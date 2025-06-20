@@ -1,15 +1,23 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Dimensions, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { width } = Dimensions.get('window');
 
 const Footer: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleLinkPress = (url: string) => {
-    Linking.openURL(url);
+  const handleLinkPress = (path: string) => {
+    // Check if it's an external link or internal route
+    if (path.startsWith('http')) {
+      Linking.openURL(path);
+    } else {
+      // Use router.push for internal navigation
+      router.push(path as any);
+    }
   };
 
   const handleSocialPress = (platform: string) => {
@@ -35,7 +43,7 @@ const Footer: React.FC = () => {
           <TouchableOpacity style={styles.logoContainer}>
             <View style={styles.logoWrapper}>
               <Image
-                source={require('@/assets/images/logo.png')} // Update path as needed
+                source={require('@/assets/images/logo.png')}
                 style={styles.logoImage}
                 contentFit="contain"
                 onLoad={() => setImageLoaded(true)}
@@ -51,66 +59,85 @@ const Footer: React.FC = () => {
         </View>
 
         {/* Navigation Links */}
-        <View style={styles.navLinks}>
-          <TouchableOpacity onPress={() => handleLinkPress('/')}>
-            <Text style={styles.link}>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleLinkPress('/symptoms')}>
-            <Text style={styles.link}>Symptoms Checker</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleLinkPress('/first-aid')}>
-            <Text style={styles.link}>First Aid Guide</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleLinkPress('/contact')}>
-            <Text style={styles.link}>Contact Us</Text>
-          </TouchableOpacity>
+        <View style={styles.navLinksContainer}>
+          <Text style={styles.sectionTitle}>Quick Links</Text>
+          <View style={styles.navLinks}>
+            <TouchableOpacity 
+              style={styles.linkButton} 
+              onPress={() => handleLinkPress('/')}
+            >
+              <Text style={styles.link}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.linkButton} 
+              onPress={() => handleLinkPress('/(tabs)/index')}
+            >
+              <Text style={styles.link}>Dashboard</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.linkButton}
+              onPress={() => handleLinkPress('/(tabs)/explore')}
+            >
+              <Text style={styles.link}>Explore</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.linkButton}
+              onPress={() => handleLinkPress('/(tabs)/ai-assistant')}
+            >
+              <Text style={styles.link}>AI Assistant</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Social Icons */}
-        <View style={styles.socialIcons}>
-          <TouchableOpacity 
-            onPress={() => handleSocialPress('facebook')}
-            style={styles.socialButton}
-            accessibilityLabel="Facebook"
-          >
-            <FontAwesome name="facebook-f" size={20} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => handleSocialPress('twitter')}
-            style={styles.socialButton}
-            accessibilityLabel="Twitter"
-          >
-            <FontAwesome name="twitter" size={20} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => handleSocialPress('instagram')}
-            style={styles.socialButton}
-            accessibilityLabel="Instagram"
-          >
-            <FontAwesome name="instagram" size={20} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => handleSocialPress('linkedin')}
-            style={styles.socialButton}
-            accessibilityLabel="LinkedIn"
-          >
-            <FontAwesome name="linkedin" size={20} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => handleSocialPress('whatsapp')}
-            style={styles.socialButton}
-            accessibilityLabel="WhatsApp"
-          >
-            <FontAwesome name="whatsapp" size={20} color="#000" />
-          </TouchableOpacity>
+        <View style={styles.socialContainer}>
+          <Text style={styles.sectionTitle}>Connect With Us</Text>
+          <View style={styles.socialIcons}>
+            <TouchableOpacity 
+              onPress={() => handleSocialPress('facebook')}
+              style={styles.socialButton}
+              accessibilityLabel="Facebook"
+            >
+              <FontAwesome name="facebook-f" size={20} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => handleSocialPress('twitter')}
+              style={styles.socialButton}
+              accessibilityLabel="Twitter"
+            >
+              <FontAwesome name="twitter" size={20} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => handleSocialPress('instagram')}
+              style={styles.socialButton}
+              accessibilityLabel="Instagram"
+            >
+              <FontAwesome name="instagram" size={20} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => handleSocialPress('linkedin')}
+              style={styles.socialButton}
+              accessibilityLabel="LinkedIn"
+            >
+              <FontAwesome name="linkedin" size={20} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => handleSocialPress('whatsapp')}
+              style={styles.socialButton}
+              accessibilityLabel="WhatsApp"
+            >
+              <FontAwesome name="whatsapp" size={20} color="#000" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Description */}
         <View style={styles.description}>
+          <Text style={styles.descriptionTitle}>About Lifeline</Text>
           <Text style={styles.descriptionText}>
-            Lifeline provides instant access to crucial first-aid information{'\n'}
-            during emergencies, ensuring you&apos;re prepared to act quickly and{'\n'}
-            effectively.
+            Lifeline provides instant access to crucial first-aid information
+            during emergencies, ensuring you&apos;re prepared to act quickly and
+            effectively when it matters most.
           </Text>
         </View>
       </View>
@@ -121,11 +148,7 @@ const Footer: React.FC = () => {
       {/* Copyright */}
       <View style={styles.copyright}>
         <Text style={styles.copyrightText}>
-          © {new Date().getFullYear()} Lifeliner. All rights reserved. Daniella Asiedu. Credits to{' '}
-          <TouchableOpacity onPress={() => handleLinkPress('https://github.com/Aristocratjnr')}>
-            <Text style={styles.creditLink}>David O. Ayim</Text>
-          </TouchableOpacity>
-          {' '}for the assistance.
+          © {new Date().getFullYear()} Lifeliner. All rights reserved. Daniella Asiedu.
         </Text>
       </View>
     </View>
@@ -134,17 +157,20 @@ const Footer: React.FC = () => {
 
 const styles = StyleSheet.create({
   footer: {
-    paddingVertical: 30,
+    paddingTop: 40,
+    paddingBottom: 25,
     paddingHorizontal: 20,
     marginTop: 40,
-    backgroundColor: '#FFB5B5', // Same as NavBar background
+    backgroundColor: '#FFB5B5',
   },
   container: {
     alignItems: 'center',
-    maxWidth: width - 40,
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
   },
   logoSection: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
   logoContainer: {
     alignItems: 'center',
@@ -156,6 +182,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#ffff', 
     overflow: 'hidden',
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -177,54 +204,100 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoFallbackText: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  logoText: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 1,
+    color: '#111827',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 15,
+    color: '#111827',
+    textAlign: 'center',
+  },
+  navLinksContainer: {
+    width: '100%',
+    marginBottom: 30,
+    alignItems: 'center',
   },
   navLinks: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 20,
-    gap: 20,
+    gap: 10,
+    maxWidth: 600,
+  },
+  linkButton: {
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    margin: 5,
   },
   link: {
     fontSize: 16,
-    fontWeight: '500',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    color: '#000', // Changed to black to match NavBar text
+    fontWeight: '600',
+    color: '#111827',
+    textAlign: 'center',
+  },
+  socialContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 30,
   },
   socialIcons: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    flexWrap: 'wrap',
     gap: 15,
   },
   socialButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 45,
+    height: 45,
+    borderRadius: 23,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.3)', // Light overlay for better contrast on pink background
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 2,
   },
   description: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
+    maxWidth: 800,
+    paddingHorizontal: 20,
+  },
+  descriptionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+    color: '#111827',
+    textAlign: 'center',
   },
   descriptionText: {
     textAlign: 'center',
-    fontSize: 14,
-    lineHeight: 20,
-    paddingHorizontal: 20,
-    color: '#000', // Changed to black for better contrast
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#111827',
+    fontWeight: '400',
   },
   bottomLine: {
     height: 1,
     width: '100%',
-    marginVertical: 15,
-    backgroundColor: '#FF9A9A', // Slightly darker pink for the line
+    marginVertical: 20,
+    backgroundColor: '#FF9A9A',
   },
   copyright: {
     alignItems: 'center',
@@ -232,13 +305,22 @@ const styles = StyleSheet.create({
   },
   copyrightText: {
     textAlign: 'center',
-    fontSize: 12,
-    lineHeight: 18,
-    color: '#000', // Changed to black for better contrast
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#111827',
+    fontWeight: '500',
+    marginBottom: 5,
+  },
+  creditText: {
+    textAlign: 'center',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#111827',
   },
   creditLink: {
     color: '#dc2626',
     textDecorationLine: 'underline',
+    fontWeight: '600',
   },
 });
 

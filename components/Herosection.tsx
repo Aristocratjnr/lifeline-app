@@ -254,7 +254,7 @@ export default function HeroSection() {
           </View>
         </View>
 
-        {/* About Us Section - Web-like 3-column grid */}
+        {/* About Us Section - Reduced to 2 columns */}
         <View style={styles.aboutSection}>
           <View style={styles.aboutContainer}>
             <View style={styles.aboutGrid}>
@@ -292,7 +292,8 @@ export default function HeroSection() {
               <TouchableOpacity 
                 style={[
                   styles.aboutCard,
-                  hoveredAbout === 'about' && styles.aboutCardHovered
+                  hoveredAbout === 'about' && styles.aboutCardHovered,
+                  { borderBottomWidth: 0 } // Remove bottom border for last item
                 ]}
                 activeOpacity={0.8}
                 onPressIn={() => setHoveredAbout('about')}
@@ -320,76 +321,6 @@ export default function HeroSection() {
                       hoveredAbout === 'about' && styles.offlineTextHovered
                     ]}>OFFLINE</Text>
                   </Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* Why Choose Us */}
-              <TouchableOpacity 
-                style={[
-                  styles.aboutCard,
-                  hoveredAbout === 'why' && styles.aboutCardHovered
-                ]}
-                activeOpacity={0.8}
-                onPressIn={() => setHoveredAbout('why')}
-                onPressOut={() => setHoveredAbout(null)}
-              >
-                <View style={[
-                  styles.aboutHoverCard,
-                  hoveredAbout === 'why' && styles.aboutHoverCardActive
-                ]} />
-                <View style={styles.aboutContent}>
-                  <Text style={[
-                    styles.aboutTitle,
-                    hoveredAbout === 'why' && styles.aboutTitleHovered
-                  ]}>Why Choose Us</Text>
-                  
-                  <View style={styles.whyChooseItem}>
-                    <View style={[
-                      styles.whyChooseIcon,
-                      hoveredAbout === 'why' && styles.whyChooseIconHovered
-                    ]}>
-                      <FontAwesome5 name="user-md" size={24} color="#FC7A7A" />
-                    </View>
-                    <View style={styles.whyChooseContent}>
-                      <Text style={styles.whyChooseTitle}>Expert-Backed Information</Text>
-                      <Text style={styles.whyChooseText}>
-                        Lifeline&apos;s content is developed, reviewed, validated by certified medical professionals,
-                        adhering to the latest guidelines from reputable organizations.
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.whyChooseItem}>
-                    <View style={[
-                      styles.whyChooseIcon,
-                      hoveredAbout === 'why' && styles.whyChooseIconHovered
-                    ]}>
-                      <Ionicons name="accessibility" size={24} color="#FC7A7A" />
-                    </View>
-                    <View style={styles.whyChooseContent}>
-                      <Text style={styles.whyChooseTitle}>Accessible and User-Friendly</Text>
-                      <Text style={styles.whyChooseText}>
-                        We prioritize a clean, intuitive design, ensuring that our app is easy to navigate and
-                        understand, even in high-stress situations.
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.whyChooseItem}>
-                    <View style={[
-                      styles.whyChooseIcon,
-                      hoveredAbout === 'why' && styles.whyChooseIconHovered
-                    ]}>
-                      <Ionicons name="library" size={24} color="#FC7A7A" />
-                    </View>
-                    <View style={styles.whyChooseContent}>
-                      <Text style={styles.whyChooseTitle}>Comprehensive Coverage</Text>
-                      <Text style={styles.whyChooseText}>
-                        From common injuries to critical medical events, Lifeline offers a wide range of first aid
-                        guides and resources, equipping you with the knowledge to handle various emergencies.
-                      </Text>
-                    </View>
-                  </View>
                 </View>
               </TouchableOpacity>
             </View>
@@ -719,40 +650,5 @@ const styles = StyleSheet.create({
   },
   offlineTextHovered: {
     color: '#FC7A7A',
-  },
-  whyChooseItem: {
-    flexDirection: width < 640 ? 'column' : 'row',
-    gap: 16,
-    marginBottom: 24,
-    alignItems: width < 640 ? 'center' : 'flex-start',
-  },
-  whyChooseIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FEF2F2',
-  },
-  whyChooseIconHovered: {
-    backgroundColor: '#F8D7D7',
-  },
-  whyChooseContent: {
-    flex: 1,
-    alignItems: width < 640 ? 'center' : 'flex-start',
-  },
-  whyChooseTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 4,
-    textAlign: width < 640 ? 'center' : 'left',
-    color: '#000',
-  },
-  whyChooseText: {
-    fontSize: 14,
-    lineHeight: 20,
-    textAlign: width < 640 ? 'center' : 'left',
-    color: '#6b7280',
   },
 });
