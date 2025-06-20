@@ -3,6 +3,7 @@ import FirstAidScenarios from '@/components/firstAidScenarios';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/Herosection';
 import NavBar from '@/components/NavBar';
+import Testimonials from '@/components/testimonials';
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,6 +27,7 @@ export default function HomeScreen() {
         <FeatureCard />
 
         <FirstAidScenarios />
+        <Testimonials />
 
         {/* Footer */}
         <Footer />
