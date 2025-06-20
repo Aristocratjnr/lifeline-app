@@ -1,17 +1,12 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { Link, Stack, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
 export default function NotFoundScreen() {
   const [countdown, setCountdown] = useState<number | null>(null);
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
 
   useEffect(() => {
     setCountdown(10);
@@ -45,76 +40,73 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ 
         title: 'Page Not Found',
         headerStyle: {
-          backgroundColor: isDark ? '#1a1a1a' : '#f9fafb',
+          backgroundColor: '#f9fafb',
         },
-        headerTintColor: isDark ? '#fff' : '#000',
+        headerTintColor: '#000',
       }} />
       
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         {/* Main Content */}
-        <ThemedView style={styles.content}>
-          <ThemedView style={styles.errorSection}>
+        <View style={styles.content}>
+          <View style={styles.errorSection}>
             {/* 404 Number */}
-            <ThemedText style={[styles.errorNumber, { color: '#FC7A7A' }]}>
+            <Text style={styles.errorNumber}>
               404
-            </ThemedText>
+            </Text>
             
             {/* Title */}
-            <ThemedText style={styles.errorTitle}>
+            <Text style={styles.errorTitle}>
               Page not found
-            </ThemedText>
+            </Text>
             
             {/* Description */}
-            <ThemedText style={styles.errorDescription}>
+            <Text style={styles.errorDescription}>
               Sorry, we couldn&apos;t find the page you&apos;re looking for.
-            </ThemedText>
-            <ThemedText style={[styles.pathText, { color: isDark ? '#9ca3af' : '#6b7280' }]}>
+            </Text>
+            <Text style={styles.pathText}>
               This screen does not exist.
-            </ThemedText>
+            </Text>
             
             {/* Action Buttons */}
-            <ThemedView style={styles.buttonContainer}>
+            <View style={styles.buttonContainer}>
               {/* Go Back Button */}
               <TouchableOpacity 
                 style={styles.primaryButton}
                 onPress={handleGoBack}
                 activeOpacity={0.8}
               >
-                <ThemedText style={styles.primaryButtonText}>
+                <Text style={styles.primaryButtonText}>
                   Go back
-                </ThemedText>
+                </Text>
               </TouchableOpacity>
               
               {/* Home Button with Countdown */}
               <Link href="/" asChild>
                 <TouchableOpacity 
-                  style={[styles.secondaryButton, { borderColor: isDark ? '#4b5563' : '#d1d5db' }]}
+                  style={styles.secondaryButton}
                   activeOpacity={0.8}
                 >
-                  <ThemedText style={[styles.secondaryButtonText, { color: isDark ? '#e5e7eb' : '#374151' }]}>
+                  <Text style={styles.secondaryButtonText}>
                     Return to homepage
                     {countdown !== null && (
-                      <ThemedText style={styles.countdownText}>
+                      <Text style={styles.countdownText}>
                         {' '}(auto-redirect in {countdown}s)
-                      </ThemedText>
+                      </Text>
                     )}
-                  </ThemedText>
+                  </Text>
                 </TouchableOpacity>
               </Link>
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
+            </View>
+          </View>
+        </View>
         
         {/* Footer */}
-        <ThemedView style={[styles.footer, { 
-          backgroundColor: isDark ? '#111827' : '#f9fafb',
-          borderTopColor: isDark ? '#374151' : '#e5e7eb'
-        }]}>
-          <ThemedText style={[styles.footerText, { color: isDark ? '#9ca3af' : '#6b7280' }]}>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
             © {new Date().getFullYear()} Lifeliner. All rights reserved. Daniella Asiedu
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
+          </Text>
+        </View>
+      </View>
     </>
   );
 }
@@ -122,6 +114,7 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
@@ -140,31 +133,35 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 16,
     textAlign: 'center',
+    color: '#FC7A7A',
   },
   errorTitle: {
     fontSize: width < 400 ? 24 : 30,
     fontWeight: '800',
     marginBottom: 16,
     textAlign: 'center',
+    color: '#000',
   },
   errorDescription: {
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 8,
     lineHeight: 24,
+    color: '#374151',
   },
   pathText: {
     fontSize: 14,
     textAlign: 'center',
     fontWeight: '500',
     marginBottom: 40,
+    color: '#6b7280',
   },
   buttonContainer: {
     width: '100%',
     gap: 12,
   },
   primaryButton: {
-    backgroundColor: '#cf9393',
+    backgroundColor: '#FC7A7A',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -186,6 +183,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
+    borderColor: '#d1d5db',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -197,18 +195,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
+    color: '#374151',
   },
   countdownText: {
     fontSize: 14,
     fontWeight: '400',
+    color: '#6b7280',
   },
   footer: {
     borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    backgroundColor: '#f9fafb',
     paddingVertical: 24,
     paddingHorizontal: 20,
   },
   footerText: {
     fontSize: 12,
     textAlign: 'center',
+    color: '#6b7280',
   },
 });
