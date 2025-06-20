@@ -180,14 +180,24 @@ export default function HeroSection() {
           </View>
         </View>
 
-        {/* About Us Section */}
+        {/* About Us Section - Web-like 3-column grid */}
         <View style={styles.aboutSection}>
           <View style={styles.aboutContainer}>
             <View style={styles.aboutGrid}>
               {/* First Aid Kit Illustration */}
               <TouchableOpacity style={styles.aboutCard} activeOpacity={0.8}>
+                <View style={styles.aboutHoverCard} />
                 <View style={styles.aboutImageContainer}>
-                  <View style={styles.firstAidPlaceholder}>
+                  <Image
+                    source={require('@/assets/images/bucket.png')} // Update to your first aid kit image
+                    style={styles.firstAidImage}
+                    contentFit="contain"
+                    onError={() => {
+                      console.error("First aid kit image failed to load");
+                    }}
+                  />
+                  {/* Fallback if image doesn't load */}
+                  <View style={styles.firstAidFallback}>
                     <FontAwesome5 name="first-aid" size={60} color="#FC7A7A" />
                     <Text style={styles.placeholderText}>First Aid Kit</Text>
                   </View>
@@ -212,7 +222,7 @@ export default function HeroSection() {
               </TouchableOpacity>
 
               {/* Why Choose Us */}
-              <View style={styles.aboutCard}>
+              <TouchableOpacity style={styles.aboutCard} activeOpacity={0.8}>
                 <View style={styles.aboutContent}>
                   <Text style={styles.aboutTitle}>Why Choose Us</Text>
                   
@@ -255,7 +265,7 @@ export default function HeroSection() {
                     </View>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -461,9 +471,42 @@ const styles = StyleSheet.create({
   aboutCard: {
     padding: width < 640 ? 16 : width < 768 ? 24 : 32,
   },
+  aboutHoverCard: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 12,
+    zIndex: 5,
+  },
   aboutImageContainer: {
     width: '100%',
-    height: width < 640 ? 240 : width < 768 ? 320 : 400,
+    height: width < 400 ? 200 : width < 640 ? 240 : width < 768 ? 280 : 320,
+    position: 'relative',
+    zIndex: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  firstAidImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+  },
+  firstAidFallback: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFB5B5',
+    borderRadius: 12,
+    gap: 12,
+    opacity: 0, // Hidden by default, only shows if image fails to load
   },
   firstAidPlaceholder: {
     width: '100%',
@@ -475,10 +518,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   placeholderText: {
-    fontSize: 16,
+    fontSize: width < 400 ? 14 : 16,
     fontWeight: 'bold',
     color: '#FC7A7A',
   },
+  
   aboutContent: {
     alignItems: width < 640 ? 'center' : 'flex-start',
   },
