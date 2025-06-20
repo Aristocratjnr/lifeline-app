@@ -37,3 +37,7 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# AI Assistant file with API keys
+app/(tabs)/ai-assistant.tsx
+

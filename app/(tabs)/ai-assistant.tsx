@@ -3,24 +3,29 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// Add this line temporarily
+const OPENROUTER_API_KEY = "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";
 
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([
-    { id: 1, type: 'assistant', text: 'Hello! I\'m your Lifeline AI assistant. How can I help you with medical information today?' },
+    { id: 1, type: 'assistant', text: 'Hello! I\'m your Lifeline First Aid Assistant. I can help with emergency medical information and first aid procedures. What would you like to know?' },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
   
@@ -31,23 +36,129 @@ export default function AIAssistantScreen() {
     }, 100);
   }, [chatHistory]);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
+  // Helper function to determine if a query is health related
+  const isHealthRelatedQuery = (query: string): boolean => {
+    const healthRelatedKeywords = [
+      'health', 'medical', 'doctor', 'nurse', 'hospital', 'emergency', 'injury', 'pain',
+      'hurt', 'wound', 'blood', 'bleeding', 'heart', 'attack', 'stroke', 'cpr', 'bandage',
+      'first aid', 'broken', 'fracture', 'burn', 'poisoning', 'choking', 'breathing',
+      'unconscious', 'fever', 'sick', 'illness', 'disease', 'medicine', 'treatment',
+      'symptom', 'diagnosis', 'ambulance', 'paramedic', 'rescue', 'safety', 'accident',
+      'trauma', 'recovery', 'injury', 'heal', 'condition', 'patient', 'care', 'therapy',
+      'infection', 'vaccine', 'pandemic', 'allergy', 'bite', 'sting', 'overdose', 'seizure'
+    ];
     
-    // Add user message
-    const userMessage = { id: Date.now(), type: 'user', text: message.trim() };
-    setChatHistory(prev => [...prev, userMessage]);
-    setMessage('');
+    // Common greetings and polite conversation starters
+    const greetings = [
+      'hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening',
+      'thanks', 'thank you', 'bye', 'goodbye', 'help', 'start', 'begin'
+    ];
     
-    // Simulate AI response after a short delay
-    setTimeout(() => {
-      const aiResponse = { 
+    const lowerQuery = query.toLowerCase().trim();
+    
+    // Allow greetings and basic conversation
+    if (greetings.some(greeting => lowerQuery.includes(greeting))) {
+      return true;
+    }
+    
+    // Check if query contains health-related keywords
+    return healthRelatedKeywords.some(keyword => lowerQuery.includes(keyword)) ||
+      // Simple heuristic for health questions not containing specific keywords
+      /how (do|to|can|should) (i|you|we|they) (treat|handle|deal with|manage|help)/i.test(lowerQuery);
+  };
+
+  const fetchAIResponse = async (userQuery: string) => {
+    try {
+      // Check if API key is available
+      if (!OPENROUTER_API_KEY) {
+        throw new Error('API key not configured');
+      }
+      
+      setIsLoading(true);
+      
+      // Check if query is health or first aid related before sending to API
+      if (!isHealthRelatedQuery(userQuery)) {
+        // Handle non-health related queries locally
+        setTimeout(() => {
+          setChatHistory(prev => [...prev, { 
+            id: Date.now() + 1, 
+            type: 'assistant', 
+            text: "I'm sorry, I can only answer questions related to health, medical issues, or first aid. Please ask me something about first aid, emergency response, or health-related topics."
+          }]);
+          setIsLoading(false);
+        }, 500);
+        return;
+      }
+      
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a knowledgeable first aid assistant helping people with emergency medical information. Provide clear, concise instructions for first aid situations. For serious emergencies, always advise calling emergency services. Your advice should be based on established first aid protocols. ONLY answer questions related to health, medicine, first aid, or emergency response. For other topics, politely decline to answer. Your name is Lifeline Assistant.'
+            },
+            { role: 'user', content: userQuery }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const aiReply = data.choices[0].message.content;
+
+      // Add AI response to chat
+      setChatHistory(prev => [...prev, { 
         id: Date.now() + 1, 
         type: 'assistant', 
-        text: 'I understand you have a question about health. As an AI assistant, I can provide general medical information, but remember that I\'m not a replacement for professional medical advice. What specific medical topic would you like to learn about?' 
-      };
-      setChatHistory(prev => [...prev, aiResponse]);
-    }, 1000);
+        text: aiReply 
+      }]);
+      
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      
+      let errorMessage = 'I apologize, but I\'m having trouble connecting to my medical database. Please try again in a moment.';
+      
+      // Special message for API key configuration issues
+      if (error instanceof Error && error.message.includes('API key')) {
+        errorMessage = 'The AI service is currently unavailable. Please contact support for assistance.';
+        console.error('API key not properly configured');
+      }
+      
+      // Add error message to chat
+      setChatHistory(prev => [...prev, { 
+        id: Date.now() + 1, 
+        type: 'assistant', 
+        text: errorMessage
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSend = () => {
+    if (!message.trim() || isLoading) return;
+    
+    // Add user message to chat
+    const userMessage = { id: Date.now(), type: 'user', text: message.trim() };
+    setChatHistory(prev => [...prev, userMessage]);
+    
+    // Save query and clear input
+    const userQuery = message.trim();
+    setMessage('');
+    
+    // Get AI response
+    fetchAIResponse(userQuery);
   };
 
   return (
@@ -56,10 +167,10 @@ export default function AIAssistantScreen() {
       
       <View style={styles.header}>
         <Text style={[styles.headerTitle, { color: isDark ? '#fff' : '#111' }]}>
-          AI Medical Assistant
+          First Aid Assistant
         </Text>
         <Text style={[styles.headerSubtitle, { color: isDark ? '#ccc' : '#666' }]}>
-          Get instant medical guidance
+          Get emergency medical guidance
         </Text>
       </View>
       
@@ -104,6 +215,13 @@ export default function AIAssistantScreen() {
               </View>
             </View>
           ))}
+          
+          {isLoading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color="#FC7A7A" />
+              <Text style={styles.loadingText}>Finding first aid information...</Text>
+            </View>
+          )}
         </ScrollView>
         
         {/* Fixed position input area */}
@@ -119,17 +237,21 @@ export default function AIAssistantScreen() {
               styles.input,
               isDark ? { backgroundColor: '#444', color: '#fff', borderColor: '#555' } : null
             ]}
-            placeholder="Type your medical question..."
+            placeholder="Ask about first aid..."
             placeholderTextColor={isDark ? '#aaa' : '#999'}
             value={message}
             onChangeText={setMessage}
             multiline
             maxLength={500}
+            editable={!isLoading}
           />
           <TouchableOpacity
-            style={[styles.sendButton, !message.trim() ? styles.sendButtonDisabled : null]}
+            style={[
+              styles.sendButton, 
+              (!message.trim() || isLoading) ? styles.sendButtonDisabled : null
+            ]}
             onPress={handleSend}
-            disabled={!message.trim()}
+            disabled={!message.trim() || isLoading}
             activeOpacity={0.7}
           >
             <FontAwesome name="send" size={18} color="#fff" />
@@ -209,6 +331,17 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 15,
     lineHeight: 20,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  loadingText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
   },
   inputContainer: {
     flexDirection: 'row',
