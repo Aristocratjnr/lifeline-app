@@ -1,18 +1,12 @@
 import { Collapsible } from '@/components/Collapsible';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ExploreScreen() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
   const router = useRouter();
 
   const handleLinkPress = (url: string) => {
@@ -24,123 +18,118 @@ export default function ExploreScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? '#1a1a1a' : '#fff' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <ParallaxScrollView
-        headerBackgroundColor={{ light: '#FFB5B5', dark: '#353636' }}
+        headerBackgroundColor={{ light: '#FFB5B5', dark: '#FFB5B5' }}
         headerImage={
           <Image
-            source={require('@/assets/images/woman.png')} // Update with your image
+            source={require('@/assets/images/woman.png')}
             style={styles.headerImage}
             contentFit="contain"
           />
         }>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Explore Lifeline</ThemedText>
-          <IconSymbol
-            size={24}
-            color={isDark ? '#fff' : '#FC7A7A'}
-            name="heart.fill"
-            style={styles.heartIcon}
-          />
-        </ThemedView>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Explore Lifeline</Text>
+          <Text style={styles.heartIcon}>💖</Text>
+        </View>
         
-        <ThemedText style={styles.subtitle}>
+        <Text style={styles.subtitle}>
           Discover the features that make Lifeline your trusted emergency companion.
-        </ThemedText>
+        </Text>
 
         <Collapsible title="🚨 Emergency First Aid">
-          <ThemedText>
+          <Text style={styles.content}>
             Access step-by-step first aid instructions for common emergencies including:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• CPR and choking procedures</ThemedText>
-          <ThemedText style={styles.listItem}>• Wound care and bleeding control</ThemedText>
-          <ThemedText style={styles.listItem}>• Burns, fractures, and allergic reactions</ThemedText>
+          </Text>
+          <Text style={styles.listItem}>• CPR and choking procedures</Text>
+          <Text style={styles.listItem}>• Wound care and bleeding control</Text>
+          <Text style={styles.listItem}>• Burns, fractures, and allergic reactions</Text>
           <TouchableOpacity onPress={() => navigateToSection('/first-aid-guide')}>
-            <ThemedText type="link" style={styles.actionLink}>
+            <Text style={styles.actionLink}>
               View First Aid Guide →
-            </ThemedText>
+            </Text>
           </TouchableOpacity>
         </Collapsible>
 
         <Collapsible title="🩺 Symptom Checker">
-          <ThemedText>
+          <Text style={styles.content}>
             Our intelligent symptom checker helps you:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• Assess symptoms and their severity</ThemedText>
-          <ThemedText style={styles.listItem}>• Get guidance on when to seek medical help</ThemedText>
-          <ThemedText style={styles.listItem}>• Understand common conditions</ThemedText>
+          </Text>
+          <Text style={styles.listItem}>• Assess symptoms and their severity</Text>
+          <Text style={styles.listItem}>• Get guidance on when to seek medical help</Text>
+          <Text style={styles.listItem}>• Understand common conditions</Text>
           <TouchableOpacity onPress={() => navigateToSection('/symptom-checker')}>
-            <ThemedText type="link" style={styles.actionLink}>
+            <Text style={styles.actionLink}>
               Try Symptom Checker →
-            </ThemedText>
+            </Text>
           </TouchableOpacity>
         </Collapsible>
 
         <Collapsible title="📱 Offline Access">
-          <ThemedText>
+          <Text style={styles.content}>
             Lifeline works even without internet connection:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• All essential guides stored locally</ThemedText>
-          <ThemedText style={styles.listItem}>• Emergency contacts always accessible</ThemedText>
-          <ThemedText style={styles.listItem}>• No data required in critical moments</ThemedText>
-          <ThemedText style={styles.highlight}>
+          </Text>
+          <Text style={styles.listItem}>• All essential guides stored locally</Text>
+          <Text style={styles.listItem}>• Emergency contacts always accessible</Text>
+          <Text style={styles.listItem}>• No data required in critical moments</Text>
+          <Text style={styles.highlight}>
             Perfect for remote areas or network emergencies!
-          </ThemedText>
+          </Text>
         </Collapsible>
 
         <Collapsible title="🏥 Emergency Contacts">
-          <ThemedText>
+          <Text style={styles.content}>
             Quick access to emergency services:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• Local emergency numbers</ThemedText>
-          <ThemedText style={styles.listItem}>• Poison control centers</ThemedText>
-          <ThemedText style={styles.listItem}>• Your personal emergency contacts</ThemedText>
+          </Text>
+          <Text style={styles.listItem}>• Local emergency numbers</Text>
+          <Text style={styles.listItem}>• Poison control centers</Text>
+          <Text style={styles.listItem}>• Your personal emergency contacts</Text>
           <TouchableOpacity onPress={() => navigateToSection('/contact')}>
-            <ThemedText type="link" style={styles.actionLink}>
+            <Text style={styles.actionLink}>
               Manage Emergency Contacts →
-            </ThemedText>
+            </Text>
           </TouchableOpacity>
         </Collapsible>
 
         <Collapsible title="👨‍⚕️ Expert-Verified Content">
-          <ThemedText>
+          <Text style={styles.content}>
             All our content is reviewed by certified medical professionals and follows guidelines from:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• American Heart Association</ThemedText>
-          <ThemedText style={styles.listItem}>• American Red Cross</ThemedText>
-          <ThemedText style={styles.listItem}>• World Health Organization</ThemedText>
+          </Text>
+          <Text style={styles.listItem}>• American Heart Association</Text>
+          <Text style={styles.listItem}>• American Red Cross</Text>
+          <Text style={styles.listItem}>• World Health Organization</Text>
           <TouchableOpacity onPress={() => handleLinkPress('https://www.heart.org')}>
-            <ThemedText type="link" style={styles.actionLink}>
+            <Text style={styles.actionLink}>
               Learn about our sources →
-            </ThemedText>
+            </Text>
           </TouchableOpacity>
         </Collapsible>
 
         <Collapsible title="🎯 How to Use Lifeline">
-          <ThemedText>
+          <Text style={styles.content}>
             Getting started is simple:
-          </ThemedText>
-          <ThemedText style={styles.stepItem}>1. Bookmark emergency contacts</ThemedText>
-          <ThemedText style={styles.stepItem}>2. Familiarize yourself with first aid basics</ThemedText>
-          <ThemedText style={styles.stepItem}>3. Practice using the symptom checker</ThemedText>
-          <ThemedText style={styles.stepItem}>4. Share with family and friends</ThemedText>
-          <ThemedText style={styles.highlight}>
+          </Text>
+          <Text style={styles.stepItem}>1. Bookmark emergency contacts</Text>
+          <Text style={styles.stepItem}>2. Familiarize yourself with first aid basics</Text>
+          <Text style={styles.stepItem}>3. Practice using the symptom checker</Text>
+          <Text style={styles.stepItem}>4. Share with family and friends</Text>
+          <Text style={styles.highlight}>
             Remember: Lifeline is a guide, not a replacement for professional medical care.
-          </ThemedText>
+          </Text>
         </Collapsible>
 
-        <ThemedView style={styles.ctaSection}>
-          <ThemedText style={styles.ctaTitle}>Ready to Get Started?</ThemedText>
-          <ThemedText style={styles.ctaText}>
+        <View style={styles.ctaSection}>
+          <Text style={styles.ctaTitle}>Ready to Get Started?</Text>
+          <Text style={styles.ctaText}>
             Explore our first aid guides and symptom checker to become better prepared for emergencies.
-          </ThemedText>
+          </Text>
           <TouchableOpacity 
-            style={[styles.ctaButton, { backgroundColor: '#FC7A7A' }]}
+            style={styles.ctaButton}
             onPress={() => navigateToSection('/first-aid-guide')}
           >
-            <ThemedText style={styles.ctaButtonText}>Start Learning</ThemedText>
+            <Text style={styles.ctaButtonText}>Start Learning</Text>
           </TouchableOpacity>
-        </ThemedView>
+        </View>
       </ParallaxScrollView>
     </SafeAreaView>
   );
@@ -160,30 +149,46 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 16,
   },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#000',
+  },
   heartIcon: {
+    fontSize: 24,
     marginLeft: 8,
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 24,
     lineHeight: 24,
+    color: '#374151',
+  },
+  content: {
+    fontSize: 14,
+    color: '#374151',
+    lineHeight: 20,
   },
   listItem: {
     fontSize: 14,
     marginVertical: 2,
     marginLeft: 8,
     lineHeight: 20,
+    color: '#374151',
   },
   stepItem: {
     fontSize: 14,
     marginVertical: 4,
     fontWeight: '500',
     lineHeight: 20,
+    color: '#374151',
   },
   actionLink: {
     marginTop: 8,
     fontSize: 14,
     fontWeight: '600',
+    color: '#FC7A7A',
+    textDecorationLine: 'underline',
   },
   highlight: {
     fontSize: 14,
@@ -204,14 +209,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
+    color: '#000',
   },
   ctaText: {
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 20,
+    color: '#374151',
   },
   ctaButton: {
+    backgroundColor: '#FC7A7A',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
