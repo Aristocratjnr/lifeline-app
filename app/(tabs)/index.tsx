@@ -1,3 +1,5 @@
+import FeatureCard from '@/components/featureCard';
+import FirstAidScenarios from '@/components/firstAidScenarios';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/Herosection';
 import NavBar from '@/components/NavBar';
@@ -17,9 +19,14 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         bounces={true}
       >
+       
         {/* Hero Section */}
         <HeroSection />
-        
+
+        <FeatureCard />
+
+        <FirstAidScenarios />
+
         {/* Footer */}
         <Footer />
       </ScrollView>
