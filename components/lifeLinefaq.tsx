@@ -276,10 +276,10 @@ const styles = StyleSheet.create({
     maxHeight: width < 768 ? 300 : 370,
   },
   faqItem: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb', // Lighter border
-    borderStyle: 'solid', // Changed from dotted for better visibility
-    backgroundColor: 'rgba(249, 250, 251, 0.5)', // Light background for better readability
+    borderBottomWidth: 2,
+    borderBottomColor: '#d1d5db', 
+    borderStyle: 'dotted', // Changed back to dotted
+    backgroundColor: 'rgba(249, 250, 251, 0.5)',
     marginVertical: 2,
     borderRadius: 8,
     paddingHorizontal: 8,
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: width < 400 ? 15 : 16,
     fontWeight: '600', // Bolder weight
     color: '#111827', // Much darker for better contrast
-    lineHeight: width < 400 ? 20 : 22,
+    lineHeight: width < 400 ? 20 : width < 640 ? 32 : 36,
     marginRight: 12,
   },
   chevron: {
@@ -383,12 +383,12 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   sendButton: {
-    backgroundColor: '#FFB5B5', // Darker red for better contrast
+    backgroundColor: '#FFB5B5',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 25,
     borderTopWidth: 2,
-    borderColor: '#111827=',
+    borderColor: '#111827', // Fixed: removed the extra '=' character
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
