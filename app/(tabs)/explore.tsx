@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
     height: 200,
     width: 200,
     bottom: -20,
-    left: 50,
+    left: '50%',
+    marginLeft: -100, // Half of the width to center it
     position: 'absolute',
   },
   titleContainer: {
