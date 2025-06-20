@@ -2,6 +2,7 @@ import FeatureCard from '@/components/featureCard';
 import FirstAidScenarios from '@/components/firstAidScenarios';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/Herosection';
+import LifelineFAQ from '@/components/lifeLinefaq';
 import NavBar from '@/components/NavBar';
 import Testimonials from '@/components/testimonials';
 import React from 'react';
@@ -28,6 +29,7 @@ export default function HomeScreen() {
 
         <FirstAidScenarios />
         <Testimonials />
+        <LifelineFAQ />
 
         {/* Footer */}
         <Footer />
