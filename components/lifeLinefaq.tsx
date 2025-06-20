@@ -132,67 +132,67 @@ const LifelineFAQ: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView 
-        style={styles.scrollView} 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <Text style={styles.title}>Frequently Asked Questions</Text>
-        
-        <View style={styles.contentContainer}>
-          {/* FAQ Section */}
-          <View style={styles.faqSection}>
+      <Text style={styles.title}>Frequently Asked Questions</Text>
+      
+      <View style={styles.contentContainer}>
+        {/* FAQ Section */}
+        <View style={styles.faqSection}>
+          <ScrollView 
+            style={styles.faqScrollView}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+          >
             {faqs.map(renderFAQItem)}
-          </View>
+          </ScrollView>
+        </View>
 
-          {/* Question Section */}
-          <View style={styles.questionSection}>
-            <View style={styles.questionCard}>
-              <View style={styles.iconContainer}>
-                <Image
-                  source={require('@/assets/images/question.png')}
-                  style={styles.questionIcon}
-                  contentFit="contain"
-                  onError={() => {
-                    console.error("Question icon failed to load");
-                  }}
-                />
-              </View>
+        {/* Question Section */}
+        <View style={styles.questionSection}>
+          <View style={styles.questionCard}>
+            <View style={styles.iconContainer}>
+              <Image
+                source={require('@/assets/images/question.png')}
+                style={styles.questionIcon}
+                contentFit="contain"
+                onError={() => {
+                  console.error("Question icon failed to load");
+                }}
+              />
+            </View>
+            
+            <Text style={styles.questionTitle}>
+              Do you have more questions?
+            </Text>
+            
+            <Text style={styles.questionSubtitle}>
+              You can ask me anything you want{'\n'}
+              to know about Lifeline
+            </Text>
+            
+            <View style={styles.formContainer}>
+              <Text style={styles.inputLabel}>Let me know</Text>
+              <TextInput
+                style={styles.textInput}
+                value={question}
+                onChangeText={handleQuestionChange}
+                placeholder="Enter your question..."
+                placeholderTextColor="#9ca3af"
+                multiline
+                numberOfLines={2}
+                textAlignVertical="top"
+              />
               
-              <Text style={styles.questionTitle}>
-                Do you have more questions?
-              </Text>
-              
-              <Text style={styles.questionSubtitle}>
-                You can ask me anything you want{'\n'}
-                to know about Lifeline
-              </Text>
-              
-              <View style={styles.formContainer}>
-                <Text style={styles.inputLabel}>Let me know</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={question}
-                  onChangeText={handleQuestionChange}
-                  placeholder="Enter your question..."
-                  placeholderTextColor="#9ca3af"
-                  multiline
-                  numberOfLines={3}
-                  textAlignVertical="top"
-                />
-                
-                <TouchableOpacity
-                  style={styles.sendButton}
-                  onPress={handleSubmit}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.sendButtonText}>Send</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={styles.sendButton}
+                onPress={handleSubmit}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.sendButtonText}>Send</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
 
       {/* Success Modal */}
       <Modal
@@ -241,27 +241,20 @@ const LifelineFAQ: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     borderTopWidth: 2,
     borderBottomWidth: 2,
     borderColor: '#111827',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 32,
+    paddingVertical: width < 768 ? 16 : 20,
   },
   title: {
-    fontSize: width < 400 ? 24 : width < 640 ? 28 : 32,
+    fontSize: width < 400 ? 20 : width < 640 ? 24 : 28,
     fontWeight: '800',
     textAlign: 'center',
     color: '#374151',
-    marginBottom: width < 768 ? 32 : 64,
-    marginTop: 32,
+    marginBottom: width < 768 ? 20 : 32,
     paddingHorizontal: 16,
-    lineHeight: width < 400 ? 28 : width < 640 ? 32 : 36,
+    lineHeight: width < 400 ? 24 : width < 640 ? 28 : 32,
   },
   contentContainer: {
     flexDirection: width < 768 ? 'column' : 'row',
@@ -269,13 +262,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     paddingHorizontal: 16,
-    gap: width < 768 ? 32 : 64,
+    gap: width < 768 ? 20 : 32,
+    height: width < 768 ? 500 : 400, // Fixed height to make container shorter
   },
   faqSection: {
-    flex: width < 768 ? undefined : 3,
+    flex: width < 768 ? 1 : 3,
+  },
+  faqScrollView: {
+    flex: 1,
+    maxHeight: width < 768 ? 280 : 350, // Limit FAQ scroll height
   },
   faqItem: {
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: '#d1d5db',
     borderStyle: 'dotted',
   },
@@ -283,15 +281,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingVertical: 12,
     paddingRight: 8,
   },
   faqQuestion: {
     flex: 1,
-    fontSize: width < 400 ? 14 : 16,
+    fontSize: width < 400 ? 13 : 14,
     fontWeight: '500',
     color: '#374151',
-    lineHeight: width < 400 ? 20 : 24,
+    lineHeight: width < 400 ? 18 : 20,
     marginRight: 12,
   },
   chevron: {
@@ -301,21 +299,20 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '180deg' }],
   },
   faqAnswer: {
-    paddingBottom: 16,
+    paddingBottom: 12,
     paddingRight: 24,
   },
   faqAnswerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6b7280',
-    lineHeight: 20,
+    lineHeight: 16,
   },
   questionSection: {
-    flex: width < 768 ? undefined : 2,
-    marginTop: width < 768 ? 32 : 0,
+    flex: width < 768 ? 1 : 2,
   },
   questionCard: {
     backgroundColor: '#fff',
-    padding: 24,
+    padding: width < 768 ? 16 : 20,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#4b5563',
@@ -324,34 +321,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    height: '100%',
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   questionIcon: {
-    width: 80,
-    height: 60,
+    width: 60,
+    height: 45,
   },
   questionTitle: {
-    fontSize: 20,
+    fontSize: width < 768 ? 16 : 18,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#111827',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   questionSubtitle: {
     textAlign: 'center',
     color: '#6b7280',
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 24,
+    fontSize: 12,
+    lineHeight: 16,
+    marginBottom: 16,
   },
   formContainer: {
-    gap: 16,
+    gap: 12,
+    flex: 1,
   },
   inputLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
     color: '#374151',
     marginBottom: 4,
@@ -360,16 +359,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#111827',
     borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    padding: 10,
+    fontSize: 14,
     color: '#111827',
     backgroundColor: '#fff',
-    minHeight: 80,
+    minHeight: 60,
     textAlignVertical: 'top',
+    flex: 1,
   },
   sendButton: {
     backgroundColor: '#fca5a5', // red-300
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 25,
     borderTopWidth: 2,
@@ -379,12 +379,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
+    marginTop: 'auto',
   },
   sendButtonText: {
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#111827',
-    fontSize: 16,
+    fontSize: 14,
   },
   // Modal styles
   modalOverlay: {
@@ -397,9 +398,9 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 32,
+    padding: 24,
     alignItems: 'center',
-    maxWidth: 400,
+    maxWidth: 350,
     width: '100%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -408,32 +409,32 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   modalIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: '#dcfce7', // green-100
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
     color: '#111827',
-    marginBottom: 8,
+    marginBottom: 6,
     textAlign: 'center',
   },
   modalSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6b7280',
     textAlign: 'center',
-    marginBottom: 20,
-    lineHeight: 20,
+    marginBottom: 16,
+    lineHeight: 16,
   },
   modalButton: {
     backgroundColor: '#fca5a5', // red-300
-    paddingHorizontal: 24,
-    paddingVertical: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: 'transparent',
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: '#fff',
     fontWeight: '500',
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
   },
 });
