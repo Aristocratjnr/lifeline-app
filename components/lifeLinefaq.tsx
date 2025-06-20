@@ -113,8 +113,8 @@ const LifelineFAQ: React.FC = () => {
         <Text style={styles.faqQuestion}>{faq.question}</Text>
         <FontAwesome
           name="chevron-down"
-          size={16}
-          color="#6b7280"
+          size={18}
+          color="#374151"
           style={[
             styles.chevron,
             expandedFaq === faq.id && styles.chevronRotated
@@ -245,16 +245,19 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderBottomWidth: 2,
     borderColor: '#111827',
-    paddingVertical: width < 768 ? 16 : 20,
+    paddingVertical: width < 768 ? 20 : 24,
   },
   title: {
-    fontSize: width < 400 ? 20 : width < 640 ? 24 : 28,
+    fontSize: width < 400 ? 24 : width < 640 ? 28 : 32,
     fontWeight: '800',
     textAlign: 'center',
-    color: '#374151',
-    marginBottom: width < 768 ? 20 : 32,
+    color: '#111827', // Darker for better contrast
+    marginBottom: width < 768 ? 24 : 36,
     paddingHorizontal: 16,
-    lineHeight: width < 400 ? 24 : width < 640 ? 28 : 32,
+    lineHeight: width < 400 ? 28 : width < 640 ? 32 : 36,
+    textShadowColor: 'rgba(255, 255, 255, 0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
   contentContainer: {
     flexDirection: width < 768 ? 'column' : 'row',
@@ -262,34 +265,38 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     paddingHorizontal: 16,
-    gap: width < 768 ? 20 : 32,
-    height: width < 768 ? 500 : 400, // Fixed height to make container shorter
+    gap: width < 768 ? 24 : 36,
+    minHeight: width < 768 ? 520 : 420, // Changed to minHeight for flexibility
   },
   faqSection: {
     flex: width < 768 ? 1 : 3,
   },
   faqScrollView: {
     flex: 1,
-    maxHeight: width < 768 ? 280 : 350, // Limit FAQ scroll height
+    maxHeight: width < 768 ? 300 : 370,
   },
   faqItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#d1d5db',
-    borderStyle: 'dotted',
+    borderBottomColor: '#e5e7eb', // Lighter border
+    borderStyle: 'solid', // Changed from dotted for better visibility
+    backgroundColor: 'rgba(249, 250, 251, 0.5)', // Light background for better readability
+    marginVertical: 2,
+    borderRadius: 8,
+    paddingHorizontal: 8,
   },
   faqButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingRight: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 4,
   },
   faqQuestion: {
     flex: 1,
-    fontSize: width < 400 ? 13 : 14,
-    fontWeight: '500',
-    color: '#374151',
-    lineHeight: width < 400 ? 18 : 20,
+    fontSize: width < 400 ? 15 : 16,
+    fontWeight: '600', // Bolder weight
+    color: '#111827', // Much darker for better contrast
+    lineHeight: width < 400 ? 20 : 22,
     marginRight: 12,
   },
   chevron: {
@@ -299,98 +306,106 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '180deg' }],
   },
   faqAnswer: {
-    paddingBottom: 12,
-    paddingRight: 24,
+    paddingBottom: 16,
+    paddingHorizontal: 4,
+    paddingTop: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 6,
+    marginBottom: 8,
   },
   faqAnswerText: {
-    fontSize: 12,
-    color: '#6b7280',
-    lineHeight: 16,
+    fontSize: 14,
+    color: '#1f2937', // Darker gray for better readability
+    lineHeight: 20,
+    fontWeight: '400',
   },
   questionSection: {
     flex: width < 768 ? 1 : 2,
   },
   questionCard: {
     backgroundColor: '#fff',
-    padding: width < 768 ? 16 : 20,
+    padding: width < 768 ? 20 : 24,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#4b5563',
+    borderWidth: 2, // Thicker border
+    borderColor: '#374151',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    height: '100%',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 6,
+    minHeight: '100%',
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   questionIcon: {
-    width: 60,
-    height: 45,
+    width: 70,
+    height: 52,
   },
   questionTitle: {
-    fontSize: width < 768 ? 16 : 18,
+    fontSize: width < 768 ? 18 : 20,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#111827',
-    marginBottom: 6,
+    marginBottom: 8,
+    lineHeight: width < 768 ? 22 : 24,
   },
   questionSubtitle: {
     textAlign: 'center',
-    color: '#6b7280',
-    fontSize: 12,
-    lineHeight: 16,
-    marginBottom: 16,
+    color: '#374151', // Darker for better contrast
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 20,
+    fontWeight: '500',
   },
   formContainer: {
-    gap: 12,
+    gap: 16,
     flex: 1,
   },
   inputLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: 4,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111827', // Darker label
+    marginBottom: 6,
   },
   textInput: {
-    borderWidth: 1,
-    borderColor: '#111827',
+    borderWidth: 2,
+    borderColor: '#374151',
     borderRadius: 8,
-    padding: 10,
-    fontSize: 14,
+    padding: 12,
+    fontSize: 16,
     color: '#111827',
     backgroundColor: '#fff',
-    minHeight: 60,
+    minHeight: 70,
     textAlignVertical: 'top',
     flex: 1,
+    fontWeight: '400',
   },
   sendButton: {
-    backgroundColor: '#fca5a5', // red-300
-    paddingVertical: 10,
+    backgroundColor: '#FFB5B5', // Darker red for better contrast
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 25,
     borderTopWidth: 2,
-    borderColor: '#111827',
+    borderColor: '#111827=',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
     marginTop: 'auto',
   },
   sendButtonText: {
     textAlign: 'center',
     fontWeight: 'bold',
-    color: '#111827',
-    fontSize: 14,
+    color: '#fff', // White text on dark background
+    fontSize: 16,
   },
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
@@ -398,56 +413,59 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 24,
+    padding: 28,
     alignItems: 'center',
-    maxWidth: 350,
+    maxWidth: 380,
     width: '100%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
   },
   modalIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: '#dcfce7', // green-100
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#111827',
-    marginBottom: 6,
+    marginBottom: 8,
     textAlign: 'center',
   },
   modalSubtitle: {
-    fontSize: 12,
-    color: '#6b7280',
+    fontSize: 14,
+    color: '#374151', // Darker for better readability
     textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 16,
+    marginBottom: 20,
+    lineHeight: 18,
+    fontWeight: '400',
   },
   modalButton: {
-    backgroundColor: '#fca5a5', // red-300
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    borderRadius: 6,
+    backgroundColor: '#ef4444', // Consistent red color
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: 'transparent',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowRadius: 3,
+    elevation: 3,
   },
   modalButtonText: {
     color: '#fff',
-    fontWeight: '500',
-    fontSize: 14,
+    fontWeight: '600',
+    fontSize: 16,
     textAlign: 'center',
   },
 });
