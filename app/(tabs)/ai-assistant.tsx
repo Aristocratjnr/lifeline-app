@@ -177,12 +177,15 @@ export default function AIAssistantScreen() {
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0} // Add offset for tab bar
       >
         <ScrollView 
           ref={scrollViewRef}
           style={styles.chatContainer} 
-          contentContainerStyle={styles.chatContent}
+          contentContainerStyle={[
+            styles.chatContent,
+            { paddingBottom: 100 } // Add extra padding for tab bar
+          ]}
           keyboardShouldPersistTaps="handled"
         >
           {chatHistory.map((msg) => (
@@ -204,11 +207,17 @@ export default function AIAssistantScreen() {
               )}
               <View style={[
                 styles.messageBubble,
-                msg.type === 'user' ? styles.userBubble : styles.aiBubble,
+                msg.type === 'user' 
+                  ? styles.userBubble 
+                  : [styles.aiBubble, isDark ? { backgroundColor: '#444' } : null],
               ]}>
                 <Text style={[
                   styles.messageText,
-                  { color: isDark ? '#fff' : '#111' }
+                  { 
+                    color: msg.type === 'user' 
+                      ? '#fff' 
+                      : (isDark ? '#fff' : '#111')
+                  }
                 ]}>
                   {msg.text}
                 </Text>
@@ -219,17 +228,25 @@ export default function AIAssistantScreen() {
           {isLoading && (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="small" color="#FC7A7A" />
-              <Text style={styles.loadingText}>Finding first aid information...</Text>
+              <Text style={[
+                styles.loadingText,
+                { color: isDark ? '#ccc' : '#666' }
+              ]}>
+                Finding first aid information...
+              </Text>
             </View>
           )}
         </ScrollView>
         
-        {/* Fixed position input area */}
+        {/* Update the input container with tab bar consideration */}
         <View 
           style={[
             styles.inputContainer,
             isDark ? { backgroundColor: '#333', borderTopColor: '#444' } : null,
-            { paddingBottom: Math.max(insets.bottom, 16) }
+            { 
+              paddingBottom: Math.max(insets.bottom + 80, 90), // Add extra padding for tab bar
+              marginBottom: 0 // Ensure no margin
+            }
           ]}
         >
           <TextInput
@@ -350,13 +367,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#eee',
     backgroundColor: '#fff',
-    paddingBottom: 20,
-    marginBottom: 80, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 4,
+    position: 'relative', // Ensure proper positioning
   },
   input: {
     flex: 1,
