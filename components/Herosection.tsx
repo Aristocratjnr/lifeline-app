@@ -15,6 +15,8 @@ const { width } = Dimensions.get('window');
 
 export default function HeroSection() {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [hoveredFeature, setHoveredFeature] = useState<string | null>(null);
+  const [hoveredAbout, setHoveredAbout] = useState<string | null>(null);
 
   return (
     <ScrollView 
@@ -122,12 +124,30 @@ export default function HeroSection() {
           <View style={styles.featuresContainer}>
             <View style={styles.featuresGrid}>
               {/* URGENT */}
-              <TouchableOpacity style={styles.featureCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.featureCard,
+                  hoveredFeature === 'urgent' && styles.featureCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredFeature('urgent')}
+                onPressOut={() => setHoveredFeature(null)}
+              >
+                <View style={[
+                  styles.featureHoverCard,
+                  hoveredFeature === 'urgent' && styles.featureHoverCardActive
+                ]} />
                 <View style={styles.featureContent}>
-                  <View style={styles.featureIcon}>
+                  <View style={[
+                    styles.featureIcon,
+                    hoveredFeature === 'urgent' && styles.featureIconHovered
+                  ]}>
                     <Ionicons name="alarm" size={32} color="#FC7A7A" />
                   </View>
-                  <Text style={styles.featureTitle}>URGENT</Text>
+                  <Text style={[
+                    styles.featureTitle,
+                    hoveredFeature === 'urgent' && styles.featureTitleHovered
+                  ]}>URGENT</Text>
                   <Text style={styles.featureDescription}>
                     Lifeline recognizes the critical nature of emergencies and delivers information and tools for rapid
                     response.
@@ -136,12 +156,30 @@ export default function HeroSection() {
               </TouchableOpacity>
 
               {/* ACCURACY */}
-              <TouchableOpacity style={styles.featureCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.featureCard,
+                  hoveredFeature === 'accuracy' && styles.featureCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredFeature('accuracy')}
+                onPressOut={() => setHoveredFeature(null)}
+              >
+                <View style={[
+                  styles.featureHoverCard,
+                  hoveredFeature === 'accuracy' && styles.featureHoverCardActive
+                ]} />
                 <View style={styles.featureContent}>
-                  <View style={styles.featureIcon}>
+                  <View style={[
+                    styles.featureIcon,
+                    hoveredFeature === 'accuracy' && styles.featureIconHovered
+                  ]}>
                     <Ionicons name="checkmark-circle" size={32} color="#FC7A7A" />
                   </View>
-                  <Text style={styles.featureTitle}>ACCURACY</Text>
+                  <Text style={[
+                    styles.featureTitle,
+                    hoveredFeature === 'accuracy' && styles.featureTitleHovered
+                  ]}>ACCURACY</Text>
                   <Text style={styles.featureDescription}>
                     Lifeline&apos;s content is sourced from trusted medical authorities and rigorously reviewed by
                     healthcare professionals.
@@ -150,12 +188,30 @@ export default function HeroSection() {
               </TouchableOpacity>
 
               {/* ACCESSIBLE */}
-              <TouchableOpacity style={styles.featureCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.featureCard,
+                  hoveredFeature === 'accessible' && styles.featureCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredFeature('accessible')}
+                onPressOut={() => setHoveredFeature(null)}
+              >
+                <View style={[
+                  styles.featureHoverCard,
+                  hoveredFeature === 'accessible' && styles.featureHoverCardActive
+                ]} />
                 <View style={styles.featureContent}>
-                  <View style={styles.featureIcon}>
+                  <View style={[
+                    styles.featureIcon,
+                    hoveredFeature === 'accessible' && styles.featureIconHovered
+                  ]}>
                     <Ionicons name="globe" size={32} color="#FC7A7A" />
                   </View>
-                  <Text style={styles.featureTitle}>ACCESSIBLE</Text>
+                  <Text style={[
+                    styles.featureTitle,
+                    hoveredFeature === 'accessible' && styles.featureTitleHovered
+                  ]}>ACCESSIBLE</Text>
                   <Text style={styles.featureDescription}>
                     Lifeline is designed to be user-friendly and accessible to everyone, regardless of technical skills
                     or circumstances.
@@ -164,12 +220,30 @@ export default function HeroSection() {
               </TouchableOpacity>
 
               {/* EMPOWERING */}
-              <TouchableOpacity style={styles.featureCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.featureCard,
+                  hoveredFeature === 'empowering' && styles.featureCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredFeature('empowering')}
+                onPressOut={() => setHoveredFeature(null)}
+              >
+                <View style={[
+                  styles.featureHoverCard,
+                  hoveredFeature === 'empowering' && styles.featureHoverCardActive
+                ]} />
                 <View style={styles.featureContent}>
-                  <View style={styles.featureIcon}>
+                  <View style={[
+                    styles.featureIcon,
+                    hoveredFeature === 'empowering' && styles.featureIconHovered
+                  ]}>
                     <MaterialIcons name="self-improvement" size={32} color="#FC7A7A" />
                   </View>
-                  <Text style={styles.featureTitle}>EMPOWERMENT</Text>
+                  <Text style={[
+                    styles.featureTitle,
+                    hoveredFeature === 'empowering' && styles.featureTitleHovered
+                  ]}>EMPOWERMENT</Text>
                   <Text style={styles.featureDescription}>
                     Lifeline equips individuals with the knowledge and confidence to take decisive action in
                     emergencies.
@@ -185,18 +259,28 @@ export default function HeroSection() {
           <View style={styles.aboutContainer}>
             <View style={styles.aboutGrid}>
               {/* First Aid Kit Illustration */}
-              <TouchableOpacity style={styles.aboutCard} activeOpacity={0.8}>
-                <View style={styles.aboutHoverCard} />
+              <TouchableOpacity 
+                style={[
+                  styles.aboutCard,
+                  hoveredAbout === 'image' && styles.aboutCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredAbout('image')}
+                onPressOut={() => setHoveredAbout(null)}
+              >
+                <View style={[
+                  styles.aboutHoverCard,
+                  hoveredAbout === 'image' && styles.aboutHoverCardActive
+                ]} />
                 <View style={styles.aboutImageContainer}>
                   <Image
-                    source={require('@/assets/images/bucket.png')} // Update to your first aid kit image
+                    source={require('@/assets/images/bucket.png')}
                     style={styles.firstAidImage}
                     contentFit="contain"
                     onError={() => {
                       console.error("First aid kit image failed to load");
                     }}
                   />
-                  {/* Fallback if image doesn't load */}
                   <View style={styles.firstAidFallback}>
                     <FontAwesome5 name="first-aid" size={60} color="#FC7A7A" />
                     <Text style={styles.placeholderText}>First Aid Kit</Text>
@@ -205,9 +289,24 @@ export default function HeroSection() {
               </TouchableOpacity>
 
               {/* About Us */}
-              <TouchableOpacity style={styles.aboutCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.aboutCard,
+                  hoveredAbout === 'about' && styles.aboutCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredAbout('about')}
+                onPressOut={() => setHoveredAbout(null)}
+              >
+                <View style={[
+                  styles.aboutHoverCard,
+                  hoveredAbout === 'about' && styles.aboutHoverCardActive
+                ]} />
                 <View style={styles.aboutContent}>
-                  <Text style={styles.aboutTitle}>About Us</Text>
+                  <Text style={[
+                    styles.aboutTitle,
+                    hoveredAbout === 'about' && styles.aboutTitleHovered
+                  ]}>About Us</Text>
                   <Text style={styles.aboutText}>
                     Lifeline was created by a team of dedicated healthcare professionals and technology experts who
                     recognized the critical need for accessible and reliable first aid information during emergencies.
@@ -216,18 +315,39 @@ export default function HeroSection() {
                   </Text>
                   <Text style={styles.aboutText}>
                     The exciting thing also is that it can be accessed{' '}
-                    <Text style={styles.offlineText}>OFFLINE</Text>
+                    <Text style={[
+                      styles.offlineText,
+                      hoveredAbout === 'about' && styles.offlineTextHovered
+                    ]}>OFFLINE</Text>
                   </Text>
                 </View>
               </TouchableOpacity>
 
               {/* Why Choose Us */}
-              <TouchableOpacity style={styles.aboutCard} activeOpacity={0.8}>
+              <TouchableOpacity 
+                style={[
+                  styles.aboutCard,
+                  hoveredAbout === 'why' && styles.aboutCardHovered
+                ]}
+                activeOpacity={0.8}
+                onPressIn={() => setHoveredAbout('why')}
+                onPressOut={() => setHoveredAbout(null)}
+              >
+                <View style={[
+                  styles.aboutHoverCard,
+                  hoveredAbout === 'why' && styles.aboutHoverCardActive
+                ]} />
                 <View style={styles.aboutContent}>
-                  <Text style={styles.aboutTitle}>Why Choose Us</Text>
+                  <Text style={[
+                    styles.aboutTitle,
+                    hoveredAbout === 'why' && styles.aboutTitleHovered
+                  ]}>Why Choose Us</Text>
                   
                   <View style={styles.whyChooseItem}>
-                    <View style={styles.whyChooseIcon}>
+                    <View style={[
+                      styles.whyChooseIcon,
+                      hoveredAbout === 'why' && styles.whyChooseIconHovered
+                    ]}>
                       <FontAwesome5 name="user-md" size={24} color="#FC7A7A" />
                     </View>
                     <View style={styles.whyChooseContent}>
@@ -240,7 +360,10 @@ export default function HeroSection() {
                   </View>
 
                   <View style={styles.whyChooseItem}>
-                    <View style={styles.whyChooseIcon}>
+                    <View style={[
+                      styles.whyChooseIcon,
+                      hoveredAbout === 'why' && styles.whyChooseIconHovered
+                    ]}>
                       <Ionicons name="accessibility" size={24} color="#FC7A7A" />
                     </View>
                     <View style={styles.whyChooseContent}>
@@ -253,7 +376,10 @@ export default function HeroSection() {
                   </View>
 
                   <View style={styles.whyChooseItem}>
-                    <View style={styles.whyChooseIcon}>
+                    <View style={[
+                      styles.whyChooseIcon,
+                      hoveredAbout === 'why' && styles.whyChooseIconHovered
+                    ]}>
                       <Ionicons name="library" size={24} color="#FC7A7A" />
                     </View>
                     <View style={styles.whyChooseContent}>
@@ -422,17 +548,44 @@ const styles = StyleSheet.create({
     padding: width < 640 ? 16 : 24,
     borderWidth: 2,
     borderColor: '#000',
+    overflow: 'visible',
   },
   featuresGrid: {
     flexDirection: width < 1024 ? 'column' : 'row',
     gap: width < 640 ? 16 : 12,
   },
   featureCard: {
+    position: 'relative',
     flex: width < 1024 ? undefined : 1,
     padding: width < 640 ? 16 : 24,
+    overflow: 'visible',
+  },
+  featureCardHovered: {
+    transform: [{ scale: 1.02 }],
+  },
+  featureHoverCard: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: '#F8D7D7',
+    borderRadius: 24,
+    zIndex: 1,
+    margin: 0,
+  },
+  featureHoverCardActive: {
+    backgroundColor: '#FA9D9D',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 15,
+    elevation: 8,
+    borderWidth: 3,
+    borderColor: '#000',
+    margin: -24,
   },
   featureContent: {
     alignItems: 'center',
+    position: 'relative',
+    zIndex: 10,
   },
   featureIcon: {
     width: 48,
@@ -440,6 +593,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+    backgroundColor: 'transparent',
+  },
+  featureIconHovered: {
+    transform: [{ scale: 1.1 }],
   },
   featureTitle: {
     fontSize: 18,
@@ -447,6 +604,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'center',
     color: '#000',
+  },
+  featureTitleHovered: {
+    color: '#aa4f4f',
   },
   featureDescription: {
     fontSize: 14,
@@ -458,28 +618,45 @@ const styles = StyleSheet.create({
     marginTop: width < 640 ? 64 : 96,
   },
   aboutContainer: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#fff',
     borderRadius: 24,
     padding: width < 640 ? 16 : 24,
     borderWidth: 2,
     borderColor: '#000',
+    overflow: 'visible',
   },
   aboutGrid: {
     flexDirection: 'column',
-    gap: width < 640 ? 16 : 8,
+    gap: 0,
   },
   aboutCard: {
+    position: 'relative',
     padding: width < 640 ? 16 : width < 768 ? 24 : 32,
+    overflow: 'visible',
+    borderBottomWidth: 2,
+    borderColor: '#000',
+  },
+  aboutCardHovered: {
+    transform: [{ scale: 1.02 }],
   },
   aboutHoverCard: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    borderRadius: 12,
-    zIndex: 5,
+    inset: 0,
+    backgroundColor: '#fff',
+    borderRadius: 0,
+    zIndex: 1,
+  },
+  aboutHoverCardActive: {
+    backgroundColor: '#F8D7D7',
+    borderRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 15,
+    elevation: 8,
+    borderWidth: 3,
+    borderColor: '#000',
+    margin: -24,
   },
   aboutImageContainer: {
     width: '100%',
@@ -506,25 +683,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFB5B5',
     borderRadius: 12,
     gap: 12,
-    opacity: 0, // Hidden by default, only shows if image fails to load
-  },
-  firstAidPlaceholder: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFB5B5',
-    borderRadius: 12,
-    gap: 12,
+    opacity: 0,
   },
   placeholderText: {
     fontSize: width < 400 ? 14 : 16,
     fontWeight: 'bold',
     color: '#FC7A7A',
   },
-  
   aboutContent: {
     alignItems: width < 640 ? 'center' : 'flex-start',
+    position: 'relative',
+    zIndex: 10,
   },
   aboutTitle: {
     fontSize: 24,
@@ -532,6 +701,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: width < 640 ? 'center' : 'left',
     color: '#000',
+  },
+  aboutTitleHovered: {
+    color: '#FC7A7A',
   },
   aboutText: {
     fontSize: 14,
@@ -544,6 +716,9 @@ const styles = StyleSheet.create({
     color: '#dc2626',
     fontWeight: '800',
     textDecorationLine: 'underline',
+  },
+  offlineTextHovered: {
+    color: '#FC7A7A',
   },
   whyChooseItem: {
     flexDirection: width < 640 ? 'column' : 'row',
@@ -558,6 +733,10 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FEF2F2',
+  },
+  whyChooseIconHovered: {
+    backgroundColor: '#F8D7D7',
   },
   whyChooseContent: {
     flex: 1,
