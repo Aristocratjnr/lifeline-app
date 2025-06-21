@@ -13,10 +13,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { OPENROUTER_API_KEY } from 'react-native-dotenv';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-
-// Add this line temporarily
-const OPENROUTER_API_KEY = "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";
 
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
