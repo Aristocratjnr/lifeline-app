@@ -3,19 +3,19 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; 
+const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY; 
 
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
