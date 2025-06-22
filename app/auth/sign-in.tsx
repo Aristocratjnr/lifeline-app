@@ -44,9 +44,7 @@ export default function SignInScreen() {
                 </View>
 
                 <Image source={require('../../assets/images/medical-kit.png')} style={styles.headerImage} />
-                <Text style={styles.slogan}>
-                    &apos;Caring for your health, every step of the way&apos;
-                </Text>
+              
 
                 <View style={styles.formCard}>
                 <Text style={styles.welcomeText}>Welcome back <Text style={{ fontWeight: 'bold' }}>LIFELINER!</Text></Text>

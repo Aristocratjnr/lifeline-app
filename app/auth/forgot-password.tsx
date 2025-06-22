@@ -78,9 +78,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 20,
     },
+    backButton: {
+        position: 'absolute',
+        top: 30,
+        left: 20,
+        zIndex: 1,
+        padding: 10,
+    },
+    backIcon: {
+        width: 24,
+        height: 24,
+    },
     topNav: {
         position: 'absolute',
-        top: 20, 
+        top: 30, 
         right: 20,
         zIndex: 1,
     },
