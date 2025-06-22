@@ -3,15 +3,16 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Animated,
+  Easing,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,12 +29,53 @@ export default function AIAssistantScreen() {
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
   
+  // Bobble animation state
+  const dot1 = useRef(new Animated.Value(0)).current;
+  const dot2 = useRef(new Animated.Value(0)).current;
+  const dot3 = useRef(new Animated.Value(0)).current;
+
   // Scroll to bottom when chat history changes
   useEffect(() => {
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   }, [chatHistory]);
+
+  // Bobble animation effect
+  useEffect(() => {
+    if (isLoading) {
+      const animateDot = (dot: Animated.Value, delay: number) => {
+        return Animated.loop(
+          Animated.sequence([
+            Animated.timing(dot, {
+              toValue: 1,
+              duration: 350,
+              delay,
+              useNativeDriver: true,
+              easing: Easing.inOut(Easing.ease),
+            }),
+            Animated.timing(dot, {
+              toValue: 0,
+              duration: 350,
+              useNativeDriver: true,
+              easing: Easing.inOut(Easing.ease),
+            }),
+          ])
+        );
+      };
+      const a1 = animateDot(dot1, 0);
+      const a2 = animateDot(dot2, 150);
+      const a3 = animateDot(dot3, 300);
+      a1.start();
+      a2.start();
+      a3.start();
+      return () => {
+        a1.stop();
+        a2.stop();
+        a3.stop();
+      };
+    }
+  }, [isLoading, dot1, dot2, dot3]);
 
   // Helper function to determine if a query is health related
   const isHealthRelatedQuery = (query: string): boolean => {
@@ -225,14 +267,21 @@ export default function AIAssistantScreen() {
           ))}
           
           {isLoading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color="#FC7A7A" />
-              <Text style={[
-                styles.loadingText,
-                { color: isDark ? '#ccc' : '#666' }
-              ]}>
-                Finding first aid information...
-              </Text>
+            <View style={[styles.messageContainer, styles.aiMessage]}>
+              <View style={styles.avatarContainer}>
+                <Image 
+                  source={require('@/assets/images/lifeline.jpeg')}
+                  style={styles.avatar}
+                  contentFit="cover"
+                />
+              </View>
+              <View style={[styles.messageBubble, [styles.aiBubble, isDark ? { backgroundColor: '#444' } : null]]}>
+                <View style={styles.bobbleEffect}>
+                  <Animated.View style={[styles.dot, { opacity: dot1.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] }), transform: [{ translateY: dot1.interpolate({ inputRange: [0, 1], outputRange: [0, -6] }) }] }]} />
+                  <Animated.View style={[styles.dot, { opacity: dot2.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] }), transform: [{ translateY: dot2.interpolate({ inputRange: [0, 1], outputRange: [0, -6] }) }] }]} />
+                  <Animated.View style={[styles.dot, { opacity: dot3.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] }), transform: [{ translateY: dot3.interpolate({ inputRange: [0, 1], outputRange: [0, -6] }) }] }]} />
+                </View>
+              </View>
             </View>
           )}
         </ScrollView>
@@ -354,10 +403,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 10,
   },
-  loadingText: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: '#666',
+  bobbleEffect: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff0f0',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: '#fcc',
+    minWidth: 48,
+    minHeight: 32,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#999',
+    marginHorizontal: 3,
+    opacity: 0.7,
+    // Optionally, add animation for pulsing effect
   },
   inputContainer: {
     flexDirection: 'row',
