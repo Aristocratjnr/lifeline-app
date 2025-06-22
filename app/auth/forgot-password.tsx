@@ -23,7 +23,7 @@ const ForgotPasswordScreen = () => {
 
                     <View style={styles.container}>
                         <Image source={require('../../assets/images/medical-kit.png')} style={styles.logo} />
-                        <Text style={styles.sideText}>'No worries, we'll help you recover your account'</Text>
+                       
 
                         <View style={styles.card}>
                             <Text style={styles.recoveryTitle}>Password Recovery</Text>
