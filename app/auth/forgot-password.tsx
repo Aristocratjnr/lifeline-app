@@ -1,3 +1,4 @@
+import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -10,63 +11,55 @@ const ForgotPasswordScreen = () => {
             style={styles.background}
             resizeMode="cover"
         >
-            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                <View style={styles.topNav}>
-                    <Link href="/auth/sign-in" asChild>
-                        <TouchableOpacity>
-                            <Text style={styles.loginLinkText}>Remember your password? <Text style={styles.loginText}>Login</Text></Text>
-                        </TouchableOpacity>
-                    </Link>
-                </View>
-
-                <View style={styles.container}>
-                    <Image source={require('../../assets/images/medical-kit.png')} style={styles.logo} />
-                    <Text style={styles.sideText}>'No worries, we'll help you recover your account'</Text>
-
-                    <View style={styles.card}>
-                        <Text style={styles.recoveryTitle}>Password Recovery</Text>
-                        <Text style={styles.title}>Reset your password</Text>
-                        <Text style={styles.subtitle}>
-                            Enter your email address and we'll send you a link to reset your password.
-                        </Text>
-
-                        <View style={styles.inputWrapper}>
-                            <Text style={styles.label}>Email</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="username@example.com"
-                                    placeholderTextColor="#A9A9A9"
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                                <Image source={require('../../assets/images/mail.png')} style={styles.inputIcon} />
-                            </View>
-                        </View>
-
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonText}>Send Reset Link →</Text>
-                        </TouchableOpacity>
-
-                        <Link href="/auth/sign-up" asChild>
+            <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFill}>
+                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                    <View style={styles.topNav}>
+                        <Link href="/auth/sign-in" asChild>
                             <TouchableOpacity>
-                                <Text style={styles.footerLinkText}>Don't have an account? <Text style={styles.signupText}>Sign up</Text></Text>
+                                <Text style={styles.loginLinkText}>Remember your password? <Text style={styles.loginText}>Login</Text></Text>
                             </TouchableOpacity>
                         </Link>
                     </View>
-                </View>
-                <View style={styles.footer}>
-                    <TouchableOpacity>
-                        <Text style={styles.footerText}>Contact Support</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.footerText}>Privacy Policy</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.footerText}>Terms & Conditions</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+
+                    <View style={styles.container}>
+                        <Image source={require('../../assets/images/medical-kit.png')} style={styles.logo} />
+                        <Text style={styles.sideText}>'No worries, we'll help you recover your account'</Text>
+
+                        <View style={styles.card}>
+                            <Text style={styles.recoveryTitle}>Password Recovery</Text>
+                            <Text style={styles.title}>Reset your password</Text>
+                            <Text style={styles.subtitle}>
+                                Enter your email address and we'll send you a link to reset your password.
+                            </Text>
+
+                            <View style={styles.inputWrapper}>
+                                <Text style={styles.label}>Email</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="username@example.com"
+                                        placeholderTextColor="#A9A9A9"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                    />
+                                    <Image source={require('../../assets/images/mail.png')} style={styles.inputIcon} />
+                                </View>
+                            </View>
+
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Send Reset Link →</Text>
+                            </TouchableOpacity>
+
+                            <Link href="/auth/sign-up" asChild>
+                                <TouchableOpacity>
+                                    <Text style={styles.footerLinkText}>Don't have an account? <Text style={styles.signupText}>Sign up</Text></Text>
+                                </TouchableOpacity>
+                            </Link>
+                        </View>
+                    </View>
+                    
+                </ScrollView>
+            </BlurView>
         </ImageBackground>
     </SafeAreaView>
   );
