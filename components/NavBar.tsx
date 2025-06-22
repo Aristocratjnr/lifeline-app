@@ -37,7 +37,7 @@ export default function NavBar() {
   }, [isMenuOpen, slideAnimation]);
 
   // Define the routes as a union type that matches Expo Router's expected formats
-  type AppRoute = '/' | '/symptom-checker' | '/first-aid-guide' | '/contact' | '/donate' | '/auth/signIn';
+  type AppRoute = '/' | '/symptom-checker' | '/first-aid-guide' | '/contact' | '/donate' | '/auth/signIn' | '/auth/sign-up';
   
   const handleNavigation = (route: AppRoute) => {
     setIsMenuOpen(false);
@@ -137,7 +137,7 @@ export default function NavBar() {
           <View style={styles.rightSection}>
             {width < 768 && (
               <TouchableOpacity 
-                onPress={() => handleNavigation('/auth/signIn')}
+                onPress={() => handleNavigation('/auth/sign-up')}
                 style={[styles.userButton, pathname.startsWith('/auth') && styles.activeUserButton]}
                 activeOpacity={0.7}
               >
@@ -171,7 +171,7 @@ export default function NavBar() {
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
-                  onPress={() => handleNavigation('/auth/signIn')}
+                  onPress={() => handleNavigation('/auth/sign-up')}
                   style={[styles.userButton, pathname.startsWith('/auth') && styles.activeUserButton]}
                   activeOpacity={0.7}
                 >

@@ -1,13 +1,13 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import {
-    Dimensions,
-    ImageBackground,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -15,7 +15,7 @@ const { width } = Dimensions.get('window');
 const FirstAidScenarios = () => {
   const scenarios = [
     {
-      src: require('@/assets/videos/peter.gif'), // Note: You'll need to convert GIFs to supported formats
+      src: require('@/assets/videos/peter.gif'), 
       title: "Bone Fracture?",
       subtitle: "Minor Injury, Immediate Care",
     },
@@ -33,7 +33,7 @@ const FirstAidScenarios = () => {
 
   return (
     <View style={styles.container}>
-      {/* Background pattern - matching web version */}
+      {/* Background pattern*/}
       <View style={styles.backgroundContainer}>
         <ImageBackground
           source={require('@/assets/images/background.jpg')}

@@ -66,7 +66,7 @@ export default function ExploreScreen() {
       
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'LifelineApp/1.0 (https://lifeline.app)' // Nominatim requires a user-agent
+          'User-Agent': 'LifelineApp/1.0 (https://lifeline-mu.vercel.app)' // Nominatim requires a user-agent
         }
       });
       const data: Hospital[] = await response.json();
