@@ -1,6 +1,7 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -18,6 +19,9 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY; 
 
+// Add this constant for tab bar height
+const TAB_BAR_HEIGHT = 10;
+
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -28,6 +32,7 @@ export default function AIAssistantScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   
   // Bobble animation state
   const dot1 = useRef(new Animated.Value(0)).current;
@@ -207,6 +212,9 @@ export default function AIAssistantScreen() {
       <SafeAreaView edges={['top']} style={{ flex: 0 }} />
       
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={{ position: 'absolute', left: 16, top: 16, zIndex: 20 }}>
+          <FontAwesome name="arrow-left" size={24} color={isDark ? '#fff' : '#111'} />
+        </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: isDark ? '#fff' : '#111' }]}>
           First Aid Assistant
         </Text>
@@ -218,7 +226,7 @@ export default function AIAssistantScreen() {
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0} // Add offset for tab bar
+        keyboardVerticalOffset={insets.bottom} // Only safe area inset
       >
         <ScrollView 
           ref={scrollViewRef}
@@ -292,8 +300,8 @@ export default function AIAssistantScreen() {
             styles.inputContainer,
             isDark ? { backgroundColor: '#333', borderTopColor: '#444' } : null,
             { 
-              paddingBottom: Math.max(insets.bottom + 80, 90), // Add extra padding for tab bar
-              marginBottom: 0 // Ensure no margin
+              paddingBottom: insets.bottom + TAB_BAR_HEIGHT, // Safe area + tab bar
+              marginBottom: 0 
             }
           ]}
         >
