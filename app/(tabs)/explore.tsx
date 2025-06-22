@@ -1,233 +1,271 @@
-import { Collapsible } from '@/components/Collapsible';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import * as Location from 'expo-location';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Linking, Platform, StyleSheet, Text, View } from 'react-native';
+import MapView, { Marker, UrlTile } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Types for hospital and location to match Nominatim response
+interface Hospital {
+  place_id: string;
+  name: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+  category: string;
+  type: string;
+}
+
+interface UserLocation {
+  latitude: number;
+  longitude: number;
+}
 
 export default function ExploreScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
-  const router = useRouter();
 
-  const handleLinkPress = (url: string) => {
-    Linking.openURL(url);
+  const [location, setLocation] = useState<UserLocation | null>(null);
+  const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      setErrorMsg('');
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied.');
+          setLoading(false);
+          return;
+        }
+        let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+        const userLocation = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
+        setLocation(userLocation);
+        fetchHospitals(userLocation);
+      } catch {
+        setErrorMsg('Could not get your location.');
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const fetchHospitals = async (coords: UserLocation) => {
+    try {
+      const radiusKm = 10; // Search radius
+      const latDeg = radiusKm / 111.32;
+      const lonDeg = radiusKm / (111.32 * Math.cos(coords.latitude * (Math.PI / 180)));
+      
+      const viewBox = `${coords.longitude - lonDeg},${coords.latitude + latDeg},${coords.longitude + lonDeg},${coords.latitude - latDeg}`;
+
+      // Nominatim API for nearby hospitals, bounded to the viewbox
+      const url = `https://nominatim.openstreetmap.org/search?q=hospital&format=jsonv2&viewbox=${viewBox}&bounded=1&limit=50`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'LifelineApp/1.0 (https://lifeline.app)' // Nominatim requires a user-agent
+        }
+      });
+      const data: Hospital[] = await response.json();
+
+      if (data && data.length > 0) {
+        // Filter results to only include actual hospitals
+        const filteredHospitals = data.filter(
+          (place) => place.category === 'amenity' && place.type === 'hospital'
+        );
+        
+        if (filteredHospitals.length > 0) {
+          setHospitals(filteredHospitals);
+        } else {
+          setErrorMsg('No hospitals found within a 10km radius.');
+        }
+      } else {
+        setErrorMsg('No hospitals found nearby.');
+      }
+    } catch {
+      setErrorMsg('Failed to fetch hospitals.');
+    }
+    setLoading(false);
   };
 
-  const navigateToSection = (route: string) => {
-    router.push(route as any);
+  const handleGetDirections = (hospital: Hospital) => {
+    const destination = `${hospital.lat},${hospital.lon}`;
+    const url = Platform.select({
+      ios: `maps:?daddr=${destination}`,
+      android: `google.navigation:q=${destination}`,
+    });
+
+    if (url) {
+      Linking.canOpenURL(url)
+        .then((supported) => {
+          if (supported) {
+            return Linking.openURL(url);
+          }
+          // Fallback to web URL
+          const webUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+          return Linking.openURL(webUrl);
+        })
+        .catch(() => alert('Could not open maps application.'));
+    }
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? '#1a1a1a' : '#fff' }}>
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#FFB5B5', dark: '#353636' }}
-        headerImage={
-          <Image
-            source={require('@/assets/images/woman.png')} 
-            style={styles.headerImage}
-            contentFit="contain"
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FC7A7A" />
+          <Text style={styles.loadingText}>Finding hospitals near you...</Text>
+        </View>
+      )}
+      {!loading && errorMsg ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{errorMsg}</Text>
+        </View>
+      ) : null}
+      {!loading && location && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          showsMyLocationButton
+        >
+          <UrlTile
+            urlTemplate="http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maximumZ={19}
           />
-        }>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Explore Lifeline</ThemedText>
-          <IconSymbol
-            size={24}
-            color={isDark ? '#fff' : '#FC7A7A'}
-            name="heart.fill"
-            style={styles.heartIcon}
-          />
-        </ThemedView>
-        
-        <ThemedText style={styles.subtitle}>
-          Discover the features that make Lifeline your trusted emergency companion.
-        </ThemedText>
-
-        <Collapsible title="🚨 Emergency First Aid">
-          <ThemedText>
-            Access step-by-step first aid instructions for common emergencies including:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• CPR and choking procedures</ThemedText>
-          <ThemedText style={styles.listItem}>• Wound care and bleeding control</ThemedText>
-          <ThemedText style={styles.listItem}>• Burns, fractures, and allergic reactions</ThemedText>
-          <TouchableOpacity onPress={() => navigateToSection('/first-aid-guide')}>
-            <ThemedText type="link" style={styles.actionLink}>
-              View First Aid Guide →
-            </ThemedText>
-          </TouchableOpacity>
-        </Collapsible>
-
-        <Collapsible title="🩺 Symptom Checker">
-          <ThemedText>
-            Our intelligent symptom checker helps you:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• Assess symptoms and their severity</ThemedText>
-          <ThemedText style={styles.listItem}>• Get guidance on when to seek medical help</ThemedText>
-          <ThemedText style={styles.listItem}>• Understand common conditions</ThemedText>
-          <TouchableOpacity onPress={() => navigateToSection('/symptom-checker')}>
-            <ThemedText type="link" style={styles.actionLink}>
-              Try Symptom Checker →
-            </ThemedText>
-          </TouchableOpacity>
-        </Collapsible>
-
-        <Collapsible title="📱 Offline Access">
-          <ThemedText>
-            Lifeline works even without internet connection:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• All essential guides stored locally</ThemedText>
-          <ThemedText style={styles.listItem}>• Emergency contacts always accessible</ThemedText>
-          <ThemedText style={styles.listItem}>• No data required in critical moments</ThemedText>
-          <ThemedText style={styles.highlight}>
-            Perfect for remote areas or network emergencies!
-          </ThemedText>
-        </Collapsible>
-
-        <Collapsible title="🏥 Emergency Contacts">
-          <ThemedText>
-            Quick access to emergency services:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• Local emergency numbers</ThemedText>
-          <ThemedText style={styles.listItem}>• Poison control centers</ThemedText>
-          <ThemedText style={styles.listItem}>• Your personal emergency contacts</ThemedText>
-          <TouchableOpacity onPress={() => navigateToSection('/contact')}>
-            <ThemedText type="link" style={styles.actionLink}>
-              Manage Emergency Contacts →
-            </ThemedText>
-          </TouchableOpacity>
-        </Collapsible>
-
-        <Collapsible title="👨‍⚕️ Expert-Verified Content">
-          <ThemedText>
-            All our content is reviewed by certified medical professionals and follows guidelines from:
-          </ThemedText>
-          <ThemedText style={styles.listItem}>• American Heart Association</ThemedText>
-          <ThemedText style={styles.listItem}>• American Red Cross</ThemedText>
-          <ThemedText style={styles.listItem}>• World Health Organization</ThemedText>
-          <TouchableOpacity onPress={() => handleLinkPress('https://www.heart.org')}>
-            <ThemedText type="link" style={styles.actionLink}>
-              Learn about our sources →
-            </ThemedText>
-          </TouchableOpacity>
-        </Collapsible>
-
-        <Collapsible title="🎯 How to Use Lifeline">
-          <ThemedText>
-            Getting started is simple:
-          </ThemedText>
-          <ThemedText style={styles.stepItem}>1. Bookmark emergency contacts</ThemedText>
-          <ThemedText style={styles.stepItem}>2. Familiarize yourself with first aid basics</ThemedText>
-          <ThemedText style={styles.stepItem}>3. Practice using the symptom checker</ThemedText>
-          <ThemedText style={styles.stepItem}>4. Share with family and friends</ThemedText>
-          <ThemedText style={styles.highlight}>
-            Remember: Lifeline is a guide, not a replacement for professional medical care.
-          </ThemedText>
-        </Collapsible>
-
-        <ThemedView style={styles.ctaSection}>
-          <ThemedText style={styles.ctaTitle}>Ready to Get Started?</ThemedText>
-          <ThemedText style={styles.ctaText}>
-            Explore our first aid guides and symptom checker to become better prepared for emergencies.
-          </ThemedText>
-          <TouchableOpacity 
-            style={[styles.ctaButton, { backgroundColor: '#FC7A7A' }]}
-            onPress={() => navigateToSection('/first-aid-guide')}
-          >
-            <ThemedText style={styles.ctaButtonText}>Start Learning</ThemedText>
-          </TouchableOpacity>
-        </ThemedView>
-      </ParallaxScrollView>
+          {hospitals.map((hospital) => (
+            <Marker
+              key={hospital.place_id}
+              coordinate={{
+                latitude: parseFloat(hospital.lat),
+                longitude: parseFloat(hospital.lon),
+              }}
+              title={hospital.name}
+              description={hospital.display_name}
+              anchor={{ x: 0.5, y: 1 }} // Center the pin tip
+              onPress={() => handleGetDirections(hospital)}
+            >
+              <View style={styles.markerContainer}>
+                <View style={styles.markerPin}>
+                  <FontAwesome name="hospital-o" size={20} color="#fff" />
+                </View>
+                <View style={styles.markerPinTriangle} />
+              </View>
+            </Marker>
+          ))}
+          {location && (
+            <Marker
+              coordinate={location}
+              title="Your Location"
+              anchor={{ x: 0.5, y: 1 }}
+            >
+              <View style={styles.markerContainer}>
+                <View style={[styles.markerPin, styles.userMarkerPin]}>
+                  <FontAwesome name="user" size={20} color="#fff" />
+                </View>
+                <View style={[styles.markerPinTriangle, styles.userMarkerPinTriangle]} />
+              </View>
+            </Marker>
+          )}
+        </MapView>
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    height: 200,
-    width: 200,
-    bottom: -20,
-    left: '50%',
-    marginLeft: -100, // Half of the width to center it
-    position: 'absolute',
+  map: {
+    flex: 1,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 16,
+  loadingContainer: {
+    ...Platform.select({
+      ios: { zIndex: 10, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', justifyContent: 'center', alignItems: 'center' },
+      android: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', justifyContent: 'center', alignItems: 'center' },
+    }),
   },
-  heartIcon: {
-    marginLeft: 8,
-  },
-  subtitle: {
+  loadingText: {
+    marginTop: 16,
     fontSize: 16,
-    marginBottom: 24,
-    lineHeight: 24,
-  },
-  listItem: {
-    fontSize: 14,
-    marginVertical: 2,
-    marginLeft: 8,
-    lineHeight: 20,
-  },
-  stepItem: {
-    fontSize: 14,
-    marginVertical: 4,
-    fontWeight: '500',
-    lineHeight: 20,
-  },
-  actionLink: {
-    marginTop: 8,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  highlight: {
-    fontSize: 14,
-    fontWeight: '600',
     color: '#FC7A7A',
-    marginTop: 8,
-    fontStyle: 'italic',
-  },
-  ctaSection: {
-    marginTop: 32,
-    padding: 24,
-    backgroundColor: '#F8D7D7',
-    borderRadius: 16,
-    alignItems: 'center',
-  },
-  ctaTitle: {
-    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
-    color: '#000',
   },
-  ctaText: {
-    fontSize: 14,
-     color: '#374151',
-    textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 20,
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
   },
-  ctaButton: {
-     backgroundColor: '#FC7A7A',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+  errorText: {
+    color: '#FC7A7A',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  markerBubble: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 8,
+    borderColor: '#FC7A7A',
+    borderWidth: 1,
+    minWidth: 80,
+    maxWidth: 150,
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  ctaButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  markerText: {
+    color: '#FC7A7A',
     fontWeight: 'bold',
+    fontSize: 13,
+    textAlign: 'center',
+  },
+  // Custom marker styles
+  markerContainer: {
+    alignItems: 'center',
+  },
+  markerPin: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FC7A7A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#fff',
+    borderWidth: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  markerPinTriangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 12,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FC7A7A',
+    alignSelf: 'center',
+    marginTop: -2,
+  },
+  userMarkerPin: {
+    backgroundColor: '#3498db',
+  },
+  userMarkerPinTriangle: {
+    borderTopColor: '#3498db',
   },
 });
