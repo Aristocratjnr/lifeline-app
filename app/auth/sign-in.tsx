@@ -90,9 +90,11 @@ export default function SignInScreen() {
                     </View>
                     <Text style={styles.rememberMeText}>Remember me</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => alert('Forgot password?')}>
-                    <Text style={styles.forgotText}>Forgot password?</Text>
-                    </TouchableOpacity>
+                    <Link href="/auth/forgot-password" asChild>
+                        <TouchableOpacity>
+                            <Text style={styles.forgotText}>Forgot password?</Text>
+                        </TouchableOpacity>
+                    </Link>
                 </View>
 
                 <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
