@@ -91,16 +91,19 @@ export default function AIAssistantScreen() {
       'infection', 'vaccine', 'pandemic', 'allergy', 'bite', 'sting', 'overdose', 'seizure'
     ];
     
-    // Common greetings and polite conversation starters
-    const greetings = [
+    // Common greetings, identity questions, and polite conversation starters
+    const allowedPhrases = [
       'hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening',
-      'thanks', 'thank you', 'bye', 'goodbye', 'help', 'start', 'begin'
+      'thanks', 'thank you', 'bye', 'goodbye', 'help', 'start', 'begin',
+      'who are you', 'what are you', 'who made you', 'who created you',
+      'what can you do', 'what do you do', 'your name', 'about you',
+      'tell me about yourself', 'what is lifeline', 'what\'s lifeline'
     ];
     
     const lowerQuery = query.toLowerCase().trim();
     
-    // Allow greetings and basic conversation
-    if (greetings.some(greeting => lowerQuery.includes(greeting))) {
+    // Allow identity questions and basic conversation
+    if (allowedPhrases.some(phrase => lowerQuery.includes(phrase))) {
       return true;
     }
     
@@ -144,7 +147,7 @@ export default function AIAssistantScreen() {
           messages: [
             {
               role: 'system',
-              content: 'You are a knowledgeable first aid assistant helping people with emergency medical information. Provide clear, concise instructions for first aid situations. For serious emergencies, always advise calling emergency services. Your advice should be based on established first aid protocols. ONLY answer questions related to health, medicine, first aid, or emergency response. For other topics, politely decline to answer. Your name is Lifeline Assistant.'
+              content: 'You are a knowledgeable first aid assistant named Lifeline Assistant, created by the Lifeline team to help people with emergency medical information. You should: 1) Provide clear, concise instructions for first aid situations, 2) For serious emergencies, always advise calling emergency services, 3) Base your advice on established first aid protocols, 4) When asked about your identity, explain that you are the Lifeline Assistant focused on providing first aid and emergency medical guidance, 5) When asked who created you, mention you were created by the Lifeline team to help people with medical emergencies and first aid information. Your responses should be helpful, professional, and focused on medical/health topics. For non-health topics, politely decline to answer.'
             },
             { role: 'user', content: userQuery }
           ],
