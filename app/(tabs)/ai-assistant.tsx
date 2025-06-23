@@ -19,9 +19,6 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY; 
 
-// Add this constant for tab bar height
-const TAB_BAR_HEIGHT = 10;
-
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -300,7 +297,7 @@ export default function AIAssistantScreen() {
             styles.inputContainer,
             isDark ? { backgroundColor: '#333', borderTopColor: '#444' } : null,
             { 
-              paddingBottom: insets.bottom + TAB_BAR_HEIGHT, // Safe area + tab bar
+              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0, // Only add bottom padding for iOS
               marginBottom: 0 
             }
           ]}
