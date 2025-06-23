@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,10 +10,12 @@ export default function SymptomCheckerScreen() {
   const [result, setResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const inputRef = useRef<TextInput>(null);
 
   const handleCheck = async () => {
     if (!symptoms.trim()) return;
     Keyboard.dismiss();
+    inputRef.current?.blur();
     setIsLoading(true);
     setResult('');
     setError('');
@@ -41,7 +43,7 @@ export default function SymptomCheckerScreen() {
       const data = await response.json();
       const aiReply = data.choices[0].message.content;
       setResult(aiReply);
-    } catch (err) {
+    } catch {
       setError('Sorry, I could not analyze your symptoms right now.');
     } finally {
       setIsLoading(false);
@@ -79,6 +81,7 @@ export default function SymptomCheckerScreen() {
             Enter your symptoms below and get quick guidance. This tool helps you identify possible conditions and next steps.
           </Text>
           <TextInput
+            ref={inputRef}
             style={styles.input}
             placeholder="e.g. headache, fever, cough"
             value={symptoms}
