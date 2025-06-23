@@ -1,10 +1,28 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { Asset } from 'expo-asset';
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Loader from '../../components/Loader';
 
 export default function HomeScreen() {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function loadAssets() {
+      await Asset.loadAsync([
+        require('@/assets/images/woman.png'),
+      ]);
+      setIsReady(true);
+    }
+    loadAssets();
+  }, []);
+
+  if (!isReady) {
+    return <Loader isLoading={true} />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inner}>

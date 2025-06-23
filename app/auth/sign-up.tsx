@@ -1,6 +1,7 @@
+import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
     ImageBackground,
@@ -12,9 +13,28 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import Loader from '../../components/Loader';
 
 const SignUpScreen = () => {
   const [rememberMe, setRememberMe] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function loadAssets() {
+      await Asset.loadAsync([
+        require('../../assets/images/background.jpg'),
+        require('../../assets/images/signup.png'),
+        require('../../assets/images/woman.png'),
+        require('../../assets/images/mail.png'),
+      ]);
+      setIsReady(true);
+    }
+    loadAssets();
+  }, []);
+
+  if (!isReady) {
+    return <Loader isLoading={true} />;
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>

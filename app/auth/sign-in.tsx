@@ -1,22 +1,40 @@
+import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Image,
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Image,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import Loader from '../../components/Loader';
 
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function loadAssets() {
+      await Asset.loadAsync([
+        require('../../assets/images/background.jpg'),
+        require('../../assets/images/medical-kit.png'),
+      ]);
+      setIsReady(true);
+    }
+    loadAssets();
+  }, []);
+
+  if (!isReady) {
+    return <Loader isLoading={true} />;
+  }
 
   const handleSignIn = () => {
     // TODO: Implement sign in logic
