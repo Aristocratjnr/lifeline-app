@@ -8,9 +8,6 @@ const NEWS_API_LIMIT = 100; // Increased limit
 const NEWS_API_URL = `https://api.mediastack.com/v1/news?access_key=${NEWS_API_KEY}&categories=health&languages=en&limit=${NEWS_API_LIMIT}`;
 const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-// News API article type for mediastack
-// See: https://mediastack.com/documentation
-// Example fields: author, title, description, url, source, image, category, language, country, published_at
 
 type NewsArticle = {
   author?: string;
