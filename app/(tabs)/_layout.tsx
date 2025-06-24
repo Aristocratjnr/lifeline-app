@@ -36,15 +36,6 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="symptom-checker"
-          options={{
-            title: 'Symptom Checker',
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="healing" size={28} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="explore"
           options={{
             title: 'Maps',
