@@ -43,6 +43,15 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="firstAidNews"
+          options={{
+            title: 'News',
+            tabBarIcon: ({ color }) => (
+              <MaterialIcons size={28} name="newspaper" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="ai-assistant"
           options={{
             title: 'AI Assistant',
