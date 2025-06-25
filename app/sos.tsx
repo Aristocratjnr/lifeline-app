@@ -1,11 +1,14 @@
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Location from 'expo-location';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SOSScreen() {
   const pulseAnimation = useRef(new Animated.Value(1)).current;
+  const router = useRouter();
 
   useEffect(() => {
     Animated.loop(
@@ -28,9 +31,20 @@ export default function SOSScreen() {
     Linking.openURL('tel:193');
   };
 
-  const handleSendLocation = () => {
-    // TODO: Implement logic to send location to emergency contacts
-    alert('Sending location to emergency contacts...');
+  const handleSendLocation = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permission to access location was denied.');
+        return;
+      }
+      let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+      const lat = loc.coords.latitude;
+      const lng = loc.coords.longitude;
+      router.push(`/explore?lat=${lat}&lng=${lng}`);
+    } catch {
+      alert('Could not get your location.');
+    }
   };
 
   const animatedSosButtonStyle = {

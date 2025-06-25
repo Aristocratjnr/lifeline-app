@@ -1,6 +1,7 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
+import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Linking, Platform, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, UrlTile } from 'react-native-maps';
@@ -25,33 +26,47 @@ interface UserLocation {
 export default function ExploreScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const params = useLocalSearchParams();
 
   const [location, setLocation] = useState<UserLocation | null>(null);
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [sosMarker, setSosMarker] = useState<UserLocation | null>(null);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      setErrorMsg('');
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          setErrorMsg('Permission to access location was denied.');
+    // If lat/lng params are present, use them as SOS marker and center
+    if (params.lat && params.lng) {
+      const lat = parseFloat(params.lat as string);
+      const lng = parseFloat(params.lng as string);
+      const sosLoc = { latitude: lat, longitude: lng };
+      setSosMarker(sosLoc);
+      setLocation(sosLoc);
+      setLoading(false);
+      fetchHospitals(sosLoc);
+    } else {
+      (async () => {
+        setLoading(true);
+        setErrorMsg('');
+        try {
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied.');
+            setLoading(false);
+            return;
+          }
+          let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+          const userLocation = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
+          setLocation(userLocation);
+          fetchHospitals(userLocation);
+        } catch {
+          setErrorMsg('Could not get your location.');
           setLoading(false);
-          return;
         }
-        let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-        const userLocation = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
-        setLocation(userLocation);
-        fetchHospitals(userLocation);
-      } catch {
-        setErrorMsg('Could not get your location.');
-        setLoading(false);
-      }
-    })();
-  }, []);
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.lat, params.lng]);
 
   const fetchHospitals = async (coords: UserLocation) => {
     try {
@@ -160,7 +175,22 @@ export default function ExploreScreen() {
               </View>
             </Marker>
           ))}
-          {location && (
+          {sosMarker && (
+            <Marker
+              coordinate={sosMarker}
+              title="SOS Location"
+              pinColor="#EF4444"
+              anchor={{ x: 0.5, y: 1 }}
+            >
+              <View style={styles.markerContainer}>
+                <View style={[styles.markerPin, { backgroundColor: '#EF4444' }] }>
+                  <FontAwesome name="exclamation" size={20} color="#fff" />
+                </View>
+                <View style={[styles.markerPinTriangle, { borderTopColor: '#EF4444' }]} />
+              </View>
+            </Marker>
+          )}
+          {!sosMarker && location && (
             <Marker
               coordinate={location}
               title="Your Location"
