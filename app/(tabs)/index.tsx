@@ -169,18 +169,18 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   image: {
-    width: 240,           // was 210
-    height: 240,          // was 210
-    borderRadius: 120,    // was 1
+    width: 240,           
+    height: 240,          
+    borderRadius: 120,    
     backgroundColor: 'transparent',
   },
   imageBorder: {
     position: 'absolute',
-    top: -12,             // was -10
+    top: -12,             
     left: -12,
     right: -12,
     bottom: -12,
-    borderRadius: 132,    // was 115
+    borderRadius: 132,
     borderWidth: 3,
     borderColor: '#FC7A7A',
     opacity: 0.3,
