@@ -47,32 +47,32 @@ const DashboardScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {/* Health Stats Widget */}
-        <LinearGradient colors={["#FDE68A", "#A7F3D0"]} style={styles.statsCard} start={{x:0, y:0}} end={{x:1, y:1}}>
+        <LinearGradient colors={["#FFE5EC", "#FFF1F2", "#FFFFFF"]} style={styles.statsCard} start={{x:0, y:0}} end={{x:1, y:1}}>
           <Text style={styles.statsTitle}>Health Stats</Text>
           <View style={styles.statsRow}>
             <View style={styles.statsItem}>
-              <FontAwesome5 name="walking" size={30} color="#10B981" style={{ marginBottom: 6 }} />
+              <FontAwesome5 name="walking" size={30} color="#FC7A7A" style={{ marginBottom: 6 }} />
               <Text style={styles.statsValue}>{healthStats.steps}</Text>
               <Text style={styles.statsLabel}>Steps</Text>
             </View>
             <View style={styles.statsItem}>
-              <MaterialIcons name="medical-services" size={30} color="#6366F1" style={{ marginBottom: 6 }} />
+              <MaterialIcons name="medical-services" size={30} color="#FBBF24" style={{ marginBottom: 6 }} />
               <Text style={styles.statsValue}>{healthStats.lastCheckup}</Text>
               <Text style={styles.statsLabel}>Last Checkup</Text>
             </View>
             <View style={[styles.statsItem, { alignItems: 'center' }]}> 
               <AnimatedCircularProgress
-                size={54}
-                width={7}
+                size={40}
+                width={6}
                 fill={(healthStats.waterIntake / 8) * 100}
-                tintColor="#3B82F6"
-                backgroundColor="#E0E7FF"
+                tintColor="#60A5FA"
+                backgroundColor="#F3F4F6"
                 rotation={0}
                 lineCap="round"
                 style={{ marginBottom: 6 }}
               >
                 {() => (
-                  <FontAwesome5 name="tint" size={22} color="#3B82F6" />
+                  <FontAwesome5 name="tint" size={24} color="#60A5FA" />
                 )}
               </AnimatedCircularProgress>
               <Text style={styles.statsValue}>{healthStats.waterIntake}/8</Text>
