@@ -215,10 +215,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loadingContainer: {
-    ...Platform.select({
-      ios: { zIndex: 10, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', justifyContent: 'center', alignItems: 'center' },
-      android: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', justifyContent: 'center', alignItems: 'center' },
-    }),
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 10,
   },
   loadingText: {
     marginTop: 16,
