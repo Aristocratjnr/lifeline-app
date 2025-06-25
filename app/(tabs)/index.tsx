@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
+import { Image as ExpoImage } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#FFFFFF', '#FEE2E2']} 
+        colors={['#FFFFFF', '#FFFFFF']} 
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -38,10 +39,10 @@ export default function HomeScreen() {
           {/* Header Section */}
           <View style={styles.headerSection}>
             <View style={styles.iconContainer}>
-            <Image
+              <ExpoImage
                 source={require('@/assets/images/logo.png')}
                 style={{ width: 80, height: 80, borderRadius: 60, backgroundColor: 'transparent' }}
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
             <Text style={styles.title}> Welcome to Lifeline</Text>
