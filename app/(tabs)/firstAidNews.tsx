@@ -264,7 +264,7 @@ export default function FirstAidNewsScreen() {
       <StatusBar barStyle="dark-content" backgroundColor="#FFF5F5" />
       
       <LinearGradient
-        colors={['#FFF5F5', '#FFE8E8']}
+        colors={['#FFFFFF', '#FFFFFF']}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -273,10 +273,9 @@ export default function FirstAidNewsScreen() {
           <View style={styles.headerTop}>
             <View style={styles.iconContainer}>
               <LinearGradient
-                colors={['#FC7A7A', '#F87171']}
+                colors={['#FFFFF', '#FFFFF']}
                 style={styles.iconGradient}
               >
-                {/* Replace icon with woman image */}
                 <Animated.Image
                   source={require('@/assets/images/woman.png')}
                   style={{ width: 40, height: 40, borderRadius: 20 }}
