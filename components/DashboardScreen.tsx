@@ -1,7 +1,9 @@
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
@@ -15,6 +17,20 @@ const DashboardScreen = () => {
     language: 'English',
     avatar: require('@/assets/images/Daniella.jpeg'), 
   };
+
+  // Simulated health stats
+  const healthStats = {
+    steps: 7421,
+    lastCheckup: '25/06/25',
+    waterIntake: 6, // out of 8 glasses
+  };
+
+  // Simulated recent activity
+  const recentActivity = [
+    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12' },
+    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45' },
+    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30' },
+  ];
 
   const timeline = [
     { id: '1', title: 'Fracture', date: 'Last Visited: 02, May, 2025', icon: 'bone' },
@@ -30,6 +46,41 @@ const DashboardScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Health Stats Widget */}
+        <LinearGradient colors={["#FDE68A", "#A7F3D0"]} style={styles.statsCard} start={{x:0, y:0}} end={{x:1, y:1}}>
+          <Text style={styles.statsTitle}>Health Stats</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statsItem}>
+              <FontAwesome5 name="walking" size={30} color="#10B981" style={{ marginBottom: 6 }} />
+              <Text style={styles.statsValue}>{healthStats.steps}</Text>
+              <Text style={styles.statsLabel}>Steps</Text>
+            </View>
+            <View style={styles.statsItem}>
+              <MaterialIcons name="medical-services" size={30} color="#6366F1" style={{ marginBottom: 6 }} />
+              <Text style={styles.statsValue}>{healthStats.lastCheckup}</Text>
+              <Text style={styles.statsLabel}>Last Checkup</Text>
+            </View>
+            <View style={[styles.statsItem, { alignItems: 'center' }]}> 
+              <AnimatedCircularProgress
+                size={54}
+                width={7}
+                fill={(healthStats.waterIntake / 8) * 100}
+                tintColor="#3B82F6"
+                backgroundColor="#E0E7FF"
+                rotation={0}
+                lineCap="round"
+                style={{ marginBottom: 6 }}
+              >
+                {() => (
+                  <FontAwesome5 name="tint" size={22} color="#3B82F6" />
+                )}
+              </AnimatedCircularProgress>
+              <Text style={styles.statsValue}>{healthStats.waterIntake}/8</Text>
+              <Text style={styles.statsLabel}>Water</Text>
+            </View>
+          </View>
+        </LinearGradient>
+
         {/* Profile Card */}
         <View style={styles.profileCard}>
           <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
@@ -101,6 +152,20 @@ const DashboardScreen = () => {
             <Text style={styles.tipFooter}>New tip every day</Text>
           </View>
         </View>
+
+        {/* Recent Activity */}
+        <View style={styles.activityCard}>
+          <Text style={styles.activityTitle}>Recent Activity</Text>
+          {recentActivity.map((item) => (
+            <View key={item.id} style={styles.activityRow}>
+              <FontAwesome5 name={item.icon as any} size={18} color="#FC7A7A" style={{ marginRight: 14 }} />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.activityLabel}>{item.label}</Text>
+                <Text style={styles.activityTime}>{item.time}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -116,6 +181,47 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
+  },
+  statsCard: {
+    width: '100%',
+    borderRadius: 22,
+    padding: 20,
+    marginBottom: 22,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.10,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  statsTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 12,
+    letterSpacing: 0.5,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statsItem: {
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: 2,
+  },
+  statsValue: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#222',
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  statsLabel: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 2,
+    letterSpacing: 0.2,
   },
   profileCard: {
     width: '100%',
@@ -280,6 +386,43 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#aaa',
     textAlign: 'center',
+  },
+  activityCard: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 18,
+    marginTop: 18,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  activityTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 10,
+  },
+  activityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  activityLabel: {
+    fontSize: 14,
+    color: '#222',
+    fontWeight: '500',
+  },
+  activityTime: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 2,
   },
 });
 

@@ -80,11 +80,11 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   sosButton: {
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 80 : 24,
+    bottom: Platform.OS === 'ios' ? 82 : 24,
     right: 12,
     backgroundColor: '#EF4444',
-    width: 56,
-    height: 56,
+    width: 54,
+    height: 54,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
