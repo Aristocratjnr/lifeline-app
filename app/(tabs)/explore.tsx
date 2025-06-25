@@ -65,7 +65,7 @@ export default function ExploreScreen() {
         }
       })();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [params.lat, params.lng]);
 
   const fetchHospitals = async (coords: UserLocation) => {
