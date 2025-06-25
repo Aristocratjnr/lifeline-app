@@ -1,6 +1,6 @@
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
     Image,
@@ -20,6 +20,7 @@ export default function SignInScreen() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function loadAssets() {
@@ -38,7 +39,7 @@ export default function SignInScreen() {
 
   const handleSignIn = () => {
     // TODO: Implement sign in logic
-    alert('Sign in logic goes here');
+    router.replace('/dashboard');
   };
 
   const handleGoogleSignIn = () => {

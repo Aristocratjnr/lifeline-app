@@ -186,9 +186,6 @@ const styles = StyleSheet.create({
     left: -12,
     right: -12,
     bottom: -12,
-    borderRadius: 132,
-    borderWidth: 3,
-    borderColor: '#FC7A7A',
     opacity: 0.3,
   },
 

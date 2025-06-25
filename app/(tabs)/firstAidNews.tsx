@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: 20,
-    borderRadius: 20,
+    borderRadius: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   cardGradient: {
-    borderRadius: 20,
+    borderRadius: 0,
     overflow: 'hidden',
   },
   imageContainer: {
