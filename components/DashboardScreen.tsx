@@ -1,18 +1,19 @@
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
   const user = {
-    name: 'OAuthAccount',
+    name: 'Daniella',
     age: '18-25',
-    gender: 'male',
+    gender: 'Female',
     location: 'Ghana',
-    medicalCondition: 'Fighting',
-    contact: '0551784926',
+    medicalCondition: 'Common Cold',
+    contact: '0203430787',
     language: 'English',
-    avatar: require('@/assets/images/lifeline.jpeg'), 
+    avatar: require('@/assets/images/Daniella.jpeg'), 
   };
 
   const timeline = [
@@ -28,10 +29,10 @@ const DashboardScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {/* Profile Card */}
         <View style={styles.profileCard}>
-          <Image source={user.avatar} style={styles.profileAvatar} />
+          <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
           <Text style={styles.profileName}>{user.name}</Text>
           <View style={styles.profileDetailsRow}>
             <Feather name="calendar" size={16} color="#666" />
@@ -114,87 +115,91 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
     alignItems: 'center',
+    backgroundColor: '#F5F5F5',
   },
   profileCard: {
     width: '100%',
     backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
+    borderRadius: 20,
+    padding: 24,
+    marginBottom: 28,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 12,
+    elevation: 4,
   },
   profileAvatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 10,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    marginBottom: 14,
+    borderWidth: 2,
+    borderColor: '#FC7A7A',
+    backgroundColor: '#F3F4F6',
   },
   profileName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 10,
     color: '#1F2937',
   },
   profileDetailsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   profileDetailText: {
     marginLeft: 6,
-    fontSize: 14,
+    fontSize: 15,
     color: '#333',
   },
   editProfileButton: {
-    marginTop: 10,
+    marginTop: 14,
     backgroundColor: '#FFE5E5',
-    borderRadius: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    borderRadius: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 28,
   },
   editProfileButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 15,
   },
   section: {
     width: '100%',
-    marginBottom: 24,
+    marginBottom: 28,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#1F2937',
   },
   viewAllButton: {
     backgroundColor: '#FFE5E5',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 16,
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 18,
   },
   viewAllButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: 14,
   },
   timelineContainer: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 14,
+    padding: 14,
     marginTop: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 2,
     elevation: 1,
@@ -202,37 +207,37 @@ const styles = StyleSheet.create({
   timelineItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    paddingBottom: 12,
+    marginBottom: 14,
+    paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#F3F4F6',
   },
   timelineIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: 14,
   },
   timelineContent: {
     flex: 1,
   },
   timelineTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1F2937',
   },
   timelineDate: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#666',
   },
   dailyTipCard: {
     width: '100%',
     backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 18,
+    borderRadius: 18,
+    padding: 20,
     marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -242,37 +247,37 @@ const styles = StyleSheet.create({
   },
   tipContent: {
     alignItems: 'center',
-    padding: 10,
+    padding: 12,
     backgroundColor: '#FAFAFA',
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 10,
   },
   tipText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
     color: '#D9534F',
   },
   tipSubText: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#666',
     textAlign: 'center',
   },
   newTipButton: {
     backgroundColor: '#FFE5E5',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 16,
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 18,
     alignSelf: 'flex-start',
   },
   newTipButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: 14,
   },
   tipFooter: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#aaa',
     textAlign: 'center',
   },
