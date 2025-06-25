@@ -2,13 +2,24 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useRef } from 'react';
-import { Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Linking, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SOSScreen() {
   const pulseAnimation = useRef(new Animated.Value(1)).current;
   const router = useRouter();
+  const [showMedicalId, setShowMedicalId] = useState(false);
+
+  // Simulated user data for Medical ID
+  const user = {
+    name: 'Daniella',
+    age: '18-25',
+    gender: 'Female',
+    medicalCondition: 'Common Cold',
+    contact: '0203430787',
+    bloodType: 'O+',
+  };
 
   useEffect(() => {
     Animated.loop(
@@ -76,12 +87,34 @@ export default function SOSScreen() {
               <FontAwesome5 name="map-marker-alt" size={24} color="#1F2937" />
               <Text style={styles.actionButtonText}>Send Location</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity style={styles.actionButton} onPress={() => setShowMedicalId(true)}>
               <FontAwesome5 name="user-shield" size={24} color="#1F2937" />
               <Text style={styles.actionButtonText}>Medical ID</Text>
             </TouchableOpacity>
           </View>
 
+          {/* Medical ID Modal */}
+          <Modal
+            visible={showMedicalId}
+            animationType="slide"
+            transparent
+            onRequestClose={() => setShowMedicalId(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.medicalIdCard}>
+                <Text style={styles.medicalIdTitle}>Medical ID</Text>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Name:</Text><Text style={styles.medicalIdValue}>{user.name}</Text></View>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Age:</Text><Text style={styles.medicalIdValue}>{user.age}</Text></View>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Gender:</Text><Text style={styles.medicalIdValue}>{user.gender}</Text></View>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Condition:</Text><Text style={styles.medicalIdValue}>{user.medicalCondition}</Text></View>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Contact:</Text><Text style={styles.medicalIdValue}>{user.contact}</Text></View>
+                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Blood Type:</Text><Text style={styles.medicalIdValue}>{user.bloodType}</Text></View>
+                <TouchableOpacity style={styles.closeModalButton} onPress={() => setShowMedicalId(false)}>
+                  <Text style={styles.closeModalButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -201,5 +234,56 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: '#6B7280',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  medicalIdCard: {
+    width: 320,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 28,
+    alignItems: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  medicalIdTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#EF4444',
+    marginBottom: 18,
+    alignSelf: 'center',
+  },
+  medicalIdRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  medicalIdLabel: {
+    fontWeight: 'bold',
+    color: '#374151',
+    width: 110,
+  },
+  medicalIdValue: {
+    color: '#1F2937',
+    fontWeight: '500',
+  },
+  closeModalButton: {
+    alignSelf: 'center',
+    marginTop: 18,
+    backgroundColor: '#EF4444',
+    borderRadius: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 28,
+  },
+  closeModalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 }); 
