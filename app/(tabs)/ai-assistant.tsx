@@ -1,5 +1,6 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { FontAwesome } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -327,7 +328,7 @@ export default function AIAssistantScreen() {
             disabled={!message.trim() || isLoading}
             activeOpacity={0.7}
           >
-            <FontAwesome name="send" size={18} color="#fff" />
+            <MaterialIcons name="auto-awesome" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
