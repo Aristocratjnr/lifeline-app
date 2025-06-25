@@ -39,7 +39,9 @@ export default function TabLayout() {
           name="explore"
           options={{
             title: 'Maps',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <MaterialIcons size={28} name="place" color={color} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -54,9 +56,9 @@ export default function TabLayout() {
         <Tabs.Screen
           name="ai-assistant"
           options={{
-            title: 'AI Assistant',
+            title: 'A.I Assistant',
             tabBarIcon: ({ color }) => (
-              <MaterialIcons size={28} name="local-hospital" color={color} />
+              <MaterialIcons size={28} name="auto-awesome" color={color} />
             ),
             tabBarStyle: { display: 'none' },
           }}

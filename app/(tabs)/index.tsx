@@ -1,10 +1,13 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../../components/Loader';
+
+const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const [isReady, setIsReady] = useState(false);
@@ -25,29 +28,69 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.inner}>
-        <Text style={styles.title}>Welcome to Lifeline</Text>
-        <Text style={styles.subtitle}>Your trusted first aid & emergency companion</Text>
-        <Image
-          source={require('@/assets/images/woman.png')}
-          style={styles.image}
-          resizeMode="cover"
-        />
-        <View style={styles.buttonContainer}>
-          <Link href="/auth/sign-in" asChild>
-            <TouchableOpacity style={styles.button} activeOpacity={0.85}>
-              <FontAwesome name="sign-in" size={20} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Sign In</Text>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/auth/sign-up" asChild>
-            <TouchableOpacity style={styles.button} activeOpacity={0.85}>
-              <FontAwesome name="user-plus" size={20} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Sign Up</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View>
+      <LinearGradient
+        colors={['#FFF5F5', '#FFE8E8', '#FFF5F5']}
+        style={styles.gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <View style={styles.inner}>
+          {/* Header Section */}
+          <View style={styles.headerSection}>
+            <View style={styles.iconContainer}>
+              <FontAwesome name="heartbeat" size={32} color="#FC7A7A" />
+            </View>
+            <Text style={styles.title}> Welcome to Lifeline</Text>
+            <View style={{ height: 8 }} />
+            <Text style={styles.subtitle}>
+              Your trusted first aid & emergency companion
+            </Text>
+            <View style={styles.featureHighlight}>
+              <FontAwesome name="shield" size={16} color="#10B981" />
+              <Text style={styles.featureText}>Always Ready • Always Safe</Text>
+            </View>
+          </View>
+
+          {/* Image Section */}
+          <View style={styles.imageSection}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('@/assets/images/woman.png')}
+                style={styles.image}
+                resizeMode="cover"
+              />
+              <View style={styles.imageBorder} />
+            </View>
+          </View>
+
+          {/* Action Section */}
+          <View style={styles.actionSection}>
+              
+            <View style={styles.buttonContainer}>
+              <Link href="/auth/sign-in" asChild>
+                <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+                  <LinearGradient
+                    colors={['#FC7A7A', '#F87171']}
+                    style={styles.buttonGradient}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  >
+                    <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
+                    <Text style={styles.primaryButtonText}>Sign In</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Link>
+              
+              <Link href="/auth/sign-up" asChild>
+                <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
+                  <FontAwesome name="user-plus" size={18} color="#FC7A7A" style={styles.buttonIcon} />
+                  <Text style={styles.secondaryButtonText}>Create Account</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+            </View>
+          </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -55,15 +98,36 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+  },
+  gradient: {
+    flex: 1,
   },
   inner: {
     flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 20,
+  },
+  
+  // Header Section
+  headerSection: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    marginBottom: 16,
+    shadowColor: '#FC7A7A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  title: {
+   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#FC7A7A',
@@ -73,62 +137,160 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#374151',
-    marginBottom: 32,
+    color: '#6B7280',
     textAlign: 'center',
     fontWeight: '500',
+    lineHeight: 22,
+    marginBottom: 12,
   },
-  image: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'transparent',
-    marginBottom: 36,
-  },
-  buttonContainer: {
-    width: '100%',
-    alignItems: 'center',
-    gap: 18,
-  },
-  button: {
+  featureHighlight: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 220,
-    paddingVertical: 16,
-    borderRadius: 30,
-    backgroundColor: '#FC7A7A',
-    justifyContent: 'center',
-    marginBottom: 8,
+    backgroundColor: '#F0FDF4',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
+  featureText: {
+    fontSize: 12,
+    color: '#059669',
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+
+  // Image Section
+  imageSection: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  imageContainer: {
+    position: 'relative',
+  },
+  image: {
+    width: 240,           // was 210
+    height: 240,          // was 210
+    borderRadius: 120,    // was 1
+    backgroundColor: 'transparent',
+  },
+  imageBorder: {
+    position: 'absolute',
+    top: -12,             // was -10
+    left: -12,
+    right: -12,
+    bottom: -12,
+    borderRadius: 132,    // was 115
+    borderWidth: 3,
+    borderColor: '#FC7A7A',
+    opacity: 0.3,
+  },
+
+  // Action Section
+  actionSection: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  actionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#374151',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    gap: 16,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  
+  // Primary Button
+  primaryButton: {
+    width: width * 0.8,
+    height: 56,
+    borderRadius: 28,
     shadowColor: '#FC7A7A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.13,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
   },
-  buttonIcon: {
-    marginRight: 10,
+  buttonGradient: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 28,
   },
-  buttonText: {
+  primaryButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
-    letterSpacing: 1,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
-  signUpButton: {
+  
+  // Secondary Button
+  secondaryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width * 0.8,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: '#fff',
     borderWidth: 2,
     borderColor: '#FC7A7A',
     shadowColor: '#FC7A7A',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    elevation: 3,
-    marginTop: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  signUpButtonText: {
+  secondaryButtonText: {
     color: '#FC7A7A',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
-  signUpButtonIcon: {
+  buttonIcon: {
     marginRight: 10,
+  },
+
+  // Quick Access Section
+  quickAccessContainer: {
+    alignItems: 'center',
+  },
+  quickAccessTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginBottom: 16,
+  },
+  quickAccessButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  quickButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  quickButtonText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginTop: 4,
+    textAlign: 'center',
   },
 });
