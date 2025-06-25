@@ -29,7 +29,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#FFF5F5', '#FFE8E8', '#FFF5F5']}
+        colors={['#FFFFFF', '#FEE2E2']} 
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -38,7 +38,11 @@ export default function HomeScreen() {
           {/* Header Section */}
           <View style={styles.headerSection}>
             <View style={styles.iconContainer}>
-              <FontAwesome name="heartbeat" size={32} color="#FC7A7A" />
+            <Image
+                source={require('@/assets/images/logo.png')}
+                style={{ width: 80, height: 80, borderRadius: 60, backgroundColor: 'transparent' }}
+                resizeMode="contain"
+              />
             </View>
             <Text style={styles.title}> Welcome to Lifeline</Text>
             <View style={{ height: 8 }} />
@@ -101,17 +105,18 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+    backgroundColor: '#fff', 
   },
   inner: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 20,
+    paddingTop: 46,
   },
   
   // Header Section
   headerSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 60,
   },
   iconContainer: {
     width: 64,
