@@ -1,7 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
 import { Image as ExpoImage } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -29,73 +28,64 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#FFFFFF', '#FFFFFF']} 
-        style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.inner}>
-          {/* Header Section */}
-          <View style={styles.headerSection}>
-            <View style={styles.iconContainer}>
-              <ExpoImage
-                source={require('@/assets/images/logo.png')}
-                style={{ width: 80, height: 80, borderRadius: 60, backgroundColor: 'transparent' }}
-                contentFit="contain"
-              />
-            </View>
-            <Text style={styles.title}> Welcome to Lifeline</Text>
-            <View style={{ height: 8 }} />
-            <Text style={styles.subtitle}>
-              Your trusted first aid & emergency companion
-            </Text>
-            <View style={styles.featureHighlight}>
-              <FontAwesome name="shield" size={16} color="#10B981" />
-              <Text style={styles.featureText}>Always Ready • Always Safe</Text>
-            </View>
+      <View style={styles.background}>
+        {/* Header Section */}
+        <View style={styles.headerSection}>
+          <View style={styles.logoContainer}>
+            <ExpoImage
+              source={require('@/assets/images/logo.png')}
+              style={styles.logo}
+              contentFit="contain"
+            />
           </View>
+          
+          <Text style={styles.title}>Welcome to LIFELINE</Text>
+          
+          <Text style={styles.subtitle}>
+            Your trusted first aid & emergency companion
+          </Text>
+          
+          <View style={styles.featureHighlight}>
+            <FontAwesome name="shield" size={16} color="#106B40" />
+            <Text style={styles.featureText}>Always Ready - Always Safe</Text>
+          </View>
+        </View>
 
-          {/* Image Section */}
-          <View style={styles.imageSection}>
-            <View style={styles.imageContainer}>
-              <Image
-                source={require('@/assets/images/woman.png')}
-                style={styles.image}
-                resizeMode="cover"
-              />
-              <View style={styles.imageBorder} />
-            </View>
+        {/* Image Section */}
+        <View style={styles.imageSection}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('@/assets/images/woman.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
           </View>
+        </View>
 
-          {/* Action Section */}
-          <View style={styles.actionSection}>
-              
-            <View style={styles.buttonContainer}>
-              <Link href="/auth/sign-in" asChild>
-                <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
-                  <LinearGradient
-                    colors={['#FC7A7A', '#F87171']}
-                    style={styles.buttonGradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                  >
-                    <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
-                    <Text style={styles.primaryButtonText}>Sign In</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </Link>
-              
-              <Link href="/auth/sign-up" asChild>
-                <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
-                  <FontAwesome name="user-plus" size={18} color="#FC7A7A" style={styles.buttonIcon} />
-                  <Text style={styles.secondaryButtonText}>Create Account</Text>
-                </TouchableOpacity>
-              </Link>
-            </View>
-            </View>
-          </View>
-      </LinearGradient>
+        {/* Action Section */}
+        <View style={styles.buttonContainer}>
+          <Link href="/auth/sign-in" asChild>
+            <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+              <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
+              <Text style={styles.primaryButtonText}>Sign In</Text>
+            </TouchableOpacity>
+          </Link>
+          
+          <Link href="/auth/sign-up" asChild>
+            <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
+              <FontAwesome name="user-plus" size={18} color="#FF5252" style={styles.buttonIcon} />
+              <Text style={styles.secondaryButtonText}>Create Account</Text>
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/(screens)/tips" asChild>
+            <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
+              <FontAwesome name="user" size={18} color="#333" style={styles.buttonIcon} />
+              <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -104,196 +94,150 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  gradient: {
+  background: {
     flex: 1,
-    backgroundColor: '#fff', 
-  },
-  inner: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 46,
+    backgroundColor: '#FBDAD8', // Light pink background
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   
   // Header Section
   headerSection: {
     alignItems: 'center',
-    marginBottom: 60,
+    width: '100%',
+    marginTop: 20,
+    marginBottom: 20,
   },
-  iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-    shadowColor: '#FC7A7A',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
   },
-   title: {
+  logo: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FC7A7A',
+    color: '#FF5252', // Brighter red for title
     marginBottom: 8,
-    letterSpacing: 1,
+    fontFamily: 'monospace',
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: '#333',
     textAlign: 'center',
-    fontWeight: '500',
-    lineHeight: 22,
+    fontFamily: 'monospace',
     marginBottom: 12,
   },
   featureHighlight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDF4',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    backgroundColor: '#CBEED8', // Light green
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: '#106B40', // Darker green border
   },
   featureText: {
-    fontSize: 12,
-    color: '#059669',
+    fontSize: 14,
+    color: '#106B40', // Darker green text
     fontWeight: '600',
-    marginLeft: 6,
+    marginLeft: 8,
+    fontFamily: 'monospace',
   },
 
   // Image Section
   imageSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginVertical: 20,
   },
   imageContainer: {
-    position: 'relative',
+    width: width * 0.7,
+    height: width * 0.7,
+    borderRadius: width * 0.35,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
   image: {
-    width: 240,           
-    height: 240,          
-    borderRadius: 120,    
-    backgroundColor: 'transparent',
-  },
-  imageBorder: {
-    position: 'absolute',
-    top: -12,             
-    left: -12,
-    right: -12,
-    bottom: -12,
-    opacity: 0.3,
+    width: '100%',
+    height: '100%',
   },
 
-  // Action Section
-  actionSection: {
-    flex: 1,
-    justifyContent: 'flex-start',
-  },
-  actionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#374151',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
+  // Button Section
   buttonContainer: {
+    width: '100%',
     alignItems: 'center',
-    gap: 16,
-    marginBottom: 10,
     marginTop: 20,
+    gap: 16,
   },
   
-  // Primary Button
+  // Primary Button (Sign In)
   primaryButton: {
-    width: width * 0.8,
-    height: 56,
-    borderRadius: 28,
-    shadowColor: '#FC7A7A',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  buttonGradient: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 28,
+    width: width * 0.85,
+    height: 56,
+    borderRadius: 20,
+    backgroundColor: '#FF9A9A', // Light coral
   },
   primaryButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    fontFamily: 'monospace',
   },
   
-  // Secondary Button
+  // Secondary Button (Create Account)
   secondaryButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: width * 0.8,
+    width: width * 0.85,
     height: 56,
-    borderRadius: 28,
+    borderRadius: 20,
     backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#FC7A7A',
-    shadowColor: '#FC7A7A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#FF9A9A',
   },
   secondaryButtonText: {
-    color: '#FC7A7A',
+    color: '#FF5252',
     fontSize: 18,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    fontFamily: 'monospace',
   },
-  buttonIcon: {
-    marginRight: 10,
-  },
-
-  // Quick Access Section
-  quickAccessContainer: {
-    alignItems: 'center',
-  },
-  quickAccessTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#6B7280',
-    marginBottom: 16,
-  },
-  quickAccessButtons: {
+  
+  // Tertiary Button (Guest)
+  tertiaryButton: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  quickButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: width * 0.85,
+    height: 56,
+    borderRadius: 20,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
-  quickButtonText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#6B7280',
-    marginTop: 4,
-    textAlign: 'center',
+  tertiaryButtonText: {
+    color: '#333',
+    fontSize: 18,
+    fontWeight: '700',
+    fontFamily: 'monospace',
+  },
+  
+  buttonIcon: {
+    marginRight: 10,
   },
 });
