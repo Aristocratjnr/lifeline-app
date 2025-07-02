@@ -92,7 +92,7 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </Link>
 
-            <Link href="/(screens)/tips" asChild>
+            <Link href="/screens/guest" asChild>
               <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
                 <FontAwesome name="user" size={18} color="#333" style={styles.buttonIcon} />
                 <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
