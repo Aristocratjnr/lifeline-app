@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10, 
+    marginTop: 20, 
     borderWidth: 1,
     borderColor: maroon,
   },
