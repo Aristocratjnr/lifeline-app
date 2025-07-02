@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import {
     Dimensions,
     Image,
+    Platform,
     ScrollView,
     StatusBar,
     StyleSheet,
@@ -58,11 +59,11 @@ export default function GuestScreen() {
   };
 
   const handleConfirm = () => {
-    router.push('/dashboard');
+    router.push('/screens/profile'); 
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="dark-content" />
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
@@ -156,6 +157,9 @@ export default function GuestScreen() {
         <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
           <Text style={styles.confirmButtonText}>Confirm Profile</Text>
         </TouchableOpacity>
+
+        {/* Add extra padding at the bottom to ensure visibility */}
+        <View style={styles.bottomPadding} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -168,7 +172,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   scrollContent: {
-    paddingBottom: 40,
+    // Increase bottom padding to ensure button visibility
+    paddingBottom: Platform.OS === 'ios' ? 80 : 60,
+  },
+  // Add this for additional space at the bottom
+  bottomPadding: {
+    height: 40, // Extra space after the button
   },
   title: {
     fontSize: 24,
@@ -201,7 +210,7 @@ const styles = StyleSheet.create({
     borderColor: '#000',
   },
   inputGroup: {
-    marginBottom: 20,
+    marginBottom: 15, // Slightly reduced margin between input groups
   },
   inputLabel: {
     fontSize: 16,
@@ -234,8 +243,8 @@ const styles = StyleSheet.create({
     borderRightColor: '#DDD',
   },
   flagIcon: {
-    width: 20,
-    height: 14,
+    width: 0,
+    height: 0,
     marginRight: 5,
   },
   countryCode: {
@@ -258,8 +267,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
-    marginBottom: 10,
+    paddingVertical: 8, // Reduced padding
+    marginBottom: 8, // Reduced margin
     borderWidth: 1,
     borderColor: '#DDD',
     borderRadius: 5,
@@ -293,6 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 18,
+    marginBottom: 10, // Add margin at the bottom
   },
   confirmButtonText: {
     color: '#000',
