@@ -94,7 +94,11 @@ export default function HomeScreen() {
 
             <Link href="/screens/guest" asChild>
               <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
-                <FontAwesome name="user" size={18} color="#333" style={styles.buttonIcon} />
+                <Image 
+                source={require('@/assets/images/guest.png')} 
+                style={styles.guestIcon} 
+                resizeMode="contain"
+              />
                 <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
               </TouchableOpacity>
             </Link>
@@ -121,6 +125,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+  
+  guestIcon: {
+  width: 22,
+  height: 22,
+  marginRight: 10,
+},
   
   // Header Section
   headerSection: {
