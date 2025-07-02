@@ -137,6 +137,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 28,
+    borderWidth: 1,
+    borderColor: '#FC3737',
   },
   logo: {
     width: 60,
