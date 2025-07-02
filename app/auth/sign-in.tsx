@@ -149,7 +149,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'transparent', // Important to see the background
+    backgroundColor: 'transparent', 
   },
   background: {
       flex: 1,
@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
       fontFamily: 'JetBrainsMono-Regular',
   },
   headerImage: {
-      width: 150,
-      height: 150,
+      width: 170,
+      height: 170,
       resizeMode: 'contain',
       marginBottom: 10,
   },
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       textAlign: 'left',
       marginBottom: 20,
-      fontFamily: 'JetBrainsMono-Regular',
+      fontFamily: 'JetBrainsMono-Bold',
   },
   inputContainer: {
       marginBottom: 15,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   signInButton: {
       backgroundColor: '#ff4d4f',
       paddingVertical: 15,
-      borderRadius: 8,
+      borderRadius: 14,
       alignItems: 'center',
       marginBottom: 20,
   },
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: '#ddd',
       paddingVertical: 15,
-      borderRadius: 8,
+      borderRadius: 14,
   },
   googleIcon: {
       width: 20,
