@@ -34,7 +34,16 @@ export default function DoctorScreen() {
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       
-   
+     {/* Blurred Background Image */}
+           <Image
+             source={require('@/assets/images/blur.png')}
+             style={styles.bgImage}
+             blurRadius={6}
+             resizeMode="cover"
+           />
+           {/* Light brown overlay for tint */}
+           <View style={styles.bgOverlay} />
+
          {/* Top curve */}
          <Image 
            source={require('@/assets/images/top.png')}
@@ -48,7 +57,7 @@ export default function DoctorScreen() {
            style={styles.bottomCurve}
            resizeMode="cover"
          />
-         
+
       {/* Main content */}
       <View style={styles.content}>
         {/* Doctor illustration */}
@@ -102,6 +111,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  bgImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width,
+    height: height,
+    zIndex: 0,
+    opacity: 0.09,
+  },
+  bgOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width,
+    height: height,
+    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
+    zIndex: 1,
   },
   background: {
     position: 'absolute',

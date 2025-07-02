@@ -28,7 +28,15 @@ export default function EmpowerScreen() {
     <View style={styles.container}>
       {/* Background */}
       <View style={styles.background} />
-      
+       {/* Blurred Background Image */}
+            <Image
+              source={require('@/assets/images/blur.png')}
+              style={styles.bgImage}
+              blurRadius={6}
+              resizeMode="cover"
+            />
+            {/* Light brown overlay for tint */}
+            <View style={styles.bgOverlay} />
      
            {/* Top curve */}
            <Image 
@@ -87,6 +95,24 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#FFF9F9',
+  },
+   bgImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width,
+    height: height,
+    zIndex: 0,
+    opacity: 0.09,
+  },
+  bgOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width,
+    height: height,
+    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
+    zIndex: 1,
   },
   background: {
     position: 'absolute',
