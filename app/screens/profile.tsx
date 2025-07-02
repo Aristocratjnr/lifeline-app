@@ -1,7 +1,8 @@
 import { useFonts } from 'expo-font';
+import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 Dimensions.get('window');
@@ -35,10 +36,10 @@ export default function ProfileScreen() {
         
         {/* Location Illustration */}
       <View style={styles.illustrationContainer}>
-          <Image
+          <ExpoImage
             source={require('@/assets/images/location.png')}
             style={styles.illustrationImage}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
         
@@ -46,7 +47,7 @@ export default function ProfileScreen() {
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Country</Text>
           <TouchableOpacity style={styles.countrySelector}>
-            <Image 
+            <ExpoImage
               source={require('@/assets/images/flags/ghana.png')}
               style={styles.flagIcon}
             />

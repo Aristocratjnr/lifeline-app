@@ -1,7 +1,8 @@
 import { useFonts } from 'expo-font';
+import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
@@ -35,37 +36,37 @@ export default function DoctorScreen() {
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       
      {/* Blurred Background Image */}
-           <Image
+           <ExpoImage
              source={require('@/assets/images/blur.png')}
              style={styles.bgImage}
              blurRadius={6}
-             resizeMode="cover"
+             contentFit="cover"
            />
            {/* Light brown overlay for tint */}
            <View style={styles.bgOverlay} />
 
          {/* Top curve */}
-         <Image 
+         <ExpoImage 
            source={require('@/assets/images/top.png')}
            style={styles.topCurve}
-           resizeMode="cover"
+           contentFit="cover"
          />
    
          {/* Bottom curve */}
-         <Image 
+         <ExpoImage 
            source={require('@/assets/images/bottom.png')}
            style={styles.bottomCurve}
-           resizeMode="cover"
+           contentFit="cover"
          />
 
       {/* Main content */}
       <View style={styles.content}>
         {/* Doctor illustration */}
         <View style={styles.illustrationContainer}>
-          <Image
+          <ExpoImage
             source={require('@/assets/images/sir.png')}
             style={styles.doctorImage}
-            resizeMode="contain"
+            contentFit="contain"
           />
           
           {/* Plus signs */}

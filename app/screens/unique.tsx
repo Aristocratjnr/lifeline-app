@@ -1,7 +1,8 @@
 import { useFonts } from 'expo-font';
+import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 const { width, height } = Dimensions.get('window');
@@ -30,34 +31,34 @@ export default function UniqueScreen() {
       {/* Background */}
       <View style={styles.background} />
       {/* Blurred Background Image */}
-            <Image
+            <ExpoImage
               source={require('@/assets/images/blur.png')}
               style={styles.bgImage}
               blurRadius={6}
-              resizeMode="cover"
+              contentFit="cover"
             />
             {/* Light brown overlay for tint */}
             <View style={styles.bgOverlay} />
 
       {/* Top curve */}
-      <Image 
+      <ExpoImage 
         source={require('@/assets/images/top.png')}
         style={styles.topCurve}
-        resizeMode="cover"
+        contentFit="cover"
       />
 
       {/* Bottom curve */}
-      <Image 
+      <ExpoImage 
         source={require('@/assets/images/bottom.png')}
         style={styles.bottomCurve}
-        resizeMode="cover"
+        contentFit="cover"
       />
 
       {/* Medical staff illustration */}
-      <Image 
+      <ExpoImage 
         source={require('@/assets/images/serve.png')}
         style={styles.illustration}
-        resizeMode="contain"
+        contentFit="contain"
       />
 
       {/* Title with Luckiest Guy font */}
