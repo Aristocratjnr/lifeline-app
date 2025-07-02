@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     width: width * 0.95,
     height: height * 0.4,
     marginBottom: 0,
-    marginTop: 100,
+    marginTop: 150,
   },
   title: {
     fontSize: 40,
