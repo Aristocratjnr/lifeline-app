@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -61,9 +61,17 @@ export default function SplashScreen() {
   return (
     <TouchableOpacity style={styles.container} activeOpacity={1} onPress={handlePress}>
       {/* Top Left Curve */}
-      <View style={styles.topCurve} />
+      <Image
+        source={require('@/assets/images/top.png')}
+        style={styles.topCurve}
+        resizeMode="cover"
+      />
       {/* Bottom Right Curve */}
-      <View style={styles.bottomCurve} />
+      <Image
+        source={require('@/assets/images/bottom.png')}
+        style={styles.bottomCurve}
+        resizeMode="cover"
+      />
 
       {/* Center Card with animation */}
       <Animated.View
@@ -104,25 +112,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: width * 0.65,
-    height: height * 0.23,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.65,
-    borderTopRightRadius: -200,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    zIndex: 2,
+    width: width * 0.5,
+    height: height * 0.25,
+    zIndex: 1,
   },
   bottomCurve: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: width,
-    height: height * 0.20,
-    backgroundColor: pink,
-    borderTopLeftRadius: 500,
-    zIndex: 2,
-    transform: [{ scaleX: 1.1 }],
+    width: width * 0.5,
+    height: height * 0.25,
+    zIndex: 1,
   },
   centerCard: {
     width: width * 0.75,
