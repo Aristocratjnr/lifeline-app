@@ -25,23 +25,6 @@ export default function RootLayout() {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="Home" options={{ headerShown: false }} />
-        <Stack.Screen name="screens/tips" options={{ title: 'Tips' }} />
-        <Stack.Screen 
-          name="auth/sign-in" 
-          options={{ 
-            title: 'Sign In',
-            presentation: 'modal'
-          }} 
-        />
-        <Stack.Screen 
-          name="auth/sign-up" 
-          options={{ 
-            title: 'Create Account',
-            presentation: 'modal'
-          }} 
-        />
-        {/* Add other screens as needed */}
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
