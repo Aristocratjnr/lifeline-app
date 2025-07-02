@@ -29,7 +29,7 @@ const ForgotPasswordScreen = () => {
                             <Text style={styles.recoveryTitle}>Password Recovery</Text>
                             <Text style={styles.title}>Reset your password</Text>
                             <Text style={styles.subtitle}>
-                                Enter your email address and we'll send you a link to reset your password.
+                                Enter your email address and we&apos;ll send you a link to reset your password.
                             </Text>
 
                             <View style={styles.inputWrapper}>
@@ -52,7 +52,7 @@ const ForgotPasswordScreen = () => {
 
                             <Link href="/auth/sign-up" asChild>
                                 <TouchableOpacity>
-                                    <Text style={styles.footerLinkText}>Don't have an account? <Text style={styles.signupText}>Sign up</Text></Text>
+                                    <Text style={styles.footerLinkText}>Don&apos;t have an account? <Text style={styles.signupText}>Sign up</Text></Text>
                                 </TouchableOpacity>
                             </Link>
                         </View>
@@ -97,10 +97,12 @@ const styles = StyleSheet.create({
     },
     loginLinkText: {
         color: '#666',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     loginText: {
         color: '#FF6347',
         fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     container: {
         justifyContent: 'center',
@@ -109,8 +111,8 @@ const styles = StyleSheet.create({
         paddingTop: 60,
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 110,
+        height: 110,
         resizeMode: 'contain',
         marginBottom: 10,
     },
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
         color: '#555',
         marginBottom: 20,
         fontStyle: 'italic',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     card: {
         width: '100%',
@@ -138,6 +141,7 @@ const styles = StyleSheet.create({
         color: '#666',
         textAlign: 'left',
         marginBottom: 5,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     title: {
         fontSize: 28,
@@ -145,13 +149,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: '#333',
         textAlign: 'left',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 13,
         marginBottom: 25,
         color: '#666',
         textAlign: 'left',
         lineHeight: 20,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputWrapper: {
         marginBottom: 20,
@@ -160,6 +166,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#333',
         marginBottom: 8,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputContainer: {
         flexDirection: 'row',
@@ -176,6 +183,7 @@ const styles = StyleSheet.create({
         height: '100%',
         color: '#333',
         fontSize: 16,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputIcon: {
         width: 20,
@@ -193,14 +201,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     footerLinkText: {
         textAlign: 'center',
         color: '#666',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     signupText: {
         fontWeight: 'bold',
         color: '#333',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     footer: {
         flexDirection: 'row',
@@ -215,6 +226,7 @@ const styles = StyleSheet.create({
         color: '#666',
         marginHorizontal: 15,
         fontSize: 12,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 });
 
