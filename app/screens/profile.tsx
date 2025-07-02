@@ -14,7 +14,7 @@ export default function ProfileScreen() {
   // Load fonts
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
-    'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
+    'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Bold.ttf'),
   });
 
   if (!fontsLoaded) {

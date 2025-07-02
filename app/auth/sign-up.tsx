@@ -1,8 +1,10 @@
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
+    Dimensions,
     Image,
     ImageBackground,
     SafeAreaView,
@@ -15,9 +17,16 @@ import {
 } from 'react-native';
 import Loader from '../../components/Loader';
 
+Dimensions.get('window');
 const SignUpScreen = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  
+  // Load JetBrains Mono font
+  const [fontsLoaded] = useFonts({
+    'JetBrainsMono-Regular': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),
+    'JetBrainsMono-Bold': require('../../assets/fonts/JetBrainsMono-Bold.ttf'),
+  });
 
   useEffect(() => {
     async function loadAssets() {
@@ -26,22 +35,34 @@ const SignUpScreen = () => {
         require('../../assets/images/signup.png'),
         require('../../assets/images/woman.png'),
         require('../../assets/images/mail.png'),
+        require('../../assets/images/lock.png'),
+        require('../../assets/images/unlock.png'),
       ]);
       setIsReady(true);
     }
     loadAssets();
   }, []);
 
-  if (!isReady) {
+  if (!isReady || !fontsLoaded) {
     return <Loader isLoading={true} />;
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ImageBackground source={require('../../assets/images/background.jpg')} style={styles.background}>
-        <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFill}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            <View style={styles.container}>
+    <>
+      {/* Full-screen background image */}
+      <ImageBackground 
+        source={require('../../assets/images/background.jpg')} 
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
+      />
+      
+      {/* Blur overlay for the entire screen */}
+      <BlurView intensity={40} tint="light" style={StyleSheet.absoluteFillObject} />
+      
+      {/* Content */}
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View style={styles.container}>
                 <Image source={require('../../assets/images/signup.png')} style={styles.headerImage} />
                 <Text style={styles.headerText}>Join our community for better healthcare</Text>
 
@@ -57,7 +78,7 @@ const SignUpScreen = () => {
                         placeholder="Your full name"
                         placeholderTextColor="#999"
                     />
-                    <Image source={require('../../assets/images/woman.png')} style={styles.inputIcon} />
+                    <Image source={require('../../assets/images/user.png')} style={styles.inputIcon} />
                     </View>
                 </View>
 
@@ -84,7 +105,7 @@ const SignUpScreen = () => {
                         placeholderTextColor="#999"
                         secureTextEntry
                     />
-                    {/* Eye icon would go here, you can add an image component if you have one */}
+                    <Image source={require('../../assets/images/lock.png')} style={styles.inputIcon} />
                     </View>
                 </View>
 
@@ -97,7 +118,7 @@ const SignUpScreen = () => {
                         placeholderTextColor="#999"
                         secureTextEntry
                     />
-                    {/* Eye icon would go here, you can add an image component if you have one */}
+                    <Image source={require('../../assets/images/unlock.png')} style={styles.inputIcon} />
                     </View>
                 </View>
 
@@ -112,7 +133,8 @@ const SignUpScreen = () => {
                 </View>
 
                 <TouchableOpacity style={styles.signUpButton}>
-                    <Text style={styles.signUpButtonText}>Sign Up →</Text>
+                    <Text style={styles.signUpButtonText}>Sign Up</Text>
+                    <Image source={require('../../assets/images/sign.png')} style={styles.soundIcon} />
                 </TouchableOpacity>
 
                 <View style={styles.dividerContainer}>
@@ -137,24 +159,27 @@ const SignUpScreen = () => {
                 </View>
             </View>
             </ScrollView>
-        </BlurView>
-      </ImageBackground>
-    </SafeAreaView>
+        </SafeAreaView>
+    </>
   );
 };
 
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
-    background: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-    },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
     scrollViewContent: {
         flexGrow: 1,
         justifyContent: 'center',
@@ -170,15 +195,16 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     headerText: {
-        fontSize: 16,
-        color: '#555',
+        fontSize: 14,
+        color: '#444',
         textAlign: 'center',
         marginBottom: 20,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     formCard: {
         width: '100%',
         backgroundColor: 'white',
-        borderRadius: 15,
+        borderRadius: 20,
         padding: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -188,81 +214,103 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     welcomeText: {
-        fontSize: 16,
-        color: '#888',
+        fontSize: 14,
+        color: '#777',
         textAlign: 'left',
         marginBottom: 5,
+        fontFamily: 'JetBrainsMono-Regular',
+        letterSpacing: 0.5,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'left',
         marginBottom: 20,
+        fontFamily: 'JetBrainsMono-Bold',
+        color: '#222',
     },
     inputContainer: {
         marginBottom: 15,
     },
     label: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#333',
         marginBottom: 5,
+        fontFamily: 'JetBrainsMono-Regular',
+        fontWeight: '500',
     },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 50,
+        height: 45,
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 8,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         backgroundColor: 'white',
     },
     input: {
         flex: 1,
         height: '100%',
+        fontSize: 14,
+        fontFamily: 'JetBrainsMono-Regular',
+        color: '#333',
     },
     inputIcon: {
-        width: 20,
-        height: 20,
+        width: 18,
+        height: 18,
         marginLeft: 10,
+        opacity: 0.7,
+    },
+    soundIcon: {
+        width: 14,
+        height: 14,
+        marginLeft: 5,
+        tintColor: '#fff',
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        marginTop: 5,
     },
     checkbox: {
-        width: 20,
-        height: 20,
+        width: 16,
+        height: 16,
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 3,
-        marginRight: 10,
+        marginRight: 8,
         justifyContent: 'center',
         alignItems: 'center',
     },
     checkboxChecked: {
-        backgroundColor: '#ff4d4f',
-        borderColor: '#ff4d4f',
+        backgroundColor: '#ff0000',
+        borderColor: '#ff0000',
     },
     checkboxCheck: {
         color: 'white',
-        fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Bold',
+        fontSize: 10,
     },
     checkboxLabel: {
-        fontSize: 14,
+        fontSize: 13,
+        color: '#555',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     signUpButton: {
-        backgroundColor: '#ff4d4f',
-        paddingVertical: 15,
-        borderRadius: 8,
+        backgroundColor: '#ff0000',
+        paddingVertical: 13,
+        borderRadius: 50,
         alignItems: 'center',
         marginBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     signUpButtonText: {
         color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 15,
+        fontFamily: 'JetBrainsMono-Bold',
     },
     dividerContainer: {
         flexDirection: 'row',
@@ -277,6 +325,8 @@ const styles = StyleSheet.create({
     dividerText: {
         marginHorizontal: 10,
         color: '#aaa',
+        fontSize: 13,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     googleButton: {
         flexDirection: 'row',
@@ -285,29 +335,33 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#ddd',
-        paddingVertical: 15,
-        borderRadius: 8,
+        paddingVertical: 12,
+        borderRadius: 50,
     },
     googleIcon: {
-        width: 20,
-        height: 20,
+        width: 18,
+        height: 18,
         marginRight: 10,
     },
     googleButtonText: {
-        fontSize: 16,
-        color: '#333',
+        fontSize: 14,
+        color: '#555',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 5,
     },
     loginText: {
-        fontSize: 14,
+        fontSize: 13,
+        color: '#555',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     loginLink: {
-        fontSize: 14,
-        color: '#ff4d4f',
-        fontWeight: 'bold',
+        fontSize: 13,
+        color: '#ff0000',
+        fontFamily: 'JetBrainsMono-Bold',
     },
 });
