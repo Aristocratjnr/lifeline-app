@@ -61,6 +61,8 @@ export default function TipsScreen() {
           <View style={styles.dot} />
           <View style={[styles.dot, styles.activeDot]} />
           <View style={styles.dot} />
+          <View style={styles.dot} />
+          <View style={styles.dot} />
         </View>
 
         {/* Next Button */}
