@@ -106,7 +106,7 @@ export default function SignInScreen() {
                     secureTextEntry
                     placeholderTextColor="#999"
                 />
-                {/* Eye icon would go here */}
+                <Image source={require('../../assets/images/lock.png')} style={styles.inputIcon} />
                 </View>
             </View>
 
@@ -175,12 +175,14 @@ const styles = StyleSheet.create({
   headerText: {
       fontSize: 14,
       color: '#555',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   signUpLink: {
       fontSize: 14,
       color: '#ff4d4f',
       fontWeight: 'bold',
       marginLeft: 5,
+      fontFamily: 'JetBrainsMono-Regular',
   },
   headerImage: {
       width: 150,
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       marginBottom: 20,
       fontStyle: 'italic',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   formCard: {
       width: '100%',
@@ -211,12 +214,14 @@ const styles = StyleSheet.create({
       color: '#888',
       textAlign: 'left',
       marginBottom: 5,
+      fontFamily: 'JetBrainsMono-Regular',
   },
   title: {
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'left',
       marginBottom: 20,
+      fontFamily: 'JetBrainsMono-Regular',
   },
   inputContainer: {
       marginBottom: 15,
@@ -225,6 +230,7 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: '#333',
       marginBottom: 5,
+      fontFamily: 'JetBrainsMono-Regular',
   },
   inputWrapper: {
       flexDirection: 'row',
@@ -239,6 +245,7 @@ const styles = StyleSheet.create({
   input: {
       flex: 1,
       height: '100%',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   inputIcon: {
       width: 20,
@@ -275,11 +282,13 @@ const styles = StyleSheet.create({
   },
   rememberMeText: {
       fontSize: 14,
+      fontFamily: 'JetBrainsMono-Regular',
   },
   forgotText: {
       color: '#ff4d4f',
       fontSize: 14,
       fontWeight: 'bold',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   signInButton: {
       backgroundColor: '#ff4d4f',
@@ -292,6 +301,7 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 16,
       fontWeight: 'bold',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   dividerContainer: {
       flexDirection: 'row',
@@ -306,6 +316,7 @@ const styles = StyleSheet.create({
   dividerText: {
       marginHorizontal: 10,
       color: '#aaa',
+      fontFamily: 'JetBrainsMono-Regular',
   },
   googleButton: {
       flexDirection: 'row',
@@ -325,5 +336,6 @@ const styles = StyleSheet.create({
   googleButtonText: {
       fontSize: 16,
       color: '#333',
+      fontFamily: 'JetBrainsMono-Regular',
   },
 });
