@@ -4,8 +4,8 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../components/Loader';
 
 const { width } = Dimensions.get('window');
@@ -33,76 +33,91 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.background}>
-        {/* Header Section */}
-        <View style={styles.headerSection}>
-          <View style={styles.logoContainer}>
-            <ExpoImage
-              source={require('@/assets/images/logo.png')}
-              style={styles.logo}
-              contentFit="contain"
-            />
+    <SafeAreaProvider>
+      {/* Set status bar with light content since background is colored */}
+      <StatusBar barStyle="dark-content" backgroundColor="#FBDAD8" />
+      
+      {/* Background that fills the entire screen */}
+      <View style={styles.fullBackground} />
+      
+      {/* Content wrapped in SafeAreaView */}
+      <SafeAreaView style={styles.container} edges={['right', 'left']}>
+        <View style={styles.content}>
+          {/* Header Section */}
+          <View style={styles.headerSection}>
+            <View style={styles.logoContainer}>
+              <ExpoImage
+                source={require('@/assets/images/logo.png')}
+                style={styles.logo}
+                contentFit="contain"
+              />
+            </View>
+            
+            <Text style={styles.title}>Welcome to LIFELINE</Text>
+            
+            <Text style={styles.subtitle}>
+              Your trusted first aid & emergency companion
+            </Text>
+            
+            <View style={styles.featureHighlight}>
+              <FontAwesome name="shield" size={16} color="#106B40" />
+              <Text style={styles.featureText}>Always Ready - Always Safe</Text>
+            </View>
           </View>
-          
-          <Text style={styles.title}>Welcome to LIFELINE</Text>
-          
-          <Text style={styles.subtitle}>
-            Your trusted first aid & emergency companion
-          </Text>
-          
-          <View style={styles.featureHighlight}>
-            <FontAwesome name="shield" size={16} color="#106B40" />
-            <Text style={styles.featureText}>Always Ready - Always Safe</Text>
+
+          {/* Image Section */}
+          <View style={styles.imageSection}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('@/assets/images/woman.png')}
+                style={styles.image}
+                resizeMode="contain"
+              />
+            </View>
+          </View>
+
+          {/* Action Section */}
+          <View style={styles.buttonContainer}>
+            <Link href="/auth/sign-in" asChild>
+              <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+                <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
+                <Text style={styles.primaryButtonText}>Sign In</Text>
+              </TouchableOpacity>
+            </Link>
+            
+            <Link href="/auth/sign-up" asChild>
+              <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
+                <FontAwesome name="user-plus" size={18} color="#FF5252" style={styles.buttonIcon} />
+                <Text style={styles.secondaryButtonText}>Create Account</Text>
+              </TouchableOpacity>
+            </Link>
+
+            <Link href="/(screens)/tips" asChild>
+              <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
+                <FontAwesome name="user" size={18} color="#333" style={styles.buttonIcon} />
+                <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
-
-        {/* Image Section */}
-        <View style={styles.imageSection}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require('@/assets/images/woman.png')}
-              style={styles.image}
-              resizeMode="contain"
-            />
-          </View>
-        </View>
-
-        {/* Action Section */}
-        <View style={styles.buttonContainer}>
-          <Link href="/auth/sign-in" asChild>
-            <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
-              <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.primaryButtonText}>Sign In</Text>
-            </TouchableOpacity>
-          </Link>
-          
-          <Link href="/auth/sign-up" asChild>
-            <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
-              <FontAwesome name="user-plus" size={18} color="#FF5252" style={styles.buttonIcon} />
-              <Text style={styles.secondaryButtonText}>Create Account</Text>
-            </TouchableOpacity>
-          </Link>
-
-          <Link href="/(screens)/tips" asChild>
-            <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
-              <FontAwesome name="user" size={18} color="#333" style={styles.buttonIcon} />
-              <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  // Full screen background that extends behind safe areas
+  fullBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#FBDAD8', 
+  },
   container: {
     flex: 1,
   },
-  background: {
+  content: {
     flex: 1,
-    backgroundColor: '#FBDAD8', // Light pink background
     alignItems: 'center',
     paddingHorizontal: 20,
   },
@@ -111,7 +126,7 @@ const styles = StyleSheet.create({
   headerSection: {
     alignItems: 'center',
     width: '100%',
-    marginTop: 20,
+    marginTop: 48,
     marginBottom: 20,
   },
   logoContainer: {
@@ -121,7 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 28,
   },
   logo: {
     width: 60,
@@ -236,7 +251,7 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
+    fontFamily: 'JetBrainsMono-Regular',
   },
   
   buttonIcon: {
