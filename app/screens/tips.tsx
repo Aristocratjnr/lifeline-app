@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(185, 171, 154, 0.32)', 
+    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
     zIndex: 1,
   },
   content: {
