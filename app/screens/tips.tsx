@@ -4,7 +4,6 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-const pink = '#FA9D9D';
 const red = '#FC1C1C';
 
 export default function TipsScreen() {
@@ -34,8 +33,16 @@ export default function TipsScreen() {
       {/* Light brown overlay for tint */}
       <View style={styles.bgOverlay} />
       {/* Background Curves */}
-      <View style={styles.topCurve} />
-      <View style={styles.bottomCurve} />
+      <Image 
+        source={require('@/assets/images/top.png')}
+        style={styles.topCurve}
+        resizeMode="cover"
+      />
+      <Image 
+        source={require('@/assets/images/bottom.png')}
+        style={styles.bottomCurve}
+        resizeMode="cover"
+      />
 
       {/* Main Content */}
       <View style={styles.content}>
@@ -109,29 +116,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     zIndex: 3,
   },
-   topCurve: {
+    topCurve: {
     position: 'absolute',
     top: 0,
     left: 0,
-    width: width * 0.65,
-    height: height * 0.23,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.65,
-    borderTopRightRadius: -200,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    zIndex: 2,
+    width: width * 0.5,
+    height: height * 0.25,
+    zIndex: 1,
   },
   bottomCurve: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: width,
-    height: height * 0.20,
-    backgroundColor: pink,
-    borderTopLeftRadius: 500,
-    zIndex: 2,
-    transform: [{ scaleX: 1.1 }],
+    width: width * 0.5,
+    height: height * 0.25,
   },
   illustration: {
     width: width * 0.95,

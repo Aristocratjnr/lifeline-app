@@ -4,7 +4,6 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-const pink = '#FA9D9D';
 const red = '#FC1C1C';
 
 export default function OnboardingScreen() {
@@ -23,43 +22,51 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      {/* Top Left Curve */}
-      <View style={styles.topCurve} />
-      {/* Bottom Right Curve */}
-      <View style={styles.bottomCurve} />
+  <View style={styles.container}>
+    {/* Top Left Curve */}
+    <Image
+      source={require('@/assets/images/top.png')}
+      style={styles.topCurve}
+      resizeMode="cover"
+    />
+    {/* Bottom Right Curve */}
+    <Image
+      source={require('@/assets/images/bottom.png')}
+      style={styles.bottomCurve}
+      resizeMode="cover"
+    />
 
-      {/* Illustration */}
-      <View style={styles.illustrationContainer}>
-        <Image
-          source={require('@/assets/images/help.png')}
-          style={styles.illustration}
-          resizeMode="contain"
-        />
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Welcome To Lifeline</Text>
-
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>
-        Your essential companion for emergencies. Be ready to act with confidence when every second counts.
-      </Text>
-
-      {/* Pagination Dots */}
-      <View style={styles.dotsContainer}>
-        <View style={[styles.dot, styles.activeDot]} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-      </View>
-
-      {/* Next Button */}
-      <TouchableOpacity style={styles.nextButton} onPress={handleNext} activeOpacity={0.85}>
-        <Text style={styles.nextButtonText}>NEXT</Text>
-      </TouchableOpacity>
+    {/* Illustration */}
+    <View style={styles.illustrationContainer}>
+      <Image
+        source={require('@/assets/images/help.png')}
+        style={styles.illustration}
+        resizeMode="contain"
+      />
     </View>
+
+    {/* Title */}
+    <Text style={styles.title}>Welcome To Lifeline</Text>
+
+    {/* Subtitle */}
+    <Text style={styles.subtitle}>
+      Your essential companion for emergencies. Be ready to act with confidence when every second counts.
+    </Text>
+
+    {/* Pagination Dots */}
+    <View style={styles.dotsContainer}>
+      <View style={[styles.dot, styles.activeDot]} />
+      <View style={styles.dot} />
+      <View style={styles.dot} />
+      <View style={styles.dot} />
+      <View style={styles.dot} />
+    </View>
+
+    {/* Next Button */}
+    <TouchableOpacity style={styles.nextButton} onPress={handleNext} activeOpacity={0.85}>
+      <Text style={styles.nextButtonText}>NEXT</Text>
+    </TouchableOpacity>
+  </View>
   );
 }
 
@@ -77,8 +84,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.7,
     zIndex: 1,
   },
   bottomCurve: {
@@ -87,8 +92,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderTopLeftRadius: width * 0.88,
   },
   illustrationContainer: {
     marginTop: height * 0.23, 
