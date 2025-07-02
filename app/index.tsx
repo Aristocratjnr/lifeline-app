@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -60,16 +60,6 @@ export default function SplashScreen() {
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={1} onPress={handlePress}>
-       {/* Blurred Background Image */}
-            <Image
-              source={require('@/assets/images/blur.png')}
-              style={styles.bgImage}
-              blurRadius={6}
-              resizeMode="cover"
-            />
-            {/* Light brown overlay for tint */}
-            <View style={styles.bgOverlay} />
-
       {/* Top Left Curve */}
       <Image
         source={require('@/assets/images/top.png')}
@@ -109,6 +99,7 @@ export default function SplashScreen() {
   );
 }
 
+const pink = '#FC7A7A';
 
 const styles = StyleSheet.create({
   container: {
@@ -116,24 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  bgImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: width,
-    height: height,
-    zIndex: 0,
-    opacity: 0.09,
-  },
-  bgOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: width,
-    height: height,
-    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
-    zIndex: 1,
   },
   topCurve: {
     position: 'absolute',
@@ -161,7 +134,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
     zIndex: 1,
-   
+    shadowColor: pink,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
