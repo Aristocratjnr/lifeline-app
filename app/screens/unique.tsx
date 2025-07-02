@@ -5,7 +5,6 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 
 
 const { width, height } = Dimensions.get('window');
-const pink = '#FA9D9D';
 const red = '#FC1C1C';
 
 export default function UniqueScreen() {
@@ -30,12 +29,20 @@ export default function UniqueScreen() {
     <View style={styles.container}>
       {/* Background */}
       <View style={styles.background} />
-      
+
       {/* Top curve */}
-      <View style={styles.topCurve} />
-      
+      <Image 
+        source={require('@/assets/images/top.png')}
+        style={styles.topCurve}
+        resizeMode="cover"
+      />
+
       {/* Bottom curve */}
-      <View style={styles.bottomCurve} />
+      <Image 
+        source={require('@/assets/images/bottom.png')}
+        style={styles.bottomCurve}
+        resizeMode="cover"
+      />
 
       {/* Medical staff illustration */}
       <Image 
@@ -92,8 +99,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.7,
     zIndex: 1,
   },
   bottomCurve: {
@@ -102,8 +107,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderTopLeftRadius: width * 0.7,
     zIndex: 1,
   },
   illustration: {
