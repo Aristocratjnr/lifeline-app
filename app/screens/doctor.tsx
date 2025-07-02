@@ -126,22 +126,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     zIndex: 2,
-    // Adjust overall vertical positioning
     justifyContent: 'center', 
   },
   illustrationContainer: {
     width: width * 0.9,
-    height: height * 0.45, // Slightly reduced height
+    height: height * 0.45, 
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    marginTop: height * 0.05, // Moved down by 5% of screen height
-    marginBottom: 0, // Remove bottom margin to eliminate gap
+    marginTop: height * 0.05, 
+    marginBottom: 0, 
   },
   doctorImage: {
     width: width * 0.8,
     height: height * 0.45,
-    marginBottom: -10, // Negative margin to pull title up closer to image
+    marginBottom: -10, 
   },
   // Other icon styles remain the same
   plusSign: {
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '600',
-    marginTop: 0, // Remove top margin to eliminate gap
+    marginTop: 0, 
     textAlign: 'center',
     fontFamily: 'Caveat-Regular',
     color: '#000',
@@ -169,13 +168,13 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   button: {
-    backgroundColor: pink,
+    backgroundColor: '#FC7C7C',
     width: width * 0.85,
     height: 56,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10, // Reduced margin
+    marginTop: 10, 
     borderWidth: 1,
     borderColor: maroon,
   },
