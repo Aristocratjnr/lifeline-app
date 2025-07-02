@@ -146,19 +146,19 @@ const styles = StyleSheet.create({
   featureHighlight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#CBEED8', // Light green
+    backgroundColor: '#CBEED8', 
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#106B40', // Darker green border
+    borderColor: '#106B40', 
   },
   featureText: {
     fontSize: 14,
-    color: '#106B40', // Darker green text
+    color: '#106B40',
     fontWeight: '600',
     marginLeft: 8,
-    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
+    fontFamily: 'JetBrainsMono-Regular', 
   },
 
   // Image Section
@@ -180,15 +180,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 
-  // Button Section
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 12,
     gap: 11,
   },
   
-  // Primary Button (Sign In)
   primaryButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,16 +193,15 @@ const styles = StyleSheet.create({
     width: width * 0.85,
     height: 56,
     borderRadius: 20,
-    backgroundColor: '#FF9A9A', // Light coral
+    backgroundColor: '#FF9A9A', 
   },
   primaryButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
+    fontFamily: 'JetBrainsMono-Regular', 
   },
   
-  // Secondary Button (Create Account)
   secondaryButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -221,7 +217,7 @@ const styles = StyleSheet.create({
     color: '#FF5252',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
+    fontFamily: 'JetBrainsMono-Regular', 
   },
   
   // Tertiary Button (Guest)
