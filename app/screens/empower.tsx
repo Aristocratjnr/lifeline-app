@@ -4,7 +4,6 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-const pink = '#FA9D9D';
 const red = '#FC1C1C';
 
 export default function EmpowerScreen() {
@@ -30,11 +29,20 @@ export default function EmpowerScreen() {
       {/* Background */}
       <View style={styles.background} />
       
-      {/* Top curve */}
-      <View style={styles.topCurve} />
-      
-      {/* Bottom curve */}
-      <View style={styles.bottomCurve} />
+     
+           {/* Top curve */}
+           <Image 
+             source={require('@/assets/images/top.png')}
+             style={styles.topCurve}
+             resizeMode="cover"
+           />
+     
+           {/* Bottom curve */}
+           <Image 
+             source={require('@/assets/images/bottom.png')}
+             style={styles.bottomCurve}
+             resizeMode="cover"
+           />
 
       {/* Bandaid illustration */}
       <View style={styles.blueCircle}>
@@ -87,14 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF9F9',
     zIndex: 0,
   },
-  topCurve: {
+   topCurve: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.7,
     zIndex: 1,
   },
   bottomCurve: {
@@ -103,8 +109,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: width * 0.5,
     height: height * 0.25,
-    backgroundColor: pink,
-    borderTopLeftRadius: width * 0.7,
     zIndex: 1,
   },
   blueCircle: {

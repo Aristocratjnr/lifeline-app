@@ -5,7 +5,6 @@ import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
-const pink = '#FBAFAF';
 const maroon = '#8E2A2A';
 
 export default function DoctorScreen() {
@@ -35,11 +34,21 @@ export default function DoctorScreen() {
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       
-      {/* Background with curves */}
-      <View style={styles.background} />
-      <View style={styles.topCurve} />
-      <View style={styles.bottomCurve} />
-
+   
+         {/* Top curve */}
+         <Image 
+           source={require('@/assets/images/top.png')}
+           style={styles.topCurve}
+           resizeMode="cover"
+         />
+   
+         {/* Bottom curve */}
+         <Image 
+           source={require('@/assets/images/bottom.png')}
+           style={styles.bottomCurve}
+           resizeMode="cover"
+         />
+         
       {/* Main content */}
       <View style={styles.content}>
         {/* Doctor illustration */}
@@ -106,19 +115,15 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: width * 0.5,
-    height: height * 0.30,
-    backgroundColor: pink,
-    borderBottomRightRadius: width * 0.5,
+    height: height * 0.25,
     zIndex: 1,
   },
   bottomCurve: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: width * 0.7,
-    height: height * 0.16,
-    backgroundColor: pink,
-    borderTopLeftRadius: width * 0.7,
+    width: width * 0.5,
+    height: height * 0.25,
     zIndex: 1,
   },
   content: {
