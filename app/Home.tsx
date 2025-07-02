@@ -1,16 +1,22 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
+import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Loader from '../../components/Loader';
+import Loader from '../components/Loader';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const [isReady, setIsReady] = useState(false);
+  
+  // Load JetBrains Mono font
+  const [fontsLoaded] = useFonts({
+    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
+  });
 
   useEffect(() => {
     async function loadAssets() {
@@ -22,7 +28,7 @@ export default function HomeScreen() {
     loadAssets();
   }, []);
 
-  if (!isReady) {
+  if (!isReady || !fontsLoaded) {
     return <Loader isLoading={true} />;
   }
 
@@ -125,16 +131,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FF5252', // Brighter red for title
+    color: '#FF5252', 
     marginBottom: 8,
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', 
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     color: '#333',
     textAlign: 'center',
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', 
     marginBottom: 12,
   },
   featureHighlight: {
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
     color: '#106B40', // Darker green text
     fontWeight: '600',
     marginLeft: 8,
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
   },
 
   // Image Section
@@ -178,8 +184,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 20,
-    gap: 16,
+    marginTop: 12,
+    gap: 11,
   },
   
   // Primary Button (Sign In)
@@ -196,7 +202,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
   },
   
   // Secondary Button (Create Account)
@@ -215,7 +221,7 @@ const styles = StyleSheet.create({
     color: '#FF5252',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
   },
   
   // Tertiary Button (Guest)
@@ -234,7 +240,7 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: 'monospace',
+    fontFamily: 'JetBrainsMono-Regular', // Updated to JetBrains Mono
   },
   
   buttonIcon: {

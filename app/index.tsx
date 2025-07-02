@@ -65,13 +65,15 @@ export default function SplashScreen() {
       {/* Bottom Right Curve */}
       <View style={styles.bottomCurve} />
 
-      {/* Logo with animation directly on background */}
+      {/* Center Card with animation */}
       <Animated.View
-        style={{
-          opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }],
-          zIndex: 3,
-        }}
+        style={[
+          styles.centerCard,
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }],
+          },
+        ]}
       >
         {/* Full logo image with pumping effect */}
         <Animated.View style={{ 
@@ -121,6 +123,22 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 500,
     zIndex: 2,
     transform: [{ scaleX: 1.1 }],
+  },
+  centerCard: {
+    width: width * 0.75,
+    height: width * 0.75, 
+    backgroundColor: 'transparent',
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    zIndex: 1,
+    shadowColor: pink,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
   logoImage: {
     width: width * 0.65,

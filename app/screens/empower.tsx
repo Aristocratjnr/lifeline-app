@@ -22,7 +22,7 @@ export default function EmpowerScreen() {
   }
 
   const handleNext = () => {
-    router.push('/firstAidNews'); // Update this to your next screen route
+    router.push('/screens/doctor'); // Update this to your next screen route
   };
 
   return (
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#A8D5F2',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: height * 0.15,
+    marginTop: height * 0.20,
     zIndex: 2,
   },
   illustration: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 34,
     textAlign: 'center',
     color: 'black',
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     marginTop: 30,
     zIndex: 2,
     fontFamily: 'Caveat-Regular',
