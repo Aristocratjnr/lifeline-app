@@ -109,7 +109,6 @@ export default function SplashScreen() {
   );
 }
 
-const pink = '#FC7A7A';
 
 const styles = StyleSheet.create({
   container: {
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
     zIndex: 1,
-    shadowColor: pink,
+   
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
