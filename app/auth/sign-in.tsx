@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       height: 50,
       borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 8,
+      borderColor: '#555',
+      borderRadius: 14,
       paddingHorizontal: 15,
       backgroundColor: 'white',
   },
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
       fontFamily: 'JetBrainsMono-Regular',
   },
   signInButton: {
-      backgroundColor: '#ff4d4f',
+      backgroundColor: '#FF0000',
       paddingVertical: 15,
       borderRadius: 14,
       alignItems: 'center',
@@ -336,6 +336,6 @@ const styles = StyleSheet.create({
   googleButtonText: {
       fontSize: 16,
       color: '#333',
-      fontFamily: 'JetBrainsMono-Regular',
+      fontFamily: 'JetBrainsMono-Bold',
   },
 });

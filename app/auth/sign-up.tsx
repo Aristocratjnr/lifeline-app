@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         color: '#444',
         textAlign: 'center',
         marginBottom: 20,
-        fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     formCard: {
         width: '100%',
@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 45,
         borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
+        borderColor: '#555',
+        borderRadius: 14,
         paddingHorizontal: 12,
         backgroundColor: 'white',
     },
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
         fontFamily: 'JetBrainsMono-Regular',
     },
     signUpButton: {
-        backgroundColor: '#ff0000',
+        backgroundColor: '#FF0000',
         paddingVertical: 13,
         borderRadius: 50,
         alignItems: 'center',
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     divider: {
         flex: 1,
         height: 1,
-        backgroundColor: '#eee',
+        backgroundColor: '#555',
     },
     dividerText: {
         marginHorizontal: 10,
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     googleButtonText: {
         fontSize: 14,
         color: '#555',
-        fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     loginContainer: {
         flexDirection: 'row',
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     loginText: {
         fontSize: 13,
         color: '#555',
-        fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     loginLink: {
         fontSize: 13,
