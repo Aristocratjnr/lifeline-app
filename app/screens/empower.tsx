@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   title: {
-    fontSize: 34,
+    fontSize: 35,
     textAlign: 'center',
     color: 'black',
     marginHorizontal: 20,
