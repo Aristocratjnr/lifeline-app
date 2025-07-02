@@ -21,7 +21,7 @@ export default function ProfileScreen() {
   }
 
   const handleConfirm = () => {
-    router.push('/screens/guest');
+    router.push('/(tabs)/explore');
   };
 
   return (
