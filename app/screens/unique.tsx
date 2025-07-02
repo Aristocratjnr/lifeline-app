@@ -55,8 +55,8 @@ export default function UniqueScreen() {
       {/* Pagination dots */}
       <View style={styles.dotsContainer}>
         <View style={[styles.dot]} />
-        <View style={[styles.dot, styles.activeDot]} />
         <View style={[styles.dot]} />
+        <View style={[styles.dot, styles.activeDot]} />
         <View style={[styles.dot]} />
         <View style={[styles.dot]} />
       </View>
