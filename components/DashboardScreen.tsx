@@ -2,7 +2,7 @@ import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-ic
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -49,9 +49,40 @@ const DashboardScreen = () => {
     { id: '3', title: 'Burns', date: 'Last Visited: 02, May, 2025', icon: 'fire' },
   ];
 
-  const dailyTip = {
-    title: 'Handle sharp objects with care:',
-    content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
+  // Daily tips list
+  const dailyTips = [
+    {
+      title: 'Handle sharp objects with care:',
+      content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
+    },
+    {
+      title: 'Stay hydrated:',
+      content: 'Drink at least 8 glasses of water a day to keep your body functioning optimally.',
+    },
+    {
+      title: 'Wash your hands regularly:',
+      content: 'Frequent handwashing helps prevent the spread of germs and illnesses.',
+    },
+    {
+      title: 'Take breaks from screens:',
+      content: 'Rest your eyes every 20 minutes to reduce eye strain and fatigue.',
+    },
+    {
+      title: 'Get enough sleep:',
+      content: 'Aim for 7-9 hours of sleep each night to support your overall health.',
+    },
+  ];
+
+  // State for the current daily tip
+  const [dailyTip, setDailyTip] = useState(dailyTips[0]);
+
+  // Function to update the daily tip
+  const handleNewTip = () => {
+    let newTip;
+    do {
+      newTip = dailyTips[Math.floor(Math.random() * dailyTips.length)];
+    } while (newTip.title === dailyTip.title && dailyTips.length > 1);
+    setDailyTip(newTip);
   };
 
   return (
@@ -162,8 +193,8 @@ const DashboardScreen = () => {
             <Text style={styles.tipSubText}>{dailyTip.content}</Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-            <TouchableOpacity style={styles.newTipButton}>
-              <Text style={styles.newTipButtonText}>% CUT</Text>
+            <TouchableOpacity style={styles.newTipButton} onPress={handleNewTip}>
+              <Text style={styles.newTipButtonText}>New Tip</Text>
             </TouchableOpacity>
             <Text style={styles.tipFooter}>New tip every day</Text>
           </View>
