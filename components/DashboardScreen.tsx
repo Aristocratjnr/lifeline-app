@@ -1,4 +1,5 @@
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
@@ -7,13 +8,23 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
+  // Load fonts
+  const [fontsLoaded] = useFonts({
+    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
+    'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Bold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <View style={styles.safeArea} />;
+  }
+
   const user = {
-    name: 'Daniella',
+    name: 'Daniella Asiedu',
     age: '18-25',
     gender: 'Female',
     location: 'Ghana',
     medicalCondition: 'Common Cold',
-    contact: '0203430787',
+    contact: '020343077',
     language: 'English',
     avatar: require('@/assets/images/Daniella.jpeg'), 
   };
@@ -85,25 +96,30 @@ const DashboardScreen = () => {
         <View style={styles.profileCard}>
           <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
           <Text style={styles.profileName}>{user.name}</Text>
-          <View style={styles.profileDetailsRow}>
-            <Feather name="calendar" size={16} color="#666" />
-            <Text style={styles.profileDetailText}>Age: {user.age}</Text>
-            <Feather name="user" size={16} color="#666" style={{ marginLeft: 16 }} />
-            <Text style={styles.profileDetailText}>Gender: {user.gender}</Text>
+          <View style={styles.profileInfoRow}>
+            <Feather name="calendar" size={20} color="#222" style={styles.profileIcon} />
+            <Text style={styles.profileInfoLabel}>Age:</Text>
+            <Text style={styles.profileInfoValue}>{user.age}</Text>
+            <Feather name="user" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
+            <Text style={styles.profileInfoLabel}>Gender:</Text>
+            <Text style={styles.profileInfoValue}>{user.gender}</Text>
           </View>
-          <View style={styles.profileDetailsRow}>
-            <Feather name="map-pin" size={16} color="#666" />
-            <Text style={styles.profileDetailText}>Location: {user.location}</Text>
+          <View style={styles.profileInfoRow}>
+            <Feather name="map-pin" size={20} color="#222" style={styles.profileIcon} />
+            <Text style={styles.profileInfoLabel}>Location:</Text>
+            <Text style={styles.profileInfoValue}>{user.location}</Text>
           </View>
-          <View style={styles.profileDetailsRow}>
-            <MaterialIcons name="healing" size={16} color="#666" />
-            <Text style={styles.profileDetailText}>Condition: {user.medicalCondition}</Text>
+          <View style={styles.profileInfoRow}>
+            <MaterialIcons name="healing" size={20} color="#222" style={styles.profileIcon} />
+            <Text style={styles.profileInfoLabel}>Condition:</Text>
+            <Text style={styles.profileInfoValue}>{user.medicalCondition}</Text>
           </View>
-          <View style={styles.profileDetailsRow}>
-            <Feather name="phone" size={16} color="#666" />
-            <Text style={styles.profileDetailText}>Contact: {user.contact}</Text>
-            <FontAwesome5 name="language" size={16} color="#666" style={{ marginLeft: 16 }} />
-            <Text style={styles.profileDetailText}>Language: {user.language}</Text>
+          <View style={styles.profileInfoRowNoWrap}>
+            <Feather name="phone" size={20} color="#222" style={styles.profileIcon} />
+            <Text style={styles.profileInfoValue}>{user.contact}</Text>
+            <FontAwesome5 name="language" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
+            <Text style={styles.profileInfoLabel}>Language:</Text>
+            <Text style={styles.profileInfoValue}>{user.language}</Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
@@ -177,16 +193,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   container: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: 24,
+    paddingBottom: 50,
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
   },
   statsCard: {
     width: '100%',
     borderRadius: 22,
-    padding: 20,
-    marginBottom: 22,
+    padding: 24,
+    marginBottom: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.10,
@@ -194,41 +210,48 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   statsTitle: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1F2937',
-    marginBottom: 12,
+    marginBottom: 16,
     letterSpacing: 0.5,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 8,
   },
   statsItem: {
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 2,
+    paddingHorizontal: 8,
+    minHeight: 80,
   },
   statsValue: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#222',
-    marginTop: 2,
-    marginBottom: 2,
+    marginTop: 4,
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Bold',
+    textAlign: 'center',
   },
   statsLabel: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#6B7280',
-    marginTop: 2,
+    marginTop: 4,
     letterSpacing: 0.2,
+    fontFamily: 'JetBrainsMono-Regular',
+    textAlign: 'center',
   },
   profileCard: {
     width: '100%',
     backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 24,
-    marginBottom: 28,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 32,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -240,7 +263,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    marginBottom: 14,
+    marginBottom: 16,
     borderWidth: 2,
     borderColor: '#FC7A7A',
     backgroundColor: '#F3F4F6',
@@ -248,62 +271,94 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#111',
+    fontFamily: 'JetBrainsMono-Bold',
+    textAlign: 'center',
     marginBottom: 10,
-    color: '#1F2937',
   },
-  profileDetailsRow: {
+  profileInfoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'center',
+    marginBottom: 6,
+    width: '100%',
+    flexWrap: 'wrap',
   },
-  profileDetailText: {
-    marginLeft: 6,
+  profileInfoRowNoWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+    width: '100%',
+    flexWrap: 'nowrap',
+  },
+  profileIcon: {
+    marginRight: 6,
+  },
+  profileInfoLabel: {
     fontSize: 15,
-    color: '#333',
+    color: '#111',
+    fontFamily: 'JetBrainsMono-Regular',
+    marginRight: 4,
+    textAlign: 'center',
+  },
+  profileInfoValue: {
+    fontSize: 15,
+    color: '#111',
+    fontFamily: 'JetBrainsMono-Regular',
+    marginRight: 8,
+    flexShrink: 1,
+    textAlign: 'center',
   },
   editProfileButton: {
     marginTop: 14,
     backgroundColor: '#FFE5E5',
-    borderRadius: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 28,
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 32,
+    alignSelf: 'center',
   },
   editProfileButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
     fontSize: 15,
+    fontFamily: 'JetBrainsMono-Bold',
+    letterSpacing: 0.5,
   },
   section: {
     width: '100%',
-    marginBottom: 28,
+    marginBottom: 32,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
+    paddingHorizontal: 4,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1F2937',
+    fontFamily: 'JetBrainsMono-Bold',
   },
   viewAllButton: {
     backgroundColor: '#FFE5E5',
-    paddingVertical: 7,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 18,
     borderRadius: 18,
   },
   viewAllButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 15,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   timelineContainer: {
     backgroundColor: '#fff',
     borderRadius: 14,
-    padding: 14,
-    marginTop: 2,
+    padding: 18,
+    marginTop: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -313,38 +368,42 @@ const styles = StyleSheet.create({
   timelineItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
-    paddingBottom: 14,
+    marginBottom: 16,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#F3F4F6',
   },
   timelineIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 14,
+    marginRight: 16,
   },
   timelineContent: {
     flex: 1,
+    paddingRight: 8,
   },
   timelineTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#1F2937',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
   },
   timelineDate: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#666',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   dailyTipCard: {
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 18,
-    padding: 20,
-    marginBottom: 10,
+    padding: 24,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
@@ -353,47 +412,53 @@ const styles = StyleSheet.create({
   },
   tipContent: {
     alignItems: 'center',
-    padding: 12,
+    padding: 16,
     backgroundColor: '#FAFAFA',
     borderRadius: 12,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   tipText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 10,
+    marginVertical: 12,
     color: '#D9534F',
+    fontFamily: 'JetBrainsMono-Bold',
+    lineHeight: 22,
   },
   tipSubText: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#666',
     textAlign: 'center',
+    fontFamily: 'JetBrainsMono-Regular',
+    lineHeight: 20,
   },
   newTipButton: {
     backgroundColor: '#FFE5E5',
-    paddingVertical: 7,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 18,
     borderRadius: 18,
     alignSelf: 'flex-start',
   },
   newTipButtonText: {
     color: '#D9534F',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 15,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   tipFooter: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#aaa',
     textAlign: 'center',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   activityCard: {
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 18,
-    padding: 18,
-    marginTop: 18,
-    marginBottom: 10,
+    padding: 20,
+    marginTop: 20,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
@@ -401,28 +466,32 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   activityTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#1F2937',
-    marginBottom: 10,
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   activityRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    paddingBottom: 10,
+    marginBottom: 14,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#F3F4F6',
   },
   activityLabel: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#222',
     fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
+    flex: 1,
   },
   activityTime: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#888',
     marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
   },
 });
 

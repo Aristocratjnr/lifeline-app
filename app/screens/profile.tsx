@@ -1,7 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   dropdownIcon: {
     fontSize: 12,
     color: '#888',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   confirmButton: {
     backgroundColor: '#FFB6B6',
