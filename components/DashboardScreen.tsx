@@ -2,6 +2,7 @@ import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-ic
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -62,6 +63,8 @@ const DashboardScreen = () => {
   const [animatedSteps, setAnimatedSteps] = useState(0);
   const [animatedWater, setAnimatedWater] = useState(0);
 
+  const router = useRouter();
+
   useEffect(() => {
     // Animate steps
     let steps = 0;
@@ -108,10 +111,16 @@ const DashboardScreen = () => {
   };
 
   // Simulated recent activity
-  const recentActivity = [
-    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12' },
-    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45' },
-    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30' },
+  const recentActivity: {
+    id: number;
+    icon: string;
+    label: string;
+    time: string;
+    path: '/sos' | '/explore' | '/firstAidNews';
+  }[] = [
+    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12', path: '/sos' },
+    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45', path: '/explore' },
+    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30', path: '/firstAidNews' },
   ];
 
   const timeline = [
@@ -267,13 +276,18 @@ const DashboardScreen = () => {
         <View style={styles.activityCard}>
           <Text style={styles.activityTitle}>Recent Activity</Text>
           {recentActivity.map((item) => (
-            <View key={item.id} style={styles.activityRow}>
+            <TouchableOpacity
+              key={item.id}
+              style={styles.activityRow}
+              onPress={() => router.push(item.path)}
+              activeOpacity={0.7}
+            >
               <FontAwesome5 name={item.icon as any} size={18} color="#FC7A7A" style={{ marginRight: 14 }} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.activityLabel}>{item.label}</Text>
                 <Text style={styles.activityTime}>{item.time}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
