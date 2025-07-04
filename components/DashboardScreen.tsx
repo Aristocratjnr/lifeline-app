@@ -179,7 +179,9 @@ const DashboardScreen = () => {
 
         {/* Profile Card */}
         <View style={styles.profileCard}>
-          <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
+          <View style={styles.profileAvatarGlow}>
+            <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
+          </View>
           <Text style={styles.profileName}>{user.name}</Text>
           <View style={styles.profileInfoRow}>
             <Feather name="calendar" size={20} color="#222" style={styles.profileIcon} />
@@ -351,11 +353,24 @@ const styles = StyleSheet.create({
     shadowRadius: 18,
     elevation: 8,
   },
+  profileAvatarGlow: {
+    width: 112, // slightly larger than avatar
+    height: 112,
+    borderRadius: 56,
+    backgroundColor: 'rgba(252,122,122,0.25)', // soft pink glow
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#FC7A7A',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 18,
+    elevation: 12, // for Android
+    marginBottom: 16,
+  },
   profileAvatar: {
     width: 96,
     height: 96,
     borderRadius: 48,
-    marginBottom: 16,
     borderWidth: 2,
     borderColor: '#FC7A7A',
     backgroundColor: '#F3F4F6',
@@ -449,7 +464,7 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
   },
   timelineContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     borderRadius: 14,
     padding: 18,
     marginTop: 4,
@@ -494,7 +509,7 @@ const styles = StyleSheet.create({
   },
   dailyTipCard: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     borderRadius: 18,
     padding: 24,
     marginBottom: 12,
@@ -548,7 +563,7 @@ const styles = StyleSheet.create({
   },
   activityCard: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     borderRadius: 18,
     padding: 20,
     marginTop: 20,
