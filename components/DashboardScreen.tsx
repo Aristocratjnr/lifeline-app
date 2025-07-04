@@ -2,7 +2,7 @@ import { AntDesign, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-ic
 import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -51,6 +51,46 @@ const DashboardScreen = () => {
   // State for the current daily tip (second hook)
   const [dailyTip, setDailyTip] = useState(dailyTips[0]);
 
+  // Simulated health stats
+  const healthStats = {
+    steps: 7421,
+    lastCheckup: '25/06/25',
+    waterIntake: 6, // out of 8 glasses
+  };
+
+  // Animated values for steps and water
+  const [animatedSteps, setAnimatedSteps] = useState(0);
+  const [animatedWater, setAnimatedWater] = useState(0);
+
+  useEffect(() => {
+    // Animate steps
+    let steps = 0;
+    const stepsTarget = healthStats.steps;
+    const stepsInterval = setInterval(() => {
+      steps += Math.ceil(stepsTarget / 40);
+      if (steps >= stepsTarget) {
+        steps = stepsTarget;
+        clearInterval(stepsInterval);
+      }
+      setAnimatedSteps(steps);
+    }, 18);
+    // Animate water
+    let water = 0;
+    const waterTarget = healthStats.waterIntake;
+    const waterInterval = setInterval(() => {
+      water += 1;
+      if (water >= waterTarget) {
+        water = waterTarget;
+        clearInterval(waterInterval);
+      }
+      setAnimatedWater(water);
+    }, 120);
+    return () => {
+      clearInterval(stepsInterval);
+      clearInterval(waterInterval);
+    };
+  }, [healthStats.steps, healthStats.waterIntake]);
+
   // Early return for fontsLoaded
   if (!fontsLoaded) {
     return <View style={styles.safeArea} />;
@@ -65,13 +105,6 @@ const DashboardScreen = () => {
     contact: '020343077',
     language: 'English',
     avatar: require('@/assets/images/Daniella.jpeg'), 
-  };
-
-  // Simulated health stats
-  const healthStats = {
-    steps: 7421,
-    lastCheckup: '25/06/25',
-    waterIntake: 6, // out of 8 glasses
   };
 
   // Simulated recent activity
@@ -103,21 +136,31 @@ const DashboardScreen = () => {
         <LinearGradient colors={["#FFE5EC", "#FFF1F2", "#FFFFFF"]} style={styles.statsCard} start={{x:0, y:0}} end={{x:1, y:1}}>
           <Text style={styles.statsTitle}>Health Stats</Text>
           <View style={styles.statsRow}>
+            {/* Steps Stat */}
             <View style={styles.statsItem}>
-              <FontAwesome5 name="walking" size={30} color="#FC7A7A" style={{ marginBottom: 6 }} />
-              <Text style={styles.statsValue}>{healthStats.steps}</Text>
+              <AnimatedCircularProgress
+                size={80}
+                width={10}
+                fill={Math.min((animatedSteps / 10000) * 100, 100)}
+                tintColor="#FC7A7A"
+                backgroundColor="#F3F4F6"
+                rotation={0}
+                lineCap="round"
+                style={{ marginBottom: 6 }}
+              >
+                {() => (
+                  <FontAwesome5 name="walking" size={32} color="#FC7A7A" />
+                )}
+              </AnimatedCircularProgress>
+              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{animatedSteps}</Text>
               <Text style={styles.statsLabel}>Steps</Text>
             </View>
+            {/* Water Stat */}
             <View style={styles.statsItem}>
-              <MaterialIcons name="medical-services" size={30} color="#FBBF24" style={{ marginBottom: 6 }} />
-              <Text style={styles.statsValue}>{healthStats.lastCheckup}</Text>
-              <Text style={styles.statsLabel}>Last Checkup</Text>
-            </View>
-            <View style={[styles.statsItem, { alignItems: 'center' }]}> 
               <AnimatedCircularProgress
-                size={40}
-                width={6}
-                fill={(healthStats.waterIntake / 8) * 100}
+                size={80}
+                width={10}
+                fill={Math.min((animatedWater / 8) * 100, 100)}
                 tintColor="#60A5FA"
                 backgroundColor="#F3F4F6"
                 rotation={0}
@@ -125,10 +168,10 @@ const DashboardScreen = () => {
                 style={{ marginBottom: 6 }}
               >
                 {() => (
-                  <FontAwesome5 name="tint" size={24} color="#60A5FA" />
+                  <FontAwesome5 name="tint" size={32} color="#60A5FA" />
                 )}
               </AnimatedCircularProgress>
-              <Text style={styles.statsValue}>{healthStats.waterIntake}/8</Text>
+              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{animatedWater}/8</Text>
               <Text style={styles.statsLabel}>Water</Text>
             </View>
           </View>
@@ -173,7 +216,7 @@ const DashboardScreen = () => {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Lifeline History</Text>
             <TouchableOpacity style={styles.viewAllButton}>
-              <Text style={styles.viewAllButtonText}>View All</Text>
+              <AntDesign name="eyeo" size={16} color="#D9534F" />
             </TouchableOpacity>
           </View>
           <View style={styles.timelineContainer}>
@@ -303,10 +346,10 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.10,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 18,
+    elevation: 8,
   },
   profileAvatar: {
     width: 96,
@@ -366,6 +409,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 32,
     alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#D9534F',
   },
   editProfileButtonText: {
     color: '#D9534F',
@@ -409,10 +454,10 @@ const styles = StyleSheet.create({
     padding: 18,
     marginTop: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 14,
+    elevation: 6,
   },
   timelineItem: {
     flexDirection: 'row',
@@ -454,10 +499,10 @@ const styles = StyleSheet.create({
     padding: 24,
     marginBottom: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 14,
+    elevation: 6,
   },
   tipContent: {
     alignItems: 'center',
@@ -509,10 +554,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 14,
+    elevation: 6,
   },
   activityTitle: {
     fontSize: 17,
