@@ -3,8 +3,8 @@ import { useFonts } from 'expo-font';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,8 +15,8 @@ const DashboardScreen = () => {
     'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Bold.ttf'),
   });
 
-  // Daily tips list
-  const dailyTips = [
+  // All hooks must be called before any early return
+  const dailyTips = useMemo(() => [
     {
       title: 'Handle sharp objects with care:',
       content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
@@ -47,52 +47,83 @@ const DashboardScreen = () => {
       iconSet: Feather,
       iconName: 'moon',
     },
-  ];
+  ], []);
 
-  // State for the current daily tip (second hook)
   const [dailyTip, setDailyTip] = useState(dailyTips[0]);
-
-  // Simulated health stats
-  const healthStats = {
+  const healthStats = useMemo(() => ({
     steps: 7421,
     lastCheckup: '25/06/25',
     waterIntake: 6, // out of 8 glasses
-  };
-
-  // Animated values for steps and water
-  const [animatedSteps, setAnimatedSteps] = useState(0);
-  const [animatedWater, setAnimatedWater] = useState(0);
-
+  }), []);
+  const animatedSteps = useRef(new Animated.Value(0)).current;
+  const animatedWater = useRef(new Animated.Value(0)).current;
+  const [displayedSteps, setDisplayedSteps] = useState(0);
+  const [displayedWater, setDisplayedWater] = useState(0);
   const router = useRouter();
-
   useEffect(() => {
-    // Animate steps
-    let steps = 0;
-    const stepsTarget = healthStats.steps;
-    const stepsInterval = setInterval(() => {
-      steps += Math.ceil(stepsTarget / 40);
-      if (steps >= stepsTarget) {
-        steps = stepsTarget;
-        clearInterval(stepsInterval);
-      }
-      setAnimatedSteps(steps);
-    }, 18);
-    // Animate water
-    let water = 0;
-    const waterTarget = healthStats.waterIntake;
-    const waterInterval = setInterval(() => {
-      water += 1;
-      if (water >= waterTarget) {
-        water = waterTarget;
-        clearInterval(waterInterval);
-      }
-      setAnimatedWater(water);
-    }, 120);
+    Animated.timing(animatedSteps, {
+      toValue: healthStats.steps,
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(animatedWater, {
+      toValue: healthStats.waterIntake,
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+  }, [healthStats.steps, healthStats.waterIntake, animatedSteps, animatedWater]);
+  useEffect(() => {
+    const stepsListener = animatedSteps.addListener(({ value }) => setDisplayedSteps(Math.round(value)));
+    const waterListener = animatedWater.addListener(({ value }) => setDisplayedWater(Math.round(value)));
     return () => {
-      clearInterval(stepsInterval);
-      clearInterval(waterInterval);
+      animatedSteps.removeListener(stepsListener);
+      animatedWater.removeListener(waterListener);
     };
-  }, [healthStats.steps, healthStats.waterIntake]);
+  }, [animatedSteps, animatedWater]);
+  const recentActivity = useMemo(() => [
+    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12', path: '/sos' as const },
+    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45', path: '/explore' as const },
+    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30', path: '/firstAidNews' as const },
+  ], []);
+  const timeline = useMemo(() => [
+    { id: '1', title: 'Fracture', date: 'Last Visited: 02, May, 2025', icon: 'bone' },
+    { id: '2', title: 'Cough', date: 'Last Visited: 02, May, 2025', icon: 'lungs-virus' },
+    { id: '3', title: 'Burns', date: 'Last Visited: 02, May, 2025', icon: 'fire' },
+  ], []);
+  const handleNewTip = useCallback(() => {
+    let newTip;
+    do {
+      newTip = dailyTips[Math.floor(Math.random() * dailyTips.length)];
+    } while (newTip.title === dailyTip.title && dailyTips.length > 1);
+    setDailyTip(newTip);
+  }, [dailyTips, dailyTip.title]);
+  const TimelineItem = React.memo(({ item }: { item: typeof timeline[0] }) => (
+    <View style={styles.timelineItem}>
+      <View style={styles.timelineIcon}>
+        <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
+      </View>
+      <View style={styles.timelineContent}>
+        <Text style={styles.timelineTitle}>{item.title}</Text>
+        <Text style={styles.timelineDate}>{item.date}</Text>
+      </View>
+      <AntDesign name="right" size={16} color="#ccc" />
+    </View>
+  ));
+  TimelineItem.displayName = "TimelineItem";
+  const ActivityRow = React.memo(({ item }: { item: typeof recentActivity[0] }) => (
+    <TouchableOpacity
+      style={styles.activityRow}
+      onPress={() => router.push(item.path)}
+      activeOpacity={0.7}
+    >
+      <FontAwesome5 name={item.icon as any} size={18} color="#FC7A7A" style={{ marginRight: 14 }} />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.activityLabel}>{item.label}</Text>
+        <Text style={styles.activityTime}>{item.time}</Text>
+      </View>
+    </TouchableOpacity>
+  ));
+  ActivityRow.displayName = "ActivityRow";
 
   // Early return for fontsLoaded
   if (!fontsLoaded) {
@@ -110,34 +141,6 @@ const DashboardScreen = () => {
     avatar: require('@/assets/images/Daniella.jpeg'), 
   };
 
-  // Simulated recent activity
-  const recentActivity: {
-    id: number;
-    icon: string;
-    label: string;
-    time: string;
-    path: '/sos' | '/explore' | '/firstAidNews';
-  }[] = [
-    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12', path: '/sos' },
-    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45', path: '/explore' },
-    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30', path: '/firstAidNews' },
-  ];
-
-  const timeline = [
-    { id: '1', title: 'Fracture', date: 'Last Visited: 02, May, 2025', icon: 'bone' },
-    { id: '2', title: 'Cough', date: 'Last Visited: 02, May, 2025', icon: 'lungs-virus' },
-    { id: '3', title: 'Burns', date: 'Last Visited: 02, May, 2025', icon: 'fire' },
-  ];
-
-  // Function to update the daily tip
-  const handleNewTip = () => {
-    let newTip;
-    do {
-      newTip = dailyTips[Math.floor(Math.random() * dailyTips.length)];
-    } while (newTip.title === dailyTip.title && dailyTips.length > 1);
-    setDailyTip(newTip);
-  };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
@@ -150,7 +153,7 @@ const DashboardScreen = () => {
               <AnimatedCircularProgress
                 size={80}
                 width={10}
-                fill={Math.min((animatedSteps / 10000) * 100, 100)}
+                fill={Math.min((displayedSteps / 10000) * 100, 100)}
                 tintColor="#FC7A7A"
                 backgroundColor="#F3F4F6"
                 rotation={0}
@@ -161,7 +164,7 @@ const DashboardScreen = () => {
                   <FontAwesome5 name="walking" size={32} color="#FC7A7A" />
                 )}
               </AnimatedCircularProgress>
-              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{animatedSteps}</Text>
+              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedSteps}</Text>
               <Text style={styles.statsLabel}>Steps</Text>
             </View>
             {/* Water Stat */}
@@ -169,7 +172,7 @@ const DashboardScreen = () => {
               <AnimatedCircularProgress
                 size={80}
                 width={10}
-                fill={Math.min((animatedWater / 8) * 100, 100)}
+                fill={Math.min((displayedWater / 8) * 100, 100)}
                 tintColor="#60A5FA"
                 backgroundColor="#F3F4F6"
                 rotation={0}
@@ -180,7 +183,7 @@ const DashboardScreen = () => {
                   <FontAwesome5 name="tint" size={32} color="#60A5FA" />
                 )}
               </AnimatedCircularProgress>
-              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{animatedWater}/8</Text>
+              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedWater}/8</Text>
               <Text style={styles.statsLabel}>Water</Text>
             </View>
           </View>
@@ -231,18 +234,12 @@ const DashboardScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.timelineContainer}>
-            {timeline.map((item, index) => (
-              <View key={item.id} style={styles.timelineItem}>
-                <View style={styles.timelineIcon}>
-                  <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
-                </View>
-                <View style={styles.timelineContent}>
-                  <Text style={styles.timelineTitle}>{item.title}</Text>
-                  <Text style={styles.timelineDate}>{item.date}</Text>
-                </View>
-                <AntDesign name="right" size={16} color="#ccc" />
-              </View>
-            ))}
+            <FlatList
+              data={timeline}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => <TimelineItem item={item} />}
+              scrollEnabled={false}
+            />
           </View>
         </View>
 
@@ -275,20 +272,12 @@ const DashboardScreen = () => {
         {/* Recent Activity */}
         <View style={styles.activityCard}>
           <Text style={styles.activityTitle}>Recent Activity</Text>
-          {recentActivity.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.activityRow}
-              onPress={() => router.push(item.path)}
-              activeOpacity={0.7}
-            >
-              <FontAwesome5 name={item.icon as any} size={18} color="#FC7A7A" style={{ marginRight: 14 }} />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.activityLabel}>{item.label}</Text>
-                <Text style={styles.activityTime}>{item.time}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          <FlatList
+            data={recentActivity}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => <ActivityRow item={item} />}
+            scrollEnabled={false}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
