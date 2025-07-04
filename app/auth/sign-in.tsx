@@ -57,7 +57,7 @@ export default function SignInScreen() {
       />
       
       {/* Blur overlay for the entire screen */}
-      <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFillObject} />
+      <BlurView intensity={100} tint="light" style={StyleSheet.absoluteFillObject} />
       
       {/* Content */}
       <SafeAreaView style={styles.safeArea}>
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
       marginRight: 10,
   },
   googleButtonText: {
-      fontSize: 16,
+      fontSize: 15,
       color: '#333',
       fontFamily: 'JetBrainsMono-Bold',
   },

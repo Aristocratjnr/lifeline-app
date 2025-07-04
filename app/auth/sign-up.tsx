@@ -57,7 +57,7 @@ const SignUpScreen = () => {
       />
       
       {/* Blur overlay for the entire screen */}
-      <BlurView intensity={40} tint="light" style={StyleSheet.absoluteFillObject} />
+      <BlurView intensity={100} tint="light" style={StyleSheet.absoluteFillObject} />
       
       {/* Content */}
       <SafeAreaView style={styles.safeArea}>
