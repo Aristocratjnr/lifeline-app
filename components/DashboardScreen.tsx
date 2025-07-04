@@ -209,7 +209,7 @@ const DashboardScreen = () => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TouchableOpacity style={styles.newTipButton} onPress={handleNewTip}>
               <Feather name="refresh-cw" size={16} color="#D9534F" style={{ marginRight: 6 }} />
-              <Text style={styles.newTipButtonText}>New Tip</Text>
+             
             </TouchableOpacity>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Feather name="zap" size={14} color="#aaa" style={{ marginRight: 4 }} />
