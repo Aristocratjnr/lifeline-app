@@ -4,21 +4,21 @@ import { BlurView } from 'expo-blur';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    ActivityIndicator,
-    Animated,
-    Image,
-    ImageBackground,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Image,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Loader from '../../components/Loader';
 
@@ -32,6 +32,7 @@ export default function SignInScreen() {
   const [answered, setAnswered] = useState(false);
   const [feelingGood, setFeelingGood] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+  const [isTransitioningToAI, setIsTransitioningToAI] = useState(false);
   const checkAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
 
@@ -87,6 +88,15 @@ export default function SignInScreen() {
 
   return (
     <>
+      {/* Transition UI for AI Assistant */}
+      {isTransitioningToAI && (
+        <View style={styles.transitionOverlay}>
+          <View style={styles.transitionCard}>
+            <ActivityIndicator size="large" color="#E53935" style={{ marginBottom: 18 }} />
+            <Text style={styles.transitionText}>Connecting you to AI Assistant...</Text>
+          </View>
+        </View>
+      )}
       {/* Full-screen background image */}
       <ImageBackground 
         source={require('../../assets/images/background.jpg')} 
@@ -97,78 +107,86 @@ export default function SignInScreen() {
       {/* Blur overlay for the entire screen */}
       <BlurView intensity={100} tint="light" style={StyleSheet.absoluteFillObject} />
       
-      {/* Health Check Modal */}
-      <Modal
-        visible={showHelpCheck}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowHelpCheck(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Pressable style={styles.modalClose} onPress={() => setShowHelpCheck(false)}>
-              <Text style={styles.modalCloseText}>×</Text>
-            </Pressable>
-            {!answered && !checkComplete ? (
-              <>
-                <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16 }} />
-                <Text style={styles.modalTitle}>Health Check</Text>
-                <Text style={styles.modalText}>Are you feeling good today?</Text>
-                <View style={{ flexDirection: 'row', marginTop: 18 }}>
+      {/* Health Check Modal (only show if not transitioning to AI) */}
+      {!isTransitioningToAI && (
+        <Modal
+          visible={showHelpCheck}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setShowHelpCheck(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <Pressable style={styles.modalClose} onPress={() => setShowHelpCheck(false)}>
+                <Text style={styles.modalCloseText}>×</Text>
+              </Pressable>
+              {!answered && !checkComplete ? (
+                <>
+                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Text style={styles.modalTitle}>Health Check</Text>
+                  <Text style={styles.modalText}>Are you feeling good today?</Text>
+                  <View style={{ flexDirection: 'row', marginTop: 18 }}>
+                    <TouchableOpacity
+                      style={[styles.modalConfirmButton, { backgroundColor: '#43A047', marginRight: 10 }]}
+                      onPress={handleYes}
+                    >
+                      <Text style={styles.modalConfirmButtonText}>Yes</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.modalConfirmButton, { backgroundColor: '#E53935' }]}
+                      onPress={() => {
+                        setAnswered(true);
+                        setFeelingGood(false);
+                        setShowHelpCheck(false);
+                        setIsTransitioningToAI(true);
+                        setTimeout(() => {
+                          setIsTransitioningToAI(false);
+                          router.replace('/ai-assistant');
+                        }, 700);
+                      }}
+                    >
+                      <Text style={styles.modalConfirmButtonText}>No</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              ) : feelingGood && isChecking ? (
+                <View style={{ alignItems: 'center' }}>
+                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
+                  <Text style={styles.modalTitle}>Checking status...</Text>
+                  <ActivityIndicator size="large" color="#E53935" style={{ marginVertical: 18 }} />
+                </View>
+              ) : feelingGood && checkComplete ? (
+                <Animated.View style={{ alignItems: 'center', opacity: checkAnim, transform: [{ scale: checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0.7, 1] }) }] }}>
+                  <MaterialIcons name="health-and-safety" size={48} color="#43A047" style={{ marginBottom: 16 }} />
+                  <Text style={[styles.modalTitle, { color: '#43A047' }]}>You&apos;re good to go!</Text>
+                  <Text style={styles.modalText}>All checks passed. You can proceed to the dashboard.</Text>
                   <TouchableOpacity
-                    style={[styles.modalConfirmButton, { backgroundColor: '#43A047', marginRight: 10 }]}
-                    onPress={handleYes}
-                  >
-                    <Text style={styles.modalConfirmButtonText}>Yes</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.modalConfirmButton, { backgroundColor: '#E53935' }]}
+                    style={[styles.modalConfirmButton, { backgroundColor: '#43A047' }]}
                     onPress={() => {
-                      setAnswered(true);
-                      setFeelingGood(false);
+                      setShowHelpCheck(false);
+                      setTimeout(() => router.replace('/dashboard'), 200);
                     }}
                   >
-                    <Text style={styles.modalConfirmButtonText}>No</Text>
+                    <Text style={styles.modalConfirmButtonText}>Proceed to Dashboard</Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              ) : !feelingGood && answered ? (
+                <View style={{ alignItems: 'center' }}>
+                  <MaterialIcons name="mood-bad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Text style={[styles.modalTitle, { color: '#E53935' }]}>Take Care!</Text>
+                  <Text style={styles.modalText}>Remember to rest and reach out for help if needed.</Text>
+                  <TouchableOpacity
+                    style={[styles.modalConfirmButton, { backgroundColor: '#E53935', marginTop: 10 }]}
+                    onPress={() => setShowHelpCheck(false)}
+                  >
+                    <Text style={styles.modalConfirmButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
-              </>
-            ) : feelingGood && isChecking ? (
-              <View style={{ alignItems: 'center' }}>
-                <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
-                <Text style={styles.modalTitle}>Checking status...</Text>
-                <ActivityIndicator size="large" color="#E53935" style={{ marginVertical: 18 }} />
-              </View>
-            ) : feelingGood && checkComplete ? (
-              <Animated.View style={{ alignItems: 'center', opacity: checkAnim, transform: [{ scale: checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0.7, 1] }) }] }}>
-                <MaterialIcons name="health-and-safety" size={48} color="#43A047" style={{ marginBottom: 16 }} />
-                <Text style={[styles.modalTitle, { color: '#43A047' }]}>You&apos;re good to go!</Text>
-                <Text style={styles.modalText}>All checks passed. You can proceed to the dashboard.</Text>
-                <TouchableOpacity
-                  style={[styles.modalConfirmButton, { backgroundColor: '#43A047' }]}
-                  onPress={() => {
-                    setShowHelpCheck(false);
-                    setTimeout(() => router.replace('/dashboard'), 200);
-                  }}
-                >
-                  <Text style={styles.modalConfirmButtonText}>Proceed to Dashboard</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            ) : !feelingGood && answered ? (
-              <View style={{ alignItems: 'center' }}>
-                <MaterialIcons name="mood-bad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
-                <Text style={[styles.modalTitle, { color: '#E53935' }]}>Take Care!</Text>
-                <Text style={styles.modalText}>Remember to rest and reach out for help if needed.</Text>
-                <TouchableOpacity
-                  style={[styles.modalConfirmButton, { backgroundColor: '#E53935', marginTop: 10 }]}
-                  onPress={() => setShowHelpCheck(false)}
-                >
-                  <Text style={styles.modalConfirmButtonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
+              ) : null}
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
       
       {/* Content */}
       <SafeAreaView style={styles.safeArea}>
@@ -506,5 +524,33 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  transitionOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  transitionCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 32,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 10,
+  },
+  transitionText: {
+    fontSize: 16,
+    color: '#E53935',
+    fontFamily: 'JetBrainsMono-Bold',
+    textAlign: 'center',
   },
 });
