@@ -8,12 +8,50 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
-  // Load fonts
+  // Load fonts (first hook)
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
     'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Bold.ttf'),
   });
 
+  // Daily tips list
+  const dailyTips = [
+    {
+      title: 'Handle sharp objects with care:',
+      content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
+      iconSet: MaterialIcons,
+      iconName: 'content-cut',
+    },
+    {
+      title: 'Stay hydrated:',
+      content: 'Drink at least 8 glasses of water a day to keep your body functioning optimally.',
+      iconSet: FontAwesome5,
+      iconName: 'tint',
+    },
+    {
+      title: 'Wash your hands regularly:',
+      content: 'Frequent handwashing helps prevent the spread of germs and illnesses.',
+      iconSet: FontAwesome5,
+      iconName: 'hands-wash',
+    },
+    {
+      title: 'Take breaks from screens:',
+      content: 'Rest your eyes every 20 minutes to reduce eye strain and fatigue.',
+      iconSet: Feather,
+      iconName: 'monitor',
+    },
+    {
+      title: 'Get enough sleep:',
+      content: 'Aim for 7-9 hours of sleep each night to support your overall health.',
+      iconSet: Feather,
+      iconName: 'moon',
+    },
+  ];
+
+  // State for the current daily tip (second hook)
+  const [dailyTip, setDailyTip] = useState(dailyTips[0]);
+
+  // Early return for fontsLoaded
   if (!fontsLoaded) {
     return <View style={styles.safeArea} />;
   }
@@ -48,33 +86,6 @@ const DashboardScreen = () => {
     { id: '2', title: 'Cough', date: 'Last Visited: 02, May, 2025', icon: 'lungs-virus' },
     { id: '3', title: 'Burns', date: 'Last Visited: 02, May, 2025', icon: 'fire' },
   ];
-
-  // Daily tips list
-  const dailyTips = [
-    {
-      title: 'Handle sharp objects with care:',
-      content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
-    },
-    {
-      title: 'Stay hydrated:',
-      content: 'Drink at least 8 glasses of water a day to keep your body functioning optimally.',
-    },
-    {
-      title: 'Wash your hands regularly:',
-      content: 'Frequent handwashing helps prevent the spread of germs and illnesses.',
-    },
-    {
-      title: 'Take breaks from screens:',
-      content: 'Rest your eyes every 20 minutes to reduce eye strain and fatigue.',
-    },
-    {
-      title: 'Get enough sleep:',
-      content: 'Aim for 7-9 hours of sleep each night to support your overall health.',
-    },
-  ];
-
-  // State for the current daily tip
-  const [dailyTip, setDailyTip] = useState(dailyTips[0]);
 
   // Function to update the daily tip
   const handleNewTip = () => {
@@ -188,15 +199,22 @@ const DashboardScreen = () => {
             <Text style={styles.sectionTitle}>DAILY TIP</Text>
           </View>
           <View style={styles.tipContent}>
-            <MaterialIcons name="content-cut" size={20} color="#ccc" />
+            {/* Dynamic icon for the tip */}
+            {dailyTip.iconSet && dailyTip.iconName && (
+              <dailyTip.iconSet name={dailyTip.iconName} size={24} color="#D9534F" style={{ marginBottom: 4 }} />
+            )}
             <Text style={styles.tipText}>{dailyTip.title}</Text>
             <Text style={styles.tipSubText}>{dailyTip.content}</Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TouchableOpacity style={styles.newTipButton} onPress={handleNewTip}>
+              <Feather name="refresh-cw" size={16} color="#D9534F" style={{ marginRight: 6 }} />
               <Text style={styles.newTipButtonText}>New Tip</Text>
             </TouchableOpacity>
-            <Text style={styles.tipFooter}>New tip every day</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Feather name="zap" size={14} color="#aaa" style={{ marginRight: 4 }} />
+              <Text style={styles.tipFooter}>New tip every day</Text>
+            </View>
           </View>
         </View>
 
