@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   solutionText: {
     fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 16,
+    fontSize: 20,
     marginTop: 15,
     color: '#333',
   },
