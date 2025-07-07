@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
+    ImageBackground,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -27,67 +28,85 @@ export default function About() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>ABOUT</Text>
-      </View>
-
-      <ScrollView style={styles.scrollContent}>
-        {/* About Lifeline Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About LIFELINE</Text>
-          <Text style={styles.sectionText}>
-            Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you&apos;re prepared to act quickly and effectively.
-          </Text>
-           <View style={styles.divider} />
-        </View>
-        
-
-        {/* App Version Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>App Version</Text>
-          <Text style={styles.sectionText}>1.0.0</Text>
-          <View style={styles.divider} />
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>ABOUT</Text>
         </View>
 
-        {/* Acknowledgement Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Acknowledgement of Credit:</Text>
-          <Text style={styles.sectionText}>
-            This application was made possible through the collaborative efforts and support of the following individuals and entities. We extend our sincere gratitude to:
-          </Text>
+        <ScrollView style={styles.scrollContent}>
+          {/* About Lifeline Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>About LIFELINE</Text>
+            <Text style={styles.sectionText}>
+              Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you&apos;re prepared to act quickly and effectively.
+            </Text>
+             <View style={styles.divider} />
+          </View>
           
-          <Text style={[styles.creditName, styles.spacingTop]}>
-            Daniella Asiedu - Lead UI/UX & Developer
-          </Text>
-          
-          <Text style={[styles.creditName, styles.spacingTop]}>
-            David Ayim Obuobi - Assistance Developer Credits
-          </Text>
-          
-          <Text style={[styles.creditName, styles.spacingTop]}>
-            Special Mention:
-          </Text>
-          <Text style={styles.sectionText}>
-            Stephen Adingo, for guidance and mentorship throughout the project.
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+
+          {/* App Version Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>App Version</Text>
+            <Text style={styles.sectionText}>1.0.0</Text>
+            <View style={styles.divider} />
+          </View>
+
+          {/* Acknowledgement Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Acknowledgement of Credit:</Text>
+            <Text style={styles.sectionText}>
+              This application was made possible through the collaborative efforts and support of the following individuals and entities. We extend our sincere gratitude to:
+            </Text>
+            
+            <Text style={[styles.creditName, styles.spacingTop]}>
+              Daniella Asiedu - Lead UI/UX & Developer
+            </Text>
+            
+            <Text style={[styles.creditName, styles.spacingTop]}>
+              David Ayim Obuobi - Assistance Developer Credits
+            </Text>
+            
+            <Text style={[styles.creditName, styles.spacingTop]}>
+              Special Mention:
+            </Text>
+            <Text style={styles.sectionText}>
+              Stephen Adingo, for guidance and mentorship throughout the project.
+            </Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',

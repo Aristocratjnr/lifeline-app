@@ -3,13 +3,14 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    Image,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -28,44 +29,62 @@ export default function OfflineContent() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>OFFLINE CONTENT{'\n'}MANAGEMENT</Text>
-      </View>
-
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Coming Soon Image */}
-        <View style={styles.imageContainer}>
-          <Image 
-            source={require('../../assets/images/coming.png')} 
-            style={styles.comingSoonImage} 
-            resizeMode="contain"
-          />
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>OFFLINE CONTENT{'\n'}MANAGEMENT</Text>
         </View>
 
-        {/* Description Text */}
-        <Text style={styles.descriptionText}>
-          Be prepared for any situation. Access all your Lifeline guides anytime, anywhere, even without internet. Download content for offline use - This feature is on its way!
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Coming Soon Image */}
+          <View style={styles.imageContainer}>
+            <Image 
+              source={require('../../assets/images/coming.png')} 
+              style={styles.comingSoonImage} 
+              resizeMode="contain"
+            />
+          </View>
+
+          {/* Description Text */}
+          <Text style={styles.descriptionText}>
+            Be prepared for any situation. Access all your Lifeline guides anytime, anywhere, even without internet. Download content for offline use - This feature is on its way!
+          </Text>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',

@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
     Alert,
+    ImageBackground,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -50,69 +51,87 @@ export default function DeleteAccount() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>DELETE ACCOUNT</Text>
-      </View>
-
-      <ScrollView style={styles.scrollContent}>
-        <View style={styles.contentCard}>
-          {/* Manage Account Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Manage Your Account</Text>
-            <Text style={styles.sectionText}>
-              Control your account settings, including deactivation and deletion options.
-            </Text>
-          </View>
-
-          <View style={styles.separator} />
-
-          {/* Deactivate Account Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Deactivate Account</Text>
-            <Text style={styles.sectionText}>
-              Temporarily disable your account. You can reactivate it by logging in again.
-            </Text>
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={handleDeactivate}
-            >
-              <Text style={styles.actionButtonText}>DEACTIVATE ACCOUNT</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.separator} />
-
-          {/* Delete Account Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Deactivate Account</Text>
-            <Text style={styles.sectionText}>
-              We are really sorry to see you go. Are you sure you want to delete your account? <Text style={styles.warningText}>This is irreversible and will remove your account and all data from Lifeline.</Text>
-            </Text>
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={handleDelete}
-            >
-              <Text style={styles.actionButtonText}>DELETE ACCOUNT</Text>
-            </TouchableOpacity>
-          </View>
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>DELETE ACCOUNT</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        <ScrollView style={styles.scrollContent}>
+          <View style={styles.contentCard}>
+            {/* Manage Account Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Manage Your Account</Text>
+              <Text style={styles.sectionText}>
+                Control your account settings, including deactivation and deletion options.
+              </Text>
+            </View>
+
+            <View style={styles.separator} />
+
+            {/* Deactivate Account Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Deactivate Account</Text>
+              <Text style={styles.sectionText}>
+                Temporarily disable your account. You can reactivate it by logging in again.
+              </Text>
+              <TouchableOpacity 
+                style={styles.actionButton}
+                onPress={handleDeactivate}
+              >
+                <Text style={styles.actionButtonText}>DEACTIVATE ACCOUNT</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.separator} />
+
+            {/* Delete Account Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Deactivate Account</Text>
+              <Text style={styles.sectionText}>
+                We are really sorry to see you go. Are you sure you want to delete your account? <Text style={styles.warningText}>This is irreversible and will remove your account and all data from Lifeline.</Text>
+              </Text>
+              <TouchableOpacity 
+                style={styles.actionButton}
+                onPress={handleDelete}
+              >
+                <Text style={styles.actionButtonText}>DELETE ACCOUNT</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',

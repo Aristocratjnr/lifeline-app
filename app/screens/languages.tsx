@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
     Image,
+    ImageBackground,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -73,74 +74,92 @@ export default function Languages() {
   }, [searchText]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>LANGUAGE</Text>
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search for language"
-            placeholderTextColor="#999"
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-          {searchText.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchText('')}>
-              <Ionicons name="close-circle" size={20} color="#999" />
-            </TouchableOpacity>
-          )}
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>LANGUAGE</Text>
         </View>
-      </View>
 
-      {/* Language Selection */}
-      <View style={styles.contentContainer}>
-        <ScrollView>
-          <View style={styles.languageGrid}>
-            {filteredLanguages.map((language) => (
-              <LanguageItem
-                key={language.id}
-                flag={<Image source={language.flag} style={styles.flagIcon} />}
-                name={language.name}
-              />
-            ))}
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search for language"
+              placeholderTextColor="#999"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+            {searchText.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchText('')}>
+                <Ionicons name="close-circle" size={20} color="#999" />
+              </TouchableOpacity>
+            )}
           </View>
+        </View>
 
-          {filteredLanguages.length === 0 && (
-            <View style={styles.noResultsContainer}>
-              <Ionicons name="search-outline" size={48} color="#ccc" />
-              <Text style={styles.noResultsText}>No languages found</Text>
-              <Text style={styles.noResultsSubtext}>Try a different search term</Text>
+        {/* Language Selection */}
+        <View style={styles.contentContainer}>
+          <ScrollView>
+            <View style={styles.languageGrid}>
+              {filteredLanguages.map((language) => (
+                <LanguageItem
+                  key={language.id}
+                  flag={<Image source={language.flag} style={styles.flagIcon} />}
+                  name={language.name}
+                />
+              ))}
             </View>
-          )}
 
-          <Text style={styles.comingSoon}>MORE LANGUAGES COMING SOON!!!</Text>
-        </ScrollView>
-      </View>
+            {filteredLanguages.length === 0 && (
+              <View style={styles.noResultsContainer}>
+                <Ionicons name="search-outline" size={48} color="#ccc" />
+                <Text style={styles.noResultsText}>No languages found</Text>
+                <Text style={styles.noResultsSubtext}>Try a different search term</Text>
+              </View>
+            )}
 
-      {/* Submit Button */}
-      <TouchableOpacity style={styles.submitButton}>
-        <Text style={styles.submitText}>SUBMIT</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+            <Text style={styles.comingSoon}>MORE LANGUAGES COMING SOON!!!</Text>
+          </ScrollView>
+        </View>
+
+        {/* Submit Button */}
+        <TouchableOpacity style={styles.submitButton}>
+          <Text style={styles.submitText}>SUBMIT</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',
