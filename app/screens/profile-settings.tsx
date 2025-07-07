@@ -1,13 +1,15 @@
 import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
+    Modal,
     SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native';
@@ -25,31 +27,100 @@ type InputRowProps = {
   value: string;
   isPassword?: boolean;
   hasDropdown?: boolean;
+  onPress?: () => void;
+  onChangeText?: (text: string) => void;
+  isEditing?: boolean;
+  onEditPress?: () => void;
 };
 
-const InputRow = ({ icon, value, isPassword = false, hasDropdown = false }: InputRowProps) => (
+const InputRow = ({ 
+  icon, 
+  value, 
+  isPassword = false, 
+  hasDropdown = false, 
+  onPress,
+  onChangeText,
+  isEditing = false,
+  onEditPress
+}: InputRowProps) => (
   <View style={styles.inputRow}>
     <View style={styles.inputIconContainer}>
       {icon}
     </View>
-    <Text style={styles.inputText}>
-      {isPassword ? '****************' : value}
-    </Text>
-    {hasDropdown && (
+    {isEditing ? (
+      <TextInput
+        style={styles.inputTextInput}
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={isPassword}
+        placeholder={isPassword ? "Enter password" : "Enter value"}
+        placeholderTextColor="#999"
+      />
+    ) : (
+      <Text style={styles.inputText}>
+        {isPassword ? '****************' : value}
+      </Text>
+    )}
+    {hasDropdown && !isEditing && (
       <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
     )}
-    {isPassword && (
+    {isPassword && !isEditing && (
       <Ionicons name="eye-outline" size={20} color="#333" />
+    )}
+    {!hasDropdown && !isPassword && (
+      <TouchableOpacity onPress={onEditPress} style={styles.editButton}>
+        <Ionicons name={isEditing ? "checkmark" : "create-outline"} size={18} color="#666" />
+      </TouchableOpacity>
     )}
   </View>
 );
 
 export default function ProfileSettings() {
   const navigation = useNavigation();
+  const [showGenderModal, setShowGenderModal] = useState(false);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    username: 'Agradaa',
+    location: 'Bahamas, Nowhere',
+    email: 'username@example.com',
+    phone: '+233 59 874 1236',
+    password: '',
+    gender: 'Female',
+    age: '18 yrs'
+  });
 
   useEffect(() => {
     loadFonts();
   }, []);
+
+  const handleEditField = (field: string) => {
+    setIsEditing(field);
+  };
+
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleGenderSelect = (gender: string) => {
+    setFormData(prev => ({
+      ...prev,
+      gender
+    }));
+    setShowGenderModal(false);
+  };
+
+  const handleSaveChanges = () => {
+    // Here you would typically save to backend/database
+    console.log('Saving changes:', formData);
+    // Show success message or navigate back
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,56 +151,135 @@ export default function ProfileSettings() {
           {/* Username */}
           <InputRow 
             icon={<Ionicons name="person-outline" size={20} color="#333" />} 
-            value="Agradaa"
+            value={formData.username}
+            isEditing={isEditing === 'username'}
+            onEditPress={() => handleEditField('username')}
+            onChangeText={(text) => handleInputChange('username', text)}
           />
           
           {/* Location */}
           <InputRow 
             icon={<MaterialIcons name="location-on" size={20} color="#333" />} 
-            value="Bahamas, Nowhere"
+            value={formData.location}
             hasDropdown
+            isEditing={isEditing === 'location'}
+            onEditPress={() => handleEditField('location')}
+            onChangeText={(text) => handleInputChange('location', text)}
           />
           
           {/* Email */}
           <InputRow 
             icon={<MaterialCommunityIcons name="email-outline" size={20} color="#333" />} 
-            value="username@example.com"
+            value={formData.email}
+            isEditing={isEditing === 'email'}
+            onEditPress={() => handleEditField('email')}
+            onChangeText={(text) => handleInputChange('email', text)}
           />
           
           {/* Phone */}
           <InputRow 
             icon={<Feather name="phone" size={20} color="#333" />} 
-            value="+233 59 874 1236"
+            value={formData.phone}
+            isEditing={isEditing === 'phone'}
+            onEditPress={() => handleEditField('phone')}
+            onChangeText={(text) => handleInputChange('phone', text)}
           />
           
           {/* Password */}
           <InputRow 
             icon={<FontAwesome name="lock" size={20} color="#333" />} 
-            value=""
+            value={formData.password}
             isPassword
+            isEditing={isEditing === 'password'}
+            onEditPress={() => handleEditField('password')}
+            onChangeText={(text) => handleInputChange('password', text)}
           />
           
           {/* Gender */}
-          <InputRow 
-            icon={<Ionicons name="transgender" size={20} color="#333" />} 
-            value="Female"
-            hasDropdown
-          />
+          <TouchableOpacity 
+            style={styles.inputRow}
+            onPress={() => setShowGenderModal(true)}
+          >
+            <View style={styles.inputIconContainer}>
+              <Ionicons name="transgender" size={20} color="#333" />
+            </View>
+            <Text style={styles.inputText}>{formData.gender}</Text>
+            <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
+          </TouchableOpacity>
           
           {/* Age */}
           <InputRow 
             icon={<MaterialIcons name="cake" size={20} color="#333" />} 
-            value="18 yrs"
+            value={formData.age}
+            isEditing={isEditing === 'age'}
+            onEditPress={() => handleEditField('age')}
+            onChangeText={(text) => handleInputChange('age', text)}
           />
         </ScrollView>
 
         {/* Save Button */}
         <View style={styles.saveButtonContainer}>
-          <TouchableOpacity style={styles.saveButton}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
             <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Gender Selection Modal */}
+      <Modal
+        visible={showGenderModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowGenderModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowGenderModal(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Gender</Text>
+              <TouchableOpacity onPress={() => setShowGenderModal(false)}>
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Male' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Male')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="male" size={24} color="#007AFF" />
+                <Text style={styles.genderOptionText}>Male</Text>
+              </View>
+              {formData.gender === 'Male' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Female' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Female')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="female" size={24} color="#FF2D92" />
+                <Text style={styles.genderOptionText}>Female</Text>
+              </View>
+              {formData.gender === 'Female' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Other' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Other')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="transgender" size={24} color="#666" />
+                <Text style={styles.genderOptionText}>Other</Text>
+              </View>
+              {formData.gender === 'Other' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -230,5 +380,62 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 14,
     letterSpacing: 0.5,
+  },
+  inputTextInput: {
+    flex: 1,
+    fontSize: 14,
+    marginLeft: 5,
+    fontFamily: 'JetBrainsMono',
+    color: '#333',
+    paddingVertical: 0,
+  },
+  editButton: {
+    padding: 5,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    width: '80%',
+    maxWidth: 300,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+  genderOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  selectedGenderOption: {
+    backgroundColor: '#f0f0f0',
+  },
+  genderOptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  genderOptionText: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 16,
+    color: '#333',
   },
 });
