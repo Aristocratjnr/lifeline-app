@@ -1,8 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import { ImageBackground } from 'expo-image';
 import React, { useState } from 'react';
-import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, ImageBackground, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 const pink = '#F9A6A6';
@@ -53,21 +52,35 @@ export default function DonateScreen() {
               <Text style={styles.modalTitle}>Payment Details</Text>
               <View style={styles.detailRow}>
                 <MaterialIcons name="mobile-friendly" size={22} color="#B96A6A" style={styles.detailIcon} />
-                <Text style={styles.modalText}>Telecel-Cash: <Text style={styles.bold}>0203430787</Text></Text>
+                <View style={styles.detailTextGroup}>
+                  <Text style={styles.modalText}>Telecel-Cash: <Text style={styles.bold}>0203430787</Text></Text>
+                  <Text style={styles.accountName}>Daniella Asiedu</Text>
+                </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="mobile-friendly" size={22} color="#B96A6A" style={styles.detailIcon} />
-                <Text style={styles.modalText}>MTN-MOMO: <Text style={styles.bold}>0551784926</Text></Text>
+                <View style={styles.detailTextGroup}>
+                  <Text style={styles.modalText}>MTN-MOMO: <Text style={styles.bold}>0551784926</Text></Text>
+                  <Text style={styles.accountName}>David Obuobi</Text>
+                </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="account-balance" size={22} color="#B96A6A" style={styles.detailIcon} />
-                <Text style={styles.modalText}>Bank(GCB): <Text style={styles.bold}>1331250000242</Text></Text>
+                <View style={styles.detailTextGroup}>
+                  <Text style={styles.modalText}>Bank(GCB): <Text style={styles.bold}>1331250000242</Text></Text>
+                  <Text style={styles.accountName}>Daniella Asiedu</Text>
+                </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="account-balance-wallet" size={22} color="#B96A6A" style={styles.detailIcon} />
-                <Text style={styles.modalText}>USDT Wallet TRC20: <Text style={styles.bold}>TCvvhtnFTm6dQcrtq3x3uXabRULzvEkwr1</Text></Text>
+                <View style={styles.detailTextGroup}>
+                  <Text style={styles.modalText}>USDT Wallet TRC20: <Text style={styles.bold}>TCvvhtnFTm6dQcrtq3x3uXabRULzvEkwr1</Text></Text>
+                </View>
               </View>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => {
+                Alert.alert('medaase wai🥲');
+                setModalVisible(false);
+              }}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
             </View>
@@ -93,6 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.89)',
     zIndex: 2,
   },
   content: {
@@ -212,5 +226,16 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: 'bold',
     letterSpacing: 1,
+  },
+  detailTextGroup: {
+    flexDirection: 'column',
+    flexShrink: 1,
+  },
+  accountName: {
+    fontFamily: 'JetBrainsMono-Regular',
+    fontSize: 13,
+    color: '#888',
+    marginTop: 2,
+    marginLeft: 2,
   },
 });
