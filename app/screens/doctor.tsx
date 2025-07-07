@@ -28,7 +28,7 @@ export default function DoctorScreen() {
 
   const handlePrivacyPolicy = () => {
     // Navigate to privacy policy
-    router.push('/firstAidNews');
+    router.push('/screens/privacy-policy');
   };
 
   return (

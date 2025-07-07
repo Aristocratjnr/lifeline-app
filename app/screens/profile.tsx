@@ -2,14 +2,26 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 Dimensions.get('window');
 
+// Countries data with flags
+const countries = [
+  { code: 'GHANA', name: 'Ghana', flag: require('@/assets/images/flags/ghana.png') },
+  { code: 'USA', name: 'United States', flag: require('@/assets/images/flags/us.png') },
+  { code: 'FRANCE', name: 'France', flag: require('@/assets/images/flags/france.png') },
+  { code: 'SPAIN', name: 'Spain', flag: require('@/assets/images/flags/spain.png') },
+  { code: 'EGYPT', name: 'Egypt', flag: require('@/assets/images/flags/egypt.png') },
+  { code: 'INDIA', name: 'India', flag: require('@/assets/images/flags/india.png') },
+  { code: 'RUSSIA', name: 'Russia', flag: require('@/assets/images/flags/russia.png') },
+];
+
 export default function ProfileScreen() {
   const router = useRouter();
-  const [country] = useState('GHANA');
+  const [selectedCountry, setSelectedCountry] = useState(countries[0]); // Default to Ghana
+  const [showCountryModal, setShowCountryModal] = useState(false);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -20,6 +32,11 @@ export default function ProfileScreen() {
   if (!fontsLoaded) {
     return <View style={styles.container} />;
   }
+
+  const handleCountrySelect = (country: typeof countries[0]) => {
+    setSelectedCountry(country);
+    setShowCountryModal(false);
+  };
 
   const handleConfirm = () => {
     router.push('/(tabs)/explore');
@@ -46,12 +63,12 @@ export default function ProfileScreen() {
         {/* Country Selection */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Country</Text>
-          <TouchableOpacity style={styles.countrySelector}>
+          <TouchableOpacity style={styles.countrySelector} onPress={() => setShowCountryModal(true)}>
             <ExpoImage
-              source={require('@/assets/images/flags/ghana.png')}
+              source={selectedCountry.flag}
               style={styles.flagIcon}
             />
-            <Text style={styles.countryText}>{country}</Text>
+            <Text style={styles.countryText}>{selectedCountry.name}</Text>
             <Text style={styles.dropdownIcon}>▼</Text>
           </TouchableOpacity>
         </View>
@@ -61,6 +78,48 @@ export default function ProfileScreen() {
           <Text style={styles.confirmButtonText}>Confirm Location</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Country Selection Modal */}
+      <Modal
+        visible={showCountryModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowCountryModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowCountryModal(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Country</Text>
+              <TouchableOpacity onPress={() => setShowCountryModal(false)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {countries.map((country) => (
+              <TouchableOpacity 
+                key={country.code}
+                style={[styles.countryOption, selectedCountry.code === country.code && styles.selectedCountryOption]}
+                onPress={() => handleCountrySelect(country)}
+              >
+                <View style={styles.countryOptionContent}>
+                  <ExpoImage
+                    source={country.flag}
+                    style={styles.countryOptionFlag}
+                  />
+                  <Text style={styles.countryOptionText}>{country.name}</Text>
+                </View>
+                {selectedCountry.code === country.code && (
+                  <Text style={styles.checkmark}>✓</Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -160,5 +219,69 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
     fontFamily: 'JetBrainsMono-Regular',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    width: '80%',
+    maxWidth: 350,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+  closeButton: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#888',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  countryOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  selectedCountryOption: {
+    backgroundColor: '#f0f0f0',
+  },
+  countryOptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  countryOptionFlag: {
+    width: 24,
+    height: 16,
+    marginRight: 15,
+  },
+  countryOptionText: {
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#333',
+  },
+  checkmark: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    fontFamily: 'JetBrainsMono-Bold',
   },
 });
