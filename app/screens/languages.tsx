@@ -43,10 +43,11 @@ type LanguageItemProps = {
   flag: React.ReactNode;
   name: string;
   onSelect?: () => void;
+  selected?: boolean;
 };
 
-const LanguageItem = ({ flag, name, onSelect }: LanguageItemProps) => (
-  <TouchableOpacity style={styles.languageItem} onPress={onSelect}>
+const LanguageItem = ({ flag, name, onSelect, selected }: LanguageItemProps) => (
+  <TouchableOpacity style={[styles.languageItem, selected && styles.languageItemSelected]} onPress={onSelect}>
     {flag}
     <Text style={styles.languageName}>{name}</Text>
   </TouchableOpacity>
@@ -56,6 +57,7 @@ export default function Languages() {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [filteredLanguages, setFilteredLanguages] = useState(languages);
+  const [selectedLanguage, setSelectedLanguage] = useState<number | null>(null);
 
   useEffect(() => {
     loadFonts();
@@ -120,6 +122,8 @@ export default function Languages() {
                   key={language.id}
                   flag={<Image source={language.flag} style={styles.flagIcon} />}
                   name={language.name}
+                  onSelect={() => setSelectedLanguage(language.id)}
+                  selected={selectedLanguage === language.id}
                 />
               ))}
             </View>
@@ -280,5 +284,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#999',
     marginTop: 5,
+  },
+  languageItemSelected: {
+    borderWidth: 2,
+    borderColor: 'red',
+    backgroundColor: '#fff0f0',
   },
 });
