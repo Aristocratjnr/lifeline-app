@@ -3,9 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { router } from 'expo-router';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DisplayPreferencesContext } from '../../context/DisplayPreferencesContext';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -46,7 +46,7 @@ const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: Set
 export default function Settings() {
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
-  const { textSize, fontBold } = useContext(DisplayPreferencesContext);
+  const { textSize, fontBold, brightness, eyeProtection } = useDisplayPreferences();
   
   useEffect(() => {
     loadFonts();
@@ -165,6 +165,20 @@ export default function Settings() {
               textSize={textSize}
               fontBold={fontBold}
             />
+          </View>
+          
+          {/* Show brightness value */}
+          <View style={{alignItems: 'center', marginVertical: 10}}>
+            <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
+              Brightness: {Math.round(brightness * 100)}%
+            </Text>
+          </View>
+          
+          {/* Show eye protection status */}
+          <View style={{alignItems: 'center', marginVertical: 10}}>
+            <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
+              Eye Protection: {eyeProtection ? 'On' : 'Off'}
+            </Text>
           </View>
           
           {/* Delete button centered */}

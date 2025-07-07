@@ -1,16 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    Animated,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -22,10 +24,18 @@ const loadFonts = async () => {
 
 export default function About() {
   const navigation = useNavigation();
-
+  const { eyeProtection } = useDisplayPreferences();
+  const fadeAnim = useRef(new Animated.Value(eyeProtection ? 1 : 0)).current;
   useEffect(() => {
     loadFonts();
   }, []);
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: eyeProtection ? 1 : 0,
+      duration: 350,
+      useNativeDriver: true,
+    }).start();
+  }, [eyeProtection]);
 
   return (
     <ImageBackground 
@@ -33,7 +43,13 @@ export default function About() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.eyeProtectionOverlay,
+          { opacity: fadeAnim },
+        ]}
+      />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -45,7 +61,6 @@ export default function About() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>ABOUT</Text>
         </View>
-
         <ScrollView style={styles.scrollContent}>
           {/* About Lifeline Section */}
           <View style={styles.section}>
@@ -55,30 +70,24 @@ export default function About() {
             </Text>
              <View style={styles.divider} />
           </View>
-          
-
           {/* App Version Section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>App Version</Text>
             <Text style={styles.sectionText}>1.0.0</Text>
             <View style={styles.divider} />
           </View>
-
           {/* Acknowledgement Section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Acknowledgement of Credit:</Text>
             <Text style={styles.sectionText}>
               This application was made possible through the collaborative efforts and support of the following individuals and entities. We extend our sincere gratitude to:
             </Text>
-            
             <Text style={[styles.creditName, styles.spacingTop]}>
               Daniella Asiedu - Lead UI/UX & Developer
             </Text>
-            
             <Text style={[styles.creditName, styles.spacingTop]}>
               David Ayim Obuobi - Assistance Developer Credits
             </Text>
-            
             <Text style={[styles.creditName, styles.spacingTop]}>
               Special Mention:
             </Text>
@@ -98,10 +107,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  overlay: {
+  eyeProtectionOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    zIndex: 1,
+    backgroundColor: 'rgba(255, 236, 140, 0.35)',
+    zIndex: 2,
   },
   container: {
     flex: 1,

@@ -2,8 +2,9 @@ import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons }
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   Image,
   ImageBackground,
   Modal,
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -94,6 +96,8 @@ export default function ProfileSettings() {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(0.5); // default medium
   const [fontBold, setFontBold] = useState(false);
+  const { eyeProtection } = useDisplayPreferences();
+  const fadeAnim = useRef(new Animated.Value(eyeProtection ? 1 : 0)).current;
   
   // Form state
   const [formData, setFormData] = useState({
@@ -140,6 +144,14 @@ export default function ProfileSettings() {
     loadDisplayPrefs();
   }, []);
 
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: eyeProtection ? 1 : 0,
+      duration: 350,
+      useNativeDriver: true,
+    }).start();
+  }, [eyeProtection, fadeAnim]);
+
   const handleEditField = (field: string) => {
     setIsEditing(field);
   };
@@ -171,11 +183,17 @@ export default function ProfileSettings() {
 
   return (
     <ImageBackground
-      source={require('../../assets/images/blur.png')}
+      source={require('../../assets/images/medical-team.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.eyeProtectionOverlay,
+          { opacity: fadeAnim },
+        ]}
+      />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -340,10 +358,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  overlay: {
+  eyeProtectionOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    zIndex: 1,
+    backgroundColor: 'rgba(255, 236, 140, 0.35)',
+    zIndex: 2,
   },
   container: {
     flex: 1,

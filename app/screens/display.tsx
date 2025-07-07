@@ -1,10 +1,10 @@
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Animated,
   ImageBackground,
   Modal,
   SafeAreaView,
@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -25,33 +26,23 @@ const loadFonts = async () => {
 
 export default function Display() {
   const navigation = useNavigation();
-  const [fontBold, setFontBold] = useState(false);
-  const [eyeProtection, setEyeProtection] = useState(false);
-  const [brightness, setBrightness] = useState(0.7);
-  const [textSize, setTextSize] = useState(0.5);
-  const [theme, setTheme] = useState('Light');
-  const [showThemeModal, setShowThemeModal] = useState(false);
+  const { textSize, setTextSize, fontBold, setFontBold, brightness, setBrightness, eyeProtection, setEyeProtection } = useDisplayPreferences();
+  const [theme, setTheme] = React.useState('Light');
+  const [showThemeModal, setShowThemeModal] = React.useState(false);
 
   useEffect(() => {
     loadFonts();
-    // Load saved display preferences
-    const loadDisplayPrefs = async () => {
-      try {
-        const prefs = await AsyncStorage.getItem('displayPrefs');
-        if (prefs) {
-          const parsed = JSON.parse(prefs);
-          if (parsed.textSize !== undefined) setTextSize(parsed.textSize);
-          if (parsed.fontBold !== undefined) setFontBold(parsed.fontBold);
-        }
-      } catch {}
-    };
-    loadDisplayPrefs();
   }, []);
 
-  // Save preferences when changed
+  // Animated fade for eye protection overlay
+  const fadeAnim = useRef(new Animated.Value(eyeProtection ? 1 : 0)).current;
   useEffect(() => {
-    AsyncStorage.setItem('displayPrefs', JSON.stringify({ textSize, fontBold }));
-  }, [textSize, fontBold]);
+    Animated.timing(fadeAnim, {
+      toValue: eyeProtection ? 1 : 0,
+      duration: 350,
+      useNativeDriver: true,
+    }).start();
+  }, [eyeProtection, fadeAnim]);
 
   const handleThemeSelect = (selectedTheme: string) => {
     setTheme(selectedTheme);
@@ -64,7 +55,14 @@ export default function Display() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
+      {/* Only show the animated yellow overlay for eye protection */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.eyeProtectionOverlay,
+          { opacity: fadeAnim },
+        ]}
+      />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -226,15 +224,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  overlay: {
+  eyeProtectionOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    zIndex: 1,
+    backgroundColor: 'rgba(255, 236, 140, 0.35)', // professional soft yellow
+    zIndex: 2,
   },
   container: {
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.89)',
-    zIndex: 2,
   },
   header: {
     flexDirection: 'row',
