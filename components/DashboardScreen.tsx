@@ -220,7 +220,7 @@ const DashboardScreen = () => {
             <Text style={styles.profileInfoLabel}>Language:</Text>
             <Text style={styles.profileInfoValue}>{user.language}</Text>
           </View>
-          <TouchableOpacity style={styles.editProfileButton}>
+          <TouchableOpacity style={styles.editProfileButton} onPress={() => router.push('/screens/profile-settings')}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>

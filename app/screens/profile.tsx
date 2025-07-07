@@ -77,6 +77,10 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
           <Text style={styles.confirmButtonText}>Confirm Location</Text>
         </TouchableOpacity>
+        {/* Next Button */}
+        <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/screens/completed')}>
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Country Selection Modal */}
@@ -283,5 +287,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  nextButton: {
+    backgroundColor: '#F9A6A6',
+    borderRadius: 8,
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  nextButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Regular',
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
 });
