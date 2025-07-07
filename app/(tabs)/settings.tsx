@@ -172,7 +172,7 @@ export default function Settings() {
             <SettingItem
               icon={<AntDesign name="delete" size={24} color="black" />}
               title="Delete?"
-              subtitle="Temporary, Permanent, Deactivate Account"
+              subtitle="Deactivate Account"
               onPress={() => navigateToScreen('delete-account')}
               textSize={textSize}
               fontBold={fontBold}
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   deleteContainer: {
     alignItems: 'center',
     marginTop: 10,
-    width: '100%',
+    width: '90%',
   },
   settingItem: {
     backgroundColor: 'white',

@@ -185,7 +185,7 @@ export default function ProfileSettings() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, getTextStyle({fontSize: 18})]}>PROFILE</Text>
+          <Text style={[styles.headerTitle, getTextStyle({fontSize: 20})]}>PROFILE</Text>
           <View style={styles.emptySpace} />
         </View>
 
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
     position: 'absolute',
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     width: 30,
   },
   heroContainer: {
-    height: 200,
+    height: 180,
     marginHorizontal: 20,
     marginBottom: 15,
   },
