@@ -3,14 +3,14 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TouchableOpacity,
-    View
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -87,8 +87,6 @@ export default function Notifications() {
           <Text style={styles.headerTitle}>NOTIFICATIONS</Text>
         </View>
         
-        <View style={styles.divider} />
-
         {/* Notification Settings */}
         <View style={styles.contentContainer}>
           <ScrollView>
@@ -195,10 +193,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 8,
   },
   notificationItem: {
     flexDirection: 'row',

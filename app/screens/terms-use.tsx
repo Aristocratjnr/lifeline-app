@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
+  ImageBackground,
   Modal,
   SafeAreaView,
   ScrollView,
@@ -71,149 +72,167 @@ export default function TermsUse() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>TERMS & USE</Text>
-      </View>
-
-      <ScrollView style={styles.scrollContent}>
-        {/* Terms Content */}
-        <View style={styles.termsContainer}>
-          <Text style={styles.termsText}>
-            By using Lifeline, you agree to our terms and conditions.
-          </Text>
-          
-          <Text style={[styles.termsText, styles.spacingTop]}>
-            Understand your rights and responsibilities when using Lifeline
-          </Text>
-          
-          <Text style={[styles.termsText, styles.spacingTop]}>
-            Please review our terms and conditions. Your use of Lifeline indicates your agreement to these guidelines.
-          </Text>
-          
-          {/* See More Button */}
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
           <TouchableOpacity 
-            style={styles.seeMoreButton}
-            onPress={() => setShowTermsModal(true)}
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            <Text style={styles.seeMoreText}>SEE MORE</Text>
-            <Ionicons name="chevron-forward" size={18} color="white" />
+            <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>TERMS & USE</Text>
         </View>
 
-        {/* Links */}
-        <View style={styles.linksContainer}>
-          <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
-          <LinkItem title="Share App" onPress={handleShareApp} />
-          <ExternalLink href="https://lifeline-mu.vercel.app/">
-            <LinkItem title="Visit Our Website" />
-          </ExternalLink>
-        </View>
-      </ScrollView>
-
-      {/* Terms and Conditions Modal */}
-      <Modal
-        visible={showTermsModal}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowTermsModal(false)}
-      >
-        <SafeAreaView style={styles.modalContainer}>
-          {/* Modal Header */}
-          <View style={styles.modalHeader}>
+        <ScrollView style={styles.scrollContent}>
+          {/* Terms Content */}
+          <View style={styles.termsContainer}>
+            <Text style={styles.termsText}>
+              By using Lifeline, you agree to our terms and conditions.
+            </Text>
+            
+            <Text style={[styles.termsText, styles.spacingTop]}>
+              Understand your rights and responsibilities when using Lifeline
+            </Text>
+            
+            <Text style={[styles.termsText, styles.spacingTop]}>
+              Please review our terms and conditions. Your use of Lifeline indicates your agreement to these guidelines.
+            </Text>
+            
+            {/* See More Button */}
             <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={() => setShowTermsModal(false)}
+              style={styles.seeMoreButton}
+              onPress={() => setShowTermsModal(true)}
             >
-              <Ionicons name="close" size={24} color="black" />
+              <Text style={styles.seeMoreText}>SEE MORE</Text>
+              <Ionicons name="chevron-forward" size={18} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Terms & Conditions</Text>
-            <View style={styles.placeholder} />
           </View>
 
-          {/* Modal Content */}
-          <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>1. Acceptance of Terms</Text>
-              <Text style={styles.sectionText}>
-                By downloading, installing, or using the Lifeline application, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the application.
-              </Text>
+          {/* Links */}
+          <View style={styles.linksContainer}>
+            <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
+            <LinkItem title="Share App" onPress={handleShareApp} />
+            <ExternalLink href="https://lifeline-mu.vercel.app/">
+              <LinkItem title="Visit Our Website" />
+            </ExternalLink>
+          </View>
+        </ScrollView>
+
+        {/* Terms and Conditions Modal */}
+        <Modal
+          visible={showTermsModal}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setShowTermsModal(false)}
+        >
+          <SafeAreaView style={styles.modalContainer}>
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <TouchableOpacity 
+                style={styles.closeButton}
+                onPress={() => setShowTermsModal(false)}
+              >
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>Terms & Conditions</Text>
+              <View style={styles.placeholder} />
             </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>2. Medical Disclaimer</Text>
-              <Text style={styles.sectionText}>
-                Lifeline is designed to provide general first aid information and guidance. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers for medical emergencies.
-              </Text>
-            </View>
+            {/* Modal Content */}
+            <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>1. Acceptance of Terms</Text>
+                <Text style={styles.sectionText}>
+                  By downloading, installing, or using the Lifeline application, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the application.
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>3. User Responsibilities</Text>
-              <Text style={styles.sectionText}>
-                • Use the app responsibly and in accordance with applicable laws{'\n'}
-                • Do not rely solely on the app for medical decisions{'\n'}
-                • Contact emergency services for serious medical situations{'\n'}
-                • Keep your personal information secure
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>2. Medical Disclaimer</Text>
+                <Text style={styles.sectionText}>
+                  Lifeline is designed to provide general first aid information and guidance. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers for medical emergencies.
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>4. Privacy and Data</Text>
-              <Text style={styles.sectionText}>
-                We respect your privacy and are committed to protecting your personal information. Our Privacy Policy explains how we collect, use, and safeguard your data.
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>3. User Responsibilities</Text>
+                <Text style={styles.sectionText}>
+                  • Use the app responsibly and in accordance with applicable laws{'\n'}
+                  • Do not rely solely on the app for medical decisions{'\n'}
+                  • Contact emergency services for serious medical situations{'\n'}
+                  • Keep your personal information secure
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>5. App Usage</Text>
-              <Text style={styles.sectionText}>
-                • The app is for personal, non-commercial use{'\n'}
-                • Do not attempt to reverse engineer or modify the app{'\n'}
-                • Report any bugs or issues through appropriate channels{'\n'}
-                • Keep the app updated to the latest version
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>4. Privacy and Data</Text>
+                <Text style={styles.sectionText}>
+                  We respect your privacy and are committed to protecting your personal information. Our Privacy Policy explains how we collect, use, and safeguard your data.
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>6. Limitation of Liability</Text>
-              <Text style={styles.sectionText}>
-                Lifeline and its developers are not liable for any damages arising from the use or inability to use the application, including but not limited to medical complications or delays in seeking professional help.
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>5. App Usage</Text>
+                <Text style={styles.sectionText}>
+                  • The app is for personal, non-commercial use{'\n'}
+                  • Do not attempt to reverse engineer or modify the app{'\n'}
+                  • Report any bugs or issues through appropriate channels{'\n'}
+                  • Keep the app updated to the latest version
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>7. Updates and Changes</Text>
-              <Text style={styles.sectionText}>
-                These terms may be updated from time to time. Continued use of the app after changes constitutes acceptance of the new terms.
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>6. Limitation of Liability</Text>
+                <Text style={styles.sectionText}>
+                  Lifeline and its developers are not liable for any damages arising from the use or inability to use the application, including but not limited to medical complications or delays in seeking professional help.
+                </Text>
+              </View>
 
-            <View style={styles.termsSection}>
-              <Text style={styles.sectionTitle}>8. Contact Information</Text>
-              <Text style={styles.sectionText}>
-                For questions about these terms, please contact us at support@lifeline.com or visit our website.
-              </Text>
-            </View>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>7. Updates and Changes</Text>
+                <Text style={styles.sectionText}>
+                  These terms may be updated from time to time. Continued use of the app after changes constitutes acceptance of the new terms.
+                </Text>
+              </View>
 
-            <View style={styles.bottomPadding} />
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
-    </SafeAreaView>
+              <View style={styles.termsSection}>
+                <Text style={styles.sectionTitle}>8. Contact Information</Text>
+                <Text style={styles.sectionText}>
+                  For questions about these terms, please contact us at support@lifeline.com or visit our website.
+                </Text>
+              </View>
+
+              <View style={styles.bottomPadding} />
+            </ScrollView>
+          </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',
