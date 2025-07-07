@@ -1,8 +1,9 @@
 import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Load JetBrains Mono font
@@ -34,10 +35,30 @@ const SettingItem = ({ icon, title, subtitle, onPress }: SettingItemProps) => (
 
 export default function Settings() {
   const navigation = useNavigation();
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     loadFonts();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadUsername = async () => {
+        try {
+          const savedData = await AsyncStorage.getItem('profileSettings');
+          if (savedData) {
+            const parsed = JSON.parse(savedData);
+            setUsername(parsed.username || '');
+          } else {
+            setUsername('');
+          }
+        } catch {
+          setUsername('');
+        }
+      };
+      loadUsername();
+    }, [])
+  );
 
   const navigateToScreen = (screen: string) => {
     router.push(`/screens/${screen}` as any);
@@ -71,7 +92,7 @@ export default function Settings() {
             <SettingItem
               icon={<Ionicons name="person-outline" size={24} color="black" />}
               title="Profile"
-              subtitle="Agradaa"
+              subtitle={username || 'Profile'}
               onPress={() => navigateToScreen('profile-settings')}
             />
             <SettingItem

@@ -1,4 +1,5 @@
 import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
@@ -93,6 +94,18 @@ export default function ProfileSettings() {
 
   useEffect(() => {
     loadFonts();
+    // Load saved profile data from AsyncStorage
+    const loadProfileData = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem('profileSettings');
+        if (savedData) {
+          setFormData(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.error('Failed to load profile data:', error);
+      }
+    };
+    loadProfileData();
   }, []);
 
   const handleEditField = (field: string) => {
@@ -115,11 +128,14 @@ export default function ProfileSettings() {
     setShowGenderModal(false);
   };
 
-  const handleSaveChanges = () => {
-    // Here you would typically save to backend/database
-    console.log('Saving changes:', formData);
-    // Show success message or navigate back
-    navigation.goBack();
+  const handleSaveChanges = async () => {
+    try {
+      await AsyncStorage.setItem('profileSettings', JSON.stringify(formData));
+      console.log('Profile data saved locally:', formData);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Failed to save profile data:', error);
+    }
   };
 
   return (
