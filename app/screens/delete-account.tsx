@@ -187,7 +187,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: '#f0f0f0',
+    borderStyle: 'dotted',
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
     marginVertical: 15,
   },
   actionButton: {
