@@ -8,6 +8,7 @@ import {
   Modal,
   SafeAreaView,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -43,6 +44,31 @@ export default function TermsUse() {
   useEffect(() => {
     loadFonts();
   }, []);
+
+  const handleShareApp = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Check out Lifeline - Your emergency first aid companion! Get instant access to crucial medical information during emergencies. Download now: https://lifeline-mu.vercel.app/',
+        title: 'Lifeline - First Aid App',
+        url: 'https://lifeline-mu.vercel.app/'
+      });
+      
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          console.log('Shared with activity type:', result.activityType);
+        } else {
+          // shared
+          console.log('Shared successfully');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        console.log('Share dismissed');
+      }
+    } catch (error) {
+      console.error('Error sharing app:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -85,7 +111,7 @@ export default function TermsUse() {
         {/* Links */}
         <View style={styles.linksContainer}>
           <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
-          <LinkItem title="Share App" />
+          <LinkItem title="Share App" onPress={handleShareApp} />
           <ExternalLink href="https://lifeline-mu.vercel.app/">
             <LinkItem title="Visit Our Website" />
           </ExternalLink>
