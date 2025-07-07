@@ -3,14 +3,14 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
-    Image,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   comingSoonImage: {
-    width: '100%',
-    height: '100%',
+    width: '120%',
+    height: '120%',
   },
   descriptionText: {
     fontFamily: 'JetBrainsMono',
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 24,
     textAlign: 'center',
     color: '#333',
