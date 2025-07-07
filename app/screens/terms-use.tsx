@@ -1,14 +1,15 @@
+import { ExternalLink } from '@/components/ExternalLink';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -78,7 +79,9 @@ export default function TermsUse() {
         <View style={styles.linksContainer}>
           <LinkItem title="FAQs" />
           <LinkItem title="Share App" />
-          <LinkItem title="Visit Our Website" />
+          <ExternalLink href="https://lifeline-mu.vercel.app/">
+            <LinkItem title="Visit Our Website" />
+          </ExternalLink>
         </View>
       </ScrollView>
     </SafeAreaView>

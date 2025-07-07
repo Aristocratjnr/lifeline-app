@@ -1,16 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
-    Image,
-    Linking,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Image,
+  Linking,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -23,6 +24,7 @@ const loadFonts = async () => {
 
 export default function Help() {
   const navigation = useNavigation();
+  const router = useRouter();
 
   useEffect(() => {
     loadFonts();
@@ -37,8 +39,8 @@ export default function Help() {
   };
 
   const handleLiveChatPress = () => {
-    // Implementation for starting live chat
-    console.log('Start live chat');
+    // Navigate to AI Assistant screen
+    router.push('/(tabs)/ai-assistant');
   };
 
   const handleDonatePress = () => {
