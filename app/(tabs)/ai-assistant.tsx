@@ -20,6 +20,16 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY; 
 
+// Local responses for common first aid queries
+const LOCAL_RESPONSES: Record<string, string> = {
+  'cpr': 'For CPR: 1) Call emergency services first. 2) Place the heel of your hand on the center of the chest. 3) Push hard and fast (100-120 compressions per minute). 4) If trained, give 2 breaths after every 30 compressions.\n\nRemember: For any serious emergency, always call professional help immediately.',
+  'choking': 'For a choking adult/child:\n1) Ask "Are you choking?"\n2) If they can cough, encourage coughing.\n3) If they can\'t breathe, perform abdominal thrusts (Heimlich maneuver):\n   - Stand behind, wrap arms around waist\n   - Make a fist above navel\n   - Grasp fist with other hand\n   - Give quick upward thrusts\n4) Continue until object is expelled or person becomes unconscious.',
+  'burn': 'For minor burns:\n1) Cool under running water for 10-15 minutes\n2) Remove jewelry/clothing near burn\n3) Cover with sterile non-stick dressing\n4) Don\'t apply butter, oil or ice\n\nFor serious burns (large, deep, or on face/hands):\n1) Call emergency services\n2) Don\'t remove stuck clothing\n3) Cover loosely with clean cloth\n4) Monitor for shock',
+  'bleeding': 'To control bleeding:\n1) Apply direct pressure with clean cloth\n2) Elevate injured area if possible\n3) Add more layers if blood soaks through\n4) Don\'t remove original dressing\n5) If severe, call emergency services\n\nFor nosebleeds:\n1) Sit upright, lean forward\n2) Pinch soft part of nose for 10 minutes\n3) Apply ice to bridge of nose\n4) Avoid blowing nose afterward',
+  'who are you': 'I\'m Lifeline Assistant, your AI first aid helper. I provide emergency medical guidance and first aid instructions. I was created by the Lifeline team to help people get accurate medical information quickly. For serious emergencies, always contact professional medical services immediately.',
+  'what can you do': 'I can help with:\n- First aid instructions\n- Emergency response guidance\n- Basic medical information\n- Wound care\n- CPR instructions\n- Handling burns, fractures, poisoning\n\nI always recommend contacting professional medical help for serious situations.'
+};
+
 export default function AIAssistantScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -80,7 +90,6 @@ export default function AIAssistantScreen() {
     }
   }, [isLoading, dot1, dot2, dot3]);
 
-  // Helper function to determine if a query is health related
   const isHealthRelatedQuery = (query: string): boolean => {
     const healthRelatedKeywords = [
       'health', 'medical', 'doctor', 'nurse', 'hospital', 'emergency', 'injury', 'pain',
@@ -92,7 +101,6 @@ export default function AIAssistantScreen() {
       'infection', 'vaccine', 'pandemic', 'allergy', 'bite', 'sting', 'overdose', 'seizure'
     ];
     
-    // Common greetings, identity questions, and polite conversation starters
     const allowedPhrases = [
       'hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening',
       'thanks', 'thank you', 'bye', 'goodbye', 'help', 'start', 'begin',
@@ -103,52 +111,61 @@ export default function AIAssistantScreen() {
     
     const lowerQuery = query.toLowerCase().trim();
     
-    // Allow identity questions and basic conversation
     if (allowedPhrases.some(phrase => lowerQuery.includes(phrase))) {
       return true;
     }
     
-    // Check if query contains health-related keywords
     return healthRelatedKeywords.some(keyword => lowerQuery.includes(keyword)) ||
-      // Simple heuristic for health questions not containing specific keywords
       /how (do|to|can|should) (i|you|we|they) (treat|handle|deal with|manage|help)/i.test(lowerQuery);
   };
 
   const fetchAIResponse = async (userQuery: string) => {
     try {
-      // Check if API key is available
+      setIsLoading(true);
+      
+      // Check for local responses first
+      const lowerQuery = userQuery.toLowerCase().trim();
+      if (LOCAL_RESPONSES[lowerQuery]) {
+        setChatHistory(prev => [...prev, { 
+          id: Date.now() + 1, 
+          type: 'assistant', 
+          text: LOCAL_RESPONSES[lowerQuery]
+        }]);
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!isHealthRelatedQuery(userQuery)) {
+        setChatHistory(prev => [...prev, { 
+          id: Date.now() + 1, 
+          type: 'assistant', 
+          text: "I'm sorry, I can only answer questions related to health, medical issues, or first aid. Please ask me something about first aid, emergency response, or health-related topics."
+        }]);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Verify API key
       if (!OPENROUTER_API_KEY) {
         throw new Error('API key not configured');
       }
       
-      setIsLoading(true);
-      
-      // Check if query is health or first aid related before sending to API
-      if (!isHealthRelatedQuery(userQuery)) {
-        // Handle non-health related queries locally
-        setTimeout(() => {
-          setChatHistory(prev => [...prev, { 
-            id: Date.now() + 1, 
-            type: 'assistant', 
-            text: "I'm sorry, I can only answer questions related to health, medical issues, or first aid. Please ask me something about first aid, emergency response, or health-related topics."
-          }]);
-          setIsLoading(false);
-        }, 500);
-        return;
-      }
+      console.log('Making request to OpenRouter API');
       
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'HTTP-Referer': ' exp://10.107.17.100:8081',
+          'X-Title': 'Lifeline App'
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'mistralai/mistral-7b-instruct',
           messages: [
             {
               role: 'system',
-              content: 'You are a knowledgeable first aid assistant named Lifeline Assistant, created by the Lifeline team to help people with emergency medical information. You should: 1) Provide clear, concise instructions for first aid situations, 2) For serious emergencies, always advise calling emergency services, 3) Base your advice on established first aid protocols, 4) When asked about your identity, explain that you are the Lifeline Assistant focused on providing first aid and emergency medical guidance, 5) When asked who created you, mention you were created by the Lifeline team to help people with medical emergencies and first aid information. Your responses should be helpful, professional, and focused on medical/health topics. For non-health topics, politely decline to answer.'
+              content: 'You are a knowledgeable first aid assistant named Lifeline Assistant. Provide clear, concise first aid instructions. For serious emergencies, always advise calling emergency services. Base advice on established protocols. When asked about identity, explain you are the Lifeline Assistant focused on first aid. For non-health topics, politely decline. Keep responses under 300 words.'
             },
             { role: 'user', content: userQuery }
           ],
@@ -158,13 +175,14 @@ export default function AIAssistantScreen() {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('API error details:', errorData);
         throw new Error(`API error: ${response.status}`);
       }
 
       const data = await response.json();
       const aiReply = data.choices[0].message.content;
 
-      // Add AI response to chat
       setChatHistory(prev => [...prev, { 
         id: Date.now() + 1, 
         type: 'assistant', 
@@ -174,15 +192,22 @@ export default function AIAssistantScreen() {
     } catch (error) {
       console.error('Error fetching AI response:', error);
       
-      let errorMessage = 'I apologize, but I\'m having trouble connecting to my medical database. Please try again in a moment.';
+      let errorMessage = 'I apologize, but I\'m having trouble connecting to my medical database. ';
       
-      // Special message for API key configuration issues
-      if (error instanceof Error && error.message.includes('API key')) {
-        errorMessage = 'The AI service is currently unavailable. Please contact support for assistance.';
-        console.error('API key not properly configured');
+      if (error instanceof Error) {
+        if (error.message.includes('API key')) {
+          errorMessage += 'The service is currently unavailable.';
+        } else if (error.message.includes('401')) {
+          errorMessage += 'There was an authentication issue.';
+        }
       }
       
-      // Add error message to chat
+      // Add fallback information for critical queries
+      const lowerQuery = userQuery.toLowerCase();
+      if (['heart attack', 'stroke', 'unconscious', 'not breathing'].some(term => lowerQuery.includes(term))) {
+        errorMessage += '\n\nIMPORTANT: For this emergency, call your local emergency number immediately.';
+      }
+      
       setChatHistory(prev => [...prev, { 
         id: Date.now() + 1, 
         type: 'assistant', 
@@ -196,15 +221,10 @@ export default function AIAssistantScreen() {
   const handleSend = () => {
     if (!message.trim() || isLoading) return;
     
-    // Add user message to chat
     const userMessage = { id: Date.now(), type: 'user', text: message.trim() };
     setChatHistory(prev => [...prev, userMessage]);
-    
-    // Save query and clear input
     const userQuery = message.trim();
     setMessage('');
-    
-    // Get AI response
     fetchAIResponse(userQuery);
   };
 
@@ -227,14 +247,14 @@ export default function AIAssistantScreen() {
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={insets.bottom} // Only safe area inset
+        keyboardVerticalOffset={Platform.OS === 'ios' ? insets.top : 0}
       >
         <ScrollView 
           ref={scrollViewRef}
           style={styles.chatContainer} 
           contentContainerStyle={[
             styles.chatContent,
-            { paddingBottom: 100 } // Add extra padding for tab bar
+            { paddingBottom: 100 }
           ]}
           keyboardShouldPersistTaps="handled"
         >
@@ -295,13 +315,12 @@ export default function AIAssistantScreen() {
           )}
         </ScrollView>
         
-        {/* Update the input container with tab bar consideration */}
         <View 
           style={[
             styles.inputContainer,
             isDark ? { backgroundColor: '#333', borderTopColor: '#444' } : null,
             { 
-              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0, // Only add bottom padding for iOS
+              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0,
               marginBottom: 0 
             }
           ]}
@@ -406,22 +425,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 20,
   },
-  loadingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
   bobbleEffect: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff0f0',
-    borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: '#fcc',
     minWidth: 48,
     minHeight: 32,
   },
@@ -432,7 +441,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#999',
     marginHorizontal: 3,
     opacity: 0.7,
-    // Optionally, add animation for pulsing effect
   },
   inputContainer: {
     flexDirection: 'row',
@@ -446,7 +454,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 4,
-    position: 'relative', // Ensure proper positioning
+    position: 'relative',
   },
   input: {
     flex: 1,

@@ -1,14 +1,12 @@
+import { HapticTab } from '@/components/HapticTab';
+import LoaderWrapper from '@/components/loaderWrapper';
+import TabBarBackground from '@/components/ui/TabBarBackground';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import LoaderWrapper from '@/components/loaderWrapper';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -30,13 +28,7 @@ export default function TabLayout() {
               default: {},
             }),
           }}>
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: 'Home',
-              tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-            }}
-          />
+          
           <Tabs.Screen
             name="explore"
             options={{
@@ -63,6 +55,15 @@ export default function TabLayout() {
                 <MaterialIcons size={28} name="auto-awesome" color={color} />
               ),
               tabBarStyle: { display: 'none' },
+            }}
+          />
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: 'Settings',
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons size={28} name="settings" color={color} />
+              ),
             }}
           />
         </Tabs>

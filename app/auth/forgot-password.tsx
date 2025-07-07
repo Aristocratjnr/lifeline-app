@@ -1,66 +1,64 @@
 import { BlurView } from 'expo-blur';
 import { Link } from 'expo-router';
 import React from 'react';
-import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const ForgotPasswordScreen = () => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-        <ImageBackground
-            source={require('../../assets/images/background.jpg')}
-            style={styles.background}
-            resizeMode="cover"
-        >
-            <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFill}>
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                    <View style={styles.topNav}>
-                        <Link href="/auth/sign-in" asChild>
-                            <TouchableOpacity>
-                                <Text style={styles.loginLinkText}>Remember your password? <Text style={styles.loginText}>Login</Text></Text>
-                            </TouchableOpacity>
-                        </Link>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        source={require('../../assets/images/background.jpg')}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
+      >
+        <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFill}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+          >
+            <ScrollView contentContainerStyle={styles.scrollViewContainer} keyboardShouldPersistTaps="handled">
+              <View style={styles.topNav}>
+                <Link href="/auth/sign-in" asChild>
+                  <TouchableOpacity>
+                    <Text style={styles.loginLinkText}>Remember your password? <Text style={styles.loginText}>Login</Text></Text>
+                  </TouchableOpacity>
+                </Link>
+              </View>
+              <View style={styles.container}>
+                <Image source={require('../../assets/images/medical-kit.png')} style={styles.logo} />
+                <View style={styles.card}>
+                  <Text style={styles.recoveryTitle}>Password Recovery</Text>
+                  <Text style={styles.title}>Reset your password</Text>
+                  <Text style={styles.subtitle}>
+                    Enter your email address and we&apos;ll send you a link to reset your password.
+                  </Text>
+                  <View style={styles.inputWrapper}>
+                    <Text style={styles.label}>Email</Text>
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="username@example.com"
+                        placeholderTextColor="#A9A9A9"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                      />
+                      <Image source={require('../../assets/images/mail.png')} style={styles.inputIcon} />
                     </View>
-
-                    <View style={styles.container}>
-                        <Image source={require('../../assets/images/medical-kit.png')} style={styles.logo} />
-                       
-
-                        <View style={styles.card}>
-                            <Text style={styles.recoveryTitle}>Password Recovery</Text>
-                            <Text style={styles.title}>Reset your password</Text>
-                            <Text style={styles.subtitle}>
-                                Enter your email address and we'll send you a link to reset your password.
-                            </Text>
-
-                            <View style={styles.inputWrapper}>
-                                <Text style={styles.label}>Email</Text>
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="username@example.com"
-                                        placeholderTextColor="#A9A9A9"
-                                        keyboardType="email-address"
-                                        autoCapitalize="none"
-                                    />
-                                    <Image source={require('../../assets/images/mail.png')} style={styles.inputIcon} />
-                                </View>
-                            </View>
-
-                            <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Send Reset Link →</Text>
-                            </TouchableOpacity>
-
-                            <Link href="/auth/sign-up" asChild>
-                                <TouchableOpacity>
-                                    <Text style={styles.footerLinkText}>Don't have an account? <Text style={styles.signupText}>Sign up</Text></Text>
-                                </TouchableOpacity>
-                            </Link>
-                        </View>
-                    </View>
-                    
-                </ScrollView>
-            </BlurView>
-        </ImageBackground>
+                  </View>
+                  <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Send Reset Link →</Text>
+                  </TouchableOpacity>
+                  <Link href="/auth/sign-up" asChild>
+                    <TouchableOpacity>
+                      <Text style={styles.footerLinkText}>Don&apos;t have an account? <Text style={styles.signupText}>Sign up</Text></Text>
+                    </TouchableOpacity>
+                  </Link>
+                </View>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </BlurView>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -90,27 +88,30 @@ const styles = StyleSheet.create({
         height: 24,
     },
     topNav: {
-        position: 'absolute',
-        top: 30, 
-        right: 20,
         zIndex: 1,
+        alignItems: 'flex-end',
+        marginBottom: 30,
+        width: '100%',
+        paddingRight: 10,
     },
     loginLinkText: {
         color: '#666',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     loginText: {
         color: '#FF6347',
         fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     container: {
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingTop: 60,
+        paddingTop: 0,
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 210,
+        height: 210,
         resizeMode: 'contain',
         marginBottom: 10,
     },
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
         color: '#555',
         marginBottom: 20,
         fontStyle: 'italic',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     card: {
         width: '100%',
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
         color: '#666',
         textAlign: 'left',
         marginBottom: 5,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     title: {
         fontSize: 28,
@@ -145,13 +148,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: '#333',
         textAlign: 'left',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 13,
         marginBottom: 25,
         color: '#666',
         textAlign: 'left',
         lineHeight: 20,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputWrapper: {
         marginBottom: 20,
@@ -160,6 +165,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#333',
         marginBottom: 8,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputContainer: {
         flexDirection: 'row',
@@ -176,6 +182,7 @@ const styles = StyleSheet.create({
         height: '100%',
         color: '#333',
         fontSize: 16,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     inputIcon: {
         width: 20,
@@ -193,14 +200,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     footerLinkText: {
         textAlign: 'center',
         color: '#666',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     signupText: {
         fontWeight: 'bold',
         color: '#333',
+        fontFamily: 'JetBrainsMono-Bold',
     },
     footer: {
         flexDirection: 'row',
@@ -215,6 +225,7 @@ const styles = StyleSheet.create({
         color: '#666',
         marginHorizontal: 15,
         fontSize: 12,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 });
 
