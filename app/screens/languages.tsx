@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   comingSoon: {
     fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'center',
     marginTop: 10,
     marginBottom: 20,
