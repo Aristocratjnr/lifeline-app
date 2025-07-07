@@ -3,16 +3,17 @@ import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Dimensions,
-  Image,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Dimensions,
+    Image,
+    Modal,
+    Platform,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -39,7 +40,8 @@ export default function GuestScreen() {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('+233 (059) 874 1236');
   const [selectedLanguages, setSelectedLanguages] = useState(['ENG']);
-  const [gender] = useState('Male/Female');
+  const [gender, setGender] = useState('Select Gender');
+  const [showGenderModal, setShowGenderModal] = useState(false);
   
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -56,6 +58,11 @@ export default function GuestScreen() {
     } else {
       setSelectedLanguages([...selectedLanguages, code]);
     }
+  };
+
+  const handleGenderSelect = (selectedGender: string) => {
+    setGender(selectedGender);
+    setShowGenderModal(false);
   };
 
   const handleConfirm = () => {
@@ -144,7 +151,7 @@ export default function GuestScreen() {
         {/* Gender Selection */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Gender</Text>
-          <TouchableOpacity style={styles.inputContainer}>
+          <TouchableOpacity style={styles.inputContainer} onPress={() => setShowGenderModal(true)}>
             <View style={styles.genderIconContainer}>
               <FontAwesome name="venus-mars" size={20} color="#333" />
             </View>
@@ -161,6 +168,62 @@ export default function GuestScreen() {
         {/* Add extra padding at the bottom to ensure visibility */}
         <View style={styles.bottomPadding} />
       </ScrollView>
+
+      {/* Gender Selection Modal */}
+      <Modal
+        visible={showGenderModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowGenderModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowGenderModal(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Gender</Text>
+              <TouchableOpacity onPress={() => setShowGenderModal(false)}>
+                <MaterialIcons name="close" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            
+            <TouchableOpacity 
+              style={[styles.genderOption, gender === 'Male' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Male')}
+            >
+              <View style={styles.genderOptionContent}>
+                <FontAwesome name="mars" size={20} color="#007AFF" />
+                <Text style={styles.genderOptionText}>Male</Text>
+              </View>
+              {gender === 'Male' && <MaterialIcons name="check" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, gender === 'Female' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Female')}
+            >
+              <View style={styles.genderOptionContent}>
+                <FontAwesome name="venus" size={20} color="#FF2D92" />
+                <Text style={styles.genderOptionText}>Female</Text>
+              </View>
+              {gender === 'Female' && <MaterialIcons name="check" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, gender === 'Other' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Other')}
+            >
+              <View style={styles.genderOptionContent}>
+                <FontAwesome name="transgender" size={20} color="#666" />
+                <Text style={styles.genderOptionText}>Other</Text>
+              </View>
+              {gender === 'Other' && <MaterialIcons name="check" size={20} color="black" />}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -308,5 +371,51 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    width: '80%',
+    maxWidth: 300,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+  genderOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  selectedGenderOption: {
+    backgroundColor: '#f0f0f0',
+  },
+  genderOptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  genderOptionText: {
+    fontFamily: 'JetBrainsMono-Regular',
+    fontSize: 16,
+    color: '#333',
   },
 });

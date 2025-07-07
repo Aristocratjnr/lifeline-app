@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
-    Image,
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Image,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -196,16 +196,12 @@ export default function ProfileSettings() {
           />
           
           {/* Gender */}
-          <TouchableOpacity 
-            style={styles.inputRow}
+          <InputRow 
+            icon={<Ionicons name="transgender" size={20} color="#333" />} 
+            value={formData.gender}
+            hasDropdown
             onPress={() => setShowGenderModal(true)}
-          >
-            <View style={styles.inputIconContainer}>
-              <Ionicons name="transgender" size={20} color="#333" />
-            </View>
-            <Text style={styles.inputText}>{formData.gender}</Text>
-            <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
-          </TouchableOpacity>
+          />
           
           {/* Age */}
           <InputRow 
