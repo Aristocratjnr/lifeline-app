@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
-    Image,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 
@@ -189,6 +189,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   searchIcon: {
     marginRight: 10,
@@ -225,10 +227,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 8,
   },
   flagIcon: {
     width: 24,
