@@ -186,8 +186,9 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono',
   },
   separator: {
-    height: 1,
-    backgroundColor: '#f0f0f0',
+    borderStyle: 'dotted',
+    borderWidth: 1,
+    borderColor: '#000',
     marginVertical: 15,
   },
   actionButton: {
