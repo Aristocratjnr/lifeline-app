@@ -2,8 +2,9 @@ import { ExternalLink } from '@/components/ExternalLink';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -35,6 +36,7 @@ const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
 
 export default function TermsUse() {
   const navigation = useNavigation();
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   useEffect(() => {
     loadFonts();
@@ -69,7 +71,10 @@ export default function TermsUse() {
           </Text>
           
           {/* See More Button */}
-          <TouchableOpacity style={styles.seeMoreButton}>
+          <TouchableOpacity 
+            style={styles.seeMoreButton}
+            onPress={() => setShowTermsModal(true)}
+          >
             <Text style={styles.seeMoreText}>SEE MORE</Text>
             <Ionicons name="chevron-forward" size={18} color="white" />
           </TouchableOpacity>
@@ -84,6 +89,95 @@ export default function TermsUse() {
           </ExternalLink>
         </View>
       </ScrollView>
+
+      {/* Terms and Conditions Modal */}
+      <Modal
+        visible={showTermsModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowTermsModal(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          {/* Modal Header */}
+          <View style={styles.modalHeader}>
+            <TouchableOpacity 
+              style={styles.closeButton}
+              onPress={() => setShowTermsModal(false)}
+            >
+              <Ionicons name="close" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>Terms & Conditions</Text>
+            <View style={styles.placeholder} />
+          </View>
+
+          {/* Modal Content */}
+          <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>1. Acceptance of Terms</Text>
+              <Text style={styles.sectionText}>
+                By downloading, installing, or using the Lifeline application, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the application.
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>2. Medical Disclaimer</Text>
+              <Text style={styles.sectionText}>
+                Lifeline is designed to provide general first aid information and guidance. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers for medical emergencies.
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>3. User Responsibilities</Text>
+              <Text style={styles.sectionText}>
+                • Use the app responsibly and in accordance with applicable laws{'\n'}
+                • Do not rely solely on the app for medical decisions{'\n'}
+                • Contact emergency services for serious medical situations{'\n'}
+                • Keep your personal information secure
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>4. Privacy and Data</Text>
+              <Text style={styles.sectionText}>
+                We respect your privacy and are committed to protecting your personal information. Our Privacy Policy explains how we collect, use, and safeguard your data.
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>5. App Usage</Text>
+              <Text style={styles.sectionText}>
+                • The app is for personal, non-commercial use{'\n'}
+                • Do not attempt to reverse engineer or modify the app{'\n'}
+                • Report any bugs or issues through appropriate channels{'\n'}
+                • Keep the app updated to the latest version
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>6. Limitation of Liability</Text>
+              <Text style={styles.sectionText}>
+                Lifeline and its developers are not liable for any damages arising from the use or inability to use the application, including but not limited to medical complications or delays in seeking professional help.
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>7. Updates and Changes</Text>
+              <Text style={styles.sectionText}>
+                These terms may be updated from time to time. Continued use of the app after changes constitutes acceptance of the new terms.
+              </Text>
+            </View>
+
+            <View style={styles.termsSection}>
+              <Text style={styles.sectionTitle}>8. Contact Information</Text>
+              <Text style={styles.sectionText}>
+                For questions about these terms, please contact us at support@lifeline.com or visit our website.
+              </Text>
+            </View>
+
+            <View style={styles.bottomPadding} />
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -160,5 +254,53 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono',
     fontSize: 16,
     color: '#333',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#fff4f5',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+    backgroundColor: 'white',
+  },
+  closeButton: {
+    padding: 5,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+  placeholder: {
+    width: 34,
+  },
+  modalContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  termsSection: {
+    marginBottom: 25,
+  },
+  sectionTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
+  },
+  sectionText: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#666',
+  },
+  bottomPadding: {
+    height: 40,
   },
 });
