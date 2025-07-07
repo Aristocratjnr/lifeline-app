@@ -4,12 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
-    SafeAreaView,
-    StyleSheet,
-    Switch,
-    Text,
-    TouchableOpacity,
-    View
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -26,10 +27,17 @@ export default function Display() {
   const [eyeProtection, setEyeProtection] = useState(false);
   const [brightness, setBrightness] = useState(0.7);
   const [textSize, setTextSize] = useState(0.5);
+  const [theme, setTheme] = useState('Light');
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
   useEffect(() => {
     loadFonts();
   }, []);
+
+  const handleThemeSelect = (selectedTheme: string) => {
+    setTheme(selectedTheme);
+    setShowThemeModal(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,13 +111,19 @@ export default function Display() {
         </View>
 
         {/* Theme */}
-        <TouchableOpacity style={styles.settingCard}>
+        <TouchableOpacity 
+          style={styles.settingCard}
+          onPress={() => setShowThemeModal(true)}
+        >
           <View style={styles.settingRow}>
             <View style={styles.settingLabelContainer}>
               <MaterialIcons name="color-lens" size={20} color="black" />
               <Text style={styles.settingLabel}>Theme</Text>
             </View>
-            <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+            <View style={styles.themeValueContainer}>
+              <Text style={styles.themeValue}>{theme}</Text>
+              <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+            </View>
           </View>
         </TouchableOpacity>
 
@@ -129,6 +143,55 @@ export default function Display() {
           </View>
         </View>
       </View>
+
+      {/* Theme Selection Modal */}
+      <Modal
+        visible={showThemeModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowThemeModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowThemeModal(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Theme</Text>
+              <TouchableOpacity onPress={() => setShowThemeModal(false)}>
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            
+            <TouchableOpacity 
+              style={[styles.themeOption, theme === 'Light' && styles.selectedThemeOption]}
+              onPress={() => handleThemeSelect('Light')}
+            >
+              <View style={styles.themeOptionContent}>
+                <View style={[styles.themeIcon, { backgroundColor: '#f0f0f0' }]}>
+                  <Ionicons name="sunny" size={20} color="#FFD700" />
+                </View>
+                <Text style={styles.themeOptionText}>Light Mode</Text>
+              </View>
+              {theme === 'Light' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.themeOption, theme === 'Dark' && styles.selectedThemeOption]}
+              onPress={() => handleThemeSelect('Dark')}
+            >
+              <View style={styles.themeOptionContent}>
+                <View style={[styles.themeIcon, { backgroundColor: '#333' }]}>
+                  <Ionicons name="moon" size={20} color="#fff" />
+                </View>
+                <Text style={styles.themeOptionText}>Dark Mode</Text>
+              </View>
+              {theme === 'Dark' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -211,5 +274,68 @@ const styles = StyleSheet.create({
   textBold: {
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  themeValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  themeValue: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    color: '#666',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    width: '80%',
+    maxWidth: 300,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+  themeOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  selectedThemeOption: {
+    backgroundColor: '#f0f0f0',
+  },
+  themeOptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  themeIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  themeOptionText: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 16,
+    color: '#333',
   },
 });
