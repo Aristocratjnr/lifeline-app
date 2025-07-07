@@ -5,14 +5,14 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -185,7 +185,7 @@ export default function PrivacyPolicy() {
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>7. Children's Privacy</Text>
+              <Text style={styles.sectionTitle}>7. Children&apos;s Privacy</Text>
               <Text style={styles.sectionText}>
                 Our application is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent and believe your child has provided us with personal information, please contact us.
               </Text>
@@ -194,7 +194,7 @@ export default function PrivacyPolicy() {
             <View style={styles.privacySection}>
               <Text style={styles.sectionTitle}>8. Changes to This Policy</Text>
               <Text style={styles.sectionText}>
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
+                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date.
               </Text>
             </View>
 
@@ -203,14 +203,14 @@ export default function PrivacyPolicy() {
               <Text style={styles.sectionText}>
                 If you have any questions about this Privacy Policy or our privacy practices, please contact us at:{'\n'}
                 Email: privacy@lifeline-app.com{'\n'}
-                Website: https://lifeline-mu.vercel.app/
+                Website: https://lifeline-mu.vercel.app
               </Text>
             </View>
 
             <View style={styles.privacySection}>
               <Text style={styles.sectionTitle}>10. Last Updated</Text>
               <Text style={styles.sectionText}>
-                This Privacy Policy was last updated on December 2024.
+                This Privacy Policy was last updated on May 2025.
               </Text>
             </View>
           </ScrollView>
