@@ -3,9 +3,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Animated,
   ImageBackground,
   Modal,
   SafeAreaView,
@@ -16,7 +15,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -43,20 +41,10 @@ export default function TermsUse() {
   const navigation = useNavigation();
   const router = useRouter();
   const [showTermsModal, setShowTermsModal] = useState(false);
-  const { eyeProtection } = useDisplayPreferences();
-  const fadeAnim = useRef(new Animated.Value(eyeProtection ? 1 : 0)).current;
 
   useEffect(() => {
     loadFonts();
   }, []);
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: eyeProtection ? 1 : 0,
-      duration: 350,
-      useNativeDriver: true,
-    }).start();
-  }, [eyeProtection, fadeAnim]);
 
   const handleShareApp = async () => {
     try {
@@ -89,13 +77,7 @@ export default function TermsUse() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.eyeProtectionOverlay,
-          { opacity: fadeAnim },
-        ]}
-      />
+      <View style={styles.overlay} />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -242,10 +224,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  eyeProtectionOverlay: {
+  overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 236, 140, 0.35)',
-    zIndex: 2,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
   },
   container: {
     flex: 1,
