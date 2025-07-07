@@ -12,7 +12,6 @@ import {
     View
 } from 'react-native';
 
-
 // Load JetBrains Mono font
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -63,6 +62,7 @@ export default function ProfileSettings() {
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>PROFILE</Text>
+        <View style={styles.emptySpace} />
       </View>
 
       {/* Hero Image */}
@@ -79,7 +79,7 @@ export default function ProfileSettings() {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Username */}
           <InputRow 
-            icon={<Ionicons name="person" size={20} color="#333" />} 
+            icon={<Ionicons name="person-outline" size={20} color="#333" />} 
             value="Agradaa"
           />
           
@@ -124,9 +124,11 @@ export default function ProfileSettings() {
         </ScrollView>
 
         {/* Save Button */}
-        <TouchableOpacity style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
-        </TouchableOpacity>
+        <View style={styles.saveButtonContainer}>
+          <TouchableOpacity style={styles.saveButton}>
+            <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -140,19 +142,27 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 15,
     paddingHorizontal: 15,
+    position: 'relative',
   },
   backButton: {
     padding: 5,
+    width: 30,
   },
   headerTitle: {
-    flex: 1,
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
-    marginRight: 30,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignSelf: 'center',
+  },
+  emptySpace: {
+    width: 30,
   },
   heroContainer: {
     height: 120,
@@ -167,43 +177,58 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     marginHorizontal: 20,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 70,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 80,
     flex: 1,
     position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
   inputIconContainer: {
-    width: 30,
+    width: 25,
+    alignItems: 'center',
+    marginRight: 5,
   },
   inputText: {
     flex: 1,
     fontSize: 14,
-    marginLeft: 10,
+    marginLeft: 5,
     fontFamily: 'JetBrainsMono',
     color: '#333',
   },
-  saveButton: {
+  saveButtonContainer: {
     position: 'absolute',
-    bottom: 15,
-    left: 20,
-    right: 20,
-    backgroundColor: 'red',
+    bottom: 20,
+    left: 15,
+    right: 15,
+  },
+  saveButton: {
+    backgroundColor: '#ff0000',
     borderRadius: 25,
-    height: 50,
+    height: 45,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 2,
   },
   saveButtonText: {
     color: 'white',
     fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 15,
+    fontSize: 14,
+    letterSpacing: 0.5,
   },
 });

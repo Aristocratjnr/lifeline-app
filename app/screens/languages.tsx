@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
     SafeAreaView,
@@ -22,6 +22,22 @@ const loadFonts = async () => {
   });
 };
 
+// Language data structure
+const languages = [
+  { id: 1, name: 'ENG', flag: require('../../assets/images/flags/us.png') },
+  { id: 2, name: 'FRAFRA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 3, name: 'TWI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 4, name: 'GA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 5, name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 6, name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 7, name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 8, name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
+  { id: 9, name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
+  { id: 10, name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
+  { id: 11, name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
+  { id: 12, name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
+];
+
 type LanguageItemProps = {
   flag: React.ReactNode;
   name: string;
@@ -37,10 +53,24 @@ const LanguageItem = ({ flag, name, onSelect }: LanguageItemProps) => (
 
 export default function Languages() {
   const navigation = useNavigation();
+  const [searchText, setSearchText] = useState('');
+  const [filteredLanguages, setFilteredLanguages] = useState(languages);
 
   useEffect(() => {
     loadFonts();
   }, []);
+
+  // Filter languages based on search text
+  useEffect(() => {
+    if (searchText.trim() === '') {
+      setFilteredLanguages(languages);
+    } else {
+      const filtered = languages.filter(language =>
+        language.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredLanguages(filtered);
+    }
+  }, [searchText]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +93,14 @@ export default function Languages() {
             style={styles.searchInput}
             placeholder="Search for language"
             placeholderTextColor="#999"
+            value={searchText}
+            onChangeText={setSearchText}
           />
+          {searchText.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchText('')}>
+              <Ionicons name="close-circle" size={20} color="#999" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -71,55 +108,22 @@ export default function Languages() {
       <View style={styles.contentContainer}>
         <ScrollView>
           <View style={styles.languageGrid}>
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/us.png')} style={styles.flagIcon} />}
-              name="ENG"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="FRAFRA"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="TWI"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="GA"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="EWE"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="HAUSA"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/ghana.png')} style={styles.flagIcon} />}
-              name="DAGBANI"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/france.png')} style={styles.flagIcon} />}
-              name="FRENCH"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/spain.png')} style={styles.flagIcon} />}
-              name="SPANISH"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/egypt.png')} style={styles.flagIcon} />}
-              name="ARABIC"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/india.png')} style={styles.flagIcon} />}
-              name="HINDI"
-            />
-            <LanguageItem
-              flag={<Image source={require('../../assets/images/flags/russia.png')} style={styles.flagIcon} />}
-              name="RUSSIAN"
-            />
+            {filteredLanguages.map((language) => (
+              <LanguageItem
+                key={language.id}
+                flag={<Image source={language.flag} style={styles.flagIcon} />}
+                name={language.name}
+              />
+            ))}
           </View>
+
+          {filteredLanguages.length === 0 && (
+            <View style={styles.noResultsContainer}>
+              <Ionicons name="search-outline" size={48} color="#ccc" />
+              <Text style={styles.noResultsText}>No languages found</Text>
+              <Text style={styles.noResultsSubtext}>Try a different search term</Text>
+            </View>
+          )}
 
           <Text style={styles.comingSoon}>MORE LANGUAGES COMING SOON!!!</Text>
         </ScrollView>
@@ -239,5 +243,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 16,
+  },
+  noResultsContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  noResultsText: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 16,
+    color: '#666',
+    marginTop: 10,
+  },
+  noResultsSubtext: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    color: '#999',
+    marginTop: 5,
   },
 });

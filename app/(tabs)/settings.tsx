@@ -109,6 +109,10 @@ export default function Settings() {
             subtitle="Need Help?"
             onPress={() => navigateToScreen('help')}
           />
+        </View>
+        
+        {/* Delete button centered */}
+        <View style={styles.deleteContainer}>
           <SettingItem
             icon={<AntDesign name="delete" size={24} color="black" />}
             title="Delete?"
@@ -153,6 +157,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  deleteContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+    width: '100%',
+  },
   settingItem: {
     backgroundColor: 'white',
     borderRadius: 12,
@@ -160,10 +169,10 @@ const styles = StyleSheet.create({
     width: '48%',
     marginBottom: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 6,
   },
   iconContainer: {
     marginBottom: 8,
