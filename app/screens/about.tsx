@@ -46,7 +46,9 @@ export default function About() {
           <Text style={styles.sectionText}>
             Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you&apos;re prepared to act quickly and effectively.
           </Text>
+           <View style={styles.divider} />
         </View>
+        
 
         {/* App Version Section */}
         <View style={styles.section}>
@@ -63,18 +65,18 @@ export default function About() {
           </Text>
           
           <Text style={[styles.creditName, styles.spacingTop]}>
-            Daniella Asamoah - Lead UI/UX & Developer
+            Daniella Asiedu - Lead UI/UX & Developer
           </Text>
           
           <Text style={[styles.creditName, styles.spacingTop]}>
-            David Ayei Dhuobi - Assistance Developer Credits
+            David Ayim Obuobi - Assistance Developer Credits
           </Text>
           
           <Text style={[styles.creditName, styles.spacingTop]}>
             Special Mention:
           </Text>
           <Text style={styles.sectionText}>
-            Adingo, for guidance and mentorship throughout the project.
+            Stephen Adingo, for guidance and mentorship throughout the project.
           </Text>
         </View>
       </ScrollView>

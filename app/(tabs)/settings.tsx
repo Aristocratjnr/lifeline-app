@@ -64,7 +64,7 @@ export default function Settings() {
           <SettingItem
             icon={<Ionicons name="person-outline" size={24} color="black" />}
             title="Profile"
-            subtitle="Anuradha"
+            subtitle="Agradaa"
             onPress={() => navigateToScreen('profile-settings')}
           />
           <SettingItem
@@ -112,7 +112,7 @@ export default function Settings() {
           <SettingItem
             icon={<AntDesign name="delete" size={24} color="black" />}
             title="Delete?"
-            subtitle="Temp, Perm, Dea..."
+            subtitle="Temporary, Permanent, Deactivate Account"
             onPress={() => navigateToScreen('delete-account')}
           />
         </View>
