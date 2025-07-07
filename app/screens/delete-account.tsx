@@ -3,14 +3,14 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
 import {
-    Alert,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -187,9 +187,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    borderStyle: 'dotted',
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
+    backgroundColor: '#f0f0f0',
     marginVertical: 15,
   },
   actionButton: {

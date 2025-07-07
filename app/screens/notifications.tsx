@@ -182,9 +182,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    borderStyle: 'dotted',
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
+    backgroundColor: '#f0f0f0',
     marginHorizontal: 15,
   },
   contentContainer: {
@@ -229,9 +227,7 @@ const styles = StyleSheet.create({
   },
   itemDivider: {
     height: 1,
-    borderStyle: 'dotted',
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
+    backgroundColor: '#f0f0f0',
     marginHorizontal: 15,
   },
 });

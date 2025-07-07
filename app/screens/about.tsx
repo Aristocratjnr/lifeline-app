@@ -146,9 +146,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    borderStyle: 'dotted',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    backgroundColor: '#e0e0e0',
     marginTop: 10,
   },
   creditName: {

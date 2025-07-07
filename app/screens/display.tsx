@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import {
+  ImageBackground,
   Modal,
   SafeAreaView,
   StyleSheet,
@@ -40,166 +41,182 @@ export default function Display() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>DISPLAY</Text>
+        </View>
+
+        {/* Display Settings */}
+        <View style={styles.contentContainer}>
+          {/* Brightness */}
+          <View style={styles.settingCard}>
+            <Text style={styles.settingLabel}>Brightness</Text>
+            <View style={styles.sliderContainer}>
+              <Feather name="sun" size={16} color="black" />
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={1}
+                value={brightness}
+                onValueChange={setBrightness}
+                minimumTrackTintColor="#DDDDDD"
+                maximumTrackTintColor="#DDDDDD"
+                thumbTintColor="black"
+              />
+              <Feather name="sun" size={22} color="black" />
+            </View>
+          </View>
+
+          {/* Text Size */}
+          <View style={styles.settingCard}>
+            <Text style={styles.settingLabel}>Text Size</Text>
+            <View style={styles.sliderContainer}>
+              <Text style={styles.smallA}>A</Text>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={1}
+                value={textSize}
+                onValueChange={setTextSize}
+                minimumTrackTintColor="#DDDDDD"
+                maximumTrackTintColor="#DDDDDD"
+                thumbTintColor="black"
+              />
+              <Text style={styles.largeA}>A</Text>
+            </View>
+          </View>
+
+          {/* Text Bold */}
+          <View style={styles.settingCard}>
+            <View style={styles.settingRow}>
+              <View style={styles.settingLabelContainer}>
+                <Text style={[styles.textBold, styles.settingLabel]}>B</Text>
+                <Text style={styles.settingLabel}>Text Bold</Text>
+              </View>
+              <Switch
+                value={fontBold}
+                onValueChange={setFontBold}
+                trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
+                thumbColor={fontBold ? 'black' : '#f4f3f4'}
+              />
+            </View>
+          </View>
+
+          {/* Theme */}
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => setShowThemeModal(true)}
+          >
+            <View style={styles.settingRow}>
+              <View style={styles.settingLabelContainer}>
+                <MaterialIcons name="color-lens" size={20} color="black" />
+                <Text style={styles.settingLabel}>Theme</Text>
+              </View>
+              <View style={styles.themeValueContainer}>
+                <Text style={styles.themeValue}>{theme}</Text>
+                <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          {/* Eye Protection */}
+          <View style={styles.settingCard}>
+            <View style={styles.settingRow}>
+              <View style={styles.settingLabelContainer}>
+                <Ionicons name="eye-outline" size={20} color="black" />
+                <Text style={styles.settingLabel}>Eye Protection</Text>
+              </View>
+              <Switch
+                value={eyeProtection}
+                onValueChange={setEyeProtection}
+                trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
+                thumbColor={eyeProtection ? 'black' : '#f4f3f4'}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* Theme Selection Modal */}
+        <Modal
+          visible={showThemeModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowThemeModal(false)}
         >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>DISPLAY</Text>
-      </View>
+          <TouchableOpacity 
+            style={styles.modalOverlay}
+            activeOpacity={1}
+            onPress={() => setShowThemeModal(false)}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Select Theme</Text>
+                <TouchableOpacity onPress={() => setShowThemeModal(false)}>
+                  <Ionicons name="close" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+              
+              <TouchableOpacity 
+                style={[styles.themeOption, theme === 'Light' && styles.selectedThemeOption]}
+                onPress={() => handleThemeSelect('Light')}
+              >
+                <View style={styles.themeOptionContent}>
+                  <View style={[styles.themeIcon, { backgroundColor: '#f0f0f0' }]}>
+                    <Ionicons name="sunny" size={20} color="#FFD700" />
+                  </View>
+                  <Text style={styles.themeOptionText}>Light Mode</Text>
+                </View>
+                {theme === 'Light' && <Ionicons name="checkmark" size={20} color="black" />}
+              </TouchableOpacity>
 
-      <View style={styles.divider} />
-      
-      {/* Display Settings */}
-      <View style={styles.contentContainer}>
-        {/* Brightness */}
-        <View style={styles.settingCard}>
-          <Text style={styles.settingLabel}>Brightness</Text>
-          <View style={styles.sliderContainer}>
-            <Feather name="sun" size={16} color="black" />
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={1}
-              value={brightness}
-              onValueChange={setBrightness}
-              minimumTrackTintColor="#DDDDDD"
-              maximumTrackTintColor="#DDDDDD"
-              thumbTintColor="black"
-            />
-            <Feather name="sun" size={22} color="black" />
-          </View>
-        </View>
-
-        {/* Text Size */}
-        <View style={styles.settingCard}>
-          <Text style={styles.settingLabel}>Text Size</Text>
-          <View style={styles.sliderContainer}>
-            <Text style={styles.smallA}>A</Text>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={1}
-              value={textSize}
-              onValueChange={setTextSize}
-              minimumTrackTintColor="#DDDDDD"
-              maximumTrackTintColor="#DDDDDD"
-              thumbTintColor="black"
-            />
-            <Text style={styles.largeA}>A</Text>
-          </View>
-        </View>
-
-        {/* Text Bold */}
-        <View style={styles.settingCard}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLabelContainer}>
-              <Text style={[styles.textBold, styles.settingLabel]}>B</Text>
-              <Text style={styles.settingLabel}>Text Bold</Text>
-            </View>
-            <Switch
-              value={fontBold}
-              onValueChange={setFontBold}
-              trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
-              thumbColor={fontBold ? 'black' : '#f4f3f4'}
-            />
-          </View>
-        </View>
-
-        {/* Theme */}
-        <TouchableOpacity 
-          style={styles.settingCard}
-          onPress={() => setShowThemeModal(true)}
-        >
-          <View style={styles.settingRow}>
-            <View style={styles.settingLabelContainer}>
-              <MaterialIcons name="color-lens" size={20} color="black" />
-              <Text style={styles.settingLabel}>Theme</Text>
-            </View>
-            <View style={styles.themeValueContainer}>
-              <Text style={styles.themeValue}>{theme}</Text>
-              <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        {/* Eye Protection */}
-        <View style={styles.settingCard}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLabelContainer}>
-              <Ionicons name="eye-outline" size={20} color="black" />
-              <Text style={styles.settingLabel}>Eye Protection</Text>
-            </View>
-            <Switch
-              value={eyeProtection}
-              onValueChange={setEyeProtection}
-              trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
-              thumbColor={eyeProtection ? 'black' : '#f4f3f4'}
-            />
-          </View>
-        </View>
-      </View>
-
-      {/* Theme Selection Modal */}
-      <Modal
-        visible={showThemeModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowThemeModal(false)}
-      >
-        <TouchableOpacity 
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setShowThemeModal(false)}
-        >
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Theme</Text>
-              <TouchableOpacity onPress={() => setShowThemeModal(false)}>
-                <Ionicons name="close" size={24} color="black" />
+              <TouchableOpacity 
+                style={[styles.themeOption, theme === 'Dark' && styles.selectedThemeOption]}
+                onPress={() => handleThemeSelect('Dark')}
+              >
+                <View style={styles.themeOptionContent}>
+                  <View style={[styles.themeIcon, { backgroundColor: '#333' }]}>
+                    <Ionicons name="moon" size={20} color="#fff" />
+                  </View>
+                  <Text style={styles.themeOptionText}>Dark Mode</Text>
+                </View>
+                {theme === 'Dark' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
             </View>
-            
-            <TouchableOpacity 
-              style={[styles.themeOption, theme === 'Light' && styles.selectedThemeOption]}
-              onPress={() => handleThemeSelect('Light')}
-            >
-              <View style={styles.themeOptionContent}>
-                <View style={[styles.themeIcon, { backgroundColor: '#f0f0f0' }]}>
-                  <Ionicons name="sunny" size={20} color="#FFD700" />
-                </View>
-                <Text style={styles.themeOptionText}>Light Mode</Text>
-              </View>
-              {theme === 'Light' && <Ionicons name="checkmark" size={20} color="black" />}
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={[styles.themeOption, theme === 'Dark' && styles.selectedThemeOption]}
-              onPress={() => handleThemeSelect('Dark')}
-            >
-              <View style={styles.themeOptionContent}>
-                <View style={[styles.themeIcon, { backgroundColor: '#333' }]}>
-                  <Ionicons name="moon" size={20} color="#fff" />
-                </View>
-                <Text style={styles.themeOptionText}>Dark Mode</Text>
-              </View>
-              {theme === 'Dark' && <Ionicons name="checkmark" size={20} color="black" />}
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
-    </SafeAreaView>
+          </TouchableOpacity>
+        </Modal>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
   },
   header: {
     flexDirection: 'row',
@@ -232,10 +249,10 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 8,
   },
   settingLabel: {
     fontFamily: 'JetBrainsMono',
