@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 15,
-    paddingTop: 20,
+    paddingTop: 80,
   },
   card: {
     backgroundColor: 'white',
