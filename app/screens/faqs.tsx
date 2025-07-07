@@ -1,14 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -46,6 +48,7 @@ const FAQItem = ({ question, answer, isExpanded, onToggle }: FAQItemProps) => (
 
 export default function FAQs() {
   const navigation = useNavigation();
+  const router = useRouter();
   const [expandedFAQs, setExpandedFAQs] = useState<number[]>([]);
 
   useEffect(() => {
@@ -111,56 +114,66 @@ export default function FAQs() {
     }
   ];
 
+  const handleContactSupport = () => {
+    router.push('/screens/help');
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>FREQUENTLY ASKED{'\n'}QUESTIONS</Text>
-      </View>
-
-      <ScrollView 
-        style={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Introduction */}
-        <View style={styles.introContainer}>
-          <Text style={styles.introTitle}>Need Help?</Text>
-          <Text style={styles.introText}>
-            Find answers to the most commonly asked questions about Lifeline. If you can't find what you're looking for, feel free to contact our support team.
-          </Text>
-        </View>
-
-        {/* FAQ Items */}
-        <View style={styles.faqsContainer}>
-          {faqs.map((faq, index) => (
-            <FAQItem
-              key={index}
-              question={faq.question}
-              answer={faq.answer}
-              isExpanded={expandedFAQs.includes(index)}
-              onToggle={() => toggleFAQ(index)}
-            />
-          ))}
-        </View>
-
-        {/* Contact Section */}
-        <View style={styles.contactContainer}>
-          <Text style={styles.contactTitle}>Still Have Questions?</Text>
-          <Text style={styles.contactText}>
-            If you couldn't find the answer you're looking for, our support team is here to help.
-          </Text>
-          <TouchableOpacity style={styles.contactButton}>
-            <Text style={styles.contactButtonText}>Contact Support</Text>
+    <ImageBackground
+      source={require('../../assets/images/blur.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>FREQUENTLY ASKED{'\n'}QUESTIONS</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        <ScrollView 
+          style={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Introduction */}
+          <View style={styles.introContainer}>
+            <Text style={styles.introTitle}>Need Help?</Text>
+            <Text style={styles.introText}>
+              Find answers to the most commonly asked questions about Lifeline. If you can&apos;t find what you&apos;re looking for, feel free to contact our support team.
+            </Text>
+          </View>
+
+          {/* FAQ Items */}
+          <View style={styles.faqsContainer}>
+            {faqs.map((faq, index) => (
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isExpanded={expandedFAQs.includes(index)}
+                onToggle={() => toggleFAQ(index)}
+              />
+            ))}
+          </View>
+
+          {/* Contact Section */}
+          <View style={styles.contactContainer}>
+            <Text style={styles.contactTitle}>Still Have Questions?</Text>
+            <Text style={styles.contactText}>
+              If you couldn&apos;t find the answer you&apos;re looking for, our support team is here to help.
+            </Text>
+            <TouchableOpacity style={styles.contactButton} onPress={handleContactSupport}>
+              <Text style={styles.contactButtonText}>Contact Support</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -284,5 +297,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 14,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 }); 
