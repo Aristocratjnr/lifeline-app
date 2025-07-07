@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '48%',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#ccc',
   },
   actionButtonText: {
     fontFamily: 'JetBrainsMono',
@@ -201,6 +203,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginBottom: 10,
+    borderWidth: 2,
+    borderColor: '#ccc',
   },
   contactButtonText: {
     fontFamily: 'JetBrainsMono',
