@@ -1,4 +1,5 @@
 import { Feather, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
@@ -28,6 +29,8 @@ type NotificationItemProps = {
   value?: boolean;
   onValueChange?: (newValue: boolean) => void;
   subtitle?: string;
+  textSize: number;
+  fontBold: boolean;
 };
 
 const NotificationItem = ({ 
@@ -36,26 +39,37 @@ const NotificationItem = ({
   isToggle, 
   value = false, 
   onValueChange,
-  subtitle
-}: NotificationItemProps) => (
-  <View style={styles.notificationItem}>
-    <View style={styles.leftContent}>
-      {icon}
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+  subtitle,
+  textSize,
+  fontBold
+}: NotificationItemProps) => {
+  // Helper for dynamic text style
+  const getTextStyle = (baseStyle = {}) => {
+    let fontSize = 14 + textSize * 8; // 14-22px
+    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
+    return { ...baseStyle, fontSize, fontFamily };
+  };
+
+  return (
+    <View style={styles.notificationItem}>
+      <View style={styles.leftContent}>
+        {icon}
+        <View style={styles.textContainer}>
+          <Text style={getTextStyle(styles.title)}>{title}</Text>
+          {subtitle && <Text style={getTextStyle(styles.subtitle)}>{subtitle}</Text>}
+        </View>
       </View>
+      {isToggle ? (
+        <Switch
+          value={value}
+          onValueChange={onValueChange}
+          trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
+          thumbColor={value ? '#000' : '#f4f3f4'}
+        />
+      ) : null}
     </View>
-    {isToggle ? (
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
-        thumbColor={value ? '#000' : '#f4f3f4'}
-      />
-    ) : null}
-  </View>
-);
+  );
+};
 
 export default function Notifications() {
   const navigation = useNavigation();
@@ -63,10 +77,33 @@ export default function Notifications() {
   const [dailyTips, setDailyTips] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [sound, setSound] = useState(false);
+  // Move state declarations here
+  const [textSize, setTextSize] = useState(0.5); // default medium
+  const [fontBold, setFontBold] = useState(false);
 
   useEffect(() => {
     loadFonts();
+    // Load display preferences
+    const loadDisplayPrefs = async () => {
+      try {
+        const prefs = await AsyncStorage.getItem('displayPrefs');
+        if (prefs) {
+          const parsed = JSON.parse(prefs);
+          if (parsed.textSize !== undefined) setTextSize(parsed.textSize);
+          if (parsed.fontBold !== undefined) setFontBold(parsed.fontBold);
+        }
+      } catch {}
+    };
+    loadDisplayPrefs();
   }, []);
+
+  // Helper for dynamic text style (used in header)
+  const getTextStyle = (baseStyle: React.ComponentProps<typeof Text>['style'] = {}) => {
+    const styleObj = Array.isArray(baseStyle) ? Object.assign({}, ...baseStyle) : baseStyle || {};
+    let fontSize = (styleObj.fontSize || 14) + textSize * 8;
+    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
+    return { ...styleObj, fontSize, fontFamily };
+  };
 
   return (
     <ImageBackground 
@@ -84,7 +121,7 @@ export default function Notifications() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>NOTIFICATIONS</Text>
+          <Text style={[styles.headerTitle, getTextStyle({fontSize: 18})]}>NOTIFICATIONS</Text>
         </View>
         
         {/* Notification Settings */}
@@ -97,6 +134,8 @@ export default function Notifications() {
                 isToggle={true}
                 value={generalNotifications}
                 onValueChange={setGeneralNotifications}
+                textSize={textSize}
+                fontBold={fontBold}
               />
               
               <View style={styles.itemDivider} />
@@ -107,6 +146,8 @@ export default function Notifications() {
                 isToggle={true}
                 value={dailyTips}
                 onValueChange={setDailyTips}
+                textSize={textSize}
+                fontBold={fontBold}
               />
               
               <View style={styles.itemDivider} />
@@ -116,6 +157,8 @@ export default function Notifications() {
                 title="App Update"
                 subtitle="(Up-to-date)"
                 isToggle={false}
+                textSize={textSize}
+                fontBold={fontBold}
               />
               
               <View style={styles.itemDivider} />
@@ -126,6 +169,8 @@ export default function Notifications() {
                 isToggle={true}
                 value={emailNotifications}
                 onValueChange={setEmailNotifications}
+                textSize={textSize}
+                fontBold={fontBold}
               />
               
               <View style={styles.itemDivider} />
@@ -136,6 +181,8 @@ export default function Notifications() {
                 isToggle={true}
                 value={sound}
                 onValueChange={setSound}
+                textSize={textSize}
+                fontBold={fontBold}
               />
             </View>
           </ScrollView>
@@ -186,7 +233,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 15,
-    paddingTop: 20,
+    paddingTop: 80,
   },
   card: {
     backgroundColor: 'white',

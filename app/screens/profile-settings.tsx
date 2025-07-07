@@ -44,43 +44,56 @@ const InputRow = ({
   onChangeText,
   isEditing = false,
   onEditPress
-}: InputRowProps) => (
-  <View style={styles.inputRow}>
-    <View style={styles.inputIconContainer}>
-      {icon}
+}: InputRowProps) => {
+  const [textSize] = useState(0.5);
+  const [fontBold] = useState(false);
+
+  const getTextStyle = (baseStyle = {}) => {
+    let fontSize = 14 + textSize * 8; // 14-22px
+    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
+    return { ...baseStyle, fontSize, fontFamily };
+  };
+
+  return (
+    <View style={styles.inputRow}>
+      <View style={styles.inputIconContainer}>
+        {icon}
+      </View>
+      {isEditing ? (
+        <TextInput
+          style={[styles.inputTextInput, getTextStyle()]}
+          value={value}
+          onChangeText={onChangeText}
+          secureTextEntry={isPassword}
+          placeholder={isPassword ? "Enter password" : "Enter value"}
+          placeholderTextColor="#999"
+        />
+      ) : (
+        <Text style={getTextStyle(styles.inputText)}>
+          {isPassword ? '****************' : value}
+        </Text>
+      )}
+      {hasDropdown && !isEditing && (
+        <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
+      )}
+      {isPassword && !isEditing && (
+        <Ionicons name="eye-outline" size={20} color="#333" />
+      )}
+      {!hasDropdown && !isPassword && (
+        <TouchableOpacity onPress={onEditPress} style={styles.editButton}>
+          <Ionicons name={isEditing ? "checkmark" : "create-outline"} size={18} color="#666" />
+        </TouchableOpacity>
+      )}
     </View>
-    {isEditing ? (
-      <TextInput
-        style={styles.inputTextInput}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={isPassword}
-        placeholder={isPassword ? "Enter password" : "Enter value"}
-        placeholderTextColor="#999"
-      />
-    ) : (
-      <Text style={styles.inputText}>
-        {isPassword ? '****************' : value}
-      </Text>
-    )}
-    {hasDropdown && !isEditing && (
-      <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
-    )}
-    {isPassword && !isEditing && (
-      <Ionicons name="eye-outline" size={20} color="#333" />
-    )}
-    {!hasDropdown && !isPassword && (
-      <TouchableOpacity onPress={onEditPress} style={styles.editButton}>
-        <Ionicons name={isEditing ? "checkmark" : "create-outline"} size={18} color="#666" />
-      </TouchableOpacity>
-    )}
-  </View>
-);
+  );
+};
 
 export default function ProfileSettings() {
   const navigation = useNavigation();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [textSize, setTextSize] = useState(0.5); // default medium
+  const [fontBold, setFontBold] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -92,6 +105,12 @@ export default function ProfileSettings() {
     gender: 'Female',
     age: '18 yrs'
   });
+
+  const getTextStyle = (baseStyle = {}) => {
+    let fontSize = 14 + textSize * 8; // 14-22px
+    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
+    return { ...baseStyle, fontSize, fontFamily };
+  };
 
   useEffect(() => {
     loadFonts();
@@ -107,12 +126,23 @@ export default function ProfileSettings() {
       }
     };
     loadProfileData();
+    // Load display preferences
+    const loadDisplayPrefs = async () => {
+      try {
+        const prefs = await AsyncStorage.getItem('displayPrefs');
+        if (prefs) {
+          const parsed = JSON.parse(prefs);
+          if (parsed.textSize !== undefined) setTextSize(parsed.textSize);
+          if (parsed.fontBold !== undefined) setFontBold(parsed.fontBold);
+        }
+      } catch {}
+    };
+    loadDisplayPrefs();
   }, []);
 
   const handleEditField = (field: string) => {
     setIsEditing(field);
   };
-
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -155,7 +185,7 @@ export default function ProfileSettings() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>PROFILE</Text>
+          <Text style={[styles.headerTitle, getTextStyle({fontSize: 18})]}>PROFILE</Text>
           <View style={styles.emptySpace} />
         </View>
 
@@ -240,7 +270,7 @@ export default function ProfileSettings() {
         {/* Save Button */}
         <View style={styles.saveButtonContainer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-            <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
+            <Text style={getTextStyle(styles.saveButtonText)}>SAVE CHANGES</Text>
           </TouchableOpacity>
         </View>
 
@@ -258,7 +288,7 @@ export default function ProfileSettings() {
           >
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>Select Gender</Text>
+                <Text style={getTextStyle(styles.modalTitle)}>Select Gender</Text>
                 <TouchableOpacity onPress={() => setShowGenderModal(false)}>
                   <Ionicons name="close" size={24} color="black" />
                 </TouchableOpacity>
@@ -270,7 +300,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="male" size={24} color="#007AFF" />
-                  <Text style={styles.genderOptionText}>Male</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>Male</Text>
                 </View>
                 {formData.gender === 'Male' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
@@ -281,7 +311,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="female" size={24} color="#FF2D92" />
-                  <Text style={styles.genderOptionText}>Female</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>Female</Text>
                 </View>
                 {formData.gender === 'Female' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
@@ -292,7 +322,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="transgender" size={24} color="#666" />
-                  <Text style={styles.genderOptionText}>Other</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>Other</Text>
                 </View>
                 {formData.gender === 'Other' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>

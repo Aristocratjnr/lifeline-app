@@ -2,8 +2,9 @@ import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   ImageBackground,
   Modal,
   SafeAreaView,
@@ -13,6 +14,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { DisplayPreferencesContext } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -24,12 +26,12 @@ const loadFonts = async () => {
 
 export default function Display() {
   const navigation = useNavigation();
-  const [fontBold, setFontBold] = useState(false);
   const [eyeProtection, setEyeProtection] = useState(false);
   const [brightness, setBrightness] = useState(0.7);
-  const [textSize, setTextSize] = useState(0.5);
   const [theme, setTheme] = useState('Light');
   const [showThemeModal, setShowThemeModal] = useState(false);
+
+  const { textSize, setTextSize, fontBold, setFontBold, savePreferences } = useContext(DisplayPreferencesContext);
 
   useEffect(() => {
     loadFonts();
@@ -38,6 +40,16 @@ export default function Display() {
   const handleThemeSelect = (selectedTheme: string) => {
     setTheme(selectedTheme);
     setShowThemeModal(false);
+  };
+
+  // Manual save handler
+  const handleSave = async () => {
+    try {
+      await savePreferences();
+      Alert.alert('Saved', 'Display settings have been saved.');
+    } catch (e) {
+      Alert.alert('Error', 'Failed to save display settings.');
+    }
   };
 
   return (
@@ -198,6 +210,12 @@ export default function Display() {
           </TouchableOpacity>
         </Modal>
       </SafeAreaView>
+      {/* Save Button */}
+      <View style={{ position: 'absolute', bottom: 30, left: 24, right: 24 }}>
+        <TouchableOpacity style={{ backgroundColor: '#ff0000', borderRadius: 25, height: 50, alignItems: 'center', justifyContent: 'center' }} onPress={handleSave}>
+          <Text style={{ color: 'white', fontFamily: 'JetBrainsMono-Bold', fontSize: 16 }}>SAVE</Text>
+        </TouchableOpacity>
+      </View>
     </ImageBackground>
   );
 }
@@ -240,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   contentContainer: {
-    padding: 20,
+    padding: 24,
     gap: 10,
   },
   settingCard: {

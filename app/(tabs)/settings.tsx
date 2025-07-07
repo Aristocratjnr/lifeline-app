@@ -3,8 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { router } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { DisplayPreferencesContext } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -14,21 +15,30 @@ const loadFonts = async () => {
   });
 };
 
+// Helper for dynamic text style - moved inside the component
+const getTextStyle = (textSize: number, fontBold: boolean, baseStyle = {}) => {
+  let fontSize = 14 + textSize * 8; // 14-22px
+  let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
+  return { ...baseStyle, fontSize, fontFamily };
+};
+
 type SettingItemProps = {
   icon: React.ReactNode;
   title: string;
   subtitle: string;
   onPress?: () => void;
+  textSize: number;
+  fontBold: boolean;
 };
 
-const SettingItem = ({ icon, title, subtitle, onPress }: SettingItemProps) => (
+const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: SettingItemProps) => (
   <TouchableOpacity style={styles.settingItem} onPress={onPress}>
     <View style={styles.iconContainer}>
       {icon}
     </View>
     <View style={styles.textContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <Text style={getTextStyle(textSize, fontBold, styles.title)}>{title}</Text>
+      <Text style={getTextStyle(textSize, fontBold, styles.subtitle)}>{subtitle}</Text>
     </View>
   </TouchableOpacity>
 );
@@ -36,7 +46,8 @@ const SettingItem = ({ icon, title, subtitle, onPress }: SettingItemProps) => (
 export default function Settings() {
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
-
+  const { textSize, fontBold } = useContext(DisplayPreferencesContext);
+  
   useEffect(() => {
     loadFonts();
   }, []);
@@ -83,7 +94,8 @@ export default function Settings() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>SETTINGS</Text>
+          <Text style={[styles.headerTitle, getTextStyle(textSize, fontBold, {fontSize: 18})]}
+            >SETTINGS</Text>
         </View>
 
         {/* Settings Grid */}
@@ -94,48 +106,64 @@ export default function Settings() {
               title="Profile"
               subtitle={username || 'Profile'}
               onPress={() => navigateToScreen('profile-settings')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<Ionicons name="notifications-outline" size={24} color="black" />}
               title="Notifications"
               subtitle="Preferences"
               onPress={() => navigateToScreen('notifications')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<Ionicons name="language" size={24} color="black" />}
               title="Language"
               subtitle="Change Language"
               onPress={() => navigateToScreen('languages')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<MaterialIcons name="display-settings" size={24} color="black" />}
               title="Display"
               subtitle="Accessibility"
               onPress={() => navigateToScreen('display')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<FontAwesome5 name="file-contract" size={22} color="black" />}
               title="Terms & Use"
               subtitle="Privacy Policy"
               onPress={() => navigateToScreen('terms-use')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<AntDesign name="infocirlceo" size={22} color="black" />}
               title="About"
               subtitle="What to know"
               onPress={() => navigateToScreen('about')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<MaterialIcons name="offline-pin" size={24} color="black" />}
               title="Offline Content"
               subtitle="Management"
               onPress={() => navigateToScreen('offline-content')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
             <SettingItem
               icon={<Feather name="help-circle" size={24} color="black" />}
               title="Help?"
               subtitle="Need Help?"
               onPress={() => navigateToScreen('help')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
           </View>
           
@@ -146,6 +174,8 @@ export default function Settings() {
               title="Delete?"
               subtitle="Temporary, Permanent, Deactivate Account"
               onPress={() => navigateToScreen('delete-account')}
+              textSize={textSize}
+              fontBold={fontBold}
             />
           </View>
         </ScrollView>
