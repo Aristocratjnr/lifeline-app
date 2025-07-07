@@ -2,6 +2,7 @@ import { ExternalLink } from '@/components/ExternalLink';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Modal,
@@ -36,6 +37,7 @@ const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
 
 export default function TermsUse() {
   const navigation = useNavigation();
+  const router = useRouter();
   const [showTermsModal, setShowTermsModal] = useState(false);
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function TermsUse() {
 
         {/* Links */}
         <View style={styles.linksContainer}>
-          <LinkItem title="FAQs" />
+          <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
           <LinkItem title="Share App" />
           <ExternalLink href="https://lifeline-mu.vercel.app/">
             <LinkItem title="Visit Our Website" />
