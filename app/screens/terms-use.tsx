@@ -5,16 +5,16 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    ImageBackground,
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Animated,
+  ImageBackground,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
@@ -56,7 +56,7 @@ export default function TermsUse() {
       duration: 350,
       useNativeDriver: true,
     }).start();
-  }, [eyeProtection]);
+  }, [eyeProtection, fadeAnim]);
 
   const handleShareApp = async () => {
     try {
