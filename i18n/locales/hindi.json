@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "सेटिंग्स",
+    "profile": {
+      "title": "प्रोफाइल",
+      "subtitle": "अपना नाम सेट करें"
+    },
+    "notifications": {
+      "title": "सूचनाएं",
+      "subtitle": "अलर्ट प्रबंधित करें"
+    },
+    "language": {
+      "title": "भाषा",
+      "subtitle": "अपनी भाषा चुनें"
+    },
+    "display": {
+      "title": "डिस्प्ले",
+      "subtitle": "टेक्स्ट और चमक समायोजित करें"
+    },
+    "terms": {
+      "title": "उपयोग की शर्तें",
+      "subtitle": "कानूनी जानकारी"
+    },
+    "about": {
+      "title": "के बारे में",
+      "subtitle": "ऐप की जानकारी"
+    },
+    "offline": {
+      "title": "ऑफलाइन सामग्री",
+      "subtitle": "ऑफलाइन उपयोग के लिए डाउनलोड करें"
+    },
+    "help": {
+      "title": "सहायता और समर्थन",
+      "subtitle": "सहायता प्राप्त करें"
+    },
+    "delete": {
+      "title": "खाता हटाएं",
+      "subtitle": "अपना खाता हटाएं"
+    },
+    "brightness": "चमक",
+    "eyeProtection": "आंखों की सुरक्षा"
+  },
+  "common": {
+    "on": "चालू",
+    "off": "बंद"
+  },
+  "languages": {
+    "title": "भाषा",
+    "searchPlaceholder": "भाषा खोजें",
+    "noResults": "कोई भाषा नहीं मिली",
+    "tryAgain": "एक अलग खोज शब्द आज़माएं",
+    "comingSoon": "अधिक भाषाएं जल्द आ रही हैं!!!",
+    "submit": "सबमिट करें"
+  },
+  "dashboard": {
+    "healthStats": "स्वास्थ्य आंकड़े",
+    "steps": "कदम",
+    "water": "पानी",
+    "dailyTip": "दैनिक सुझाव",
+    "lifelineHistory": "लाइफलाइन इतिहास",
+    "recentActivity": "हाल की गतिविधि"
+  }
+}

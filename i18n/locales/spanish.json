@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "CONFIGURACIÓN",
+    "profile": {
+      "title": "Perfil",
+      "subtitle": "Configura tu nombre"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "subtitle": "Gestionar alertas"
+    },
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Elige tu idioma"
+    },
+    "display": {
+      "title": "Pantalla",
+      "subtitle": "Ajustar texto y brillo"
+    },
+    "terms": {
+      "title": "Términos de uso",
+      "subtitle": "Información legal"
+    },
+    "about": {
+      "title": "Acerca de",
+      "subtitle": "Información de la aplicación"
+    },
+    "offline": {
+      "title": "Contenido sin conexión",
+      "subtitle": "Descargar para uso sin conexión"
+    },
+    "help": {
+      "title": "Ayuda y soporte",
+      "subtitle": "Obtener asistencia"
+    },
+    "delete": {
+      "title": "Eliminar cuenta",
+      "subtitle": "Eliminar tu cuenta"
+    },
+    "brightness": "Brillo",
+    "eyeProtection": "Protección ocular"
+  },
+  "common": {
+    "on": "Activado",
+    "off": "Desactivado"
+  },
+  "languages": {
+    "title": "IDIOMA",
+    "searchPlaceholder": "Buscar idioma",
+    "noResults": "No se encontraron idiomas",
+    "tryAgain": "Prueba con otro término de búsqueda",
+    "comingSoon": "¡¡¡MÁS IDIOMAS PRÓXIMAMENTE!!!",
+    "submit": "ENVIAR"
+  },
+  "dashboard": {
+    "healthStats": "Estadísticas de salud",
+    "steps": "Pasos",
+    "water": "Agua",
+    "dailyTip": "CONSEJO DIARIO",
+    "lifelineHistory": "Historial Lifeline",
+    "recentActivity": "Actividad reciente"
+  }
+}

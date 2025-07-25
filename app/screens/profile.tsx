@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,7 +23,8 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState(countries[0]); // Default to Ghana
   const [showCountryModal, setShowCountryModal] = useState(false);
-  
+  const { t } = useTranslation();
+
   // Load fonts
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -45,12 +47,12 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>What Is Your Location?</Text>
-        
+        <Text style={styles.title}>{t('profile.title')}</Text>
+
         <Text style={styles.description}>
-          Allow Lifeline to provide local emergency numbers and nearby help. Help us find you faster in an emergency.
+          {t('profile.description')}
         </Text>
-        
+
         {/* Location Illustration */}
       <View style={styles.illustrationContainer}>
           <ExpoImage
@@ -59,10 +61,10 @@ export default function ProfileScreen() {
             contentFit="contain"
           />
         </View>
-        
+
         {/* Country Selection */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Country</Text>
+          <Text style={styles.inputLabel}>{t('profile.country')}</Text>
           <TouchableOpacity style={styles.countrySelector} onPress={() => setShowCountryModal(true)}>
             <ExpoImage
               source={selectedCountry.flag}
@@ -72,14 +74,14 @@ export default function ProfileScreen() {
             <Text style={styles.dropdownIcon}>▼</Text>
           </TouchableOpacity>
         </View>
-        
+
         {/* Confirm Button */}
         <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-          <Text style={styles.confirmButtonText}>Confirm Location</Text>
+          <Text style={styles.confirmButtonText}>{t('profile.confirmLocation')}</Text>
         </TouchableOpacity>
         {/* Next Button */}
         <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/screens/completed')}>
-          <Text style={styles.nextButtonText}>Next</Text>
+          <Text style={styles.nextButtonText}>{t('common.next')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -90,21 +92,21 @@ export default function ProfileScreen() {
         animationType="fade"
         onRequestClose={() => setShowCountryModal(false)}
       >
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
           onPress={() => setShowCountryModal(false)}
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Country</Text>
+              <Text style={styles.modalTitle}>{t('profile.selectCountry')}</Text>
               <TouchableOpacity onPress={() => setShowCountryModal(false)}>
                 <Text style={styles.closeButton}>✕</Text>
               </TouchableOpacity>
             </View>
-            
+
             {countries.map((country) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 key={country.code}
                 style={[styles.countryOption, selectedCountry.code === country.code && styles.selectedCountryOption]}
                 onPress={() => handleCountrySelect(country)}
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 50, 
+    paddingBottom: 50,
   },
   title: {
     fontSize: 24,
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     transform: [{ scaleX: 2 }],
     zIndex: 1,
-  }, 
+  },
   inputGroup: {
     width: '100%',
     marginBottom: 40,

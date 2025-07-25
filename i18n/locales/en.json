@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "Settings",
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Manage your profile"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Configure alerts"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Change language"
+    },
+    "display": {
+      "title": "Display",
+      "subtitle": "Text & appearance"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "subtitle": "Legal information"
+    },
+    "about": {
+      "title": "About",
+      "subtitle": "App information"
+    },
+    "offline": {
+      "title": "Offline Content",
+      "subtitle": "Manage downloads"
+    },
+    "help": {
+      "title": "Help",
+      "subtitle": "Support & FAQ"
+    },
+    "delete": {
+      "title": "Delete Account",
+      "subtitle": "Remove your data"
+    },
+    "brightness": "Brightness",
+    "eyeProtection": "Eye Protection"
+  },
+  "common": {
+    "on": "On",
+    "off": "Off"
+  },
+  "languages": {
+    "title": "LANGUAGE",
+    "searchPlaceholder": "Search for language",
+    "noResults": "No languages found",
+    "tryAgain": "Try a different search term",
+    "comingSoon": "MORE LANGUAGES COMING SOON!!!",
+    "submit": "SUBMIT"
+  },
+  "dashboard": {
+    "healthStats": "Health Stats",
+    "steps": "Steps",
+    "water": "Water",
+    "dailyTip": "DAILY TIP",
+    "lifelineHistory": "Lifeline History",
+    "recentActivity": "Recent Activity"
+  }
+}

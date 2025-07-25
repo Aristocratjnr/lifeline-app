@@ -4,11 +4,13 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Animated, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
+  const { t } = useTranslation();
   // Load fonts (first hook)
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -18,14 +20,14 @@ const DashboardScreen = () => {
   // All hooks must be called before any early return
   const dailyTips = useMemo(() => [
     {
-      title: 'Handle sharp objects with care:',
-      content: "This seems obvious, but it's the most important rule. Pay close attention when using knives, scissors, razors, box cutters, and tools. Don't rush!",
+      title: t('tips.handleSharpObjects'),
+      content: t('tips.handleSharpObjectsContent'),
       iconSet: MaterialIcons,
       iconName: 'content-cut',
     },
     {
-      title: 'Stay hydrated:',
-      content: 'Drink at least 8 glasses of water a day to keep your body functioning optimally.',
+      title: t('tips.stayHydrated'),
+      content: t('tips.stayHydratedContent'),
       iconSet: FontAwesome5,
       iconName: 'tint',
     },
@@ -47,7 +49,7 @@ const DashboardScreen = () => {
       iconSet: Feather,
       iconName: 'moon',
     },
-  ], []);
+  ], [t]);
 
   const [dailyTip, setDailyTip] = useState(dailyTips[0]);
   const healthStats = useMemo(() => ({
@@ -146,7 +148,7 @@ const DashboardScreen = () => {
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {/* Health Stats Widget */}
         <LinearGradient colors={["#FFE5EC", "#FFF1F2", "#FFFFFF"]} style={styles.statsCard} start={{x:0, y:0}} end={{x:1, y:1}}>
-          <Text style={styles.statsTitle}>Health Stats</Text>
+          <Text style={styles.statsTitle}>{t('dashboard.healthStats')}</Text>
           <View style={styles.statsRow}>
             {/* Steps Stat */}
             <View style={styles.statsItem}>
@@ -165,7 +167,7 @@ const DashboardScreen = () => {
                 )}
               </AnimatedCircularProgress>
               <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedSteps}</Text>
-              <Text style={styles.statsLabel}>Steps</Text>
+              <Text style={styles.statsLabel}>{t('dashboard.steps')}</Text>
             </View>
             {/* Water Stat */}
             <View style={styles.statsItem}>
@@ -184,7 +186,7 @@ const DashboardScreen = () => {
                 )}
               </AnimatedCircularProgress>
               <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedWater}/8</Text>
-              <Text style={styles.statsLabel}>Water</Text>
+              <Text style={styles.statsLabel}>{t('dashboard.water')}</Text>
             </View>
           </View>
         </LinearGradient>
@@ -607,4 +609,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen; 
+export default DashboardScreen;

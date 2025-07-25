@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "NSHƆNKƆLƆ",
+    "profile": {
+      "title": "Wo sunsum",
+      "subtitle": "Kɛ wo nii"
+    },
+    "notifications": {
+      "title": "Amanee",
+      "subtitle": "Lɛ nkɔkɔ"
+    },
+    "language": {
+      "title": "Gbegbe",
+      "subtitle": "Tuu wo gbegbe"
+    },
+    "display": {
+      "title": "Kɛkɛ",
+      "subtitle": "Sane kɛkɛ ni kpa"
+    },
+    "terms": {
+      "title": "Ni lɛ kɛkɛ",
+      "subtitle": "Ni gbɛɛ nsɛm"
+    },
+    "about": {
+      "title": "Eni nsɛm",
+      "subtitle": "App ni nsɛm"
+    },
+    "offline": {
+      "title": "Nsɛm offline",
+      "subtitle": "Download maa offline"
+    },
+    "help": {
+      "title": "Lɛɛloo ni Gyemi",
+      "subtitle": "Nyɛ lɛɛloo"
+    },
+    "delete": {
+      "title": "Tutu Account lɛ",
+      "subtitle": "Tutu wo account"
+    },
+    "brightness": "Kpa",
+    "eyeProtection": "Ni gbami"
+  },
+  "common": {
+    "on": "Tso",
+    "off": "Mii tso"
+  },
+  "languages": {
+    "title": "GBEGBE",
+    "searchPlaceholder": "Shwɛ gbegbe",
+    "noResults": "Gbegbe kɛkɛ mii",
+    "tryAgain": "Sɔ kɛkɛ foforɔ",
+    "comingSoon": "GBEGBE FOFORƆ BA WIƐƐ!!!",
+    "submit": "KɛMI"
+  },
+  "dashboard": {
+    "healthStats": "Laafia Stats",
+    "steps": "Tsɔtsɔɛ",
+    "water": "Kpoo",
+    "dailyTip": "DAANAA AFOTUO",
+    "lifelineHistory": "Lifeline Blema",
+    "recentActivity": "Nɔɔnɔ adwuma"
+  }
+}

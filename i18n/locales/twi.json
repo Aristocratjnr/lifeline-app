@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "NHYEHYƐE",
+    "profile": {
+      "title": "Wo ho nsɛm",
+      "subtitle": "Kyerɛw wo din"
+    },
+    "notifications": {
+      "title": "Amanneɛbɔ",
+      "subtitle": "Hwɛ nkɔkɔ so"
+    },
+    "language": {
+      "title": "Kasa",
+      "subtitle": "Yi wo kasa"
+    },
+    "display": {
+      "title": "Mpaeɛ",
+      "subtitle": "Sesa nsɛm ne hann"
+    },
+    "terms": {
+      "title": "Mmara a wɔde di dwuma",
+      "subtitle": "Mmara ho nsɛm"
+    },
+    "about": {
+      "title": "Ɛho nsɛm",
+      "subtitle": "App ho nsɛm"
+    },
+    "offline": {
+      "title": "Nsɛm a enni intanɛt",
+      "subtitle": "Download ma offline"
+    },
+    "help": {
+      "title": "Mmoa ne Begyeɛ",
+      "subtitle": "Nya mmoa"
+    },
+    "delete": {
+      "title": "Yi Account no fi",
+      "subtitle": "Yi wo account no fi"
+    },
+    "brightness": "Hann",
+    "eyeProtection": "Ani ho banbɔ"
+  },
+  "common": {
+    "on": "Asi",
+    "off": "Ansi"
+  },
+  "languages": {
+    "title": "KASA",
+    "searchPlaceholder": "Hwehwɛ kasa bi",
+    "noResults": "Wɔannya kasa biara",
+    "tryAgain": "Sɔ foforɔ hwɛ",
+    "comingSoon": "KASA FOFORƆ REBA!!!",
+    "submit": "SOMA"
+  },
+  "dashboard": {
+    "healthStats": "Apɔmuden Stats",
+    "steps": "Anammɔntuo",
+    "water": "Nsuo",
+    "dailyTip": "DA BIARA AFOTUO",
+    "lifelineHistory": "Lifeline Abakɔsɛm",
+    "recentActivity": "Nnɛyi adwuma"
+  }
+}

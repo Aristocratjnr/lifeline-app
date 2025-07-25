@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "SELINSE",
+    "profile": {
+      "title": "A yure",
+      "subtitle": "Tari a yure"
+    },
+    "notifications": {
+      "title": "Nɔɔre",
+      "subtitle": "Kɔ nɔɔre"
+    },
+    "language": {
+      "title": "Ninkanse",
+      "subtitle": "Pɔgi a ninkanse"
+    },
+    "display": {
+      "title": "Kɔkɔre",
+      "subtitle": "Sɛni kɔkɔre ni yelɛm"
+    },
+    "terms": {
+      "title": "Tɔɔga selinse",
+      "subtitle": "Selinse zukɔ"
+    },
+    "about": {
+      "title": "A la ka",
+      "subtitle": "App zukɔ"
+    },
+    "offline": {
+      "title": "Offline zukɔ",
+      "subtitle": "Download tɔɔ offline"
+    },
+    "help": {
+      "title": "Sɔɔlengo ni Bɔɔkum",
+      "subtitle": "Nyɛ sɔɔlengo"
+    },
+    "delete": {
+      "title": "Kpi account la",
+      "subtitle": "Kpi a account"
+    },
+    "brightness": "Yelɛm",
+    "eyeProtection": "Ninkɔlɔk bɔɔkum"
+  },
+  "common": {
+    "on": "A wɛla",
+    "off": "A ka wɛla"
+  },
+  "languages": {
+    "title": "NINKANSE",
+    "searchPlaceholder": "Sɔɔri ninkanse",
+    "noResults": "Ninkanse kɛ ka nyɛ",
+    "tryAgain": "Sɔɔri fɔk",
+    "comingSoon": "NINKANSE FƆHƆ BA ZAMA!!!",
+    "submit": "KƆLI"
+  },
+  "dashboard": {
+    "healthStats": "Kɔlgo Stats",
+    "steps": "Piak",
+    "water": "Kɔɔm",
+    "dailyTip": "DALƖKA TINGƆƆNSE",
+    "lifelineHistory": "Lifeline Ansɔɔre",
+    "recentActivity": "Tɔɔga yeltɔɔm"
+  }
+}

@@ -4,6 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
@@ -44,6 +45,7 @@ const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: Set
 );
 
 export default function Settings() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
   const { textSize, fontBold, brightness, eyeProtection } = useDisplayPreferences();
@@ -95,7 +97,7 @@ export default function Settings() {
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, getTextStyle(textSize, fontBold, {fontSize: 18})]}
-            >SETTINGS</Text>
+            >{t('settings.title')}</Text>
         </View>
 
         {/* Settings Grid */}
@@ -103,64 +105,64 @@ export default function Settings() {
           <View style={styles.grid}>
             <SettingItem
               icon={<Ionicons name="person-outline" size={24} color="black" />}
-              title="Profile"
-              subtitle={username || 'Profile'}
+              title={t('settings.profile.title')}
+              subtitle={username || t('settings.profile.subtitle')}
               onPress={() => navigateToScreen('profile-settings')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<Ionicons name="notifications-outline" size={24} color="black" />}
-              title="Notifications"
-              subtitle="Preferences"
+              title={t('settings.notifications.title')}
+              subtitle={t('settings.notifications.subtitle')}
               onPress={() => navigateToScreen('notifications')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<Ionicons name="language" size={24} color="black" />}
-              title="Language"
-              subtitle="Change Language"
+              title={t('settings.language.title')}
+              subtitle={t('settings.language.subtitle')}
               onPress={() => navigateToScreen('languages')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<MaterialIcons name="display-settings" size={24} color="black" />}
-              title="Display"
-              subtitle="Accessibility"
+              title={t('settings.display.title')}
+              subtitle={t('settings.display.subtitle')}
               onPress={() => navigateToScreen('display')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<FontAwesome5 name="file-contract" size={22} color="black" />}
-              title="Terms & Use"
-              subtitle="Privacy Policy"
+              title={t('settings.terms.title')}
+              subtitle={t('settings.terms.subtitle')}
               onPress={() => navigateToScreen('terms-use')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<AntDesign name="infocirlceo" size={22} color="black" />}
-              title="About"
-              subtitle="What to know"
+              title={t('settings.about.title')}
+              subtitle={t('settings.about.subtitle')}
               onPress={() => navigateToScreen('about')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<MaterialIcons name="offline-pin" size={24} color="black" />}
-              title="Offline Content"
-              subtitle="Management"
+              title={t('settings.offline.title')}
+              subtitle={t('settings.offline.subtitle')}
               onPress={() => navigateToScreen('offline-content')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
               icon={<Feather name="help-circle" size={24} color="black" />}
-              title="Help?"
-              subtitle="Need Help?"
+              title={t('settings.help.title')}
+              subtitle={t('settings.help.subtitle')}
               onPress={() => navigateToScreen('help')}
               textSize={textSize}
               fontBold={fontBold}
@@ -170,14 +172,14 @@ export default function Settings() {
           {/* Show brightness value */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
             <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              Brightness: {Math.round(brightness * 100)}%
+              {t('settings.brightness')}: {Math.round(brightness * 100)}%
             </Text>
           </View>
           
           {/* Show eye protection status */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
             <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              Eye Protection: {eyeProtection ? 'On' : 'Off'}
+              {t('settings.eyeProtection')}: {eyeProtection ? t('common.on') : t('common.off')}
             </Text>
           </View>
           
@@ -185,8 +187,8 @@ export default function Settings() {
           <View style={styles.deleteContainer}>
             <SettingItem
               icon={<AntDesign name="delete" size={24} color="black" />}
-              title="Delete?"
-              subtitle="Deactivate Account"
+              title={t('settings.delete.title')}
+              subtitle={t('settings.delete.subtitle')}
               onPress={() => navigateToScreen('delete-account')}
               textSize={textSize}
               fontBold={fontBold}

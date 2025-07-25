@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "الإعدادات",
+    "profile": {
+      "title": "الملف الشخصي",
+      "subtitle": "قم بإعداد اسمك"
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "subtitle": "إدارة التنبيهات"
+    },
+    "language": {
+      "title": "اللغة",
+      "subtitle": "اختر لغتك"
+    },
+    "display": {
+      "title": "العرض",
+      "subtitle": "ضبط النص والسطوع"
+    },
+    "terms": {
+      "title": "شروط الاستخدام",
+      "subtitle": "المعلومات القانونية"
+    },
+    "about": {
+      "title": "حول",
+      "subtitle": "معلومات التطبيق"
+    },
+    "offline": {
+      "title": "المحتوى دون اتصال",
+      "subtitle": "تحميل للاستخدام دون اتصال"
+    },
+    "help": {
+      "title": "المساعدة والدعم",
+      "subtitle": "الحصول على المساعدة"
+    },
+    "delete": {
+      "title": "حذف الحساب",
+      "subtitle": "إزالة حسابك"
+    },
+    "brightness": "السطوع",
+    "eyeProtection": "حماية العين"
+  },
+  "common": {
+    "on": "مفعل",
+    "off": "معطل"
+  },
+  "languages": {
+    "title": "اللغة",
+    "searchPlaceholder": "البحث عن لغة",
+    "noResults": "لم يتم العثور على لغات",
+    "tryAgain": "جرب مصطلح بحث آخر",
+    "comingSoon": "المزيد من اللغات قريباً!!!",
+    "submit": "إرسال"
+  },
+  "dashboard": {
+    "healthStats": "إحصائيات الصحة",
+    "steps": "الخطوات",
+    "water": "الماء",
+    "dailyTip": "نصيحة يومية",
+    "lifelineHistory": "تاريخ شريان الحياة",
+    "recentActivity": "النشاط الأخير"
+  }
+}

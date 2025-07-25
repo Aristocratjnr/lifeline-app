@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "title": "ƉOƉO",
+    "profile": {
+      "title": "Wò ŋkɔ",
+      "subtitle": "Ŋlɔ wò ŋkɔ"
+    },
+    "notifications": {
+      "title": "Gbedeasi",
+      "subtitle": "Kpɔ gbedeasi"
+    },
+    "language": {
+      "title": "Gbe",
+      "subtitle": "Tia wò gbe"
+    },
+    "display": {
+      "title": "Fiafia",
+      "subtitle": "Trɔ asi kple kekeli"
+    },
+    "terms": {
+      "title": "Zazã ƒe sewowo",
+      "subtitle": "Se ŋuti nyawo"
+    },
+    "about": {
+      "title": "Eŋuti nyawo",
+      "subtitle": "App ŋuti nyawo"
+    },
+    "offline": {
+      "title": "Offline nyawo",
+      "subtitle": "Download na offline"
+    },
+    "help": {
+      "title": "Kpekpeɖeŋu",
+      "subtitle": "Xɔ kpekpeɖeŋu"
+    },
+    "delete": {
+      "title": "Tutu akawo",
+      "subtitle": "Tutu wò akawo"
+    },
+    "brightness": "Kekeli",
+    "eyeProtection": "Ŋku dzɔdzɔ"
+  },
+  "common": {
+    "on": "Le edzi",
+    "off": "Mele edzi o"
+  },
+  "languages": {
+    "title": "GBE",
+    "searchPlaceholder": "Di gbe aɖe",
+    "noResults": "Womekpɔ gbe aɖeke o",
+    "tryAgain": "Gaɖo bubu kpɔ",
+    "comingSoon": "GBE BUBUWO GBɔNA!!!",
+    "submit": "DƆ"
+  },
+  "dashboard": {
+    "healthStats": "Lãmesɛ nyawo",
+    "steps": "Afɔɖeɖe",
+    "water": "Tsi",
+    "dailyTip": "GBESIAGBE AƉAŊU",
+    "lifelineHistory": "Lifeline ŋutinyawo",
+    "recentActivity": "Nuwɔna yeyewo"
+  }
+}

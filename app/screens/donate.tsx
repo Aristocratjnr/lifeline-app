@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { Alert, Dimensions, ImageBackground, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+Dimensions.get('window');
 const pink = '#F9A6A6';
 
 export default function DonateScreen() {

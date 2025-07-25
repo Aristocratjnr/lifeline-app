@@ -2,7 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
+  Alert,
   Image,
   ImageBackground,
   SafeAreaView,
@@ -13,6 +15,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useLanguage } from '../../i18n/LanguageContext';
+
 
 
 // Load JetBrains Mono font
@@ -25,18 +29,18 @@ const loadFonts = async () => {
 
 // Language data structure
 const languages = [
-  { id: 1, name: 'ENG', flag: require('../../assets/images/flags/us.png') },
-  { id: 2, name: 'FRAFRA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 3, name: 'TWI', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 4, name: 'GA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 5, name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 6, name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 7, name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 8, name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
-  { id: 9, name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
-  { id: 10, name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
-  { id: 11, name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
-  { id: 12, name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
+  { id: 1, code: 'en', name: 'ENG', flag: require('../../assets/images/flags/us.png') },
+  { id: 2, code: 'frafra', name: 'FRAFRA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 3, code: 'twi', name: 'TWI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 4, code: 'ga', name: 'GA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 5, code: 'ewe', name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 6, code: 'hausa', name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 7, code: 'dagbani', name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 8, code: 'french', name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
+  { id: 9, code: 'spanish', name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
+  { id: 10, code: 'arabic', name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
+  { id: 11, code: 'hindi', name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
+  { id: 12, code: 'russian', name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
 ];
 
 type LanguageItemProps = {
@@ -57,7 +61,18 @@ export default function Languages() {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [filteredLanguages, setFilteredLanguages] = useState(languages);
-  const [selectedLanguage, setSelectedLanguage] = useState<number | null>(null);
+  const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
+
+  const { t } = useTranslation();
+  const { currentLanguage, setLanguage } = useLanguage();
+
+  // Set initial selected language based on current language
+  useEffect(() => {
+    const currentLangObj = languages.find(lang => lang.code === currentLanguage);
+    if (currentLangObj) {
+      setSelectedLanguageId(currentLangObj.id);
+    }
+  }, [currentLanguage]);
 
   useEffect(() => {
     loadFonts();
@@ -75,9 +90,43 @@ export default function Languages() {
     }
   }, [searchText]);
 
+  // Apply language selection immediately when a language is selected
+  const handleLanguageSelect = async (languageId: number) => {
+    setSelectedLanguageId(languageId);
+
+    const selectedLang = languages.find(lang => lang.id === languageId);
+    if (selectedLang) {
+      try {
+        await setLanguage(selectedLang.code);
+      } catch (error) {
+        console.error("Failed to change language:", error);
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedLanguageId) {
+      Alert.alert(
+        "No Language Selected",
+        "Please select a language before submitting.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    const selectedLang = languages.find(lang => lang.id === selectedLanguageId);
+    if (selectedLang) {
+      Alert.alert(
+        "Language Changed",
+        `Language has been changed to ${selectedLang.name}`,
+        [{ text: "OK", onPress: () => navigation.goBack() }]
+      );
+    }
+  };
+
   return (
-    <ImageBackground 
-      source={require('../../assets/images/blur.png')} 
+    <ImageBackground
+      source={require('../../assets/images/blur.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
@@ -85,13 +134,13 @@ export default function Languages() {
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>LANGUAGE</Text>
+          <Text style={styles.headerTitle}>{t('languages.title')}</Text>
         </View>
 
         {/* Search Bar */}
@@ -100,7 +149,7 @@ export default function Languages() {
             <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search for language"
+              placeholder={t('languages.searchPlaceholder')}
               placeholderTextColor="#999"
               value={searchText}
               onChangeText={setSearchText}
@@ -122,8 +171,8 @@ export default function Languages() {
                   key={language.id}
                   flag={<Image source={language.flag} style={styles.flagIcon} />}
                   name={language.name}
-                  onSelect={() => setSelectedLanguage(language.id)}
-                  selected={selectedLanguage === language.id}
+                  onSelect={() => handleLanguageSelect(language.id)}
+                  selected={selectedLanguageId === language.id}
                 />
               ))}
             </View>
@@ -131,18 +180,21 @@ export default function Languages() {
             {filteredLanguages.length === 0 && (
               <View style={styles.noResultsContainer}>
                 <Ionicons name="search-outline" size={48} color="#ccc" />
-                <Text style={styles.noResultsText}>No languages found</Text>
-                <Text style={styles.noResultsSubtext}>Try a different search term</Text>
+                <Text style={styles.noResultsText}>{t('languages.noResults')}</Text>
+                <Text style={styles.noResultsSubtext}>{t('languages.tryAgain')}</Text>
               </View>
             )}
 
-            <Text style={styles.comingSoon}>MORE LANGUAGES COMING SOON!!!</Text>
+            <Text style={styles.comingSoon}>{t('languages.comingSoon')}</Text>
           </ScrollView>
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton}>
-          <Text style={styles.submitText}>SUBMIT</Text>
+        <TouchableOpacity 
+          style={styles.submitButton}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.submitText}>{t('languages.submit')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
