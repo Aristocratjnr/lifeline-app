@@ -44,7 +44,6 @@ export default function DoctorScreen() {
     router.push('/screens/privacy-policy');
   };
 
-  // Force re-render on language change
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']} key={`doctor-${i18n.language}`}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />

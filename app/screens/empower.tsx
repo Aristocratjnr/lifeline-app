@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -9,6 +10,18 @@ const red = '#FC1C1C';
 
 export default function EmpowerScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in EmpowerScreen - forcing update");
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   // Load the fonts
   const [fontsLoaded] = useFonts({
@@ -25,8 +38,9 @@ export default function EmpowerScreen() {
     router.push('/screens/doctor'); // Update this to your next screen route
   };
 
+  // Force re-render on language change
   return (
-    <View style={styles.container}>
+    <View style={styles.container} key={`empower-${i18n.language}`}>
       {/* Background */}
       <View style={styles.background} />
        {/* Blurred Background Image */}
@@ -63,11 +77,17 @@ export default function EmpowerScreen() {
       </View>
 
       {/* Title with Caveat font */}
-      <Text style={styles.title}>Confidence and Empowerment</Text>
+      <Text style={styles.title}>
+        {i18n.language === 'twi' 
+          ? "Ahoɔden ne Ahoɔdennie" 
+          : "Confidence and Empowerment"}
+      </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        Use our interactive tools and daily tips to build life-saving skills and stay prepared always
+        {i18n.language === 'twi'
+          ? "Fa yɛn nkitahodie nneɛma ne dabiara afotuo di dwuma kyerɛ nkwa-nkwagyeɛ nyansa na woasiesie wo ho daa"
+          : "Use our interactive tools and daily tips to build life-saving skills and stay prepared always"}
       </Text>
 
       {/* Pagination dots */}
@@ -81,7 +101,9 @@ export default function EmpowerScreen() {
 
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-        <Text style={styles.nextButtonText}>NEXT</Text>
+        <Text style={styles.nextButtonText}>
+          {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

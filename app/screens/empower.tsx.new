@@ -5,18 +5,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-
 const { width, height } = Dimensions.get('window');
 const red = '#FC1C1C';
 
-export default function UniqueScreen() {
+export default function EmpowerScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
 
   // Re-render when language changes
   React.useEffect(() => {
     const handleLanguageChanged = () => {
-      console.log("Language changed in UniqueScreen - forcing update");
+      console.log("Language changed in EmpowerScreen - forcing update");
     };
     i18n.on('languageChanged', handleLanguageChanged);
     return () => {
@@ -26,7 +25,7 @@ export default function UniqueScreen() {
 
   // Load the fonts
   const [fontsLoaded] = useFonts({
-    'LuckiestGuy-Regular': require('@/assets/fonts/LuckiestGuy-Regular.ttf'),
+    'Caveat-Regular': require('@/assets/fonts/Caveat-Bold.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -36,15 +35,14 @@ export default function UniqueScreen() {
   }
 
   const handleNext = () => {
-    router.push('/screens/empower');
+    router.push('/screens/doctor'); // Update this to your next screen route
   };
 
-  // Force re-render on language change
   return (
-    <View style={styles.container} key={`unique-${i18n.language}`}>
+    <View style={styles.container} key={`empower-${i18n.language}`}>
       {/* Background */}
       <View style={styles.background} />
-      {/* Blurred Background Image */}
+       {/* Blurred Background Image */}
             <ExpoImage
               source={require('@/assets/images/blur.png')}
               style={styles.bgImage}
@@ -54,54 +52,52 @@ export default function UniqueScreen() {
             {/* Light brown overlay for tint */}
             <View style={styles.bgOverlay} />
 
-      {/* Top curve */}
-      <ExpoImage 
-        source={require('@/assets/images/top.png')}
-        style={styles.topCurve}
-        contentFit="cover"
-      />
+           {/* Top curve */}
+           <ExpoImage
+             source={require('@/assets/images/top.png')}
+             style={styles.topCurve}
+             contentFit="cover"
+           />
 
-      {/* Bottom curve */}
-      <ExpoImage 
-        source={require('@/assets/images/bottom.png')}
-        style={styles.bottomCurve}
-        contentFit="cover"
-      />
+           {/* Bottom curve */}
+           <ExpoImage
+             source={require('@/assets/images/bottom.png')}
+             style={styles.bottomCurve}
+             contentFit="cover"
+           />
 
-      {/* Medical staff illustration */}
-      <ExpoImage 
-        source={require('@/assets/images/serve.png')}
-        style={styles.illustration}
-        contentFit="contain"
-      />
+      {/* Bandaid illustration */}
+      <View style={styles.blueCircle}>
+        <ExpoImage
+          source={require('@/assets/images/cotton.png')}
+          style={styles.illustration}
+          contentFit="contain"
+        />
+      </View>
 
-      {/* Title with Luckiest Guy font */}
+      {/* Title with Caveat font */}
       <Text style={styles.title}>
-        {i18n.language === 'twi' 
-          ? "SIESIE WO HO MA WO NKOAA AHIADEƐ"
-          : "PREPARE FOR YOUR UNIQUE NEEDS"}
+        {t('empower.title')}
       </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        {i18n.language === 'twi'
-          ? "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
-          : "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"}
+        {t('empower.description')}
       </Text>
 
       {/* Pagination dots */}
       <View style={styles.dotsContainer}>
         <View style={[styles.dot]} />
         <View style={[styles.dot]} />
-        <View style={[styles.dot, styles.activeDot]} />
         <View style={[styles.dot]} />
+        <View style={[styles.dot, styles.activeDot]} />
         <View style={[styles.dot]} />
       </View>
 
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>
-          {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+          {t('common.next')}
         </Text>
       </TouchableOpacity>
     </View>
@@ -113,7 +109,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF9F9',
   },
-    bgImage: {
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#FFF9F9',
+  },
+   bgImage: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -128,13 +129,8 @@ const styles = StyleSheet.create({
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
+    backgroundColor: 'rgba(228, 225, 220, 0.32)',
     zIndex: 1,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#FFF9F9',
   },
   background: {
     position: 'absolute',
@@ -143,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF9F9',
     zIndex: 0,
   },
-  topCurve: {
+   topCurve: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -159,21 +155,29 @@ const styles = StyleSheet.create({
     height: height * 0.25,
     zIndex: 1,
   },
-  illustration: {
-    width: width * 0.8,
-    height: height * 0.45,
-    marginTop: height * 0.1,
-    marginBottom: 0, // Removed bottom margin
+  blueCircle: {
+    width: width * 0.7,
+    height: width * 0.7,
+    borderRadius: width * 0.35,
+    backgroundColor: '#A8D5F2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: height * 0.20,
     zIndex: 2,
   },
+  illustration: {
+    width: width * 0.5,
+    height: width * 0.5,
+    zIndex: 3,
+  },
   title: {
-    fontSize: 34,
+    fontSize: 35,
     textAlign: 'center',
     color: 'black',
-    marginHorizontal: 30,
-    marginTop: 0, 
+    marginHorizontal: 20,
+    marginTop: 30,
     zIndex: 2,
-    fontFamily: 'LuckiestGuy-Regular',
+    fontFamily: 'Caveat-Regular',
     letterSpacing: 0.5,
   },
   description: {
@@ -204,18 +208,18 @@ const styles = StyleSheet.create({
     backgroundColor: red,
     width: 18,
   },
- nextButton: {
-  backgroundColor: red,
-  paddingVertical: 12,
-  paddingHorizontal: 50,
-  borderRadius: 50,
-  marginTop: 20,
-  position: 'absolute',
-  bottom: height * 0.05,
-  zIndex: 2,
-  borderWidth: 2,          
-  borderColor: '#000000',  
-},
+  nextButton: {
+    backgroundColor: red,
+    paddingVertical: 12,
+    paddingHorizontal: 50,
+    borderRadius: 50,
+    marginTop: 20,
+    position: 'absolute',
+    bottom: height * 0.05,
+    zIndex: 2,
+    borderWidth: 2,
+    borderColor: '#000000',
+  },
   nextButtonText: {
     color: 'white',
     fontSize: 18,

@@ -42,7 +42,9 @@
   },
   "common": {
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "next": "NEXT",
+    "back": "Back"
   },
   "languages": {
     "title": "LANGUAGE",
@@ -58,6 +60,51 @@
     "water": "Water",
     "dailyTip": "DAILY TIP",
     "lifelineHistory": "Lifeline History",
-    "recentActivity": "Recent Activity"
+    "recentActivity": "Recent Activity",
+    "sentSOSAlert": "Sent SOS alert",
+    "viewedMap": "Viewed map",
+    "readHealthNews": "Read health news",
+    "todayTime": "Today, 09:12",
+    "yesterdayTime1": "Yesterday, 18:45",
+    "yesterdayTime2": "Yesterday, 08:30",
+    "fracture": "Fracture",
+    "cough": "Cough",
+    "burns": "Burns",
+    "lastVisited": "Last Visited: 02, May, 2025",
+    "age": "Age",
+    "gender": "Gender",
+    "location": "Location",
+    "condition": "Condition",
+    "language": "Language",
+    "editProfile": "Edit Profile",
+    "newTipEveryDay": "New tip every day"
+  },
+  "doctor": {
+    "title": "Expert Medical Guidance",
+    "description": "Receive personalized medical advice and consultations from experienced healthcare professionals. Get the care you need, when you need it.",
+    "getStarted": "Get Started",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "welcome": {
+    "title": "Welcome To Lifeline",
+    "subtitle": "Your essential companion for emergencies. Be ready to act with confidence when every second counts."
+  },
+  "tips": {
+    "title": "Instant First Aid at Your Fingertips",
+    "subtitle": "Get clear, Step-by-step instructions for any emergency, even without internet",
+    "handleSharpObjects": "Handle sharp objects carefully:",
+    "handleSharpObjectsContent": "Always cut away from your body and keep blades sharp for safer use.",
+    "stayHydrated": "Stay hydrated:",
+    "stayHydratedContent": "Drink plenty of water throughout the day to maintain optimal health.",
+    "washHands": "Wash your hands regularly:",
+    "washHandsContent": "Frequent handwashing helps prevent the spread of germs and illnesses.",
+    "takeBreaks": "Take breaks from screens:",
+    "takeBreaksContent": "Rest your eyes every 20 minutes to reduce eye strain and fatigue.",
+    "getSleep": "Get enough sleep:",
+    "getSleepContent": "Aim for 7-9 hours of sleep each night to support your overall health."
+  },
+  "unique": {
+    "title": "PREPARE FOR YOUR UNIQUE NEEDS",
+    "description": "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"
   }
 }

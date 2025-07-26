@@ -11,16 +11,16 @@ import dagbaniTranslation from './translations/dagbani';
 import enTranslation from './translations/en';
 import eweTranslation from './translations/ewe';
 import fraFraTranslation from './translations/frafra';
-import frenchTranslation from './translations/french';
+import frTranslation from './translations/french';
 import gaTranslation from './translations/ga';
 import hausaTranslation from './translations/hausa';
 import hindiTranslation from './translations/hindi';
 import russianTranslation from './translations/russian';
-import spanishTranslation from './translations/spanish';
+import esTranslation from './translations/spanish';
 import twiTranslation from './translations/twi';
 
 // Map of RTL languages
-const RTL_LANGUAGES = ['arabic'];
+const RTL_LANGUAGES = ['ar'];
 
 // Initialize i18n resources
 const resources = {
@@ -45,19 +45,19 @@ const resources = {
   dagbani: {
     translation: dagbaniTranslation
   },
-  french: {
-    translation: frenchTranslation
+  fr: {
+    translation: frTranslation
   },
-  spanish: {
-    translation: spanishTranslation
+  es: {
+    translation: esTranslation
   },
-  arabic: {
+  ar: {
     translation: arabicTranslation
   },
-  hindi: {
+  hi: {
     translation: hindiTranslation
   },
-  russian: {
+  ru: {
     translation: russianTranslation
   }
 };
@@ -140,11 +140,11 @@ export const getLanguageDisplayName = (code) => {
     case 'ewe': return 'Ewe';
     case 'hausa': return 'Hausa';
     case 'dagbani': return 'Dagbani';
-    case 'french': return 'Français';
-    case 'spanish': return 'Español';
-    case 'arabic': return 'العربية';
-    case 'hindi': return 'हिन्दी';
-    case 'russian': return 'Русский';
+    case 'fr': return 'Français';
+    case 'es': return 'Español';
+    case 'ar': return 'العربية';
+    case 'hi': return 'हिन्दी';
+    case 'ru': return 'Русский';
     default: return code;
   }
 };

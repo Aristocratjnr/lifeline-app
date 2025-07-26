@@ -67,5 +67,17 @@ export default {
     "privacy": "Privacy",
     "about": "About",
     "logout": "Log out"
+  },
+
+  // Tips section
+  "tips": {
+    "title": "الإسعافات الأولية الفورية\nفي متناول يديك",
+    "subtitle": "احصل على تعليمات واضحة وخطوة بخطوة\nلأي حالة طوارئ،\nحتى بدون إنترنت"
+  },
+
+  // Welcome screen
+  "welcome": {
+    "title": "مرحباً بك في لايفلاين",
+    "subtitle": "رفيقك الأساسي للطوارئ. كن مستعداً للعمل بثقة عندما تكون كل ثانية مهمة."
   }
 }

@@ -3,11 +3,11 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { DisplayPreferencesProvider } from '../context/DisplayPreferencesContext';
+import { useColorScheme } from '../hooks/useColorScheme';
 import { initI18n } from '../i18n';
 import { LanguageProvider } from '../i18n/LanguageContext';
 

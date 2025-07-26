@@ -67,5 +67,17 @@ export default {
     "privacy": "Privacy",
     "about": "About",
     "logout": "Log out"
+  },
+
+  // Tips section
+  "tips": {
+    "title": "Primeros Auxilios Instantáneos\na Tu Alcance",
+    "subtitle": "Obtén instrucciones claras y paso a paso\npara cualquier emergencia,\nincluso sin conexión a internet"
+  },
+
+  // Welcome screen
+  "welcome": {
+    "title": "Bienvenido a Lifeline",
+    "subtitle": "Tu compañero esencial para emergencias. Prepárate para actuar con confianza cuando cada segundo cuenta."
   }
 }

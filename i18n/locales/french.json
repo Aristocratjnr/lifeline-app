@@ -42,7 +42,9 @@
   },
   "common": {
     "on": "Activé",
-    "off": "Désactivé"
+    "off": "Désactivé",
+    "next": "SUIVANT",
+    "back": "Retour"
   },
   "languages": {
     "title": "LANGUE",
@@ -59,5 +61,22 @@
     "dailyTip": "CONSEIL QUOTIDIEN",
     "lifelineHistory": "Historique Lifeline",
     "recentActivity": "Activité récente"
+  },
+  "doctor": {
+    "title": "Conseils Médicaux Experts",
+    "description": "Recevez des conseils médicaux personnalisés et des consultations de professionnels de la santé expérimentés. Obtenez les soins dont vous avez besoin, quand vous en avez besoin.",
+    "getStarted": "Commencer",
+    "privacyPolicy": "Politique de Confidentialité"
+  },
+  "welcome": {
+    "title": "Bienvenue sur Lifeline",
+    "subtitle": "Votre compagnon essentiel pour les urgences. Soyez prêt à agir avec confiance quand chaque seconde compte."
+  },
+  "tips": {
+    "title": "Premiers Secours Instantanés
+à Portée de Main",
+    "subtitle": "Obtenez des instructions claires, étape par étape
+pour toute urgence,
+même sans connexion internet"
   }
 }

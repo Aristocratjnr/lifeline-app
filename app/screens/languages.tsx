@@ -36,11 +36,11 @@ const languages = [
   { id: 5, code: 'ewe', name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
   { id: 6, code: 'hausa', name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
   { id: 7, code: 'dagbani', name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 8, code: 'french', name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
-  { id: 9, code: 'spanish', name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
-  { id: 10, code: 'arabic', name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
-  { id: 11, code: 'hindi', name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
-  { id: 12, code: 'russian', name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
+  { id: 8, code: 'fr', name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
+  { id: 9, code: 'es', name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
+  { id: 10, code: 'ar', name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
+  { id: 11, code: 'hi', name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
+  { id: 12, code: 'ru', name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
 ];
 
 type LanguageItemProps = {

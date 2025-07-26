@@ -10,12 +10,12 @@ import dagbani from './locales/dagbani.json';
 import en from './locales/en.json';
 import ewe from './locales/ewe.json';
 import frafra from './locales/frafra.json';
-import french from './locales/french.json';
+import french from './locales/fr.json';
 import ga from './locales/ga.json';
 import hausa from './locales/hausa.json';
 import hindi from './locales/hindi.json';
 import russian from './locales/russian.json';
-import spanish from './locales/spanish.json';
+import spanish from './locales/es.json';
 import twi from './locales/twi.json';
 
 // Define supported languages
@@ -27,11 +27,11 @@ const resources = {
   frafra: { translation: frafra },
   hausa: { translation: hausa },
   dagbani: { translation: dagbani },
-  french: { translation: french },
-  spanish: { translation: spanish },
-  arabic: { translation: arabic },
-  hindi: { translation: hindi },
-  russian: { translation: russian },
+  fr: { translation: french },
+  es: { translation: spanish },
+  ar: { translation: arabic },
+  hi: { translation: hindi },
+  ru: { translation: russian },
 };
 
 // Detect device language

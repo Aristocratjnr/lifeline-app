@@ -23,19 +23,18 @@ export default function OnboardingScreen() {
     };
   }, [i18n]);
   const [fontsLoaded] = useFonts({
-    'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'), 
-    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'), 
+    'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'),
+    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
   const handleNext = () => {
-    router.push('/screens/tips');  
+    router.push('/screens/tips');
   };
 
   if (!fontsLoaded) {
     return null;
   }
 
-  // Force re-render on language change
   return (
   <View style={styles.container} key={`welcome-${i18n.language}`}>
      {/* Blurred Background Image */}
@@ -72,16 +71,12 @@ export default function OnboardingScreen() {
 
     {/* Title */}
     <Text style={styles.title}>
-      {i18n.language === 'twi' 
-        ? "Akwaaba Lifeline" 
-        : "Welcome To Lifeline"}
+      {t('welcome.title')}
     </Text>
 
     {/* Subtitle */}
     <Text style={styles.subtitle}>
-      {i18n.language === 'twi'
-        ? "Wo yɔnko paa ma ahokyere. Siesie woho na wode ahotoso ayɛ adwuma bere a sɛkɛnd biara ho hia."
-        : "Your essential companion for emergencies. Be ready to act with confidence when every second counts."}
+      {t('welcome.subtitle')}
     </Text>
 
     {/* Pagination Dots */}
@@ -96,7 +91,7 @@ export default function OnboardingScreen() {
     {/* Next Button */}
     <TouchableOpacity style={styles.nextButton} onPress={handleNext} activeOpacity={0.85}>
       <Text style={styles.nextButtonText}>
-        {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+        {t('common.next')}
       </Text>
     </TouchableOpacity>
   </View>
@@ -126,8 +121,8 @@ const styles = StyleSheet.create({
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
-    
+    backgroundColor: 'rgba(228, 225, 220, 0.32)',
+
   },
    topCurve: {
     position: 'absolute',
@@ -145,7 +140,7 @@ const styles = StyleSheet.create({
     height: height * 0.25,
   },
   illustrationContainer: {
-    marginTop: height * 0.23, 
+    marginTop: height * 0.23,
     width: width * 0.93,
     height: height * 0.38,
     alignItems: 'center',
@@ -160,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#222',
     textAlign: 'center',
-    fontFamily: 'Flavours', 
+    fontFamily: 'Flavours',
     marginTop: 8,
     marginBottom: 8,
     letterSpacing: 1,
@@ -169,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     textAlign: 'center',
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
     marginHorizontal: 24,
     marginBottom: 24,
     lineHeight: 22,
@@ -180,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 120, 
+    marginBottom: 120,
     marginTop: 2,
   },
   dot: {
@@ -204,8 +199,8 @@ nextButton: {
   position: 'absolute',
   bottom: height * 0.05,
   zIndex: 2,
-  borderWidth: 2,          
-  borderColor: '#000000',  
+  borderWidth: 2,
+  borderColor: '#000000',
 },
   nextButtonText: {
     color: '#fff',

@@ -115,40 +115,17 @@ export default {
     "water": "Water",
     "dailyTip": "DAILY TIP",
     "lifelineHistory": "Lifeline History",
-    "recentActivity": "Recent Activity",
-    "sentSOSAlert": "Sent SOS alert",
-    "viewedMap": "Viewed map",
-    "readHealthNews": "Read health news",
-    "todayTime": "Today, 09:12",
-    "yesterdayTime1": "Yesterday, 18:45",
-    "yesterdayTime2": "Yesterday, 08:30",
-    "fracture": "Fracture",
-    "cough": "Cough",
-    "burns": "Burns",
-    "lastVisited": "Last Visited: 02, May, 2025",
-    "age": "Age",
-    "gender": "Gender",
-    "location": "Location",
-    "condition": "Condition",
-    "language": "Language",
-    "editProfile": "Edit Profile",
-    "newTipEveryDay": "New tip every day"
+    "recentActivity": "Recent Activity"
   },
 
   // Tips section (new)
   "tips": {
-    "handleSharpObjects": "Handle sharp objects carefully:",
-    "handleSharpObjectsContent": "Always cut away from your body and keep blades sharp for safer use.",
-    "stayHydrated": "Stay hydrated:",
-    "stayHydratedContent": "Drink plenty of water throughout the day to maintain optimal health.",
-    "washHands": "Wash your hands regularly:",
-    "washHandsContent": "Frequent handwashing helps prevent the spread of germs and illnesses.",
-    "takeBreaks": "Take breaks from screens:",
-    "takeBreaksContent": "Rest your eyes every 20 minutes to reduce eye strain and fatigue.",
-    "getSleep": "Get enough sleep:",
-    "getSleepContent": "Aim for 7-9 hours of sleep each night to support your overall health.",
-    "title": "Instant First Aid at Your Fingertips",
-    "subtitle": "Get clear, Step-by-step instructions for any emergency, even without internet"
+    "handleSharpObjects": "Handle Sharp Objects Safely",
+    "handleSharpObjectsContent": "Always cut away from your body and keep sharp objects pointed away from yourself and others.",
+    "stayHydrated": "Stay Hydrated",
+    "stayHydratedContent": "Drink at least 8 glasses of water daily to maintain proper hydration, especially during hot weather or physical activity.",
+    "title": "Instant First Aid at\nYour Fingertips",
+    "subtitle": "Get clear, Step-by-step\ninstructions for any emergency,\neven without internet"
   },
 
   // Welcome screen
@@ -157,19 +134,15 @@ export default {
     "subtitle": "Your essential companion for emergencies. Be ready to act with confidence when every second counts."
   },
 
-  // Home screen
-  "home": {
-    "title": "Welcome to LIFELINE",
-    "subtitle": "Your trusted first aid & emergency companion",
-    "featureText": "Always Ready - Always Safe",
-    "signIn": "Sign In",
-    "createAccount": "Create Account",
-    "continueAsGuest": "Continue as a Guest"
-  },
-
   // Unique screen
   "unique": {
     "title": "PREPARE FOR YOUR UNIQUE NEEDS",
     "description": "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"
+  },
+
+  // Empower screen
+  "empower": {
+    "title": "Confidence and Empowerment",
+    "description": "Use our interactive tools and daily tips to build life-saving skills and stay prepared always"
   }
 }

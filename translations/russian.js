@@ -60,51 +60,12 @@ export default {
 
   // Settings
   "settings": {
-    "title": "Paramètres",
-    "language": "Langue",
+    "title": "Settings",
+    "language": "Language",
     "notifications": "Notifications",
-    "theme": "Thème",
-    "privacy": "Confidentialité",
-    "about": "À propos",
-    "logout": "Se déconnecter"
-  },
-
-  // Dashboard
-  "dashboard": {
-    "healthStats": "Statistiques de Santé",
-    "steps": "Pas",
-    "water": "Eau",
-    "dailyTip": "CONSEIL DU JOUR",
-    "lifelineHistory": "Historique Lifeline",
-    "recentActivity": "Activité Récente",
-    "sentSOSAlert": "Alerte SOS envoyée",
-    "viewedMap": "Carte consultée",
-    "readHealthNews": "Actualités santé lues",
-    "todayTime": "Aujourd'hui, 09:12",
-    "yesterdayTime1": "Hier, 18:45",
-    "yesterdayTime2": "Hier, 08:30",
-    "fracture": "Fracture",
-    "cough": "Toux",
-    "burns": "Brûlures",
-    "lastVisited": "Dernière visite: 02, Mai, 2025",
-    "age": "Âge",
-    "gender": "Genre",
-    "location": "Localisation",
-    "condition": "Condition",
-    "language": "Langue",
-    "editProfile": "Modifier le Profil",
-    "newTipEveryDay": "Nouveau conseil chaque jour"
-  },
-
-  // Tips section
-  "tips": {
-    "title": "Premiers Secours Instantanés\nà Portée de Main",
-    "subtitle": "Obtenez des instructions claires, étape par étape\npour toute urgence,\nmême sans connexion internet"
-  },
-
-  // Welcome screen
-  "welcome": {
-    "title": "Bienvenue sur Lifeline",
-    "subtitle": "Votre compagnon essentiel pour les urgences. Soyez prêt à agir avec confiance quand chaque seconde compte."
+    "theme": "Theme",
+    "privacy": "Privacy",
+    "about": "About",
+    "logout": "Log out"
   }
 }

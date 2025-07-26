@@ -39,7 +39,6 @@ export default function UniqueScreen() {
     router.push('/screens/empower');
   };
 
-  // Force re-render on language change
   return (
     <View style={styles.container} key={`unique-${i18n.language}`}>
       {/* Background */}
@@ -55,21 +54,21 @@ export default function UniqueScreen() {
             <View style={styles.bgOverlay} />
 
       {/* Top curve */}
-      <ExpoImage 
+      <ExpoImage
         source={require('@/assets/images/top.png')}
         style={styles.topCurve}
         contentFit="cover"
       />
 
       {/* Bottom curve */}
-      <ExpoImage 
+      <ExpoImage
         source={require('@/assets/images/bottom.png')}
         style={styles.bottomCurve}
         contentFit="cover"
       />
 
       {/* Medical staff illustration */}
-      <ExpoImage 
+      <ExpoImage
         source={require('@/assets/images/serve.png')}
         style={styles.illustration}
         contentFit="contain"
@@ -77,16 +76,12 @@ export default function UniqueScreen() {
 
       {/* Title with Luckiest Guy font */}
       <Text style={styles.title}>
-        {i18n.language === 'twi' 
-          ? "SIESIE WO HO MA WO NKOAA AHIADEƐ"
-          : "PREPARE FOR YOUR UNIQUE NEEDS"}
+        {t('unique.title')}
       </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        {i18n.language === 'twi'
-          ? "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
-          : "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"}
+        {t('unique.description')}
       </Text>
 
       {/* Pagination dots */}
@@ -101,7 +96,7 @@ export default function UniqueScreen() {
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>
-          {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+          {t('common.next')}
         </Text>
       </TouchableOpacity>
     </View>
@@ -128,7 +123,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
+    backgroundColor: 'rgba(228, 225, 220, 0.32)',
     zIndex: 1,
   },
   container: {
@@ -171,7 +166,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     marginHorizontal: 30,
-    marginTop: 0, 
+    marginTop: 0,
     zIndex: 2,
     fontFamily: 'LuckiestGuy-Regular',
     letterSpacing: 0.5,
@@ -213,8 +208,8 @@ const styles = StyleSheet.create({
   position: 'absolute',
   bottom: height * 0.05,
   zIndex: 2,
-  borderWidth: 2,          
-  borderColor: '#000000',  
+  borderWidth: 2,
+  borderColor: '#000000',
 },
   nextButtonText: {
     color: 'white',

@@ -32,20 +32,20 @@ const DashboardScreen = () => {
       iconName: 'tint',
     },
     {
-      title: 'Wash your hands regularly:',
-      content: 'Frequent handwashing helps prevent the spread of germs and illnesses.',
+      title: t('tips.washHands'),
+      content: t('tips.washHandsContent'),
       iconSet: FontAwesome5,
       iconName: 'hands-wash',
     },
     {
-      title: 'Take breaks from screens:',
-      content: 'Rest your eyes every 20 minutes to reduce eye strain and fatigue.',
+      title: t('tips.takeBreaks'),
+      content: t('tips.takeBreaksContent'),
       iconSet: Feather,
       iconName: 'monitor',
     },
     {
-      title: 'Get enough sleep:',
-      content: 'Aim for 7-9 hours of sleep each night to support your overall health.',
+      title: t('tips.getSleep'),
+      content: t('tips.getSleepContent'),
       iconSet: Feather,
       iconName: 'moon',
     },
@@ -83,15 +83,15 @@ const DashboardScreen = () => {
     };
   }, [animatedSteps, animatedWater]);
   const recentActivity = useMemo(() => [
-    { id: 1, icon: 'exclamation-circle', label: 'Sent SOS alert', time: 'Today, 09:12', path: '/sos' as const },
-    { id: 2, icon: 'map-marker-alt', label: 'Viewed map', time: 'Yesterday, 18:45', path: '/explore' as const },
-    { id: 3, icon: 'newspaper', label: 'Read health news', time: 'Yesterday, 08:30', path: '/firstAidNews' as const },
-  ], []);
+    { id: 1, icon: 'exclamation-circle', label: t('dashboard.sentSOSAlert'), time: t('dashboard.todayTime'), path: '/sos' as const },
+    { id: 2, icon: 'map-marker-alt', label: t('dashboard.viewedMap'), time: t('dashboard.yesterdayTime1'), path: '/explore' as const },
+    { id: 3, icon: 'newspaper', label: t('dashboard.readHealthNews'), time: t('dashboard.yesterdayTime2'), path: '/firstAidNews' as const },
+  ], [t]);
   const timeline = useMemo(() => [
-    { id: '1', title: 'Fracture', date: 'Last Visited: 02, May, 2025', icon: 'bone' },
-    { id: '2', title: 'Cough', date: 'Last Visited: 02, May, 2025', icon: 'lungs-virus' },
-    { id: '3', title: 'Burns', date: 'Last Visited: 02, May, 2025', icon: 'fire' },
-  ], []);
+    { id: '1', title: t('dashboard.fracture'), date: t('dashboard.lastVisited'), icon: 'bone' },
+    { id: '2', title: t('dashboard.cough'), date: t('dashboard.lastVisited'), icon: 'lungs-virus' },
+    { id: '3', title: t('dashboard.burns'), date: t('dashboard.lastVisited'), icon: 'fire' },
+  ], [t]);
   const handleNewTip = useCallback(() => {
     let newTip;
     do {
@@ -199,38 +199,38 @@ const DashboardScreen = () => {
           <Text style={styles.profileName}>{user.name}</Text>
           <View style={styles.profileInfoRow}>
             <Feather name="calendar" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>Age:</Text>
+            <Text style={styles.profileInfoLabel}>{t('dashboard.age')}:</Text>
             <Text style={styles.profileInfoValue}>{user.age}</Text>
             <Feather name="user" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
-            <Text style={styles.profileInfoLabel}>Gender:</Text>
+            <Text style={styles.profileInfoLabel}>{t('dashboard.gender')}:</Text>
             <Text style={styles.profileInfoValue}>{user.gender}</Text>
           </View>
           <View style={styles.profileInfoRow}>
             <Feather name="map-pin" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>Location:</Text>
+            <Text style={styles.profileInfoLabel}>{t('dashboard.location')}:</Text>
             <Text style={styles.profileInfoValue}>{user.location}</Text>
           </View>
           <View style={styles.profileInfoRow}>
             <MaterialIcons name="healing" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>Condition:</Text>
+            <Text style={styles.profileInfoLabel}>{t('dashboard.condition')}:</Text>
             <Text style={styles.profileInfoValue}>{user.medicalCondition}</Text>
           </View>
           <View style={styles.profileInfoRowNoWrap}>
             <Feather name="phone" size={20} color="#222" style={styles.profileIcon} />
             <Text style={styles.profileInfoValue}>{user.contact}</Text>
             <FontAwesome5 name="language" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
-            <Text style={styles.profileInfoLabel}>Language:</Text>
+            <Text style={styles.profileInfoLabel}>{t('dashboard.language')}:</Text>
             <Text style={styles.profileInfoValue}>{user.language}</Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton} onPress={() => router.push('/screens/profile-settings')}>
-            <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+            <Text style={styles.editProfileButtonText}>{t('dashboard.editProfile')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Lifeline History */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Lifeline History</Text>
+            <Text style={styles.sectionTitle}>{t('dashboard.lifelineHistory')}</Text>
             <TouchableOpacity style={styles.viewAllButton}>
               <AntDesign name="eyeo" size={16} color="#D9534F" />
             </TouchableOpacity>
@@ -249,7 +249,7 @@ const DashboardScreen = () => {
         <View style={styles.dailyTipCard}>
           <View style={styles.sectionHeader}>
             <AntDesign name="info" size={16} color="#ccc" />
-            <Text style={styles.sectionTitle}>DAILY TIP</Text>
+            <Text style={styles.sectionTitle}>{t('dashboard.dailyTip')}</Text>
           </View>
           <View style={styles.tipContent}>
             {/* Dynamic icon for the tip */}
@@ -266,14 +266,14 @@ const DashboardScreen = () => {
             </TouchableOpacity>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Feather name="zap" size={14} color="#aaa" style={{ marginRight: 4 }} />
-              <Text style={styles.tipFooter}>New tip every day</Text>
+              <Text style={styles.tipFooter}>{t('dashboard.newTipEveryDay')}</Text>
             </View>
           </View>
         </View>
 
         {/* Recent Activity */}
         <View style={styles.activityCard}>
-          <Text style={styles.activityTitle}>Recent Activity</Text>
+          <Text style={styles.activityTitle}>{t('dashboard.recentActivity')}</Text>
           <FlatList
             data={recentActivity}
             keyExtractor={item => item.id.toString()}
