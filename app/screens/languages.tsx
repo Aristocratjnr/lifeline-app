@@ -120,11 +120,8 @@ export default function Languages() {
         // Apply the language change
         await setLanguage(selectedLang.code);
         
-        Alert.alert(
-          t('languages.languageChanged'),
-          `${t('languages.languageChangedTo')} ${selectedLang.name}`,
-          [{ text: "OK", onPress: () => navigation.goBack() }]
-        );
+        // Navigate to welcome screen after language selection
+        navigation.navigate('screens/welcome' as never);
       } catch (error) {
         console.error("Failed to change language:", error);
         Alert.alert(
