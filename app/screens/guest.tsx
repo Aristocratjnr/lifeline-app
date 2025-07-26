@@ -1,5 +1,6 @@
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
+import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,18 +23,18 @@ const { width } = Dimensions.get('window');
 
 // Language options with flags
 const languages = [
-  { code: 'ENG', flag: '', name: 'ENG' },
-  { code: 'FRA', flag: '', name: 'FRAFRA' },
-  { code: 'TWI', flag: '', name: 'TWI' },
-  { code: 'GA', flag: '', name: 'GA' },
-  { code: 'EWE', flag: '', name: 'EWE' },
-  { code: 'HAU', flag: '', name: 'HAUSA' },
-  { code: 'DAG', flag: '', name: 'DAGBANI' },
-  { code: 'FRE', flag: '', name: 'FRENCH' },
-  { code: 'SPA', flag: '', name: 'SPANISH' },
-  { code: 'ARA', flag: '', name: 'ARABIC' },
-  { code: 'HIN', flag: '', name: 'HINDI' },
-  { code: 'RUS', flag: '', name: 'RUSSIAN' },
+  { code: 'ENG', flag: require('@/assets/images/flags/us.png'), name: 'ENG' },
+  { code: 'FRA', flag: require('@/assets/images/flags/france.png'), name: 'FRAFRA' },
+  { code: 'TWI', flag: require('@/assets/images/flags/ghana.png'), name: 'TWI' },
+  { code: 'GA', flag: require('@/assets/images/flags/ghana.png'), name: 'GA' },
+  { code: 'EWE', flag: require('@/assets/images/flags/ghana.png'), name: 'EWE' },
+  { code: 'HAU', flag: require('@/assets/images/flags/egypt.png'), name: 'HAUSA' },
+  { code: 'DAG', flag: require('@/assets/images/flags/ghana.png'), name: 'DAGBANI' },
+  { code: 'FRE', flag: require('@/assets/images/flags/france.png'), name: 'FRENCH' },
+  { code: 'SPA', flag: require('@/assets/images/flags/spain.png'), name: 'SPANISH' },
+  { code: 'ARA', flag: require('@/assets/images/flags/egypt.png'), name: 'ARABIC' },
+  { code: 'HIN', flag: require('@/assets/images/flags/india.png'), name: 'HINDI' },
+  { code: 'RUS', flag: require('@/assets/images/flags/russia.png'), name: 'RUSSIAN' },
 ];
 
 export default function GuestScreen() {
@@ -142,7 +143,11 @@ export default function GuestScreen() {
                 ]}
                 onPress={() => toggleLanguage(lang.code)}
               >
-                <Text style={styles.languageFlag}>{lang.flag}</Text>
+                <ExpoImage
+                  source={lang.flag}
+                  style={styles.languageFlag}
+                  contentFit="cover"
+                />
                 <Text style={styles.languageText}>{lang.name}</Text>
               </TouchableOpacity>
             ))}
@@ -342,7 +347,8 @@ const styles = StyleSheet.create({
     borderColor: '#FF9A9A',
   },
   languageFlag: {
-    fontSize: 16,
+    width: 24,
+    height: 16,
     marginRight: 5,
   },
   languageText: {

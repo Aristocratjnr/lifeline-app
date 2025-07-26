@@ -13,10 +13,15 @@ export default function DoctorScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
 
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
   // Re-render when language changes
   React.useEffect(() => {
     const handleLanguageChanged = () => {
       console.log("Language changed in DoctorScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
     };
     i18n.on('languageChanged', handleLanguageChanged);
     return () => {

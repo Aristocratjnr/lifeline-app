@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert, I18nManager, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Updates from 'expo-updates';
-import i18n from './index';
+import i18n from './i18n';
 
 // Language metadata with display names and native names
 export type LanguageOption = {
@@ -67,20 +67,47 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Restart the app to apply layout changes (especially important for RTL changes)
   const restartApp = async () => {
     if (Platform.OS === 'web') {
-      window.location.reload();
+      // Check if we're in a browser environment
+      try {
+        // Use globalThis which is available in modern browsers and Node.js
+        const globalWindow = globalThis as any;
+        if (globalWindow && globalWindow.location && typeof globalWindow.location.reload === 'function') {
+          globalWindow.location.reload();
+        }
+      } catch (e) {
+        // Fallback to window if globalThis doesn't work
+        try {
+          // Type-safe access to window object
+          const win: any = (global as any).window || (typeof window !== 'undefined' ? window : undefined);
+          if (win && win.location && typeof win.location.reload === 'function') {
+            win.location.reload();
+          }
+        } catch (e2) {
+          // If both fail, just log
+          if (__DEV__) {
+            console.log('Could not restart app in web environment');
+          }
+        }
+      }
       return;
     }
 
     try {
       // Try to reload the app without showing alert
-      if (Updates.isAvailableAsync && Updates.isEnabled) {
-        await Updates.reloadAsync();
-      } else {
-        // Only show alert in development mode
+      try {
+        if (Updates.isEnabled) {
+          await Updates.reloadAsync();
+        } else {
+          // Only log in development mode
+          if (__DEV__) {
+            console.log('Development mode: App restart might be needed for full RTL support');
+          }
+        }
+      } catch (error) {
+        // Only log in development mode
         if (__DEV__) {
           console.log('Development mode: App restart might be needed for full RTL support');
         }
-        // No alert shown to the user in production
       }
     } catch (error) {
       console.error('Error restarting app:', error);
@@ -88,7 +115,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  // Function to change language - define it first
+  // Function to change language
   const setLanguage = async (languageCode: string, restart: boolean = false) => {
     try {
       if (!AVAILABLE_LANGUAGES.some(lang => lang.code === languageCode)) {
@@ -102,36 +129,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       console.log(`Changing language to: ${languageCode}`);
 
-      // Apply multiple language change approaches to ensure it works
-
-      // 1. Direct approach with i18n instance from index.js
+      // Change language using i18n
       await i18n.changeLanguage(languageCode);
-
-      // 2. Force reload resources specifically for this language
-      if (typeof i18n.reloadResources === 'function') {
-        i18n.reloadResources([languageCode]);
-      }
-
-      // 3. Try to force a hard refresh of the i18n store data
-      if (i18n.store && i18n.store.data) {
-        const oldData = i18n.store.data;
-        i18n.store.data = {};
-        setTimeout(() => {
-          i18n.store.data = JSON.parse(JSON.stringify(oldData));
-        }, 10);
-      }
-
-      // 4. Try to directly access translation namespace if possible
-      try {
-        if (i18n.getResourceBundle && typeof i18n.getResourceBundle === 'function') {
-          const bundle = i18n.getResourceBundle(languageCode, 'translation');
-          if (bundle) {
-            i18n.addResourceBundle(languageCode, 'translation', bundle, true, true);
-          }
-        }
-      } catch (e) {
-        console.warn('Error refreshing resource bundle:', e);
-      }
 
       // Only update if RTL state needs to change
       if (shouldBeRTL !== isRTL) {
@@ -150,14 +149,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       // Update state
       setCurrentLanguage(languageCode);
-
-      // Force translation update multiple ways
-      i18n.emit('languageChanged', languageCode);
-
-      // Force additional language changed events with slight delay
-      setTimeout(() => {
-        i18n.emit('languageChanged', languageCode);
-      }, 100);
 
       console.log(`Language changed to: ${languageCode}`);
     } catch (error) {

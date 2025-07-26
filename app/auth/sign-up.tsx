@@ -20,10 +20,26 @@ import Loader from '../../components/Loader';
 
 Dimensions.get('window');
 const SignUpScreen = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
   const [isReady, setIsReady] = useState(false);
   
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in SignUpScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
+
   // Load JetBrains Mono font
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),

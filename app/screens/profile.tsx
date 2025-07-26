@@ -1,7 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,7 +23,23 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState(countries[0]); // Default to Ghana
   const [showCountryModal, setShowCountryModal] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = useState(0);
+
+  // Re-render when language changes
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in ProfileScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -69,6 +85,7 @@ export default function ProfileScreen() {
             <ExpoImage
               source={selectedCountry.flag}
               style={styles.flagIcon}
+              contentFit="cover"
             />
             <Text style={styles.countryText}>{selectedCountry.name}</Text>
             <Text style={styles.dropdownIcon}>▼</Text>
@@ -115,6 +132,7 @@ export default function ProfileScreen() {
                   <ExpoImage
                     source={country.flag}
                     style={styles.countryOptionFlag}
+                    contentFit="cover"
                   />
                   <Text style={styles.countryOptionText}>{country.name}</Text>
                 </View>

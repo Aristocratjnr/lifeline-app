@@ -24,7 +24,7 @@ import {
 import Loader from '../../components/Loader';
 
 export default function SignInScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -37,6 +37,22 @@ export default function SignInScreen() {
   const [isTransitioningToAI, setIsTransitioningToAI] = useState(false);
   const checkAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
+
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in SignInScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   useEffect(() => {
     async function loadAssets() {
@@ -556,3 +572,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
