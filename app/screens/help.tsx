@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Image,
   ImageBackground,
@@ -26,6 +27,7 @@ const loadFonts = async () => {
 export default function Help() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadFonts();
@@ -65,7 +67,7 @@ export default function Help() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>HELP</Text>
+          <Text style={styles.headerTitle}>{t('help.header')}</Text>
         </View>
 
         <ScrollView 
@@ -82,42 +84,42 @@ export default function Help() {
           </View>
 
           {/* Help Title */}
-          <Text style={styles.helpTitle}>HOW CAN WE BE OF HELP?</Text>
+          <Text style={styles.helpTitle}>{t('help.title')}</Text>
 
           {/* Help Description */}
           <Text style={styles.helpText}>
-            We&apos;re here to help! Whether you have a question about our services, need to schedule an appointment, or simply want to share your feedback, we&apos;re happy to hear from you.
+            {t('help.description')}
           </Text>
 
           {/* Action Buttons */}
           <View style={styles.actionButtonsRow}>
             <TouchableOpacity style={styles.actionButton} onPress={handleDonatePress}>
               <MaterialIcons name="favorite" size={18} color="#E74C3C" style={styles.buttonIcon} />
-              <Text style={styles.actionButtonText}>Donate?</Text>
+              <Text style={styles.actionButtonText}>{t('help.donate')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.actionButton} onPress={handleLiveChatPress}>
               <MaterialIcons name="chat" size={18} color="#2980B9" style={styles.buttonIcon} />
-              <Text style={styles.actionButtonText}>Start Live Chat</Text>
+              <Text style={styles.actionButtonText}>{t('help.startLiveChat')}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Contact Text */}
-          <Text style={styles.contactText}>Or you can contact us at:</Text>
+          <Text style={styles.contactText}>{t('help.contactUs')}</Text>
 
           {/* Email Button */}
           <TouchableOpacity style={styles.contactButton} onPress={handleEmailPress}>
             <MaterialIcons name="email" size={18} color="#8E44AD" style={styles.buttonIcon} />
-            <Text style={styles.contactButtonText}>Email: support@gmail.com</Text>
+            <Text style={styles.contactButtonText}>{t('help.email')}</Text>
           </TouchableOpacity>
 
           {/* Phone Button */}
           <TouchableOpacity style={styles.contactButton} onPress={handlePhonePress}>
             <MaterialIcons name="call" size={18} color="#16A085" style={styles.buttonIcon} />
-            <Text style={styles.contactButtonText}>Phone: 0201346530</Text>
+            <Text style={styles.contactButtonText}>{t('help.phone')}</Text>
           </TouchableOpacity>
 
           {/* Solution Text */}
-          <Text style={styles.solutionText}>WE HAVE THE SOLUTION!</Text>
+          <Text style={styles.solutionText}>{t('help.solution')}</Text>
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>

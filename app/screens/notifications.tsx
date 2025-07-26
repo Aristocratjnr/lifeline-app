@@ -2,6 +2,7 @@ import { Feather, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icon
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ImageBackground,
   SafeAreaView,
@@ -59,6 +60,7 @@ const NotificationItem = ({
 
 export default function Notifications() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [generalNotifications, setGeneralNotifications] = useState(true);
   const [dailyTips, setDailyTips] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -84,7 +86,7 @@ export default function Notifications() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>NOTIFICATIONS</Text>
+          <Text style={styles.headerTitle}>{t('settings.notifications.title')}</Text>
         </View>
         
         {/* Notification Settings */}
@@ -93,7 +95,7 @@ export default function Notifications() {
             <View style={styles.card}>
               <NotificationItem
                 icon={<Ionicons name="notifications-outline" size={22} color="black" />}
-                title="General Notifications"
+                title={t('settings.notifications.general')}
                 isToggle={true}
                 value={generalNotifications}
                 onValueChange={setGeneralNotifications}
@@ -103,7 +105,7 @@ export default function Notifications() {
               
               <NotificationItem
                 icon={<FontAwesome name="comment" size={22} color="black" />}
-                title="Daily Tips"
+                title={t('settings.notifications.dailyTips')}
                 isToggle={true}
                 value={dailyTips}
                 onValueChange={setDailyTips}
@@ -113,8 +115,8 @@ export default function Notifications() {
               
               <NotificationItem
                 icon={<Feather name="settings" size={22} color="black" />}
-                title="App Update"
-                subtitle="(Up-to-date)"
+                title={t('settings.notifications.appUpdate')}
+                subtitle={t('settings.notifications.upToDate')}
                 isToggle={false}
               />
               
@@ -122,7 +124,7 @@ export default function Notifications() {
               
               <NotificationItem
                 icon={<MaterialIcons name="mail-outline" size={22} color="black" />}
-                title="Email Notifications"
+                title={t('settings.notifications.email')}
                 isToggle={true}
                 value={emailNotifications}
                 onValueChange={setEmailNotifications}
@@ -132,7 +134,7 @@ export default function Notifications() {
               
               <NotificationItem
                 icon={<Ionicons name="volume-medium-outline" size={22} color="black" />}
-                title="Sound"
+                title={t('settings.notifications.sound')}
                 isToggle={true}
                 value={sound}
                 onValueChange={setSound}

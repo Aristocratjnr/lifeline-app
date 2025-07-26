@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Pantalla",
-      "subtitle": "Ajustar texto y brillo"
+      "subtitle": "Ajustar texto y brillo",
+      "brightness": "Brillo",
+      "textSize": "Tamaño del texto",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Texto en negrita",
+      "theme": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "eyeProtection": "Protección ocular",
+      "selectTheme": "Seleccionar tema",
+      "lightMode": "Modo claro",
+      "darkMode": "Modo oscuro"
     },
     "terms": {
       "title": "Términos de uso",

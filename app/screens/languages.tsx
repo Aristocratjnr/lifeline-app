@@ -107,8 +107,8 @@ export default function Languages() {
   const handleSubmit = async () => {
     if (!selectedLanguageId) {
       Alert.alert(
-        "No Language Selected",
-        "Please select a language before submitting.",
+        t('languages.noLanguageSelected'),
+        t('languages.pleaseSelectLanguage'),
         [{ text: "OK" }]
       );
       return;
@@ -116,11 +116,23 @@ export default function Languages() {
 
     const selectedLang = languages.find(lang => lang.id === selectedLanguageId);
     if (selectedLang) {
-      Alert.alert(
-        "Language Changed",
-        `Language has been changed to ${selectedLang.name}`,
-        [{ text: "OK", onPress: () => navigation.goBack() }]
-      );
+      try {
+        // Apply the language change
+        await setLanguage(selectedLang.code);
+        
+        Alert.alert(
+          t('languages.languageChanged'),
+          `${t('languages.languageChangedTo')} ${selectedLang.name}`,
+          [{ text: "OK", onPress: () => navigation.goBack() }]
+        );
+      } catch (error) {
+        console.error("Failed to change language:", error);
+        Alert.alert(
+          t('languages.error'),
+          t('languages.languageChangeFailed'),
+          [{ text: "OK" }]
+        );
+      }
     }
   };
 

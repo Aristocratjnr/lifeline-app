@@ -72,16 +72,12 @@ export default function OnboardingScreen() {
 
     {/* Title */}
     <Text style={styles.title}>
-      {i18n.language === 'twi' 
-        ? "Akwaaba Lifeline" 
-        : "Welcome To Lifeline"}
+      {t('welcome.title')}
     </Text>
 
     {/* Subtitle */}
     <Text style={styles.subtitle}>
-      {i18n.language === 'twi'
-        ? "Wo yɔnko paa ma ahokyere. Siesie woho na wode ahotoso ayɛ adwuma bere a sɛkɛnd biara ho hia."
-        : "Your essential companion for emergencies. Be ready to act with confidence when every second counts."}
+      {t('welcome.subtitle')}
     </Text>
 
     {/* Pagination Dots */}
@@ -96,7 +92,7 @@ export default function OnboardingScreen() {
     {/* Next Button */}
     <TouchableOpacity style={styles.nextButton} onPress={handleNext} activeOpacity={0.85}>
       <Text style={styles.nextButtonText}>
-        {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+        {t('buttons.next')}
       </Text>
     </TouchableOpacity>
   </View>

@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Pantalla",
-      "subtitle": "Ajustar texto y brillo"
+      "subtitle": "Ajustar texto y brillo",
+      "brightness": "Brillo",
+      "textSize": "Tamaño del texto",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Texto en negrita",
+      "theme": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "eyeProtection": "Protección ocular",
+      "selectTheme": "Seleccionar tema",
+      "lightMode": "Modo claro",
+      "darkMode": "Modo oscuro"
     },
     "terms": {
       "title": "Términos de uso",
@@ -73,10 +86,7 @@
     "subtitle": "Tu compañero esencial para emergencias. Prepárate para actuar con confianza cuando cada segundo cuenta."
   },
   "tips": {
-    "title": "Primeros Auxilios Instantáneos
-a Tu Alcance",
-    "subtitle": "Obtén instrucciones claras y paso a paso
-para cualquier emergencia,
-incluso sin conexión a internet"
+    "title": "Primeros Auxilios Instantáneos\na Tu Alcance",
+    "subtitle": "Obtén instrucciones claras y paso a paso\npara cualquier emergencia,\nincluso sin conexión a internet"
   }
 }

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Image,
   ImageBackground,
@@ -34,6 +35,7 @@ type InputRowProps = {
   onChangeText?: (text: string) => void;
   isEditing?: boolean;
   onEditPress?: () => void;
+  t: (key: string) => string;
 };
 
 const InputRow = ({ 
@@ -44,7 +46,8 @@ const InputRow = ({
   onPress,
   onChangeText,
   isEditing = false,
-  onEditPress
+  onEditPress,
+  t
 }: InputRowProps) => {
   const [textSize] = useState(0.5);
   const [fontBold] = useState(false);
@@ -66,12 +69,12 @@ const InputRow = ({
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={isPassword}
-          placeholder={isPassword ? "Enter password" : "Enter value"}
+          placeholder={isPassword ? t('settings.profileSettings.passwordPlaceholder') : t('settings.profileSettings.valuePlaceholder')}
           placeholderTextColor="#999"
         />
       ) : (
         <Text style={getTextStyle(styles.inputText)}>
-          {isPassword ? '****************' : value}
+          {isPassword ? t('settings.profileSettings.maskedPassword') : value}
         </Text>
       )}
       {hasDropdown && !isEditing && (
@@ -91,6 +94,7 @@ const InputRow = ({
 
 export default function ProfileSettings() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [textSize, setTextSize] = useState(0.5); // default medium
@@ -99,13 +103,13 @@ export default function ProfileSettings() {
   
   // Form state
   const [formData, setFormData] = useState({
-    username: 'Agradaa',
-    location: 'Bahamas, Nowhere',
-    email: 'username@example.com',
-    phone: '+233 59 874 1236',
+    username: '',
+    location: '',
+    email: '',
+    phone: '',
     password: '',
-    gender: 'Female',
-    age: '18 yrs'
+    gender: t('settings.profile.selectGender'),
+    age: ''
   });
 
   const getTextStyle = (baseStyle = {}) => {
@@ -186,7 +190,7 @@ export default function ProfileSettings() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, getTextStyle({fontSize: 20})]}>PROFILE</Text>
+          <Text style={[styles.headerTitle, getTextStyle({fontSize: 20})]}>{t('profile.title')}</Text>
           <View style={styles.emptySpace} />
         </View>
 
@@ -209,6 +213,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'username'}
               onEditPress={() => handleEditField('username')}
               onChangeText={(text) => handleInputChange('username', text)}
+              t={t}
             />
             
             {/* Location */}
@@ -219,6 +224,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'location'}
               onEditPress={() => handleEditField('location')}
               onChangeText={(text) => handleInputChange('location', text)}
+              t={t}
             />
             
             {/* Email */}
@@ -228,6 +234,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'email'}
               onEditPress={() => handleEditField('email')}
               onChangeText={(text) => handleInputChange('email', text)}
+              t={t}
             />
             
             {/* Phone */}
@@ -237,6 +244,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'phone'}
               onEditPress={() => handleEditField('phone')}
               onChangeText={(text) => handleInputChange('phone', text)}
+              t={t}
             />
             
             {/* Password */}
@@ -247,6 +255,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'password'}
               onEditPress={() => handleEditField('password')}
               onChangeText={(text) => handleInputChange('password', text)}
+              t={t}
             />
             
             {/* Gender */}
@@ -255,6 +264,7 @@ export default function ProfileSettings() {
               value={formData.gender}
               hasDropdown
               onPress={() => setShowGenderModal(true)}
+              t={t}
             />
             
             {/* Age */}
@@ -264,6 +274,7 @@ export default function ProfileSettings() {
               isEditing={isEditing === 'age'}
               onEditPress={() => handleEditField('age')}
               onChangeText={(text) => handleInputChange('age', text)}
+              t={t}
             />
           </ScrollView>
         </View>
@@ -271,7 +282,7 @@ export default function ProfileSettings() {
         {/* Save Button */}
         <View style={styles.saveButtonContainer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-            <Text style={getTextStyle(styles.saveButtonText)}>SAVE CHANGES</Text>
+            <Text style={getTextStyle(styles.saveButtonText)}>{t('settings.profileSettings.saveChanges')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -289,7 +300,7 @@ export default function ProfileSettings() {
           >
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text style={getTextStyle(styles.modalTitle)}>Select Gender</Text>
+                <Text style={getTextStyle(styles.modalTitle)}>{t('settings.profile.selectGender')}</Text>
                 <TouchableOpacity onPress={() => setShowGenderModal(false)}>
                   <Ionicons name="close" size={24} color="black" />
                 </TouchableOpacity>
@@ -301,7 +312,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="male" size={24} color="#007AFF" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>Male</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.male')}</Text>
                 </View>
                 {formData.gender === 'Male' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
@@ -312,7 +323,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="female" size={24} color="#FF2D92" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>Female</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.female')}</Text>
                 </View>
                 {formData.gender === 'Female' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
@@ -323,7 +334,7 @@ export default function ProfileSettings() {
               >
                 <View style={styles.genderOptionContent}>
                   <Ionicons name="transgender" size={24} color="#666" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>Other</Text>
+                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.other')}</Text>
                 </View>
                 {formData.gender === 'Other' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>

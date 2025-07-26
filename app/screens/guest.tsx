@@ -2,6 +2,7 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Dimensions,
     Image,
@@ -21,22 +22,23 @@ const { width } = Dimensions.get('window');
 
 // Language options with flags
 const languages = [
-  { code: 'ENG', flag: '🇺🇸', name: 'ENG' },
-  { code: 'FRA', flag: '🇬🇭', name: 'FRAFRA' },
-  { code: 'TWI', flag: '🇬🇭', name: 'TWI' },
-  { code: 'GA', flag: '🇬🇭', name: 'GA' },
-  { code: 'EWE', flag: '🇬🇭', name: 'EWE' },
-  { code: 'HAU', flag: '🇬🇭', name: 'HAUSA' },
-  { code: 'DAG', flag: '🇬🇭', name: 'DAGBANI' },
-  { code: 'FRE', flag: '🇫🇷', name: 'FRENCH' },
-  { code: 'SPA', flag: '🇪🇸', name: 'SPANISH' },
-  { code: 'ARA', flag: '🇪🇬', name: 'ARABIC' },
-  { code: 'HIN', flag: '🇮🇳', name: 'HINDI' },
-  { code: 'RUS', flag: '🇷🇺', name: 'RUSSIAN' },
+  { code: 'ENG', flag: '', name: 'ENG' },
+  { code: 'FRA', flag: '', name: 'FRAFRA' },
+  { code: 'TWI', flag: '', name: 'TWI' },
+  { code: 'GA', flag: '', name: 'GA' },
+  { code: 'EWE', flag: '', name: 'EWE' },
+  { code: 'HAU', flag: '', name: 'HAUSA' },
+  { code: 'DAG', flag: '', name: 'DAGBANI' },
+  { code: 'FRE', flag: '', name: 'FRENCH' },
+  { code: 'SPA', flag: '', name: 'SPANISH' },
+  { code: 'ARA', flag: '', name: 'ARABIC' },
+  { code: 'HIN', flag: '', name: 'HINDI' },
+  { code: 'RUS', flag: '', name: 'RUSSIAN' },
 ];
 
 export default function GuestScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('+233 (059) 874 1236');
   const [selectedLanguages, setSelectedLanguages] = useState(['ENG']);
@@ -76,11 +78,10 @@ export default function GuestScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Complete Your Profile!</Text>
+        <Text style={styles.title}>{t('guest.title')}</Text>
         
         <Text style={styles.description}>
-          Unlock personalized guidance and ensure critical info is ready for emergencies.
-          Add your info for a safer, more personalized experience.
+          {t('guest.description')}
         </Text>
         
         {/* Profile Image */}
@@ -94,11 +95,11 @@ export default function GuestScreen() {
         
         {/* Name Input */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Name</Text>
+          <Text style={styles.inputLabel}>{t('guest.name')}</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Your full name"
+              placeholder={t('guest.namePlaceholder')}
               value={name}
               onChangeText={setName}
               placeholderTextColor="#888"
@@ -109,7 +110,7 @@ export default function GuestScreen() {
         
         {/* Phone Number Input */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Phone Number</Text>
+          <Text style={styles.inputLabel}>{t('guest.phoneNumber')}</Text>
           <View style={styles.inputContainer}>
             <View style={styles.countryCodeContainer}>
               <Image source={require('@/assets/images/flags/ghana.png')} style={styles.flagIcon} />
@@ -130,7 +131,7 @@ export default function GuestScreen() {
         
         {/* Language Selection */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Language</Text>
+          <Text style={styles.inputLabel}>{t('guest.preferredLanguages')}</Text>
           <View style={styles.languageGrid}>
             {languages.map((lang) => (
               <TouchableOpacity
@@ -150,19 +151,19 @@ export default function GuestScreen() {
         
         {/* Gender Selection */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Gender</Text>
+          <Text style={styles.inputLabel}>{t('guest.gender')}</Text>
           <TouchableOpacity style={styles.inputContainer} onPress={() => setShowGenderModal(true)}>
             <View style={styles.genderIconContainer}>
               <FontAwesome name="venus-mars" size={20} color="#333" />
             </View>
-            <Text style={styles.genderText}>{gender}</Text>
+            <Text style={styles.genderText}>{gender === 'Select Gender' ? t('guest.selectGender') : gender}</Text>
             <MaterialIcons name="arrow-drop-down" size={24} color="black" style={styles.dropdownIcon} />
           </TouchableOpacity>
         </View>
         
         {/* Confirm Button */}
         <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-          <Text style={styles.confirmButtonText}>Confirm Profile</Text>
+          <Text style={styles.confirmButtonText}>{t('guest.confirm')}</Text>
         </TouchableOpacity>
 
         {/* Add extra padding at the bottom to ensure visibility */}
@@ -183,7 +184,7 @@ export default function GuestScreen() {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Gender</Text>
+              <Text style={styles.modalTitle}>{t('guest.selectGender')}</Text>
               <TouchableOpacity onPress={() => setShowGenderModal(false)}>
                 <MaterialIcons name="close" size={24} color="black" />
               </TouchableOpacity>

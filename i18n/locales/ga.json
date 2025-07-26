@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Kɛkɛ",
-      "subtitle": "Sane kɛkɛ ni kpa"
+      "subtitle": "Sane kɛkɛ ni kpa",
+      "brightness": "Kɛkɛ",
+      "textSize": "Kpa kɛkɛ",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Kpa zuu",
+      "theme": "Tema",
+      "light": "Kɛkɛ",
+      "dark": "Tɔli",
+      "eyeProtection": "Nɔnɔ kpɛri",
+      "selectTheme": "Temaia",
+      "lightMode": "Kɛkɛ Mode",
+      "darkMode": "Tɔli Mode"
     },
     "terms": {
       "title": "Ni lɛ kɛkɛ",

@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Kɔkɔre",
-      "subtitle": "Sɛni kɔkɔre ni yelɛm"
+      "subtitle": "Sɛni kɔkɔre ni yelɛm",
+      "brightness": "Kɔkɔre",
+      "textSize": "Yelɛm kɔkɔre",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Yelɛm zuu",
+      "theme": "Tema",
+      "light": "Kɔkɔre",
+      "dark": "Tɔli",
+      "eyeProtection": "Nɛnɛ kpɛri",
+      "selectTheme": "Temaia",
+      "lightMode": "Kɔkɔre Mode",
+      "darkMode": "Tɔli Mode"
     },
     "terms": {
       "title": "Tɔɔga selinse",

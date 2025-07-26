@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Image,
   ImageBackground,
@@ -23,6 +24,7 @@ const loadFonts = async () => {
 
 export default function OfflineContent() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadFonts();
@@ -44,7 +46,7 @@ export default function OfflineContent() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>OFFLINE CONTENT{'\n'}MANAGEMENT</Text>
+          <Text style={styles.headerTitle}>{t('settings.offline.headerTitle')}</Text>
         </View>
 
         <ScrollView 
@@ -62,7 +64,7 @@ export default function OfflineContent() {
 
           {/* Description Text */}
           <Text style={styles.descriptionText}>
-            Be prepared for any situation. Access all your Lifeline guides anytime, anywhere, even without internet. Download content for offline use - This feature is on its way!
+            {t('settings.offline.description')}
           </Text>
         </ScrollView>
       </SafeAreaView>

@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Dimensions, ImageBackground, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 Dimensions.get('window');
@@ -12,6 +13,7 @@ export default function DonateScreen() {
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
   const [modalVisible, setModalVisible] = useState(false);
+  const { t } = useTranslation();
 
   if (!fontsLoaded) {
     return null;
@@ -31,12 +33,12 @@ export default function DonateScreen() {
       <View style={styles.container}>
         {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.title}>Support Lifeline</Text>
+          <Text style={styles.title}>{t('donate.title')}</Text>
           <Text style={styles.subtitle}>
-            Your donation helps us keep providing life-saving information and support to everyone, everywhere. Thank you for making a difference!
+            {t('donate.subtitle')}
           </Text>
           <TouchableOpacity style={styles.button} onPress={handleDonate} activeOpacity={0.85}>
-            <Text style={styles.buttonText}>Donate Now</Text>
+            <Text style={styles.buttonText}>{t('donate.donateNow')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -49,39 +51,39 @@ export default function DonateScreen() {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Payment Details</Text>
+              <Text style={styles.modalTitle}>{t('donate.paymentDetails')}</Text>
               <View style={styles.detailRow}>
                 <MaterialIcons name="mobile-friendly" size={22} color="#B96A6A" style={styles.detailIcon} />
                 <View style={styles.detailTextGroup}>
-                  <Text style={styles.modalText}>Telecel-Cash: <Text style={styles.bold}>0203430787</Text></Text>
+                  <Text style={styles.modalText}>{t('donate.telecelCash')} <Text style={styles.bold}>0203430787</Text></Text>
                   <Text style={styles.accountName}>Daniella Asiedu</Text>
                 </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="mobile-friendly" size={22} color="#B96A6A" style={styles.detailIcon} />
                 <View style={styles.detailTextGroup}>
-                  <Text style={styles.modalText}>MTN-MOMO: <Text style={styles.bold}>0551784926</Text></Text>
-                  <Text style={styles.accountName}>David Obuobi</Text>
+                  <Text style={styles.modalText}>{t('donate.mtnMomo')} <Text style={styles.bold}>0551784926</Text></Text>
+                  <Text style={styles.accountName}>{t('donate.davidAccount')}</Text>
                 </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="account-balance" size={22} color="#B96A6A" style={styles.detailIcon} />
                 <View style={styles.detailTextGroup}>
-                  <Text style={styles.modalText}>Bank(GCB): <Text style={styles.bold}>1331250000242</Text></Text>
-                  <Text style={styles.accountName}>Daniella Asiedu</Text>
+                  <Text style={styles.modalText}>{t('donate.bankGcb')} <Text style={styles.bold}>1331250000242</Text></Text>
+                  <Text style={styles.accountName}>{t('donate.daniellaAccount')}</Text>
                 </View>
               </View>
               <View style={styles.detailRow}>
                 <MaterialIcons name="account-balance-wallet" size={22} color="#B96A6A" style={styles.detailIcon} />
                 <View style={styles.detailTextGroup}>
-                  <Text style={styles.modalText}>USDT Wallet TRC20: <Text style={styles.bold}>TCvvhtnFTm6dQcrtq3x3uXabRULzvEkwr1</Text></Text>
+                  <Text style={styles.modalText}>{t('donate.usdtWallet')} <Text style={styles.bold}>TCvvhtnFTm6dQcrtq3x3uXabRULzvEkwr1</Text></Text>
                 </View>
               </View>
               <TouchableOpacity style={styles.closeButton} onPress={() => {
-                Alert.alert('medaase wai🥲');
+                Alert.alert(t('donate.thankYouAlert'));
                 setModalVisible(false);
               }}>
-                <Text style={styles.closeButtonText}>Close</Text>
+                <Text style={styles.closeButtonText}>{t('donate.close')}</Text>
               </TouchableOpacity>
             </View>
           </View>

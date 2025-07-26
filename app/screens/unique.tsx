@@ -77,16 +77,12 @@ export default function UniqueScreen() {
 
       {/* Title with Luckiest Guy font */}
       <Text style={styles.title}>
-        {i18n.language === 'twi' 
-          ? "SIESIE WO HO MA WO NKOAA AHIADEƐ"
-          : "PREPARE FOR YOUR UNIQUE NEEDS"}
+        {t('unique.title')}
       </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        {i18n.language === 'twi'
-          ? "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
-          : "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"}
+        {t('unique.description')}
       </Text>
 
       {/* Pagination dots */}
@@ -101,7 +97,7 @@ export default function UniqueScreen() {
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>
-          {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+          {t('buttons.next')}
         </Text>
       </TouchableOpacity>
     </View>

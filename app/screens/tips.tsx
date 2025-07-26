@@ -68,15 +68,11 @@ export default function TipsScreen() {
         />
 
         <Text style={styles.title}>
-          {i18n.language === 'twi' 
-            ? "Ahoɔhare Nkwagyeɛ\nwɔ wo Nsateaa so"
-            : "Instant First Aid at\nYour Fingertips"}
+          {t('tips.title')}
         </Text>
 
         <Text style={styles.subtitle}>
-          {i18n.language === 'twi'
-            ? "Nya akwankyerɛ a ɛho da hɔ\nma ahokyere biara,\nmpo sɛ wo nni intanɛt koraa"
-            : "Get clear, Step-by-step\ninstructions for any emergency,\neven without internet"}
+          {t('tips.subtitle')}
         </Text>
 
         {/* Pagination Dots */}
@@ -95,7 +91,7 @@ export default function TipsScreen() {
           activeOpacity={0.85}
         >
           <Text style={styles.nextButtonText}>
-            {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+            {t('buttons.next')}
           </Text>
         </TouchableOpacity>
       </View>

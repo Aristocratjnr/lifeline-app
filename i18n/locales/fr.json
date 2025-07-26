@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Affichage",
-      "subtitle": "Ajuster le texte et la luminosité"
+      "subtitle": "Ajuster le texte et la luminosité",
+      "brightness": "Luminosité",
+      "textSize": "Taille du texte",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Texte en gras",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "eyeProtection": "Protection oculaire",
+      "selectTheme": "Sélectionner un thème",
+      "lightMode": "Mode clair",
+      "darkMode": "Mode sombre"
     },
     "terms": {
       "title": "Conditions d'utilisation",

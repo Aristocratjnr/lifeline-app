@@ -78,16 +78,12 @@ export default function EmpowerScreen() {
 
       {/* Title with Caveat font */}
       <Text style={styles.title}>
-        {i18n.language === 'twi' 
-          ? "Ahoɔden ne Ahoɔdennie" 
-          : "Confidence and Empowerment"}
+        {t('empower.title')}
       </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        {i18n.language === 'twi'
-          ? "Fa yɛn nkitahodie nneɛma ne dabiara afotuo di dwuma kyerɛ nkwa-nkwagyeɛ nyansa na woasiesie wo ho daa"
-          : "Use our interactive tools and daily tips to build life-saving skills and stay prepared always"}
+        {t('empower.description')}
       </Text>
 
       {/* Pagination dots */}
@@ -102,7 +98,7 @@ export default function EmpowerScreen() {
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>
-          {i18n.language === 'twi' ? "NKANODƆ" : "NEXT"}
+          {t('buttons.next')}
         </Text>
       </TouchableOpacity>
     </View>

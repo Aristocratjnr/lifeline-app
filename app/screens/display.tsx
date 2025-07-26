@@ -3,6 +3,7 @@ import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Animated,
   ImageBackground,
@@ -26,6 +27,7 @@ const loadFonts = async () => {
 
 export default function Display() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const { textSize, setTextSize, fontBold, setFontBold, brightness, setBrightness, eyeProtection, setEyeProtection } = useDisplayPreferences();
   const [theme, setTheme] = React.useState('Light');
   const [showThemeModal, setShowThemeModal] = React.useState(false);
@@ -72,14 +74,14 @@ export default function Display() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>DISPLAY</Text>
+          <Text style={styles.headerTitle}>{t('settings.display.title')}</Text>
         </View>
 
         {/* Display Settings */}
         <View style={styles.contentContainer}>
           {/* Brightness */}
           <View style={styles.settingCard}>
-            <Text style={styles.settingLabel}>Brightness</Text>
+            <Text style={styles.settingLabel}>{t('settings.display.brightness')}</Text>
             <View style={styles.sliderContainer}>
               <Feather name="sun" size={16} color="black" />
               <Slider
@@ -98,9 +100,9 @@ export default function Display() {
 
           {/* Text Size */}
           <View style={styles.settingCard}>
-            <Text style={styles.settingLabel}>Text Size</Text>
+            <Text style={styles.settingLabel}>{t('settings.display.textSize')}</Text>
             <View style={styles.sliderContainer}>
-              <Text style={styles.smallA}>A</Text>
+              <Text style={styles.smallA}>{t('settings.display.small')}</Text>
               <Slider
                 style={styles.slider}
                 minimumValue={0}
@@ -111,7 +113,7 @@ export default function Display() {
                 maximumTrackTintColor="#DDDDDD"
                 thumbTintColor="black"
               />
-              <Text style={styles.largeA}>A</Text>
+              <Text style={styles.largeA}>{t('settings.display.large')}</Text>
             </View>
           </View>
 
@@ -119,8 +121,8 @@ export default function Display() {
           <View style={styles.settingCard}>
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
-                <Text style={[styles.textBold, styles.settingLabel]}>B</Text>
-                <Text style={styles.settingLabel}>Text Bold</Text>
+                <Text style={[styles.textBold, styles.settingLabel]}>{t('settings.display.bold')}</Text>
+                <Text style={styles.settingLabel}>{t('settings.display.textBold')}</Text>
               </View>
               <Switch
                 value={fontBold}
@@ -139,10 +141,10 @@ export default function Display() {
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
                 <MaterialIcons name="color-lens" size={20} color="black" />
-                <Text style={styles.settingLabel}>Theme</Text>
+                <Text style={styles.settingLabel}>{t('settings.display.theme')}</Text>
               </View>
               <View style={styles.themeValueContainer}>
-                <Text style={styles.themeValue}>{theme}</Text>
+                <Text style={styles.themeValue}>{theme === 'Light' ? t('settings.display.light') : t('settings.display.dark')}</Text>
                 <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
               </View>
             </View>
@@ -153,7 +155,7 @@ export default function Display() {
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
                 <Ionicons name="eye-outline" size={20} color="black" />
-                <Text style={styles.settingLabel}>Eye Protection</Text>
+                <Text style={styles.settingLabel}>{t('settings.display.eyeProtection')}</Text>
               </View>
               <Switch
                 value={eyeProtection}
@@ -179,7 +181,7 @@ export default function Display() {
           >
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>Select Theme</Text>
+                <Text style={styles.modalTitle}>{t('settings.display.selectTheme')}</Text>
                 <TouchableOpacity onPress={() => setShowThemeModal(false)}>
                   <Ionicons name="close" size={24} color="black" />
                 </TouchableOpacity>
@@ -193,7 +195,7 @@ export default function Display() {
                   <View style={[styles.themeIcon, { backgroundColor: '#f0f0f0' }]}>
                     <Ionicons name="sunny" size={20} color="#FFD700" />
                   </View>
-                  <Text style={styles.themeOptionText}>Light Mode</Text>
+                  <Text style={styles.themeOptionText}>{t('settings.display.lightMode')}</Text>
                 </View>
                 {theme === 'Light' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>
@@ -206,7 +208,7 @@ export default function Display() {
                   <View style={[styles.themeIcon, { backgroundColor: '#333' }]}>
                     <Ionicons name="moon" size={20} color="#fff" />
                   </View>
-                  <Text style={styles.themeOptionText}>Dark Mode</Text>
+                  <Text style={styles.themeOptionText}>{t('settings.display.darkMode')}</Text>
                 </View>
                 {theme === 'Dark' && <Ionicons name="checkmark" size={20} color="black" />}
               </TouchableOpacity>

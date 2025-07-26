@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ImageBackground,
   Modal,
@@ -40,6 +41,7 @@ const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
 export default function TermsUse() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { t } = useTranslation();
   const [showTermsModal, setShowTermsModal] = useState(false);
 
   useEffect(() => {
@@ -49,8 +51,8 @@ export default function TermsUse() {
   const handleShareApp = async () => {
     try {
       const result = await Share.share({
-        message: 'Check out Lifeline - Your emergency first aid companion! Get instant access to crucial medical information during emergencies. Download now: https://lifeline-mu.vercel.app/',
-        title: 'Lifeline - First Aid App',
+        message: t('termsUse.share.message'),
+        title: t('termsUse.share.title'),
         url: 'https://lifeline-mu.vercel.app/'
       });
       
@@ -87,22 +89,22 @@ export default function TermsUse() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>TERMS & USE</Text>
+          <Text style={styles.headerTitle}>{t('termsUse.header')}</Text>
         </View>
 
         <ScrollView style={styles.scrollContent}>
           {/* Terms Content */}
           <View style={styles.termsContainer}>
             <Text style={styles.termsText}>
-              By using Lifeline, you agree to our terms and conditions.
+              {t('termsUse.intro.agreement')}
             </Text>
             
             <Text style={[styles.termsText, styles.spacingTop]}>
-              Understand your rights and responsibilities when using Lifeline
+              {t('termsUse.intro.rightsResponsibilities')}
             </Text>
             
             <Text style={[styles.termsText, styles.spacingTop]}>
-              Please review our terms and conditions. Your use of Lifeline indicates your agreement to these guidelines.
+              {t('termsUse.intro.reviewTerms')}
             </Text>
             
             {/* See More Button */}
@@ -110,30 +112,29 @@ export default function TermsUse() {
               style={styles.seeMoreButton}
               onPress={() => setShowTermsModal(true)}
             >
-              <Text style={styles.seeMoreText}>SEE MORE</Text>
+              <Text style={styles.seeMoreText}>{t('termsUse.seeMore')}</Text>
               <Ionicons name="chevron-forward" size={18} color="white" />
             </TouchableOpacity>
           </View>
 
           {/* Links */}
           <View style={styles.linksContainer}>
-            <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
-            <LinkItem title="Share App" onPress={handleShareApp} />
+            <LinkItem title={t('termsUse.links.privacyPolicy')} onPress={() => router.push('/screens/privacy-policy')} />
+            <LinkItem title={t('termsUse.links.faqs')} onPress={() => router.push('/screens/faqs')} />
+            <LinkItem title={t('termsUse.links.shareApp')} onPress={handleShareApp} />
             <ExternalLink href="https://lifeline-mu.vercel.app/">
-              <LinkItem title="Visit Our Website" />
+              <LinkItem title={t('termsUse.links.visitWebsite')} />
             </ExternalLink>
           </View>
         </ScrollView>
 
-        {/* Terms and Conditions Modal */}
+        {/* Terms Modal */}
         <Modal
           visible={showTermsModal}
-          transparent={true}
           animationType="slide"
-          onRequestClose={() => setShowTermsModal(false)}
+          presentationStyle="pageSheet"
         >
           <SafeAreaView style={styles.modalContainer}>
-            {/* Modal Header */}
             <View style={styles.modalHeader}>
               <TouchableOpacity 
                 style={styles.closeButton}
@@ -141,71 +142,63 @@ export default function TermsUse() {
               >
                 <Ionicons name="close" size={24} color="black" />
               </TouchableOpacity>
-              <Text style={styles.modalTitle}>Terms & Conditions</Text>
+              <Text style={styles.modalTitle}>{t('termsUse.header')}</Text>
               <View style={styles.placeholder} />
             </View>
-
-            {/* Modal Content */}
-            <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+            <ScrollView style={styles.modalContent}>
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>1. Acceptance of Terms</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.acceptanceOfTerms.title')}</Text>
                 <Text style={styles.sectionText}>
-                  By downloading, installing, or using the Lifeline application, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the application.
+                  {t('termsUse.sections.acceptanceOfTerms.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>2. Medical Disclaimer</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.useOfApplication.title')}</Text>
                 <Text style={styles.sectionText}>
-                  Lifeline is designed to provide general first aid information and guidance. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers for medical emergencies.
+                  {t('termsUse.sections.useOfApplication.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>3. User Responsibilities</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.userResponsibilities.title')}</Text>
                 <Text style={styles.sectionText}>
-                  • Use the app responsibly and in accordance with applicable laws{'\n'}
-                  • Do not rely solely on the app for medical decisions{'\n'}
-                  • Contact emergency services for serious medical situations{'\n'}
-                  • Keep your personal information secure
+                  {t('termsUse.sections.userResponsibilities.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>4. Privacy and Data</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.intellectualProperty.title')}</Text>
                 <Text style={styles.sectionText}>
-                  We respect your privacy and are committed to protecting your personal information. Our Privacy Policy explains how we collect, use, and safeguard your data.
+                  {t('termsUse.sections.intellectualProperty.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>5. App Usage</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.disclaimerOfWarranties.title')}</Text>
                 <Text style={styles.sectionText}>
-                  • The app is for personal, non-commercial use{'\n'}
-                  • Do not attempt to reverse engineer or modify the app{'\n'}
-                  • Report any bugs or issues through appropriate channels{'\n'}
-                  • Keep the app updated to the latest version
+                  {t('termsUse.sections.disclaimerOfWarranties.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>6. Limitation of Liability</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.limitationOfLiability.title')}</Text>
                 <Text style={styles.sectionText}>
-                  Lifeline and its developers are not liable for any damages arising from the use or inability to use the application, including but not limited to medical complications or delays in seeking professional help.
+                  {t('termsUse.sections.limitationOfLiability.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>7. Updates and Changes</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.updatesAndChanges.title')}</Text>
                 <Text style={styles.sectionText}>
-                  These terms may be updated from time to time. Continued use of the app after changes constitutes acceptance of the new terms.
+                  {t('termsUse.sections.updatesAndChanges.description')}
                 </Text>
               </View>
 
               <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>8. Contact Information</Text>
+                <Text style={styles.sectionTitle}>{t('termsUse.sections.contactInformation.title')}</Text>
                 <Text style={styles.sectionText}>
-                  For questions about these terms, please contact us at support@lifeline.com or visit our website.
+                  {t('termsUse.sections.contactInformation.description')}
                 </Text>
               </View>
 

@@ -55,18 +55,98 @@ export default {
     "noResults": "Yenhu kasa biara",
     "tryAgain": "Sɔ hwehwɛ asɛm foforo bio",
     "comingSoon": "KASA BEBREE REBA NNKYƐRE!!!",
-    "submit": "FA KƆMA"
+    "submit": "FA KƆMA",
+    "noLanguageSelected": "Kasa biara nna mmfa",
+    "pleaseSelectLanguage": "Yɛsrɛ sɛ fa kasa biara ansa na fa kɔma.",
+    "languageChanged": "Kasa a ɛsesa",
+    "languageChangedTo": "Kasa a ɛsesa kɔ",
+    "error": "Nsɛn",
+    "languageChangeFailed": "Entumi nsesa kasa. Yɛsrɛ sɛ try bio."
   },
 
   // Settings
   "settings": {
-    "title": "Nhyehyɛe",
+    "title": "Nsiesiei",
+    "account": "Akaunt",
     "language": "Kasa",
-    "notifications": "Nkra",
-    "theme": "Nhwɛso",
-    "privacy": "Kokoamsɛm",
-    "about": "Fa",
-    "logout": "Pue"
+    "notifications": "Nkyerɛkyerɛmu",
+    "helpSupport": "Mmoa & Kɔmpiɛda",
+    "about": "Yɛfiri",
+    "logout": "Pipie",
+    "privacy": "Bra fam",
+    "profile": {
+      "title": "Profael",
+      "subtitle": "Hwɛ wo nsɛm",
+      "maskedPassword": "****************",
+      "selectGender": "Select Gender"
+    },
+    "notifications": {
+      "title": "Nkyerɛkyerɛmu",
+      "subtitle": "Hwɛ nkyerɛkyerɛmu a w'apɛ",
+      "general": "Nkyerɛkyerɛmu Ahobrɛmu",
+      "dailyTips": "Nkyerɛkyerɛmu a Ɛbɛka",
+      "appUpdate": "App Update",
+      "upToDate": "(Up-to-date)",
+      "email": "Email Nkyerɛkyerɛmu",
+      "sound": "Audio"
+    },
+    "language": {
+      "title": "Kasa",
+      "subtitle": "Paw kasa a w'ahwehwɛ"
+    },
+    "display": {
+      "title": "Hwɛ",
+      "subtitle": "Yi display no",
+      "brightness": "Tum no",
+      "textSize": "Nkyerɛwde Kɛseyɛ",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Nkyerɛwde a ɛtɛ sɛn",
+      "theme": "Bebree",
+      "light": "Kɔsɛn",
+      "dark": "Tum",
+      "eyeProtection": "Agye no ho ban",
+      "selectTheme": "Paw Bebree",
+      "lightMode": "Kɔsɛn Mode",
+      "darkMode": "Tum Mode"
+    },
+    "terms": {
+      "title": "Mmbusua",
+      "subtitle": "Kenkan mmbusua yɛn"
+    },
+    "profileSettings": {
+      "title": "PROFILE",
+      "saveChanges": "SAVE CHANGES",
+      "selectGender": "Select Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "passwordPlaceholder": "Enter password",
+      "valuePlaceholder": "Enter value"
+    },
+    "profile": {
+      "maskedPassword": "****************",
+      "selectGender": "Select Gender"
+    },
+    "about": {
+      "title": "Yɛfiri",
+      "subtitle": "Yɛn dwuma no ho nsɛm"
+    },
+    "offline": {
+      "title": "Offline Mode",
+      "subtitle": "Hwɛ emu nsɛm",
+      "headerTitle": "OFFLINE CONTENT\nMANAGEMENT",
+      "description": "Be prepared for any situation. Access all your Lifeline guides anytime, anywhere, even without internet. Download content for offline use - This feature is on its way!"
+    },
+    "help": {
+      "title": "Mmoa",
+      "subtitle": "Mmoa w'adwuma no ho"
+    },
+    "delete": {
+      "title": "Pipie Akaunt",
+      "subtitle": "Pipie wo akaunt no"
+    }
   },
 
   // Dashboard
@@ -128,9 +208,211 @@ export default {
     "continueAsGuest": "Kɔ so sɛ Ɔhɔhɔ"
   },
 
+  // Donate screen
+  "donate": {
+    "title": "Fa Lifeline",
+    "subtitle": "Wo mmoa deɛ bɛma yɛn tumi atua nsɛm a ɛbɛboa wɔn a wɔhia no. Meda wo ase sɛ woama yɛn tumi yɛ biako!",
+    "donateNow": "Fa Mmoa Seisei",
+    "paymentDetails": "Payment Details",
+    "telecelCash": "Telecel-Cash:",
+    "daniellaAccount": "Daniella Asiedu",
+    "mtnMomo": "MTN-MOMO:",
+    "davidAccount": "David Obuobi",
+    "bankGcb": "Bank(GCB):",
+    "usdtWallet": "USDT Wallet TRC20:",
+    "close": "Yi firi hɔ",
+    "thankYouAlert": "Medaase wai🥲"
+  },
+
+  // Help screen
+  "help": {
+    "header": "MMOA",
+    "title": "SƐNEA YƐBƐMOA WO ASEM?",
+    "description": "Yɛhɔ wo! Sɛ wo hia nsɛm bi ho, hia sɛ wode kɔɔ tie, anaa pɛ sɛ ka nsa wo asem, yɛpɛ sɛ yɛnkyerɛ wo asem.",
+    "donate": "Fa Mmoa?",
+    "startLiveChat": "Hyɛ Live Chat Ase",
+    "contactUs": "Anaa wo bisa yɛn wɔ:",
+    "email": "Email: support@gmail.com",
+    "phone": "Telefon: 0201346530",
+    "solution": "YƐWU SOLUTION!"
+  },
+
+  // About screen
+  "about": {
+    "header": "HO NSƐM",
+    "aboutLifeline": "LIFELINE Ho Nsɛm",
+    "lifelineDescription": "Lifeline de kɔkɔbɔ a wɔhia wɔ ɔdum yi ho kyerɛw sɛnea wode bɛyɛ wo na nna wode hyɛn hyɛn a ɛbɛyɛ.",
+    "appVersion": "Dwumadie Version",
+    "versionNumber": "1.0.0",
+    "acknowledgement": "Awurade a Yɛda So:",
+    "acknowledgementDescription": "Yɛtumi yɛ dwumadi yi ama so ama wɔn a wɔkora so na wɔde mmoa ma yɛn. Yɛda wɔn akyi sɛ: ",
+    "daniellaCredit": "Daniella Asiedu - Lead UI/UX & Developer",
+    "davidCredit": "David Ayim Obuobi - Assistance Developer Credits",
+    "specialMention": "Special Mention:",
+    "stephenCredit": "Stephen Adingo, ma yɛn nyansa ne mmoa wɔ dwumadi yi mu biara."
+  },
+
+  // Guest screen
+  "guest": {
+    "title": "Fa wo ho no so!",
+    "description": "Bue kɔkɔbɔ a wɔpɛ sɛ wode bɛyɛ wo na nna wo ho nsɛm a wɔhia wɔ ɔdum yi ho. Fa wo ho nsɛm de kɔ so ama wode hyɛn hyɛn a ɛbɛyɛ.",
+    "name": "Din",
+    "namePlaceholder": "Wo din nyinara",
+    "phoneNumber": "Telefon Nɔma",
+    "preferredLanguages": "Kasa a Wopɛ",
+    "gender": "Baa anaa Akuo",
+    "selectGender": "Paw Baa anaa Akuo",
+    "confirm": "Gye Din no Tom"
+  },
+
+  // Completed screen
+  "completed": {
+    "title": "WO HO YIE!!!",
+    "subtitle": "Yɛda wo akyi sɛ wode akɔɔntu ahyɛ yɛn ho ansa",
+    "goHome": "Kɔ FIE"
+  },
+
   // Unique screen
   "unique": {
     "title": "SIESIE WO HO MA WO NKOAA AHIADEƐ",
     "description": "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
+  },
+  
+  // Empower screen
+  "empower": {
+    "title": "Ahoɔden ne Ahoɔdennie",
+    "description": "Fa yɛn nkitahodie nneɛma ne dabiara afotuo di dwuma kyerɛ nkwa-nkwagyeɛ nyansa na woasiesie wo ho daa"
+  },
+  
+  // Common buttons
+  "buttons": {
+    "next": "NKANODƆ",
+    "signUp": "Kɔɔ tuɔ",
+    "signIn": "Kɔɔ so",
+    "login": "Kɔɔ so",
+    "forgotPassword": "Wo fie asɛmfua a?",
+    "rememberMe": "Kae me",
+    "continueWithGoogle": "Toa so Google so",
+    "proceedToDashboard": "Kɔɔ so dashboard so"
+  },
+  
+  // Authentication screens
+  "auth": {
+    "signIn": {
+      "title": "Kɔɔ so wo akɔɔntu so",
+      "welcomeBack": "Yɛ wɔn ase",
+      "noAccount": "Wo nni akɔɔntu bi anaa?",
+      "checkingStatus": "Ɛrehunu so...",
+      "youAreGood": "Wo ho yie!",
+      "allChecksPassed": "Nnhunu nyinaa atu. Wo bɛtumi ahyɛ dashboard so.",
+      "healthCheck": "Ahunu ho",
+      "feelingGoodToday": "Wo ho yie anaa wɔn da?",
+      "yes": "Awo",
+      "no": "Daabi",
+      "takeCare": "Kae wo ho!",
+      "rememberToRest": "Kae sɛ wo bɛtumi ayɛ anaa kɔ bi akyerɛseɛ sɛ wo hia boa.",
+      "close": "Yi fi hɔ",
+      "emailLabel": "Email",
+      "emailPlaceholder": "username@example.com",
+      "passwordLabel": "Asɛmfua",
+      "passwordPlaceholder": "Bɔ wo asɛmfua"
+    },
+    "signUp": {
+      "title": "Hyɛ wo akɔɔntu ase",
+      "welcome": "Yɛ wɔn ase LIFELINER!",
+      "joinCommunity": "Kɔɔ wɔn kɔɔmuuniti so deɛ ɛyɛ wɔn ahwɛhwɛ kɛseɛ",
+      "nameLabel": "Din",
+      "namePlaceholder": "Wo din nyinara",
+      "emailLabel": "Email",
+      "emailPlaceholder": "username@example.com",
+      "passwordLabel": "Asɛmfua",
+      "passwordPlaceholder": "Hyɛ asɛmfua a ɛtɛ sɛn",
+      "alreadyHaveAccount": "Wo wɔ akɔɔntu baako ara anaa?"
+    }
+  },
+
+  // FAQs screen
+  "faqs": {
+    "headerTitle": "FAQs",
+    "introTitle": "Wo hia boa?",
+    "introText": "Hunu nhwɛsoɔ pii a wɔbɔ Lifeline ho. Sɛ wo nni nhunu a wɔhia a, kɔɔ wɔn boafoɔ no ho.",
+    "contactTitle": "Wo bɛka nhunu bio?",
+    "contactText": "Sɛ wo nni nhunu a wɔhia a, wɔn boafoɔ no wɔ ha deɛ ɛboa wo.",
+    "contactButton": "Frɛ boafoɔ no",
+    "questions": {
+      "whatIsLifeline": "Lifeline yɛ dɛn?",
+      "whatIsLifelineAnswer": "Lifeline yɛ dwumadi a wɔayɛ ama nhwɛsoɔ mu nsɛm a wɔde boa. Ɛboa wɔn a wɔhia nhwɛsoɔ mu sɛnea wɔbɛyɛ biribiara.",
+      "substituteForProfessionalHelp": "Lifeline boa wɔn a wɔyɛ biribi ho anaa?",
+      "substituteForProfessionalHelpAnswer": "Daabi, Lifeline nnya boa wɔn a wɔyɛ biribi ho. Ɛyɛ biribi a wɔde boa sɛnea wɔbɛyɛ biribi wɔ bere a wɔn nsafoɔ no nnya mu. Frɛ wɔn a wɔyɛ biribi ho bere biara. Lifeline boa wɔn a wɔyɛ biribi ho sɛnea wɔbɛyɛ biribi.",
+      "symptomCheckerWork": "Symptom Checker yɛ dɛn?",
+      "symptomCheckerWorkAnswer": "Symptom Checker boa wɔn a wɔwɔ nhwɛsoɔ mu sɛnea wɔbɛyɛ biribi. Frɛ wɔn a wɔwɔ nhwɛsoɔ mu sɛnea wɔbɛyɛ biribi. Ɛyɛ biribi a wɔde boa sɛnea wɔbɛyɛ biribi wɔ bere a wɔn nsafoɔ no nnya mu.",
+      "symptomCheckerDiagnose": "Symptom Checker bisa wɔn a wɔyɛ biribi ho anaa?",
+      "symptomCheckerDiagnoseAnswer": "Symptom Checker nnya bisa wɔn a wɔyɛ biribi ho. Ɛyɛ biribi a wɔde boa sɛnea wɔbɛyɛ biribi wɔ bere a wɔn nsafoɔ no nnya mu. Frɛ wɔn a wɔyɛ biribi ho bere biara.",
+      "firstAidGuides": "First-aid guides yɛ biribi a wɔde boa anaa?",
+      "firstAidGuidesAnswer": "Awo! First-aid guides nyinaa yɛ biribi a wɔde boa. Wɔn nyinaa yɛ biribi a wɔde boa. Wɔn nyinaa yɛ biribi a wɔde boa. Wɔn nyinaa yɛ biribi a wɔde boa.",
+      "updateLifeline": "Mɛn yɛ dɛn sɛ mɛtumi nsesa Lifeline?",
+      "updateLifelineAnswer": "Lifeline nsesa wɔn ara sɛnea wɔn nsafoɔ no nnya mu. Wobetumi nsesa wɔn ara sɛnea wɔn nsafoɔ no nnya mu. Yɛbɔ wɔn a wɔn nsafoɔ no nnya mu sɛnea wɔbɛyɛ biribi.",
+      "offlineUse": "Mɛtumi de Lifeline edi dwuma sɛnea mɛn ni mu anaa?",
+      "offlineUseAnswer": "Awo, Lifeline boa wɔn a wɔwɔ nhwɛsoɔ mu sɛnea wɔbɛyɛ biribi. Wobetumi fa content no ama dwuma sɛnea wɔn nsafoɔ no nnya mu. Ɛyɛ biribi a wɔde boa sɛnea wɔbɛyɛ biribi wɔ bere a wɔn nsafoɔ no nnya mu.",
+      "dataSecurity": "Mɛn data yɛ biribi a wɔde boa anaa?",
+      "dataSecurityAnswer": "Yɛbɔ wɔn a wɔn nsafoɔ no nnya mu sɛnea wɔbɛyɛ biribi. Yɛn data nyinaa yɛ biribi a wɔde boa. Yɛn nyinaa yɛ biribi a wɔde boa. Yɛn nyinaa yɛ biribi a wɔde boa.",
+      "contactSupport": "Mɛn frɛ Lifeline boafoɔ no sɛ dɛn?",
+      "contactSupportAnswer": "Wobetumi frɛ wɔn boafoɔ no wɔ ha anaa email so. Wɔn boafoɔ no wɔ ha deɛ ɛboa wɔn. Yɛbɔ wɔn a wɔn nsafoɔ no nnya mu sɛnea wɔbɛyɛ biribi."
+    }
+  },
+  
+  // Terms of Use
+  "termsUse": {
+    "header": "Mmbusua a Yɛde Di Dwuma",
+    "intro": {
+      "agreement": "Yɛn akwaaba Lifeline. Mmbusua a Yɛde Di Dwuma yi na wɔde di dwuma no ho. Sɛ wo de Lifeline di a, na wo gyee mmbusua a Yɛde Di Dwuma yi ho.",
+      "rightsResponsibilities": "Lifeline ma wo kwan a wo bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho.",
+      "reviewTerms": "Kenkan mmbusua a Yɛde Di Dwuma yi ansa na wo de Lifeline di. Sɛ wo renhye a, mɛde Lifeline di."
+    },
+    "seeMore": "Hunu Bɛkyɛ",
+    "links": {
+      "privacyPolicy": "Bra Fam",
+      "faqs": "FAQs",
+      "shareApp": "Fa App no Ma",
+      "visitWebsite": "Kɔ Website no"
+    },
+    "share": {
+      "message": "Hunu Lifeline - wo kɔmpiɛda a wɔde bɛyɛ adwuma wɔ bere a wɔhia no. Yɛn sɛnea yɛbɛyɛ adwuma wɔ bere a wɔhia no.",
+      "title": "Lifeline - Dwumadi a Wɔde Bɛyɛ Adwuma"
+    },
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "Mmbusua a Yɛde Di Dwuma no Gyee",
+        "description": "Sɛ wo de Lifeline di a, na wo gyee mmbusua a Yɛde Di Dwuma no ho. Sɛ wo de dwumadi no di ama obi a, na wo gyee mmbusua a Yɛde Di Dwuma no ho."
+      },
+      "useOfApplication": {
+        "title": "Dwumadi no Di Dwuma",
+        "description": "Lifeline yɛ dwumadi a wɔde bɛyɛ adwuma wɔ bere a wɔhia no. Wo bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho."
+      },
+      "userResponsibilities": {
+        "title": "Wo Bɛyɛ Adwuma",
+        "description": "Wo bɛtumi de wo ho nsɛm ase. Wo bɛtumi de wo ho nsɛm ase. Wo bɛtumi de wo ho nsɛm ase."
+      },
+      "intellectualProperty": {
+        "title": "Nsɛm a Yɛde Di Dwuma",
+        "description": "Nsɛm no nyinaa yɛ Lifeline deɛ. Nsɛm no nyinaa yɛ Lifeline deɛ. Nsɛm no nyinaa yɛ Lifeline deɛ."
+      },
+      "disclaimerOfWarranties": {
+        "title": "Mmbusua a Yɛde Di Dwuma no Nhyehyɛe",
+        "description": "Lifeline yɛ dwumadi a wɔde bɛyɛ adwuma wɔ bere a wɔhia no. Wo bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho."
+      },
+      "limitationOfLiability": {
+        "title": "Mmbusua a Yɛde Di Dwuma no Nhyehyɛe",
+        "description": "Lifeline, its affiliates, or their respective officers, directors, employees, or agents no bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho. Wo bɛtumi de dwuma no ho."
+      },
+      "updatesAndChanges": {
+        "title": "Mmbusua a Yɛde Di Dwuma no Nhyehyɛe",
+        "description": "Yɛn bɛtumi sesa, tumu, anaa atumi, dwumadi no. Yɛn bɛtumi sesa, tumu, anaa atumi, dwumadi no. Yɛn bɛtumi sesa, tumu, anaa atumi, dwumadi no."
+      },
+      "contactInformation": {
+        "title": "Nsɛm a Yɛde Di Dwuma",
+        "description": "Sɛ wo hia mmoa a, kɔntak yɛn wɔ support@lifeline.com. Sɛ wo hia mmoa a, kɔntak yɛn wɔ support@lifeline.com."
+      }
+    }
   }
 }

@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -9,6 +10,7 @@ const pink = '#F9A6A6';
 
 export default function CompletedScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -36,12 +38,12 @@ export default function CompletedScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        <Text style={styles.title}>YOU ARE SET!!!</Text>
+        <Text style={styles.title}>{t('completed.title')}</Text>
         <Text style={styles.subtitle}>
-          Thank you for creating{"\n"}an account with us
+          {t('completed.subtitle')}
         </Text>
         <TouchableOpacity style={styles.button} onPress={handleGoHome} activeOpacity={0.85}>
-          <Text style={styles.buttonText}>GO TO HOME</Text>
+          <Text style={styles.buttonText}>{t('completed.goHome')}</Text>
         </TouchableOpacity>
       </View>
     </View>

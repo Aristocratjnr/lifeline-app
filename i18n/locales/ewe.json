@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Fiafia",
-      "subtitle": "Trɔ asi kple kekeli"
+      "subtitle": "Trɔ asi kple kekeli",
+      "brightness": "Kekeli",
+      "textSize": "Ametɔ ƒe lolome",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Gɔme tɔ",
+      "theme": "Tema",
+      "light": "Kpɔkpɔ",
+      "dark": "Ɖiɖi",
+      "eyeProtection": "Nu kpɔkpɔ ƒe dedie",
+      "selectTheme": "Temaia",
+      "lightMode": "Kpɔkpɔ Mode",
+      "darkMode": "Ɖiɖi Mode"
     },
     "terms": {
       "title": "Zazã ƒe sewowo",

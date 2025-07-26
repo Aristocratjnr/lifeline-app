@@ -15,7 +15,20 @@
     },
     "display": {
       "title": "Affichage",
-      "subtitle": "Ajuster le texte et la luminosité"
+      "subtitle": "Ajuster le texte et la luminosité",
+      "brightness": "Luminosité",
+      "textSize": "Taille du texte",
+      "small": "Petit",
+      "large": "Grand",
+      "bold": "Gras",
+      "textBold": "Texte en gras",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "eyeProtection": "Protection oculaire",
+      "selectTheme": "Sélectionner le thème",
+      "lightMode": "Mode clair",
+      "darkMode": "Mode sombre"
     },
     "terms": {
       "title": "Conditions d'utilisation",
@@ -73,10 +86,7 @@
     "subtitle": "Votre compagnon essentiel pour les urgences. Soyez prêt à agir avec confiance quand chaque seconde compte."
   },
   "tips": {
-    "title": "Premiers Secours Instantanés
-à Portée de Main",
-    "subtitle": "Obtenez des instructions claires, étape par étape
-pour toute urgence,
-même sans connexion internet"
+    "title": "Premiers Secours Instantanés\nà Portée de Main",
+    "subtitle": "Obtenez des instructions claires, étape par étape\npour toute urgence,\nmême sans connexion internet"
   }
 }
