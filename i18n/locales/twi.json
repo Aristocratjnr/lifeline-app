@@ -119,5 +119,41 @@
   "unique": {
     "title": "SIESIE WO HO MA WO NKOAA AHIADEƐ",
     "description": "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
+  },
+  "bot": {
+    "title": "Dɔkta Panidzi",
+    "description": "Yɛ! Mɛ ne wo dɔkta panidzi. Mɛ betumi de wo kɔnɛkt kyerɛ dɔkta bi a ɔnim adwuma mu ama wo nhwɛe kwa.",
+    "callDoctor": "Frɛ Dɔkta Sei",
+    "connecting": "Ɛkɔnɛkt kyerɛ dɔkta..."
+  },
+  "callLogs": {
+    "title": "Frɛ Logs",
+    "outgoing": "Nea wɔfrɛɛ",
+    "incoming": "Nea wɔatwa frɔɔ wo",
+    "missed": "Nea wɔanya yie"
+  },
+  "firstAid": {
+    "title": "FIRST AID GUIDES",
+    "subtitle": "Kɔɔ list no mu na\nhwɛ first aid guides no\nna wo atumi\nhunu nneɛma a wo hia",
+    "searchPlaceholder": "Hwehwɛ first aid guide bi",
+    "emergencyTab": "Emergency/External",
+    "exposuresTab": "Exposures/Internal",
+    "categories": {
+      "cuts": "CUTS",
+      "stings": "STINGS",
+      "splinter": "SPLINTER",
+      "sprainStrain": "SPRAIN/\nSTRAIN",
+      "fever": "FEVER",
+      "jockItch": "JOCK ITCH",
+      "rash": "RASH",
+      "hives": "HIVES",
+      "abdominalPains": "ABDOMINAL\nPAINS",
+      "choking": "CHOKING",
+      "frostBite": "FROST\nBITE",
+      "heatStroke": "HEAT\nSTROKE",
+      "noseBleed": "NOSE\nBLEED",
+      "insectBite": "INSECT\nBITE",
+      "sunBurn": "SUN\nBURN"
+    }
   }
 }

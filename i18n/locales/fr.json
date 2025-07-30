@@ -55,7 +55,9 @@
   },
   "common": {
     "on": "Activé",
-    "off": "Désactivé"
+    "off": "Désactivé",
+    "next": "SUIVANT",
+    "back": "Retour"
   },
   "languages": {
     "title": "LANGUE",
@@ -64,5 +66,17 @@
     "tryAgain": "Essayez un autre terme de recherche",
     "comingSoon": "PLUS DE LANGUES BIENTÔT DISPONIBLES !!!",
     "submit": "SOUMETTRE"
+  },
+  "bot": {
+    "title": "Assistant Médical",
+    "description": "Salut ! Je suis votre assistant médical. Je peux vous connecter avec un médecin professionnel pour une consultation immédiate.",
+    "callDoctor": "Appeler le Médecin Maintenant",
+    "connecting": "Connexion au médecin..."
+  },
+  "callLogs": {
+    "title": "Historique des appels",
+    "outgoing": "Émis",
+    "incoming": "Reçu",
+    "missed": "Manqué"
   }
 }

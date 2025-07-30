@@ -1,65 +1,98 @@
 {
   "settings": {
-    "title": "SAITI",
+    "title": "SAITUNA",
     "profile": {
-      "title": "Bayanka",
-      "subtitle": "Rubuta sunanka"
+      "title": "Bayanin martaba",
+      "subtitle": "Saita sunan ka"
     },
     "notifications": {
       "title": "Sanarwa",
-      "subtitle": "Sarrafa faɗakarwa"
+      "subtitle": "Sarrafa sanarwa"
     },
     "language": {
-      "title": "Harshe",
-      "subtitle": "Zaɓi harshenka"
+      "title": "Yare",
+      "subtitle": "Zaɓi yaren ka"
     },
     "display": {
       "title": "Nuni",
-      "subtitle": "Gyara rubutu da haske",
+      "subtitle": "Daidaita rubutu & haske",
       "brightness": "Haske",
-      "eyeProtection": "Kariyar Ido"
+      "textSize": "Girman rubutu",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Rubutu mai kauri",
+      "theme": "Jigo",
+      "light": "Mai haske",
+      "dark": "Mai duhu",
+      "eyeProtection": "Kare ido",
+      "selectTheme": "Zaɓi jigo",
+      "lightMode": "Yanayin haske",
+      "darkMode": "Yanayin duhu"
     },
     "terms": {
-      "title": "Sharuɗan Amfani",
-      "subtitle": "Bayanan doka"
+      "title": "Sharuɗɗan amfani",
+      "subtitle": "Bayanai na shari'a"
     },
     "about": {
       "title": "Game da",
-      "subtitle": "Bayanan app"
+      "subtitle": "Bayanai na app"
     },
     "offline": {
-      "title": "Abun ciki na offline",
-      "subtitle": "Download don offline"
+      "title": "Abun ciki na layi",
+      "subtitle": "Sauke don amfani na layi"
     },
     "help": {
-      "title": "Taimako da Tallafi",
-      "subtitle": "Sami taimako"
+      "title": "Taimako & Tallafi",
+      "subtitle": "Samu taimako"
     },
     "delete": {
-      "title": "Share Asusu",
-      "subtitle": "Cire asusunka"
+      "title": "Share asusu",
+      "subtitle": "Cire asusun ka"
     },
     "brightness": "Haske",
-    "eyeProtection": "Kariyar Ido"
+    "eyeProtection": "Kare ido"
   },
   "common": {
     "on": "A kunne",
-    "off": "A kashe"
+    "off": "A kashe",
+    "next": "NA GABA",
+    "back": "Baya"
   },
   "languages": {
-    "title": "HARSHE",
-    "searchPlaceholder": "Nemo harshe",
-    "noResults": "Ba a sami harshe ba",
-    "tryAgain": "Gwada wani kalmar bincike",
-    "comingSoon": "HARSUNAN DA SUKA ZUWA!!!",
-    "submit": "AIKA"
+    "title": "YARE",
+    "searchPlaceholder": "Bincika yare",
+    "noResults": "Ba a samu yare ba",
+    "tryAgain": "Gwada kalma ta bincike ta daban",
+    "comingSoon": "ƘARIN YARE ZAI ZUWA DA FIRDAU!!!",
+    "submit": "MIKA"
   },
   "dashboard": {
-    "healthStats": "Alkalinsa Stats",
+    "healthStats": "Ƙididdigar lafiya",
     "steps": "Matakai",
     "water": "Ruwa",
-    "dailyTip": "SHAWARAR YAU DA KULLUM",
+    "dailyTip": "TIP DIN YAU",
     "lifelineHistory": "Tarihin Lifeline",
-    "recentActivity": "Ayyukan Kwanan Nan"
+    "recentActivity": "Ayyukan kwanan nan"
+  },
+  "doctor": {
+    "title": "Jagorar Likita Mai Gwani",
+    "description": "Sami shawarar likita daidaita da tattaunawa daga masu gwani a cikin kula da lafiya. Sami kula da kake bukata, lokacin da kake bukata.",
+    "getStarted": "Fara",
+    "privacyPolicy": "Manuɗin Sirri"
+  },
+  "welcome": {
+    "title": "Barka da zuwa Lifeline",
+    "subtitle": "Abokin ka na bukata don balo. Shin kunyi maka don aiki da aminci lokacin da kowanne daƙiƙa ta matter."
+  },
+  "tips": {
+    "title": "Gaggawa na Cikin Taimako\nA Kwafin Ka",
+    "subtitle": "Sami umarni mai dadi, mataki ɗaya-ɗaya\ndon kowane balo,\nkoda ba tare da intanet ba"
+  },
+  "bot": {
+    "title": "Mataimakin Likita",
+    "description": "Sannu! Na mataimakin likita ne. Na iya haɗa ka da likita mai gwani don tattaunawa nan take.",
+    "callDoctor": "Kira Likita Yanzu",
+    "connecting": "Ana haɗawa da likita..."
   }
 }

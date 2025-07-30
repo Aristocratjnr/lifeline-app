@@ -88,5 +88,11 @@
   "tips": {
     "title": "Primeros Auxilios Instantáneos\na Tu Alcance",
     "subtitle": "Obtén instrucciones claras y paso a paso\npara cualquier emergencia,\nincluso sin conexión a internet"
+  },
+  "bot": {
+    "title": "Asistente Médico",
+    "description": "¡Hola! Soy tu asistente médico. Puedo conectarte con un médico profesional para una consulta inmediata.",
+    "callDoctor": "Llamar al Médico Ahora",
+    "connecting": "Conectando con el médico..."
   }
 }

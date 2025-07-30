@@ -4,6 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Animated,
   Easing,
@@ -20,22 +21,24 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY; 
 
-// Local responses for common first aid queries
-const LOCAL_RESPONSES: Record<string, string> = {
-  'cpr': 'For CPR: 1) Call emergency services first. 2) Place the heel of your hand on the center of the chest. 3) Push hard and fast (100-120 compressions per minute). 4) If trained, give 2 breaths after every 30 compressions.\n\nRemember: For any serious emergency, always call professional help immediately.',
-  'choking': 'For a choking adult/child:\n1) Ask "Are you choking?"\n2) If they can cough, encourage coughing.\n3) If they can\'t breathe, perform abdominal thrusts (Heimlich maneuver):\n   - Stand behind, wrap arms around waist\n   - Make a fist above navel\n   - Grasp fist with other hand\n   - Give quick upward thrusts\n4) Continue until object is expelled or person becomes unconscious.',
-  'burn': 'For minor burns:\n1) Cool under running water for 10-15 minutes\n2) Remove jewelry/clothing near burn\n3) Cover with sterile non-stick dressing\n4) Don\'t apply butter, oil or ice\n\nFor serious burns (large, deep, or on face/hands):\n1) Call emergency services\n2) Don\'t remove stuck clothing\n3) Cover loosely with clean cloth\n4) Monitor for shock',
-  'bleeding': 'To control bleeding:\n1) Apply direct pressure with clean cloth\n2) Elevate injured area if possible\n3) Add more layers if blood soaks through\n4) Don\'t remove original dressing\n5) If severe, call emergency services\n\nFor nosebleeds:\n1) Sit upright, lean forward\n2) Pinch soft part of nose for 10 minutes\n3) Apply ice to bridge of nose\n4) Avoid blowing nose afterward',
-  'who are you': 'I\'m Lifeline Assistant, your AI first aid helper. I provide emergency medical guidance and first aid instructions. I was created by the Lifeline team to help people get accurate medical information quickly. For serious emergencies, always contact professional medical services immediately.',
-  'what can you do': 'I can help with:\n- First aid instructions\n- Emergency response guidance\n- Basic medical information\n- Wound care\n- CPR instructions\n- Handling burns, fractures, poisoning\n\nI always recommend contacting professional medical help for serious situations.'
-};
-
 export default function AIAssistantScreen() {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const [message, setMessage] = useState('');
+
+  // Local responses for common first aid queries - now using translations
+  const getLocalResponses = (): Record<string, string> => ({
+    'cpr': t('aiAssistant.localResponses.cpr'),
+    'choking': t('aiAssistant.localResponses.choking'),
+    'burn': t('aiAssistant.localResponses.burn'),
+    'bleeding': t('aiAssistant.localResponses.bleeding'),
+    'who are you': t('aiAssistant.localResponses.whoAreYou'),
+    'what can you do': t('aiAssistant.localResponses.whatCanYouDo')
+  });
+
   const [chatHistory, setChatHistory] = useState([
-    { id: 1, type: 'assistant', text: 'Hello! I\'m your Lifeline First Aid Assistant. I can help with emergency medical information and first aid procedures. What would you like to know?' },
+    { id: 1, type: 'assistant', text: t('aiAssistant.welcomeMessage') },
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
@@ -139,7 +142,7 @@ export default function AIAssistantScreen() {
         setChatHistory(prev => [...prev, { 
           id: Date.now() + 1, 
           type: 'assistant', 
-          text: "I'm sorry, I can only answer questions related to health, medical issues, or first aid. Please ask me something about first aid, emergency response, or health-related topics."
+          text: t('aiAssistant.errorMessage')
         }]);
         setIsLoading(false);
         return;

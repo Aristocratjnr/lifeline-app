@@ -1,76 +1,121 @@
 {
   "settings": {
-    "title": "PAHIM",
+    "title": "Settings",
     "profile": {
-      "title": "A yuri",
-      "subtitle": "Nyɛ a yuri"
+      "title": "Profile",
+      "subtitle": "Setup your name"
     },
     "notifications": {
-      "title": "Zuɣusimi",
-      "subtitle": "Lahi zuɣusimi"
+      "title": "Notifications",
+      "subtitle": "Manage alerts"
     },
     "language": {
-      "title": "Gbali",
-      "subtitle": "Pahi a gbali"
+      "title": "Language",
+      "subtitle": "Choose your language"
     },
     "display": {
-      "title": "Yeli ka",
-      "subtitle": "Mali ka pam ni nimdi",
-      "brightness": "Nimdi",
-      "textSize": "Pam nimdi",
+      "title": "Display",
+      "subtitle": "Adjust text & brightness",
+      "brightness": "Brightness",
+      "textSize": "Text Size",
       "small": "A",
       "large": "A",
       "bold": "B",
-      "textBold": "Pam zuɣu",
-      "theme": "Lahabali",
-      "light": "Nabila",
-      "dark": "Tɔli",
-      "eyeProtection": "Nini kpɛri",
-      "selectTheme": "Piimi Lahabali",
-      "lightMode": "Nabila Mode",
-      "darkMode": "Tɔli Mode"
+      "textBold": "Text Bold",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "eyeProtection": "Eye Protection",
+      "selectTheme": "Select Theme",
+      "lightMode": "Light Mode",
+      "darkMode": "Dark Mode"
     },
     "terms": {
-      "title": "Tuma pahim",
-      "subtitle": "Pahim vihigu"
+      "title": "Terms of use",
+      "subtitle": "Legal information"
     },
     "about": {
-      "title": "N-ka ti",
-      "subtitle": "App vihigu"
+      "title": "About",
+      "subtitle": "App information"
     },
     "offline": {
-      "title": "Offline vihigu",
-      "subtitle": "Download bi offline"
+      "title": "Offline Content",
+      "subtitle": "Download for offline use"
     },
     "help": {
-      "title": "Dɔɣim ni Yiɣim",
-      "subtitle": "Nyɛ dɔɣim"
+      "title": "Help & Support",
+      "subtitle": "Get help"
     },
     "delete": {
-      "title": "Dihi account ni",
-      "subtitle": "Dihi a account"
+      "title": "Delete Account",
+      "subtitle": "Remove your account"
     },
-    "brightness": "Nimdi",
-    "eyeProtection": "Nɛŋkpɛŋ dɔɣim"
+    "brightness": "Brightness",
+    "eyeProtection": "Eye Protection"
   },
   "common": {
-    "on": "N be",
-    "off": "N kpa be"
+    "on": "On",
+    "off": "Off",
+    "next": "NEXT",
+    "back": "Back"
   },
   "languages": {
-    "title": "GBALI",
-    "searchPlaceholder": "Nahi gbali",
-    "noResults": "Gbali kɛ ka nyɛ",
-    "tryAgain": "Nahi fɔɣ",
-    "comingSoon": "GBALI FƆƔƆ N-DANI ZUU!!!",
-    "submit": "KƆLI"
+    "title": "LANGUAGE",
+    "searchPlaceholder": "Search for language",
+    "noResults": "No languages found",
+    "tryAgain": "Try a different search term",
+    "comingSoon": "MORE LANGUAGES COMING SOON!!!",
+    "submit": "SUBMIT"
   },
   "dashboard": {
-    "healthStats": "Kɔlga Stats",
-    "steps": "Diɣinga",
-    "water": "Koom",
-    "dailyTip": "AYUBU VIHIM",
-    "lifelineHistory": "Lifeline Tuma",
-    "recentActivity": "Tuma yɛltɔɣu"
+    "healthStats": "Health Stats",
+    "steps": "Steps",
+    "water": "Water",
+    "dailyTip": "DAILY TIP",
+    "lifelineHistory": "Lifeline History",
+    "recentActivity": "Recent Activity",
+    "sentSOSAlert": "Sent SOS alert",
+    "viewedMap": "Viewed map",
+    "readHealthNews": "Read health news",
+    "todayTime": "Today, 09:12",
+    "yesterdayTime1": "Yesterday, 18:45",
+    "yesterdayTime2": "Yesterday, 08:30",
+    "fracture": "Fracture",
+    "cough": "Cough",
+    "burns": "Burns",
+    "lastVisited": "Last Visited: 02, May, 2025",
+    "age": "Age",
+    "gender": "Gender",
+    "location": "Location",
+    "condition": "Condition",
+    "language": "Language",
+    "editProfile": "Edit Profile",
+    "newTipEveryDay": "New tip every day"
+  },
+  "doctor": {
+    "title": "Expert Medical Guidance",
+    "description": "Receive personalized medical advice and consultations from experienced healthcare professionals. Get the care you need, when you need it.",
+    "getStarted": "Get Started",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "welcome": {
+    "title": "Welcome To Lifeline",
+    "subtitle": "Your essential companion for emergencies. Be ready to act with confidence when every second counts."
+  },
+  "tips": {
+    "title": "Instant First Aid\nAt Your Fingertips",
+    "subtitle": "Get clear, step-by-step\ninstructions for any emergency,\neven without internet"
+  },
+  "bot": {
+    "title": "Medical Assistant",
+    "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
+    "callDoctor": "Call Doctor Now",
+    "connecting": "Connecting to doctor..."
+  },
+  "callLogs": {
+    "title": "Call Logs",
+    "outgoing": "Outgoing",
+    "incoming": "Incoming",
+    "missed": "Missed"
   }
 }

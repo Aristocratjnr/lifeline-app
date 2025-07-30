@@ -411,5 +411,41 @@ export default {
         "description": "If you have any questions about these Terms of Use, please contact us at support@lifeline.com. For general inquiries, you can also reach us through the contact form in the Help section of the application."
       }
     }
+  },
+  "bot": {
+    "title": "Medical Assistant",
+    "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
+    "callDoctor": "Call Doctor Now",
+    "connecting": "Connecting to doctor..."
+  },
+  "callLogs": {
+    "title": "Call Logs",
+    "outgoing": "Outgoing",
+    "incoming": "Incoming",
+    "missed": "Missed"
+  },
+  "firstAid": {
+    "title": "FIRST AID GUIDES",
+    "subtitle": "Navigate through the list of\nfirst aid guides to\nhelp you find\nexactly you need",
+    "searchPlaceholder": "Search for first aid guide",
+    "emergencyTab": "Emergency/External",
+    "exposuresTab": "Exposures/Internal",
+    "categories": {
+      "cuts": "CUTS",
+      "stings": "STINGS",
+      "splinter": "SPLINTER",
+      "sprainStrain": "SPRAIN/STRAIN",
+      "fever": "FEVER",
+      "jockItch": "JOCK ITCH",
+      "rash": "RASH",
+      "hives": "HIVES",
+      "abdominalPains": "ABDOMINAL PAINS",
+      "choking": "CHOKING",
+      "frostBite": "FROST BITE",
+      "heatStroke": "HEAT STROKE",
+      "noseBleed": "NOSE BLEED",
+      "insectBite": "INSECT BITE",
+      "sunBurn": "SUN BURN"
+    }
   }
 }

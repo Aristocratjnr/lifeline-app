@@ -1,76 +1,98 @@
 {
   "settings": {
-    "title": "ƉOƉO",
+    "title": "Ɖɔɖɔ",
     "profile": {
-      "title": "Wò ŋkɔ",
-      "subtitle": "Ŋlɔ wò ŋkɔ"
+      "title": "Profail",
+      "subtitle": "Ɖo wo nyanyawo ɖo"
     },
     "notifications": {
-      "title": "Gbedeasi",
-      "subtitle": "Kpɔ gbedeasi"
+      "title": "Nuxlɔ̃",
+      "subtitle": "Ɖo nuxlɔ̃ ɖo"
     },
     "language": {
       "title": "Gbe",
-      "subtitle": "Tia wò gbe"
+      "subtitle": "Tia wo gbe"
     },
     "display": {
-      "title": "Fiafia",
-      "subtitle": "Trɔ asi kple kekeli",
-      "brightness": "Kekeli",
-      "textSize": "Ametɔ ƒe lolome",
+      "title": "Ɖiplay",
+      "subtitle": "Ɖo nutext kple didi ɖo",
+      "brightness": "Didi",
+      "textSize": "Nɔnɔmetata ƒe xexlẽ",
       "small": "A",
       "large": "A",
       "bold": "B",
-      "textBold": "Gɔme tɔ",
+      "textBold": "Text ƒe nɔnɔme",
       "theme": "Tema",
-      "light": "Kpɔkpɔ",
-      "dark": "Ɖiɖi",
-      "eyeProtection": "Nu kpɔkpɔ ƒe dedie",
-      "selectTheme": "Temaia",
-      "lightMode": "Kpɔkpɔ Mode",
-      "darkMode": "Ɖiɖi Mode"
+      "light": "Light",
+      "dark": "Ɖim",
+      "eyeProtection": "Anyi ƒe dɔɖɔ",
+      "selectTheme": "Tia tema",
+      "lightMode": "Light Mode",
+      "darkMode": "Ɖim Mode"
     },
     "terms": {
-      "title": "Zazã ƒe sewowo",
-      "subtitle": "Se ŋuti nyawo"
+      "title": "Ɖoɖo siwo wotia",
+      "subtitle": "Nuxlɔ̃ siwo le dɔla"
     },
     "about": {
-      "title": "Eŋuti nyawo",
-      "subtitle": "App ŋuti nyawo"
+      "title": "Nuwo ŋu",
+      "subtitle": "App siwo ŋu"
     },
     "offline": {
-      "title": "Offline nyawo",
+      "title": "Nu siwo mele internet dzi o",
       "subtitle": "Download na offline"
     },
     "help": {
-      "title": "Kpekpeɖeŋu",
-      "subtitle": "Xɔ kpekpeɖeŋu"
+      "title": "Kpekpeɖeŋu kple kpeɖeŋu",
+      "subtitle": "Kpe ɖe kpekpeɖeŋu"
     },
     "delete": {
-      "title": "Tutu akawo",
-      "subtitle": "Tutu wò akawo"
+      "title": "Ɖe account ɖa",
+      "subtitle": "Ɖe wo account ɖa"
     },
-    "brightness": "Kekeli",
-    "eyeProtection": "Ŋku dzɔdzɔ"
+    "brightness": "Didi",
+    "eyeProtection": "Anyi ƒe dɔɖɔ"
   },
   "common": {
-    "on": "Le edzi",
-    "off": "Mele edzi o"
+    "on": "Le",
+    "off": "Mele o",
+    "next": "Esi gbɔna",
+    "back": "Megbe"
   },
   "languages": {
     "title": "GBE",
-    "searchPlaceholder": "Di gbe aɖe",
+    "searchPlaceholder": "Dii be gbe",
     "noResults": "Womekpɔ gbe aɖeke o",
-    "tryAgain": "Gaɖo bubu kpɔ",
-    "comingSoon": "GBE BUBUWO GBɔNA!!!",
-    "submit": "DƆ"
+    "tryAgain": "Gawoe kɔkɔe",
+    "comingSoon": "GBE VOVOTUTUO WO NƆ BA!!!",
+    "submit": "Ɖo"
   },
   "dashboard": {
-    "healthStats": "Lãmesɛ nyawo",
-    "steps": "Afɔɖeɖe",
-    "water": "Tsi",
-    "dailyTip": "GBESIAGBE AƉAŊU",
-    "lifelineHistory": "Lifeline ŋutinyawo",
-    "recentActivity": "Nuwɔna yeyewo"
+    "healthStats": "Ale ŋuti ƒe Stats",
+    "steps": "Dzɔdzɔ",
+    "water": "Madzi",
+    "dailyTip": "ŊKU SI BE DZI",
+    "lifelineHistory": "Lifeline ƒe taɖodzinya",
+    "recentActivity": "Dɔwɔwɔ si nye xoxo"
+  },
+  "doctor": {
+    "title": "Dɔktɔ ƒe Nuxlɔ̃ si nye Dudu",
+    "description": "Nye nuxlɔ̃ siwo wotia kple dɔɖo siwo dɔktɔwo si nye dudu wɔ wɔ kple ale ŋuti. Xe kpekpe si wo hia, bere si wo hia.",
+    "getStarted": "Dze egɔme",
+    "privacyPolicy": "Privacy ƒe Dɔɖo"
+  },
+  "welcome": {
+    "title": "Woezɔ na Lifeline",
+    "subtitle": "Wo ƒomeɖeɖe vevitɔ na nyagbe siwo. Do be yeawɔ dɔde wɔ kple dzidzedzetɔ bere si nɔnɔme tɔn kple ɖe ɖedie."
+  },
+  "tips": {
+    "title": "Ale ŋuti ƒe kpekpeɖeŋu\nSi le wo dzɔtɔ dzi",
+    "subtitle": "Nye nuxlɔ̃ si nye dudu kple ete siwo\nna nyagbe siwo,\nhafi mele internet dzi o"
+  },
+  "bot": {
+    "title": "Dɔktɔ ƒe Kpekpeɖeŋu",
+    "description": "Ŋdi be! Mɛ nye wo dɔktɔ ƒe kpekpeɖeŋu. Mateŋu akpe wo kple dɔktɔ aɖe si nye duduetɔ na nɔnɔme si le ɖedie.",
+    "callDoctor": "Kpɔ Dɔktɔ Fifi",
+    "connecting": "Wokpe kple dɔktɔ..."
   }
 }

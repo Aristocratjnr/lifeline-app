@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import {
   Alert,
   Image,
   ImageBackground,
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -16,8 +17,6 @@ import {
   View
 } from 'react-native';
 import { useLanguage } from '../../i18n/LanguageContext';
-
-
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -62,6 +61,7 @@ export default function Languages() {
   const [searchText, setSearchText] = useState('');
   const [filteredLanguages, setFilteredLanguages] = useState(languages);
   const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { t } = useTranslation();
   const { currentLanguage, setLanguage } = useLanguage();
@@ -106,11 +106,7 @@ export default function Languages() {
 
   const handleSubmit = async () => {
     if (!selectedLanguageId) {
-      Alert.alert(
-        t('languages.noLanguageSelected'),
-        t('languages.pleaseSelectLanguage'),
-        [{ text: "OK" }]
-      );
+      setModalVisible(true);
       return;
     }
 
@@ -119,9 +115,14 @@ export default function Languages() {
       try {
         // Apply the language change
         await setLanguage(selectedLang.code);
-        
-        // Navigate to welcome screen after language selection
-        navigation.navigate('screens/welcome' as never);
+
+        // Reset navigation stack to Welcome screen for seamless language update
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'screens/welcome' }], 
+          })
+        );
       } catch (error) {
         console.error("Failed to change language:", error);
         Alert.alert(
@@ -205,6 +206,28 @@ export default function Languages() {
         >
           <Text style={styles.submitText}>{t('languages.submit')}</Text>
         </TouchableOpacity>
+
+        {/* Modal for no language selected */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Ionicons name="alert-circle" size={48} color="red" style={{ marginBottom: 10 }} />
+              <Text style={styles.modalTitle}>{t('languages.noLanguageSelected')}</Text>
+              <Text style={styles.modalMessage}>{t('languages.pleaseSelectLanguage')}</Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -350,5 +373,50 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'red',
     backgroundColor: '#fff0f0',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    width: 300,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: 'red',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  modalMessage: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: 'red',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 10,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });

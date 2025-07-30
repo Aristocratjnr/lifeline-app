@@ -1,0 +1,68 @@
+{
+  "settings": {
+    "title": "PARAMÈTRES",
+    "profile": {
+      "title": "Profil",
+      "subtitle": "Configurez votre nom"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Gérer les alertes"
+    },
+    "language": {
+      "title": "Langue",
+      "subtitle": "Choisissez votre langue"
+    },
+    "display": {
+      "title": "Affichage",
+      "subtitle": "Ajuster le texte et la luminosité",
+      "brightness": "Luminosité",
+      "textSize": "Taille du texte",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Texte en gras",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "eyeProtection": "Protection oculaire",
+      "selectTheme": "Sélectionner un thème",
+      "lightMode": "Mode clair",
+      "darkMode": "Mode sombre"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "subtitle": "Informations légales"
+    },
+    "about": {
+      "title": "À propos",
+      "subtitle": "Informations sur l'application"
+    },
+    "offline": {
+      "title": "Contenu hors ligne",
+      "subtitle": "Télécharger pour une utilisation hors ligne"
+    },
+    "help": {
+      "title": "Aide et support",
+      "subtitle": "Obtenir de l'aide"
+    },
+    "delete": {
+      "title": "Supprimer le compte",
+      "subtitle": "Supprimer votre compte"
+    },
+    "brightness": "Luminosité",
+    "eyeProtection": "Protection des yeux"
+  },
+  "common": {
+    "on": "Activé",
+    "off": "Désactivé"
+  },
+  "languages": {
+    "title": "LANGUE",
+    "searchPlaceholder": "Rechercher une langue",
+    "noResults": "Aucune langue trouvée",
+    "tryAgain": "Essayez un autre terme de recherche",
+    "comingSoon": "PLUS DE LANGUES BIENTÔT DISPONIBLES !!!",
+    "submit": "SOUMETTRE"
+  }
+}

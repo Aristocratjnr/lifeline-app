@@ -150,6 +150,30 @@ export default {
   },
 
   // Dashboard
+  "firstAid": {
+    "title": "FIRST AID GUIDES",
+    "subtitle": "Kɔɔ list no mu na\nhwɛ first aid guides no\nna wo atumi\nhunu nneɛma a wo hia",
+    "searchPlaceholder": "Hwehwɛ first aid guide bi",
+    "emergencyTab": "Emergency/External",
+    "exposuresTab": "Exposures/Internal",
+    "categories": {
+      "cuts": "CUTS",
+      "stings": "STINGS",
+      "splinter": "SPLINTER",
+      "sprainStrain": "SPRAIN/STRAIN",
+      "fever": "FEVER",
+      "jockItch": "JOCK ITCH",
+      "rash": "RASH",
+      "hives": "HIVES",
+      "abdominalPains": "ABDOMINAL PAINS",
+      "choking": "CHOKING",
+      "frostBite": "FROST BITE",
+      "heatStroke": "HEAT STROKE",
+      "noseBleed": "NOSE BLEED",
+      "insectBite": "INSECT BITE",
+      "sunBurn": "SUN BURN"
+    }
+  },
   "dashboard": {
     "healthStats": "Apɔmuden Stats",
     "steps": "Anammɔntuo",
@@ -414,5 +438,17 @@ export default {
         "description": "Sɛ wo hia mmoa a, kɔntak yɛn wɔ support@lifeline.com. Sɛ wo hia mmoa a, kɔntak yɛn wɔ support@lifeline.com."
       }
     }
+  },
+  "bot": {
+    "title": "Dɔkta Panidzi",
+    "description": "Yɛ! Mɛ ne wo dɔkta panidzi. Mɛ betumi de wo kɔnɛkt kyerɛ dɔkta bi a ɔnim adwuma mu ama wo nhwɛe kwa.",
+    "callDoctor": "Frɛ Dɔkta Sei",
+    "connecting": "Ɛkɔnɛkt kyerɛ dɔkta..."
+  },
+  "callLogs": {
+    "title": "Frɛ Logs",
+    "outgoing": "Nea wɔfrɛɛ",
+    "incoming": "Nea wɔatwa frɔɔ wo",
+    "missed": "Nea wɔanya yie"
   }
 }
