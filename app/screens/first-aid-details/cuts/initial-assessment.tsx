@@ -17,11 +17,11 @@ const CutsInitialAssessment: React.FC = () => {
   const video = useRef<Video>(null);
 
   const handleNext = () => {
-    router.push('/screens/first-aid-details/cuts/cleaning-wound');
+    router.push('/screens/first-aid-details/cuts/assessment');
   };
 
   const handleSOS = () => {
-    router.push('/screens/doctor');
+    router.push('/sos');
   };
   
   // Load fonts

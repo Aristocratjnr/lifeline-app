@@ -1,4 +1,4 @@
-import { AVPlaybackStatus, Video, ResizeMode } from 'expo-av';
+import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av';
 import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -10,7 +10,7 @@ const CutsIntroVideo: React.FC = () => {
   const handleStatusUpdate = (status: AVPlaybackStatus) => {
     if (!status.isLoaded) return;
     if ((status as any).didJustFinish) {
-      router.replace('/screens/first-aid-details/cuts/initial-assessment');
+      router.replace('/screens/first-aid-details/cuts/assessment');
     }
   };
 
