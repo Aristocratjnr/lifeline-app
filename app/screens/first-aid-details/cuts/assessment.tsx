@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import { LinearGradient } from "expo-linear-gradient"; // Add this import
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -47,7 +46,7 @@ const CutsControllingBleeding: React.FC = () => {
       content: "Rinse the cut under clean running water. Remove any dirt or debris gently. Avoid using hydrogen peroxide or iodine directly in the wound.",
       iconSet: Ionicons,
       iconName: "water-outline",
-      color: "#60A5FA",
+      color: "#ec8080ff",
     },
     {
       title: "Protect the Wound",
@@ -133,24 +132,24 @@ const CutsControllingBleeding: React.FC = () => {
                 <Ionicons name="bulb-outline" size={18} color="#aaa" />
                 <Text style={styles.tipsTitle}>Tips for Treating Cuts</Text>
               </View>
-              <LinearGradient
-                colors={["#F0F9FF", "#E0F2FE", "#F5F5F5"]}
-                style={styles.tipGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
+              <View style={styles.tipTranslucent}>
                 <View style={styles.tipContent}>
                   {currentTip.iconSet && currentTip.iconName && (
-                    <currentTip.iconSet name={currentTip.iconName as React.ComponentProps<typeof Ionicons>['name']} size={28} color={currentTip.color} style={{ marginBottom: 6 }} />
+                    <currentTip.iconSet
+                      name={currentTip.iconName as React.ComponentProps<typeof Ionicons>['name']}
+                      size={28}
+                      color={currentTip.color}
+                      style={{ marginBottom: 6 }}
+                    />
                   )}
                   <Text style={styles.tipText}>{currentTip.title}</Text>
                   <Text style={styles.tipSubText}>{currentTip.content}</Text>
                 </View>
                 <TouchableOpacity style={styles.newTipButton} onPress={handleNewTip}>
-                  <Ionicons name="refresh-outline" size={16} color="#007AFF" style={{ marginRight: 6 }} />
+                  <Ionicons name="refresh-outline" size={16} color="#f88181ff" style={{ marginRight: 6 }} />
                   <Text style={styles.newTipButtonText}>New Tip</Text>
                 </TouchableOpacity>
-              </LinearGradient>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -294,11 +293,12 @@ const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono-Bold",
     marginLeft: 8,
   },
-  tipGradient: {
+  tipTranslucent: {
     borderRadius: 18,
     padding: 18,
     paddingTop: 10,
     margin: 0,
+    backgroundColor: "rgba(255,255,255,0.75)", // translucent white
   },
   tipContent: {
     alignItems: "center",

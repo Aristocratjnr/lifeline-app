@@ -29,7 +29,7 @@ interface FirstAidCategory {
 
 const FirstAidGuides: React.FC = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"emergency" | "exposures">("emergency")
+  const [activeTab, setActiveTab] = useState<"emergency" | "exposures" | "internal">("emergency")
   const [searchText, setSearchText] = useState("")
   const { t } = useTranslation();
 
@@ -113,14 +113,11 @@ const FirstAidGuides: React.FC = () => {
         {/* Subtitle with illustration behind */}
         <View style={styles.subtitleContainer}>
           <View style={styles.illustrationBackground}>
-            <View style={styles.personIllustration}>
-              <View style={styles.personHead} />
-              <View style={styles.personBody} />
-              <View style={styles.medicalCross}>
-                <View style={styles.crossVertical} />
-                <View style={styles.crossHorizontal} />
-              </View>
-            </View>
+            <Image 
+              source={require('../../assets/images/firstbg.png')} 
+              style={styles.illustrationImage}
+              resizeMode="contain"
+            />
           </View>
           <View style={styles.subtitleTextContainer}>
             <Text style={styles.subtitle}>
@@ -146,40 +143,46 @@ const FirstAidGuides: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.toggleButton,
-              activeTab === "emergency"
-                ? styles.activeToggleButton
-                : styles.inactiveToggleButton,
+              styles.firstToggleButton,
+              activeTab === "emergency" && styles.activeToggleButton,
             ]}
             onPress={() => setActiveTab("emergency")}
           >
-            <View>
-              <Text style={[
-                styles.toggleText,
-                activeTab === "emergency" && styles.activeToggleText,
-              ]}>
-                {t('firstAid.emergencyTab')}
-              </Text>
-              {activeTab === "emergency" && <View style={styles.customUnderline} />}
-            </View>
+            <Text style={[
+              styles.toggleText,
+              activeTab === "emergency" && styles.activeToggleText,
+            ]}>
+              Emergency
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.toggleButton,
-              activeTab === "exposures"
-                ? styles.activeToggleButton
-                : styles.inactiveToggleButton,
+              activeTab === "exposures" && styles.activeToggleButton,
             ]}
             onPress={() => setActiveTab("exposures")}
           >
-            <View>
-              <Text style={[
-                styles.toggleText,
-                activeTab === "exposures" && styles.activeToggleText,
-              ]}>
-                {t('firstAid.exposuresTab')}
-              </Text>
-              {activeTab === "exposures" && <View style={styles.customUnderline} />}
-            </View>
+            <Text style={[
+              styles.toggleText,
+              activeTab === "exposures" && styles.activeToggleText,
+            ]}>
+              External Exposures
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.toggleButton,
+              styles.lastToggleButton,
+              activeTab === "internal" && styles.activeToggleButton,
+            ]}
+            onPress={() => setActiveTab("internal")}
+          >
+            <Text style={[
+              styles.toggleText,
+              activeTab === "internal" && styles.activeToggleText,
+            ]}>
+              Internal
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -256,42 +259,9 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 8,
   },
-  personIllustration: {
-    width: 70,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  personHead: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#FFB5B5",
-    marginBottom: 2,
-  },
-  personBody: {
-    width: 30,
-    height: 35,
-    backgroundColor: "#FFB5B5",
-    borderRadius: 15,
-  },
-  medicalCross: {
-    position: "absolute",
-    top: 25,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  crossVertical: {
-    width: 3,
-    height: 12,
-    backgroundColor: "#FF6B6B",
-    position: "absolute",
-  },
-  crossHorizontal: {
-    width: 12,
-    height: 3,
-    backgroundColor: "#FF6B6B",
-    position: "absolute",
+  illustrationImage: {
+    width: 140,
+    height: 140,
   },
   searchContainer: {
     flexDirection: "row",
@@ -324,37 +294,46 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     marginBottom: 16,
-    backgroundColor: "#fff",
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: "#000",
-    padding: 2,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 25,
+    padding: 3,
+    marginHorizontal: 20,
   },
   toggleButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 18,
-    borderRadius: 22,
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  firstToggleButton: {
+    borderTopLeftRadius: 22,
+    borderBottomLeftRadius: 22,
+  },
+  lastToggleButton: {
+    borderTopRightRadius: 22,
+    borderBottomRightRadius: 22,
   },
   activeToggleButton: {
     backgroundColor: "#fff",
-  },
-  inactiveToggleButton: {
-    backgroundColor: "transparent",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   toggleText: {
-    fontSize: 13,
-    color: "#888",
+    fontSize: 12,
+    color: "#666",
     fontFamily: "JetBrainsMono-Bold",
-    fontWeight: "bold",
+    fontWeight: "600",
+    textAlign: "center",
   },
   activeToggleText: {
     color: "#000",
-  },
-  customUnderline: {
-    height: 2,
-    backgroundColor: "#000",
-    marginTop: 2,
-    borderRadius: 1,
+    fontWeight: "700",
   },
   scrollView: {
     flex: 1,
