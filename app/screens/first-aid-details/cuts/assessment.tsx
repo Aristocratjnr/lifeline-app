@@ -15,7 +15,7 @@ import {
   View,
 } from "react-native";
 
-const { width, height } = Dimensions.get("window");
+Dimensions.get("window");
 
 const CutsControllingBleeding: React.FC = () => {
   const router = useRouter();
@@ -104,7 +104,8 @@ const CutsControllingBleeding: React.FC = () => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Cuts - Controlling Bleeding</Text>
         </View>
-        
+
+        {/* palm */}
         <ScrollView style={styles.content}>
           <View style={styles.illustrationContainer}>
             <Image 
@@ -207,11 +208,20 @@ const styles = StyleSheet.create({
   illustrationContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10, // Reduced vertical margin
+    marginVertical: 10,
   },
   illustration: {
-    width: width * 0.45, // Reduced width
-    height: height * 0.18, // Reduced height
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    borderWidth: 3,
+    borderColor: '#D9534F',
+    backgroundColor: '#fff',
+    shadowColor: '#D9534F',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 6,
   },
   infoContainer: {
     backgroundColor: 'white',

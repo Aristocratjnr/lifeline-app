@@ -111,14 +111,6 @@ export default function DoctorScreen() {
           <Text style={styles.buttonText}>{t('doctor.getStarted')}</Text>
         </TouchableOpacity>
 
-        {/* Call Logs Button */}
-        <TouchableOpacity 
-          style={[styles.button, { backgroundColor: '#3B82F6', marginTop: 15 }]}
-          onPress={() => router.push('/screens/call-logs')}
-        >
-          <Text style={styles.buttonText}>{t('callLogs.title')}</Text>
-        </TouchableOpacity>
-
         {/* Privacy Policy */}
         <TouchableOpacity onPress={handlePrivacyPolicy}>
           <Text style={styles.privacyText}>{t('doctor.privacyPolicy')}</Text>

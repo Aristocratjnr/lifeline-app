@@ -417,22 +417,55 @@ const DashboardScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.botModalCard}>
-            <View style={styles.botIcon}>
-              <MaterialIcons name="support-agent" size={48} color="#E53935" />
+            <TouchableOpacity 
+              style={styles.modalCloseButton} 
+              onPress={() => setShowBotModal(false)}
+            >
+              <AntDesign name="close" size={24} color="#666" />
+            </TouchableOpacity>
+            <View style={styles.botIconContainer}>
+              <View style={styles.botIcon}>
+                <MaterialIcons name="support-agent" size={48} color="#E53935" />
+              </View>
+              <View style={styles.botIconRing} />
             </View>
             <Text style={styles.botModalTitle}>{t('bot.title')}</Text>
             <Text style={styles.botModalText}>{t('bot.description')}</Text>
+            
             {isConnectingDoctor ? (
               <View style={styles.connectingContainer}>
                 <ActivityIndicator size="large" color="#E53935" />
                 <Text style={styles.connectingText}>{t('bot.connecting')}</Text>
               </View>
             ) : (
-              <TouchableOpacity style={styles.callDoctorButton} onPress={handleCallDoctor} activeOpacity={0.8}>
-                <MaterialIcons name="phone" size={20} color="#fff" style={{ marginRight: 8 }} />
-                <Text style={styles.callDoctorButtonText}>{t('bot.callDoctor')}</Text>
-              </TouchableOpacity>
+              <View style={styles.modalButtonsContainer}>
+                <TouchableOpacity 
+                  style={styles.callDoctorButton} 
+                  onPress={handleCallDoctor} 
+                  activeOpacity={0.8}
+                >
+                  <MaterialIcons name="phone" size={20} color="#fff" style={{ marginRight: 8 }} />
+                  <Text style={styles.callDoctorButtonText}>{t('bot.callDoctor')}</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={styles.callLogsButton} 
+                  onPress={() => {
+                    setShowBotModal(false);
+                    router.push('/screens/call-logs');
+                  }} 
+                  activeOpacity={0.8}
+                >
+                  <MaterialIcons name="history" size={20} color="#E53935" style={{ marginRight: 8 }} />
+                  <Text style={styles.callLogsButtonText}>{t('callLogs.title')}</Text>
+                </TouchableOpacity>
+              </View>
             )}
+            
+            <View style={styles.modalFooter}>
+              <MaterialIcons name="info-outline" size={16} color="#666" style={{ marginRight: 6 }} />
+              <Text style={styles.modalFooterText}>{t('bot.available24x7')}</Text>
+            </View>
           </View>
         </View>
       </Modal>
@@ -906,6 +939,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 24,
     elevation: 12,
+    position: 'relative',
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    right: 16,
+    top: 16,
+    zIndex: 1,
+    padding: 8,
+  },
+  botIconContainer: {
+    position: 'relative',
+    marginBottom: 16,
   },
   botIcon: {
     width: 80,
@@ -914,23 +959,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    zIndex: 2,
   },
-  botModalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    fontFamily: 'JetBrainsMono-Bold',
-    color: '#E53935',
-    textAlign: 'center',
+  botIconRing: {
+    position: 'absolute',
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 2,
+    borderColor: '#E53935',
+    top: -8,
+    left: -8,
+    opacity: 0.2,
   },
-  botModalText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
-    fontFamily: 'JetBrainsMono-Regular',
-    lineHeight: 22,
+  modalButtonsContainer: {
+    width: '100%',
+    gap: 12,
+    marginTop: 8,
   },
   callDoctorButton: {
     flexDirection: 'row',
@@ -940,23 +985,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 160,
+    width: '100%',
   },
-  callDoctorButtonText: {
-    color: '#fff',
+  callLogsButton: {
+    flexDirection: 'row',
+    backgroundColor: '#FFE5E5',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#E53935',
+  },
+  callLogsButtonText: {
+    color: '#E53935',
     fontSize: 16,
     fontFamily: 'JetBrainsMono-Bold',
   },
-  connectingContainer: {
+  modalFooter: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
+    marginTop: 20,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
   },
-  connectingText: {
-    fontSize: 16,
-    color: '#E53935',
+  modalFooterText: {
+    fontSize: 14,
+    color: '#666',
     fontFamily: 'JetBrainsMono-Regular',
-    textAlign: 'center',
   },
   floatingBot: {
     position: 'absolute',
@@ -976,6 +1035,39 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+  },
+  botModalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#E53935',
+    textAlign: 'center',
+  },
+  botModalText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+    fontFamily: 'JetBrainsMono-Regular',
+    lineHeight: 22,
+  },
+  connectingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+  },
+  connectingText: {
+    fontSize: 16,
+    color: '#E53935',
+    fontFamily: 'JetBrainsMono-Regular',
+    textAlign: 'center',
+    marginTop: 12,
+  },
+  callDoctorButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
   },
 })
 

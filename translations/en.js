@@ -76,5 +76,14 @@ export default {
     "dailyTip": "DAILY TIP",
     "lifelineHistory": "Lifeline History",
     "recentActivity": "Recent Activity"
+  },
+
+  // Bot modal
+  "bot": {
+    "title": "Medical Assistant Bot",
+    "description": "Get instant help or connect to a doctor for emergencies.",
+    "callDoctor": "Call Doctor",
+    "connecting": "Connecting to a doctor...",
+    "available24x7": "Available 24/7 for your medical needs"
   }
 }

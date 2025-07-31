@@ -71,7 +71,7 @@ const CutsInitialAssessment: React.FC = () => {
             <Video
                ref={video}
                style={styles.topVideo}
-               source={require("@/assets/videos/cut-1.mp4")}
+               source={require("@/assets/videos/cut-2.mp4")}
                useNativeControls
                resizeMode={ResizeMode.COVER}
                shouldPlay={false} 

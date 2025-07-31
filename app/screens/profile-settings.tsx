@@ -181,6 +181,8 @@ export default function ProfileSettings() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
+      {/* Overlay for better text contrast */}
+      <View style={styles.overlay} />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -351,6 +353,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    position: 'relative',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    zIndex: 1,
   },
   container: {
     flex: 1,
