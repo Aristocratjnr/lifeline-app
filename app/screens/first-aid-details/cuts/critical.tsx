@@ -4,12 +4,12 @@ import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import React, { useRef } from "react";
 import {
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ImageBackground,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const CutsInitialAssessment: React.FC = () => {
@@ -18,7 +18,7 @@ const CutsInitialAssessment: React.FC = () => {
 
 
   const handleNext = () => {
-    router.push('/screens/first-aid-details/cuts/follow-up-care');
+    router.push('/screens/first-aid-details/cuts/finished');
   };
 
   const handleSOS = () => {
@@ -72,7 +72,7 @@ const CutsInitialAssessment: React.FC = () => {
             <Video
                ref={video}
                style={styles.topVideo}
-               source={require("@/assets/videos/cut-4.mp4")}
+               source={require("@/assets/videos/doctor.mp4")}
                useNativeControls
                resizeMode={ResizeMode.COVER}
                progressUpdateIntervalMillis={250}
@@ -88,17 +88,11 @@ const CutsInitialAssessment: React.FC = () => {
               <Text style={styles.scenarioTitle}>Scenario</Text>
             </View>
             <Text style={styles.scenarioText}>
-            Place a bandage against the length of the CUT or close the wound and protect against infections
+              .....more serious cuts should not be treated at home. Call your <Text style={styles.highlight}>doctor</Text> or your <Text style={styles.highlight}>local emergency</Text>
             </Text>
           </View>
 
-          
-            <View style={styles.scenarioHeader}>
-             
-            </View>
-            <Text style={styles.scenarioText}>
-            Remember to check it frequently to keep it clean
-            </Text>
+         
          
           
 
@@ -238,6 +232,10 @@ const styles = StyleSheet.create({
   },
   activeCaptionText: {
     color: '#e74c3c',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  highlight: {
+    color: '#FF0000',
     fontFamily: 'JetBrainsMono-Bold',
   },
   bottomSpacing: {

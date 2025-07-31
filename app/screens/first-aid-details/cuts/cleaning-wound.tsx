@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   ImageBackground,
   ScrollView,
@@ -16,12 +16,37 @@ const CutsInitialAssessment: React.FC = () => {
   const router = useRouter();
   const video = useRef<Video>(null);
 
+  // Per-word transcript with timings (in seconds)
+  const transcript = useMemo(() => [
+    { word: "Apply", start: 0, end: 0.7 },
+    { word: "gentle", start: 0.7, end: 1.2 },
+    { word: "pressure", start: 1.2, end: 2.0 },
+    { word: "to", start: 2.0, end: 2.2 },
+    { word: "reduce", start: 2.2, end: 2.8 },
+    { word: "bleeding.", start: 2.8, end: 3.5 },
+    { word: "Clean", start: 3.5, end: 4.2 },
+    { word: "the", start: 4.2, end: 4.4 },
+    { word: "wound", start: 4.4, end: 5.0 },
+    { word: "with", start: 5.0, end: 5.3 },
+    { word: "mild", start: 5.3, end: 5.7 },
+    { word: "soap", start: 5.7, end: 6.2 },
+    { word: "and", start: 6.2, end: 6.4 },
+    { word: "water.", start: 6.4, end: 7.0 },
+    { word: "Remove", start: 7.0, end: 7.7 },
+    { word: "any", start: 7.7, end: 8.0 },
+    { word: "visible", start: 8.0, end: 8.5 },
+    { word: "debris", start: 8.5, end: 9.0 },
+    { word: "carefully.", start: 9.0, end: 10.0 },
+  ], []);
+
+  const [highlightedWordIdx, setHighlightedWordIdx] = useState<number>(-1);
+
   const handleNext = () => {
-    router.push('/screens/first-aid-details/cuts/cleaning-wound');
+    router.push('/screens/first-aid-details/cuts/controlling-bleeding');
   };
 
   const handleSOS = () => {
-    router.push('/screens/doctor');
+    router.push('/sos');
   };
   
   // Load fonts
@@ -36,6 +61,19 @@ const CutsInitialAssessment: React.FC = () => {
     } else {
       router.replace('/dashboard');
     }
+  };
+
+  // Highlight logic for per-word
+  const handlePlaybackStatusUpdate = (status: any) => {
+    if (!status.isLoaded) return;
+    const seconds = status.positionMillis / 1000;
+    let idx = transcript.findIndex(
+      (w, i) => seconds >= w.start && seconds < w.end
+    );
+    if (idx === -1 && seconds >= transcript[transcript.length - 1].end) {
+      idx = transcript.length - 1;
+    }
+    setHighlightedWordIdx(idx);
   };
 
   if (!fontsLoaded) {
@@ -58,7 +96,6 @@ const CutsInitialAssessment: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>First Aid: Cuts</Text>
         </View>
         
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -74,43 +111,28 @@ const CutsInitialAssessment: React.FC = () => {
                source={require("@/assets/videos/cut-2.mp4")}
                useNativeControls
                resizeMode={ResizeMode.COVER}
-               shouldPlay={false} 
+               progressUpdateIntervalMillis={200}
+               shouldPlay={false}
+               onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
              />
-          
           </View>
 
           {/* Scenario Section */}
           <View style={styles.scenarioContainer}>
             <View style={styles.scenarioHeader}>
-              <Text style={styles.scenarioTitle}>Scenario</Text>
+              <Text style={styles.scenarioTitle}>Instructions</Text>
             </View>
             <Text style={styles.scenarioText}>
-              Katrina is taking a walk, when she trips and cuts her hand
+              {transcript.map((w, i) => (
+                <Text
+                  key={i}
+                  style={i === highlightedWordIdx ? styles.wordHighlight : undefined}
+                >
+                  {w.word + ' '}
+                </Text>
+              ))}
             </Text>
           </View>
-
-          {/* Divider */}
-          <View style={styles.divider} />
-
-          {/* Instructions Section */}
-          <View style={styles.instructionsContainer}>
-           
-            
-            <View style={styles.instructionContent}>
-              <Text style={styles.instructionText}>
-                If you have a small CUT, first apply pressure to the wound to reduce bleeding
-              </Text>
-              
-              <View style={styles.subTextContainer}>
-                <Text style={styles.instructionSubText}>
-                  Applying pressure helps constrict the blood vessels preventing blood from flowing through
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Additional spacing for bottom navigation */}
-          <View style={styles.bottomSpacing} />
         </ScrollView>
         
         {/* Bottom Navigation */}
@@ -176,7 +198,8 @@ const styles = StyleSheet.create({
     height: 220,
   },
   scenarioContainer: {
-    marginBottom: 20,
+    marginTop: 70,
+    marginBottom: 4,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 12,
     padding: 16,
@@ -190,7 +213,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
     paddingBottom: 8,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   scenarioTitle: {
     fontSize: 16,
@@ -206,48 +229,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontFamily: 'JetBrainsMono-Regular',
   },
-  divider: {
-    height: 2,
-    backgroundColor: '#e0e0e0',
-    width: '100%',
-    marginVertical: 20,
-  },
-  instructionsContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 12,
-    padding: 0,
-    marginBottom: 20,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  instructionHeader: {
-    backgroundColor: '#3498db',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
-  instructionHeaderText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
-    fontFamily: 'JetBrainsMono-Bold',
-    textAlign: 'center',
-  },
-  instructionContent: {
-    padding: 16,
-  },
-  instructionText: {
-    fontSize: 18,
-    color: '#2c3e50',
-    lineHeight: 26,
-    textAlign: 'center',
-    fontFamily: 'JetBrainsMono-Bold',
-    marginBottom: 16,
-  },
+ 
   subTextContainer: {
     backgroundColor: '#f8f9fa',
     borderRadius: 8,
@@ -271,6 +253,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'JetBrainsMono-Regular',
     fontStyle: 'italic',
+  },
+  captionsContainer: {
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  captionText: {
+    fontSize: 14,
+    color: '#34495e',
+    fontFamily: 'JetBrainsMono-Regular',
+    marginVertical: 2,
+    textAlign: 'center',
+  },
+  activeCaptionText: {
+    color: '#e74c3c',
+    fontFamily: 'JetBrainsMono-Bold',
   },
   bottomSpacing: {
     height: 120, // Space for bottom navigation
@@ -346,6 +343,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+  },
+  wordHighlight: {
+    backgroundColor: '#ffe082',
+    borderRadius: 4,
+    color: '#d84315',
+    fontWeight: 'bold',
   },
 });
 

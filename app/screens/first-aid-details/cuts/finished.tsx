@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   ImageBackground,
   ScrollView,
@@ -16,10 +16,25 @@ const CutsInitialAssessment: React.FC = () => {
   const router = useRouter();
   const video = useRef<Video>(null);
 
+  // Per-word transcript with timings (adjust timings to match your video)
+  const transcript = useMemo(() => [
+    { word: "But", start: 0, end: 0.3 },
+    { word: "if", start: 0.3, end: 0.5 },
+    { word: "your", start: 0.5, end: 0.7 },
+    { word: "cut", start: 0.7, end: 1.0 },
+    { word: "is", start: 1.0, end: 1.2 },
+    { word: "not", start: 1.2, end: 1.4 },
+    { word: "as", start: 1.4, end: 1.6 },
+    { word: "serious,", start: 1.6, end: 2.0 },
+    { word: "it", start: 2.0, end: 2.2 },
+    { word: "should", start: 2.2, end: 2.5 },
+    { word: "heal", start: 2.5, end: 2.8 },
+    { word: "about", start: 2.8, end: 3.1 },
+    { word: "two", start: 3.1, end: 3.3 },
+    { word: "weeks.", start: 3.3, end: 3.7 },
+  ], []);
 
-  const handleNext = () => {
-    router.push('/screens/first-aid-details/cuts/follow-up-care');
-  };
+  const [highlightedWordIdx, setHighlightedWordIdx] = useState<number>(-1);
 
   const handleSOS = () => {
     router.push('/sos');
@@ -37,6 +52,19 @@ const CutsInitialAssessment: React.FC = () => {
     } else {
       router.replace('/dashboard');
     }
+  };
+
+  // Highlight logic for per-word
+  const handlePlaybackStatusUpdate = (status: any) => {
+    if (!status.isLoaded) return;
+    const seconds = status.positionMillis / 1000;
+    let idx = transcript.findIndex(
+      (w, i) => seconds >= w.start && seconds < w.end
+    );
+    if (idx === -1 && seconds >= transcript[transcript.length - 1].end) {
+      idx = transcript.length - 1;
+    }
+    setHighlightedWordIdx(idx);
   };
 
   if (!fontsLoaded) {
@@ -59,7 +87,6 @@ const CutsInitialAssessment: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-         
         </View>
         
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -72,15 +99,14 @@ const CutsInitialAssessment: React.FC = () => {
             <Video
                ref={video}
                style={styles.topVideo}
-               source={require("@/assets/videos/cut-4.mp4")}
+               source={require("@/assets/videos/cut-12.mp4")}
                useNativeControls
                resizeMode={ResizeMode.COVER}
                progressUpdateIntervalMillis={250}
                shouldPlay={false}
+               onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
              />
-          
           </View>
-
 
           {/* Scenario Section */}
           <View style={styles.scenarioContainer}>
@@ -88,22 +114,16 @@ const CutsInitialAssessment: React.FC = () => {
               <Text style={styles.scenarioTitle}>Scenario</Text>
             </View>
             <Text style={styles.scenarioText}>
-            Place a bandage against the length of the CUT or close the wound and protect against infections
+              {transcript.map((w, i) => (
+                <Text
+                  key={i}
+                  style={i === highlightedWordIdx ? styles.wordHighlight : undefined}
+                >
+                  {w.word + ' '}
+                </Text>
+              ))}
             </Text>
           </View>
-
-          
-            <View style={styles.scenarioHeader}>
-             
-            </View>
-            <Text style={styles.scenarioText}>
-            Remember to check it frequently to keep it clean
-            </Text>
-         
-          
-
-        
-          
         </ScrollView>
         
         {/* Bottom Navigation */}
@@ -114,10 +134,6 @@ const CutsInitialAssessment: React.FC = () => {
           
           <TouchableOpacity style={styles.sosButton} onPress={handleSOS}>
             <Text style={styles.sosText}>SOS</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-            <Ionicons name="arrow-forward" size={28} color="#000" />
           </TouchableOpacity>
         </View>
       </View>
@@ -314,6 +330,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+  },
+  wordHighlight: {
+    backgroundColor: '#ffe082',
+    borderRadius: 4,
+    color: '#d84315',
+    fontWeight: 'bold',
   },
 });
 

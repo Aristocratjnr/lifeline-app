@@ -1,12 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
+import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useRef } from "react";
 import {
-  Dimensions,
-  Image,
   ImageBackground,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,11 +12,19 @@ import {
   View,
 } from "react-native";
 
-const { width, height } = Dimensions.get("window");
-
-const CutsFollowUpCare: React.FC = () => {
+const CutsInitialAssessment: React.FC = () => {
   const router = useRouter();
+  const video = useRef<Video>(null);
 
+
+  const handleNext = () => {
+    router.push('/screens/first-aid-details/cuts/preventing-infection');
+  };
+
+  const handleSOS = () => {
+    router.push('/sos');
+  };
+  
   // Load fonts
   const [fontsLoaded] = useFonts({
     "JetBrainsMono-Regular": require("@/assets/fonts/JetBrainsMono-Regular.ttf"),
@@ -39,12 +45,12 @@ const CutsFollowUpCare: React.FC = () => {
 
   return (
     <ImageBackground 
-      source={require('../../../../assets/images/blur.png')} 
+      source={require('../../../../assets/images/blur.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
       <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
@@ -53,76 +59,193 @@ const CutsFollowUpCare: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Cuts - Follow-up Care</Text>
+         
         </View>
         
-        <ScrollView style={styles.content}>
-          <View style={styles.illustrationContainer}>
-            <Image 
-              source={require('../../../../assets/images/cut-palm.png')} 
-              style={styles.illustration}
-              resizeMode="contain"
-            />
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Credits */}
+          <View style={styles.creditsContainer}>
+            <Text style={styles.creditsText}>Credits: First Aid Kit</Text>
           </View>
+          {/* Top Video Illustration */}
+          <View style={styles.topVideoContainer}>
+            <Video
+               ref={video}
+               style={styles.topVideo}
+               source={require("@/assets/videos/cut-10.mp4")}
+               useNativeControls
+               resizeMode={ResizeMode.COVER}
+               progressUpdateIntervalMillis={250}
+               shouldPlay={false}
+             />
           
-          <View style={styles.infoContainer}>
-            <Text style={styles.sectionTitle}>Follow-up Care:</Text>
-            <Text style={styles.description}>
-              Proper follow-up care is essential for optimal healing and to prevent complications. Monitoring the wound and maintaining good care practices will help ensure the best outcome.
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Daily care routine:</Text>
-            <Text style={styles.description}>
-              1. Check the wound daily for signs of healing or complications.{'\n'}
-              2. Gently clean the wound with water during dressing changes.{'\n'}
-              3. Apply a thin layer of antibiotic ointment if recommended.{'\n'}
-              4. Replace the dressing with a clean, sterile one.{'\n'}
-              5. Keep the wound dry and protected from further injury.
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Promoting healing:</Text>
-            <Text style={styles.description}>
-              • Eat a healthy diet rich in protein, vitamins A and C, and zinc to support tissue repair{'\n'}
-              • Stay hydrated to maintain good blood flow to the wound{'\n'}
-              • Get adequate rest to allow your body to focus on healing{'\n'}
-              • Avoid smoking as it impairs circulation and delays healing{'\n'}
-              • Protect the healing wound from sun exposure to prevent dark scarring
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Normal healing process:</Text>
-            <Text style={styles.description}>
-              • Day 1-3: Blood clotting and initial inflammation{'\n'}
-              • Day 3-7: New tissue begins to form (wound may appear red or pink){'\n'}
-              • Week 1-3: Continued tissue growth and wound contraction{'\n'}
-              • Week 3+: Remodeling phase where scar tissue strengthens{'\n'}
-              • Weeks to months: Scar maturation and fading
-            </Text>
-            
-            <Text style={styles.sectionTitle}>When healing is delayed:</Text>
-            <Text style={styles.description}>
-              • The wound becomes larger or deeper over time{'\n'}
-              • Persistent or increasing pain{'\n'}
-              • Persistent redness, swelling, or warmth{'\n'}
-              • Foul odor or unusual discharge{'\n'}
-              • Fever develops{'\n'}
-              • The wound fails to show signs of improvement after a few days
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Scar care:</Text>
-            <Text style={styles.description}>
-              • Once the wound has closed, gently massage the area with moisturizer{'\n'}
-              • Protect the new skin from sun exposure{'\n'}
-              • Silicone gel sheets or scar gels may help minimize scarring{'\n'}
-              • Be patient - scars can continue to improve for up to a year
+          </View>
+
+
+          {/* Recap Section */}
+          <View style={styles.recapContainer}>
+            <Text style={styles.recapText}>
+              TO RECAP!!!
             </Text>
           </View>
+         
+          
+
+        
+          
         </ScrollView>
-      </SafeAreaView>
+        
+        {/* Bottom Navigation */}
+        <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={28} color="#000" />
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.sosButton} onPress={handleSOS}>
+            <Text style={styles.sosText}>SOS</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+            <Ionicons name="arrow-forward" size={28} color="#000" />
+          </TouchableOpacity>
+        </View>
+      </View>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
+    justifyContent: 'space-between',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    fontFamily: 'JetBrainsMono-Bold',
+    flex: 1,
+    textAlign: 'center',
+    marginRight: 29, 
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  topVideoContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  topVideo: {
+    width: '100%',
+    height: 220,
+  },
+  scenarioContainer: {
+    marginTop: 70,
+    marginBottom: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  scenarioHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    paddingBottom: 8,
+    marginBottom: 10,
+  },
+  scenarioTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    fontFamily: 'JetBrainsMono-Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  scenarioText: {
+    fontSize: 15,
+    color: '#34495e',
+    lineHeight: 22,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+ 
+  subTextContainer: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    padding: 12,
+  },
+  creditsContainer: {
+    alignSelf: 'flex-end',
+    marginTop: 4,
+    marginRight: 6,
+  },
+  creditsText: {
+    fontSize: 16,
+    color: '#000',
+    fontFamily: 'Cochin',
+    fontStyle: 'italic',
+  },
+  instructionSubText: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    lineHeight: 22,
+    textAlign: 'center',
+    fontFamily: 'JetBrainsMono-Regular',
+    fontStyle: 'italic',
+  },
+  captionsContainer: {
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  captionText: {
+    fontSize: 14,
+    color: '#34495e',
+    fontFamily: 'JetBrainsMono-Regular',
+    marginVertical: 2,
+    textAlign: 'center',
+  },
+  activeCaptionText: {
+    color: '#e74c3c',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  recapContainer: {
+    marginTop: 70,
+    marginBottom: 4,
+    borderRadius: 12,
+    padding: 16,
+  },
+  recapText: {
+    fontSize: 23,
+    color: '#000',
+    fontWeight: 'bold',
+    lineHeight: 26,
+    fontFamily: 'JetBrainsMono-Bold',
+    textAlign: 'center',
+  },
+  bottomSpacing: {
+    height: 120, // Space for bottom navigation
+  },
   backgroundImage: {
     flex: 1,
     width: '100%',
@@ -133,65 +256,68 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)',
-    zIndex: 2,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-  },
   backButton: {
-    padding: 5,
-    marginRight: 10,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-    fontFamily: 'JetBrainsMono-Bold',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  illustrationContainer: {
+    width: 50,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  illustration: {
-    width: width * 0.6,
-    height: height * 0.3,
+  bottomNav: {
+    zIndex: 3,
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
-  infoContainer: {
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 20,
+  sosButton: {
+    backgroundColor: '#FF3B30',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -20, 
+    elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3,
   },
-  sectionTitle: {
-    fontSize: 18,
+  sosText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 10,
     fontFamily: 'JetBrainsMono-Bold',
   },
-  description: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-    marginBottom: 15,
-    fontFamily: 'JetBrainsMono-Regular',
+  nextButton: {
+    position: 'absolute',
+    right: 30,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
 });
 
-export default CutsFollowUpCare;
+export default CutsInitialAssessment;

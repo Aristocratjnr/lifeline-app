@@ -187,11 +187,16 @@
       "poison": "Poison Control"
     }
   },
+  "display": {
+    "brightness": "Brightness",
+    "eyeProtection": "Eye Protection"
+  },
   "bot": {
     "title": "Medical Assistant",
     "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
     "callDoctor": "Call Doctor Now",
-    "connecting": "Connecting to doctor..."
+    "connecting": "Connecting to doctor...",
+    "available24x7": "Available 24x7"
   },
   "callLogs": {
     "title": "Call Logs",

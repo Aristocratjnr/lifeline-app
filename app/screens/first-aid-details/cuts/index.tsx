@@ -22,6 +22,7 @@ const CutsIntroVideo: React.FC = () => {
         style={StyleSheet.absoluteFill}
         resizeMode={ResizeMode.COVER}
         shouldPlay
+        rate={1.5} 
         onPlaybackStatusUpdate={handleStatusUpdate}
         useNativeControls={false}
       />

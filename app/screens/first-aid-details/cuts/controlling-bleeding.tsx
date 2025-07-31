@@ -1,12 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
+import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
-  Dimensions,
-  Image,
   ImageBackground,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,11 +12,42 @@ import {
   View,
 } from "react-native";
 
-const { width, height } = Dimensions.get("window");
-
-const CutsControllingBleeding: React.FC = () => {
+const CutsInitialAssessment: React.FC = () => {
   const router = useRouter();
+  const video = useRef<Video>(null);
 
+  // Per-word transcript with timings (in seconds)
+  const transcript = useMemo(() => [
+    { word: "Do", start: 0, end: 0.3 },
+    { word: "not", start: 0.3, end: 0.5 },
+    { word: "use", start: 0.5, end: 0.8 },
+    { word: "rubbing", start: 0.8, end: 1.2 },
+    { word: "alcohol", start: 1.2, end: 1.7 },
+    { word: "or", start: 1.7, end: 1.9 },
+    { word: "hydrogen", start: 1.9, end: 2.4 },
+    { word: "peroxide", start: 2.4, end: 2.9 },
+    { word: "to", start: 2.9, end: 3.1 },
+    { word: "clean", start: 3.1, end: 3.5 },
+    { word: "cut", start: 3.5, end: 3.8 },
+    { word: "-", start: 3.8, end: 3.9 },
+    { word: "it", start: 3.9, end: 4.1 },
+    { word: "can", start: 4.1, end: 4.3 },
+    { word: "slow", start: 4.3, end: 4.6 },
+    { word: "the", start: 4.6, end: 4.7 },
+    { word: "healing", start: 4.7, end: 5.1 },
+    { word: "process", start: 5.1, end: 5.6 },
+  ], []);
+
+  const [highlightedWordIdx, setHighlightedWordIdx] = useState<number>(-1);
+
+  const handleNext = () => {
+    router.push('/screens/first-aid-details/cuts/applying-dressings');
+  };
+
+  const handleSOS = () => {
+    router.push('/sos');
+  };
+  
   // Load fonts
   const [fontsLoaded] = useFonts({
     "JetBrainsMono-Regular": require("@/assets/fonts/JetBrainsMono-Regular.ttf"),
@@ -33,18 +62,31 @@ const CutsControllingBleeding: React.FC = () => {
     }
   };
 
+  // Highlight logic for per-word
+  const handlePlaybackStatusUpdate = (status: any) => {
+    if (!status.isLoaded) return;
+    const seconds = status.positionMillis / 1000;
+    let idx = transcript.findIndex(
+      (w, i) => seconds >= w.start && seconds < w.end
+    );
+    if (idx === -1 && seconds >= transcript[transcript.length - 1].end) {
+      idx = transcript.length - 1;
+    }
+    setHighlightedWordIdx(idx);
+  };
+
   if (!fontsLoaded) {
     return <View style={styles.container} />;
   }
 
   return (
     <ImageBackground 
-      source={require('../../../../assets/images/blur.png')} 
+      source={require('../../../../assets/images/blur.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
       <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
@@ -53,56 +95,182 @@ const CutsControllingBleeding: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Cuts - Controlling Bleeding</Text>
         </View>
         
-        <ScrollView style={styles.content}>
-          <View style={styles.illustrationContainer}>
-            <Image 
-              source={require('../../../../assets/images/cut-palm.png')} 
-              style={styles.illustration}
-              resizeMode="contain"
-            />
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Credits */}
+          <View style={styles.creditsContainer}>
+            <Text style={styles.creditsText}>Credits: First Aid Kit</Text>
           </View>
-          
-          <View style={styles.infoContainer}>
-            <Text style={styles.sectionTitle}>Controlling Bleeding:</Text>
-            <Text style={styles.description}>
-              Controlling bleeding is often the first step in treating a cut. Most minor cuts will stop bleeding on their own, but some may require direct pressure.
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Steps to control bleeding:</Text>
-            <Text style={styles.description}>
-              1. Apply direct pressure to the wound with a clean cloth, sterile gauze, or your hand if nothing else is available.{'\n'}
-              2. Maintain pressure for at least 5-10 minutes without lifting to check if bleeding has stopped.{'\n'}
-              3. If blood soaks through the material, add another layer on top rather than removing the original one.{'\n'}
-              4. Elevate the injured area above the level of the heart if possible to reduce blood flow to the area.{'\n'}
-              5. If bleeding is severe, apply pressure to the artery that supplies blood to the wound (pressure points).
-            </Text>
-            
-            <Text style={styles.sectionTitle}>Pressure points:</Text>
-            <Text style={styles.description}>
-              • For arm or hand injuries: Apply pressure to the brachial artery (inside of upper arm) or radial/ulnar arteries (wrist).{'\n'}
-              • For leg or foot injuries: Apply pressure to the femoral artery (groin area) or popliteal artery (behind the knee).{'\n'}
-              • Never use a tourniquet unless absolutely necessary and you have proper training.
-            </Text>
-            
-            <Text style={styles.sectionTitle}>When to seek immediate medical help:</Text>
-            <Text style={styles.description}>
-              • Bleeding is spurting or cannot be controlled with direct pressure{'\n'}
-              • Bleeding continues heavily after 10-15 minutes of direct pressure{'\n'}
-              • The person shows signs of shock (pale, cold, clammy skin; rapid breathing; dizziness; weakness){'\n'}
-              • The cut is on the neck, chest, or abdomen{'\n'}
-              • The person loses consciousness
+          {/* Top Video Illustration */}
+          <View style={styles.topVideoContainer}>
+            <Video
+               ref={video}
+               style={styles.topVideo}
+               source={require("@/assets/videos/cut-3.mp4")}
+               useNativeControls
+               resizeMode={ResizeMode.COVER}
+               progressUpdateIntervalMillis={250}
+               shouldPlay={false}
+               onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+             />
+          </View>
+
+          {/* Scenario Section */}
+          <View style={styles.scenarioContainer}>
+            <View style={styles.scenarioHeader}>
+              <Text style={styles.scenarioTitle}>Scenario</Text>
+            </View>
+            <Text style={styles.scenarioText}>
+              {transcript.map((w, i) => (
+                <Text
+                  key={i}
+                  style={i === highlightedWordIdx ? styles.wordHighlight : undefined}
+                >
+                  {w.word + ' '}
+                </Text>
+              ))}
             </Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
+        
+        {/* Bottom Navigation */}
+        <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={28} color="#000" />
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.sosButton} onPress={handleSOS}>
+            <Text style={styles.sosText}>SOS</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+            <Ionicons name="arrow-forward" size={28} color="#000" />
+          </TouchableOpacity>
+        </View>
+      </View>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
+    justifyContent: 'space-between',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    fontFamily: 'JetBrainsMono-Bold',
+    flex: 1,
+    textAlign: 'center',
+    marginRight: 29, 
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  topVideoContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  topVideo: {
+    width: '100%',
+    height: 220,
+  },
+  scenarioContainer: {
+    marginTop: 70,
+    marginBottom: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  scenarioHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    paddingBottom: 8,
+    marginBottom: 10,
+  },
+  scenarioTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    fontFamily: 'JetBrainsMono-Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  scenarioText: {
+    fontSize: 15,
+    color: '#34495e',
+    lineHeight: 22,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+ 
+  subTextContainer: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    padding: 12,
+  },
+  creditsContainer: {
+    alignSelf: 'flex-end',
+    marginTop: 4,
+    marginRight: 6,
+  },
+  creditsText: {
+    fontSize: 16,
+    color: '#000',
+    fontFamily: 'Cochin',
+    fontStyle: 'italic',
+  },
+  instructionSubText: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    lineHeight: 22,
+    textAlign: 'center',
+    fontFamily: 'JetBrainsMono-Regular',
+    fontStyle: 'italic',
+  },
+  captionsContainer: {
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  captionText: {
+    fontSize: 14,
+    color: '#34495e',
+    fontFamily: 'JetBrainsMono-Regular',
+    marginVertical: 2,
+    textAlign: 'center',
+  },
+  activeCaptionText: {
+    color: '#e74c3c',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  bottomSpacing: {
+    height: 120, // Space for bottom navigation
+  },
   backgroundImage: {
     flex: 1,
     width: '100%',
@@ -113,65 +281,74 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)',
-    zIndex: 2,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-  },
   backButton: {
-    padding: 5,
-    marginRight: 10,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-    fontFamily: 'JetBrainsMono-Bold',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  illustrationContainer: {
+    width: 50,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  illustration: {
-    width: width * 0.6,
-    height: height * 0.3,
+  bottomNav: {
+    zIndex: 3,
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
-  infoContainer: {
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 20,
+  sosButton: {
+    backgroundColor: '#FF3B30',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -20, 
+    elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3,
   },
-  sectionTitle: {
-    fontSize: 18,
+  sosText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 10,
     fontFamily: 'JetBrainsMono-Bold',
   },
-  description: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-    marginBottom: 15,
-    fontFamily: 'JetBrainsMono-Regular',
+  nextButton: {
+    position: 'absolute',
+    right: 30,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  wordHighlight: {
+    backgroundColor: '#ffe082',
+    borderRadius: 4,
+    color: '#d84315',
+    fontWeight: 'bold',
   },
 });
 
-export default CutsControllingBleeding;
+export default CutsInitialAssessment;

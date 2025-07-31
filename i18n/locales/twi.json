@@ -132,6 +132,13 @@
     "incoming": "Nea wɔatwa frɔɔ wo",
     "missed": "Nea wɔanya yie"
   },
+  "bot": {
+    "available24x7": "Wɔ hɔ daa 24/7"
+  },
+  "display": {
+    "brightness": "Hyerɛn",
+    "eyeProtection": "Anihwɛ so"
+  },
   "firstAid": {
     "title": "FIRST AID GUIDES",
     "subtitle": "Kɔɔ list no mu na\nhwɛ first aid guides no\nna wo atumi\nhunu nneɛma a wo hia",

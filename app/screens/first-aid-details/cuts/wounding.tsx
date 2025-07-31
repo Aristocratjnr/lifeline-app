@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   ImageBackground,
   ScrollView,
@@ -16,9 +16,46 @@ const CutsInitialAssessment: React.FC = () => {
   const router = useRouter();
   const video = useRef<Video>(null);
 
+  // Per-word transcript with timings (adjust timings to match your video)
+  const transcript = useMemo(() => [
+    { word: "If", start: 0, end: 0.2 },
+    { word: "you", start: 0.2, end: 0.4 },
+    { word: "are", start: 0.4, end: 0.6 },
+    { word: "unable", start: 0.6, end: 1.0 },
+    { word: "to", start: 1.0, end: 1.1 },
+    { word: "stop", start: 1.1, end: 1.4 },
+    { word: "the", start: 1.4, end: 1.5 },
+    { word: "bleeding,", start: 1.5, end: 2.0 },
+    { word: "the", start: 2.0, end: 2.1 },
+    { word: "CUT", start: 2.1, end: 2.4 },
+    { word: "is", start: 2.4, end: 2.6 },
+    { word: "very", start: 2.6, end: 2.8 },
+    { word: "large,", start: 2.8, end: 3.2 },
+    { word: "you", start: 3.2, end: 3.4 },
+    { word: "have", start: 3.4, end: 3.6 },
+    { word: "problems", start: 3.6, end: 4.0 },
+    { word: "moving", start: 4.0, end: 4.3 },
+    { word: "your", start: 4.3, end: 4.5 },
+    { word: "body", start: 4.5, end: 4.7 },
+    { word: "part,", start: 4.7, end: 5.0 },
+    { word: "are", start: 5.0, end: 5.2 },
+    { word: "experiencing", start: 5.2, end: 5.7 },
+    { word: "severe", start: 5.7, end: 6.0 },
+    { word: "pain,", start: 6.0, end: 6.3 },
+    { word: "or", start: 6.3, end: 6.4 },
+    { word: "still", start: 6.4, end: 6.6 },
+    { word: "have", start: 6.6, end: 6.8 },
+    { word: "debris", start: 6.8, end: 7.1 },
+    { word: "stuck", start: 7.1, end: 7.3 },
+    { word: "inside", start: 7.3, end: 7.6 },
+    { word: "the", start: 7.6, end: 7.7 },
+    { word: "CUT.", start: 7.7, end: 8.0 },
+  ], []);
+
+  const [highlightedWordIdx, setHighlightedWordIdx] = useState<number>(-1);
 
   const handleNext = () => {
-    router.push('/screens/first-aid-details/cuts/follow-up-care');
+    router.push('/screens/first-aid-details/cuts/critical');
   };
 
   const handleSOS = () => {
@@ -37,6 +74,19 @@ const CutsInitialAssessment: React.FC = () => {
     } else {
       router.replace('/dashboard');
     }
+  };
+
+  // Highlight logic for per-word
+  const handlePlaybackStatusUpdate = (status: any) => {
+    if (!status.isLoaded) return;
+    const seconds = status.positionMillis / 1000;
+    let idx = transcript.findIndex(
+      (w, i) => seconds >= w.start && seconds < w.end
+    );
+    if (idx === -1 && seconds >= transcript[transcript.length - 1].end) {
+      idx = transcript.length - 1;
+    }
+    setHighlightedWordIdx(idx);
   };
 
   if (!fontsLoaded) {
@@ -59,7 +109,6 @@ const CutsInitialAssessment: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-         
         </View>
         
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -72,38 +121,31 @@ const CutsInitialAssessment: React.FC = () => {
             <Video
                ref={video}
                style={styles.topVideo}
-               source={require("@/assets/videos/cut-4.mp4")}
+               source={require("@/assets/videos/cut-7.mp4")}
                useNativeControls
                resizeMode={ResizeMode.COVER}
                progressUpdateIntervalMillis={250}
                shouldPlay={false}
+               onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
              />
-          
           </View>
 
-
           {/* Scenario Section */}
-          <View style={styles.scenarioContainer}>
+          <View style={[styles.scenarioContainer, {marginTop: 20}]}>
             <View style={styles.scenarioHeader}>
               <Text style={styles.scenarioTitle}>Scenario</Text>
             </View>
             <Text style={styles.scenarioText}>
-            Place a bandage against the length of the CUT or close the wound and protect against infections
+              {transcript.map((w, i) => (
+                <Text
+                  key={i}
+                  style={i === highlightedWordIdx ? styles.wordHighlight : undefined}
+                >
+                  {w.word + ' '}
+                </Text>
+              ))}
             </Text>
           </View>
-
-          
-            <View style={styles.scenarioHeader}>
-             
-            </View>
-            <Text style={styles.scenarioText}>
-            Remember to check it frequently to keep it clean
-            </Text>
-         
-          
-
-        
-          
         </ScrollView>
         
         {/* Bottom Navigation */}
@@ -169,7 +211,7 @@ const styles = StyleSheet.create({
     height: 220,
   },
   scenarioContainer: {
-    marginTop: 70,
+    marginTop: 20,
     marginBottom: 4,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 12,
@@ -314,6 +356,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+  },
+  wordHighlight: {
+    backgroundColor: '#ffe082',
+    borderRadius: 4,
+    color: '#d84315',
+    fontWeight: 'bold',
   },
 });
 
