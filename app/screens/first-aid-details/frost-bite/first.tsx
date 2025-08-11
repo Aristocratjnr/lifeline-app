@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-const FrostBiteIntroVideo: React.FC = () => {
+const SprainStrainIntroVideo: React.FC = () => {
   const router = useRouter();
   const videoRef = useRef<Video>(null);
 
@@ -15,32 +15,40 @@ const FrostBiteIntroVideo: React.FC = () => {
   };
 
   return (
-    <View style={styles.fullScreenContainer}>
-      <Video
-        ref={videoRef}
-        source={require('../../../../assets/videos/frost.mp4')}
-        style={styles.fullScreenVideo}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        rate={1.5}
-        onPlaybackStatusUpdate={handleStatusUpdate}
-        useNativeControls={false}
-        isLooping
-      />
+    <View style={styles.container}>
+      <View style={styles.videoContainer}>
+        <Video
+          ref={videoRef}
+          source={require('../../../../assets/videos/frost.mp4')}
+          style={styles.video}
+          resizeMode={ResizeMode.CONTAIN}
+          shouldPlay
+          rate={1.5}
+          onPlaybackStatusUpdate={handleStatusUpdate}
+          useNativeControls={false}
+          isLooping
+        />
+      </View>
     </View>
   );
 };
 
-export default FrostBiteIntroVideo;
+export default SprainStrainIntroVideo;
 
 const styles = StyleSheet.create({
-  fullScreenContainer: {
-    ...StyleSheet.absoluteFillObject,
+  container: { 
+    flex: 1, 
     backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  fullScreenVideo: {
-    flex: 1,
-    width: '50%',
-    height: '50%',
+  videoContainer: {
+    width: '100%',
+    aspectRatio: 16/9,
+    backgroundColor: 'black',
+  },
+  video: {
+    width: '100%',
+    height: '100%',
   },
 });
