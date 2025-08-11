@@ -121,19 +121,18 @@
     "description": "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
   },
   "bot": {
-    "title": "Dɔkta Panidzi",
-    "description": "Yɛ! Mɛ ne wo dɔkta panidzi. Mɛ betumi de wo kɔnɛkt kyerɛ dɔkta bi a ɔnim adwuma mu ama wo nhwɛe kwa.",
-    "callDoctor": "Frɛ Dɔkta Sei",
-    "connecting": "Ɛkɔnɛkt kyerɛ dɔkta..."
+    "available247": "Wɔ hɔ bere nyinaa (24/7)",
+    "title": "AI Boafo a Ɔyɛ Aduruyɛfoɔ",
+    "description": "Akwaba! Me ne wo aduruyɛ kyerɛkyerɛfoɔ. Nya mmoa ntɛmntɛm fi yɛn AI boafo hɔ.",
+    "callDoctor": "Frɛ Dɔkota",
+    "connecting": "Ɛrekɔ...",
+    "available24x7": "Wɔ hɔ daa 24/7"
   },
   "callLogs": {
     "title": "Frɛ Logs",
     "outgoing": "Nea wɔfrɛɛ",
     "incoming": "Nea wɔatwa frɔɔ wo",
     "missed": "Nea wɔanya yie"
-  },
-  "bot": {
-    "available24x7": "Wɔ hɔ daa 24/7"
   },
   "display": {
     "brightness": "Hyerɛn",
@@ -149,18 +148,18 @@
       "cuts": "CUTS",
       "stings": "STINGS",
       "splinter": "SPLINTER",
-      "sprainStrain": "SPRAIN/\nSTRAIN",
+      "sprainStrain": "SPRAIN/STRAIN",
       "fever": "FEVER",
       "jockItch": "JOCK ITCH",
       "rash": "RASH",
       "hives": "HIVES",
-      "abdominalPains": "ABDOMINAL\nPAINS",
+      "abdominalPains": "ABDOMINAL PAINS",
       "choking": "CHOKING",
-      "frostBite": "FROST\nBITE",
-      "heatStroke": "HEAT\nSTROKE",
-      "noseBleed": "NOSE\nBLEED",
-      "insectBite": "INSECT\nBITE",
-      "sunBurn": "SUN\nBURN"
+      "frostBite": "FROST BITE",
+      "heatStroke": "HEAT STROKE",
+      "noseBleed": "NOSE BLEED",
+      "insectBite": "INSECT BITE",
+      "sunBurn": "SUN BURN"
     }
   }
 }

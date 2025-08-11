@@ -32,6 +32,13 @@ const FirstAidGuides: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"emergency" | "exposures" | "internal">("emergency")
   const [searchText, setSearchText] = useState("")
   const { t } = useTranslation();
+  
+  // Define category types for filtering
+  const categoryTypes = {
+    emergency: ["1", "4", "5", "9", "10", "12", "13", "14", "15"],
+    exposures: ["2", "3", "6", "7", "8", "11"],
+    internal: ["5", "9"]
+  };
 
   const firstAidCategories: FirstAidCategory[] = [
     { id: "1", title: t('firstAid.categories.cuts'), imageSource: require("../../assets/images/cut-palm.png") },
@@ -61,6 +68,17 @@ const FirstAidGuides: React.FC = () => {
     return <View style={styles.container} />
   }
 
+  // Filter categories based on search text and active tab
+  const filteredCategories = firstAidCategories.filter(category => {
+    const matchesSearch = category.title.toLowerCase().includes(searchText.toLowerCase());
+    const matchesTab = categoryTypes[activeTab].includes(category.id);
+    
+    if (searchText.trim() === '') {
+      return matchesTab;
+    }
+    return matchesSearch && matchesTab;
+  });
+
   const renderCategory = (category: FirstAidCategory) => (
     <TouchableOpacity 
       key={category.id} 
@@ -69,7 +87,7 @@ const FirstAidGuides: React.FC = () => {
         // Navigate to specific detail screen based on category id
         switch (category.id) {
           case "1": router.push('/screens/first-aid-details/cuts'); break;
-          case "2": router.push('/screens/first-aid-details/stings'); break;
+          case "2": router.push('/screens/first-aid-details/Stings'); break;
           case "3": router.push('/screens/first-aid-details/splinter'); break;
           case "4": router.push('/screens/first-aid-details/sprain-strain'); break;
           case "5": router.push('/screens/first-aid-details/fever'); break;
@@ -188,7 +206,17 @@ const FirstAidGuides: React.FC = () => {
 
         {/* Categories Grid */}
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-          <View style={styles.categoriesGrid}>{firstAidCategories.map(renderCategory)}</View>
+          {filteredCategories.length > 0 ? (
+            <View style={styles.categoriesGrid}>
+              {filteredCategories.map(renderCategory)}
+            </View>
+          ) : (
+            <View style={styles.noResultsContainer}>
+              <Ionicons name="search-outline" size={50} color="#999" />
+              <Text style={styles.noResultsText}>No results found for &quot;{searchText}&quot;</Text>
+              <Text style={styles.noResultsSubtext}>Try different keywords or check your spelling</Text>
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -378,6 +406,26 @@ const styles = StyleSheet.create({
     lineHeight: 12,
     letterSpacing: 0.2,
     fontFamily: "JetBrainsMono-Bold",
+  },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  noResultsText: {
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#333',
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  noResultsSubtext: {
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#666',
+    textAlign: 'center',
   },
 })
 

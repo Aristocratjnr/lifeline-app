@@ -67,5 +67,60 @@ export default {
     "privacy": "Kokoamsɛm",
     "about": "Fa",
     "logout": "Pue"
+  },
+
+  // Dashboard
+  "dashboard": {
+    "healthStats": "Akwahosan Nsɛm",
+    "steps": "Anammɔn",
+    "water": "Nsu",
+    "dailyTip": "DA BIARA AFOTUO",
+    "lifelineHistory": "Lifeline Abakɔsɛm",
+    "recentActivity": "Nneyɛe A Ɛyɛ Foforo",
+    "sentSOSAlert": "SOS Kɔkɔbɔ A Wode Somaa",
+    "todayTime": "2:30 PM Nnɛ",
+    "viewedMap": "Hwɛɛ Emergency Map",
+    "yesterdayTime1": "4:15 PM Nnɛra",
+    "readHealthNews": "Kenkanee Akwahosan Nsɛm",
+    "yesterdayTime2": "6:45 PM Nnɛra",
+    "fracture": "Dompe Ho Aduru",
+    "lastVisited": "Ɔkɔɔ hɔ nnansa",
+    "cough": "Ɔhwonya & Awɔ",
+    "burns": "Ogya Mu Pira Ho Aduru",
+    "age": "Mfe",
+    "gender": "Suban",
+    "location": "Beaeyɛ",
+    "condition": "Yadeɛ",
+    "language": "Kasa",
+    "editProfile": "Sesa Profaele",
+    "newTipEveryDay": "Afotuo foforo da biara"
+  },
+
+  // Tips
+  "tips": {
+    "handleSharpObjects": "Di Nneɛma A Ano Yɛ Nam Ho Dwuma Yiye",
+    "handleSharpObjectsContent": "Twa fi wo nipadua ho na ma sekan no ano nyɛ nam na ɛnyɛ dwuma yiye.",
+    "stayHydrated": "Nom Nsu",
+    "stayHydratedContent": "Nom nsu nkuruwa 8 da biara na wo ho nyɛ den.",
+    "washHands": "Hohoro Wo Nsa",
+    "washHandsContent": "Nsa hohoro taa ma mmoawa ntumi ntrɛw.",
+    "takeBreaks": "Gye W'ahome",
+    "takeBreaksContent": "Ma w'ani ngye ahome simma 20 biara sɛ wode screen reyɛ adwuma.",
+    "getSleep": "Da Yiye",
+    "getSleepContent": "Hwehwɛ sɛ wobɛda nnɔnhwerew 7-9 anadwo biara."
+  },
+
+  // Call Logs
+  "callLogs": {
+    "title": "Frɛ Abakɔsɛm"
+  },
+
+  // Bot modal
+  "bot": {
+    "title": "Aduruyɛfo Boafo Bot",
+    "description": "Nya mmoa ntɛm anaasɛ frɛ oduruyɛfo wɔ ahokyere mu.",
+    "callDoctor": "Frɛ Oduruyɛfo",
+    "connecting": "Ɛrefrɛ oduruyɛfo...",
+    "available247": "Ɛwɔ hɔ da 24/7"
   }
 }

@@ -1,4 +1,4 @@
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { Link, useRouter } from 'expo-router';
@@ -140,7 +140,7 @@ export default function SignInScreen() {
               </Pressable>
               {!answered && !checkComplete ? (
                 <>
-                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Ionicons name="heart" size={48} color="#E53935" style={{ marginBottom: 16 }} />
                   <Text style={styles.modalTitle}>{t('auth.signIn.healthCheck')}</Text>
                   <Text style={styles.modalText}>{t('auth.signIn.feelingGoodToday')}</Text>
                   <View style={{ flexDirection: 'row', marginTop: 18 }}>
@@ -169,13 +169,13 @@ export default function SignInScreen() {
                 </>
               ) : feelingGood && isChecking ? (
                 <View style={{ alignItems: 'center' }}>
-                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
+                  <Ionicons name="heart" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
                   <Text style={styles.modalTitle}>{t('auth.signIn.checkingStatus')}</Text>
                   <ActivityIndicator size="large" color="#E53935" style={{ marginVertical: 18 }} />
                 </View>
               ) : feelingGood && checkComplete ? (
                 <Animated.View style={{ alignItems: 'center', opacity: checkAnim, transform: [{ scale: checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0.7, 1] }) }] }}>
-                  <MaterialIcons name="health-and-safety" size={48} color="#43A047" style={{ marginBottom: 16 }} />
+                  <Ionicons name="medkit" size={48} color="#43A047" style={{ marginBottom: 16 }} />
                   <Text style={[styles.modalTitle, { color: '#43A047' }]}>{t('auth.signIn.youAreGood')}</Text>
                   <Text style={styles.modalText}>{t('auth.signIn.allChecksPassed')}</Text>
                   <TouchableOpacity
@@ -190,7 +190,7 @@ export default function SignInScreen() {
                 </Animated.View>
               ) : !feelingGood && answered ? (
                 <View style={{ alignItems: 'center' }}>
-                  <MaterialIcons name="mood-bad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Ionicons name="sad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
                   <Text style={[styles.modalTitle, { color: '#E53935' }]}>{t('auth.signIn.takeCare')}</Text>
                   <Text style={styles.modalText}>{t('auth.signIn.rememberToRest')}</Text>
                   <TouchableOpacity

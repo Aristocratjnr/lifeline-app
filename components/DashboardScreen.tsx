@@ -464,7 +464,7 @@ const DashboardScreen = () => {
             
             <View style={styles.modalFooter}>
               <MaterialIcons name="info-outline" size={16} color="#666" style={{ marginRight: 6 }} />
-              <Text style={styles.modalFooterText}>{t('bot.available24x7')}</Text>
+              <Text style={styles.modalFooterText}>{t('bot.available247')}</Text>
             </View>
           </View>
         </View>

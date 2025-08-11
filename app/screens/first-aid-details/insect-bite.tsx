@@ -25,6 +25,38 @@ const InsectBiteDetail: React.FC = () => {
     "JetBrainsMono-Bold": require("@/assets/fonts/JetBrainsMono-Bold.ttf"),
   });
 
+  const [currentTipIndex, setCurrentTipIndex] = useState(0);
+  
+  const tips = [
+    {
+      title: "Use Insect Repellent",
+      content: "Apply EPA-registered insect repellent containing DEET, picaridin, or oil of lemon eucalyptus when outdoors.",
+      iconSet: Ionicons,
+      iconName: "bug-outline" as const,
+      color: "#8E44AD",
+    },
+    {
+      title: "Wear Protective Clothing",
+      content: "Wear long sleeves, pants, and closed-toe shoes when in areas with high insect activity.",
+      iconSet: Ionicons,
+      iconName: "shirt-outline" as const,
+      color: "#8E44AD",
+    },
+    {
+      title: "Avoid Peak Hours",
+      content: "Stay indoors during dawn and dusk when many insects are most active.",
+      iconSet: Ionicons,
+      iconName: "time-outline" as const,
+      color: "#8E44AD",
+    },
+  ];
+
+  const currentTip = tips[currentTipIndex];
+
+  const handleNewTip = () => {
+    setCurrentTipIndex((prevIndex) => (prevIndex + 1) % tips.length);
+  };
+
   const handleGoBack = () => {
     if (router.canGoBack()) {
       router.back();
@@ -56,38 +88,144 @@ const InsectBiteDetail: React.FC = () => {
           <Text style={styles.headerTitle}>INSECT BITE</Text>
         </View>
         
-        <ScrollView style={styles.content}>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.illustrationContainer}>
-            <Image 
-              source={require('../../../assets/images/insect_bite.png')} 
-              style={styles.illustration}
-              resizeMode="contain"
-            />
+            <View style={styles.imageWrapper}>
+              <Image 
+                source={require('../../../assets/images/insect_bite.png')} 
+                style={styles.illustration}
+                resizeMode="contain"
+              />
+            </View>
           </View>
           
           <View style={styles.infoContainer}>
-            <Text style={styles.sectionTitle}>What to do:</Text>
-            <Text style={styles.description}>
-              1. Remove the stinger if present (scrape it out with a fingernail or credit card, don't use tweezers).{'\n'}
-              2. Wash the bite area thoroughly with soap and water.{'\n'}
-              3. Apply a cold compress or ice wrapped in a cloth for 10-20 minutes to reduce swelling.{'\n'}
-              4. Elevate the affected area if possible.{'\n'}
-              5. Take an over-the-counter antihistamine like diphenhydramine to reduce allergic reactions.{'\n'}
-              6. Apply hydrocortisone cream or calamine lotion to reduce itching and inflammation.{'\n'}
-              7. Monitor the bite area for signs of infection or allergic reaction.
-            </Text>
+            {/* Scenario Section */}
+            <View style={styles.section}>
+              <View style={[styles.sectionHeader, { borderLeftColor: '#8E44AD' }]}>
+                <Text style={styles.sectionTitle}>Scenario</Text>
+              </View>
+              <Text style={styles.sectionText}>
+                You or someone nearby has been bitten or stung by an insect and is experiencing discomfort, swelling, or pain at the bite site. The person may or may not know what type of insect caused the bite.
+              </Text>
+            </View>
             
-            <Text style={styles.sectionTitle}>When to seek medical help:</Text>
-            <Text style={styles.description}>
-              • Difficulty breathing or swallowing{'\n'}
-              • Swelling of the face, throat, or mouth{'\n'}
-              • Rapid pulse or dizziness{'\n'}
-              • Hives or widespread itching{'\n'}
-              • Nausea, vomiting, or diarrhea{'\n'}
-              • Signs of infection (increasing redness, warmth, red streaking, pus){'\n'}
-              • Fever develops{'\n'}
-              • The bite was from a tick and you're unable to remove it completely
-            </Text>
+            {/* What to Do Section */}
+            <View style={styles.section}>
+              <View style={[styles.sectionHeader, { borderLeftColor: '#8E44AD' }]}>
+                <Text style={styles.sectionTitle}>What to do</Text>
+              </View>
+              <View style={styles.bulletList}>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Remove</Text> the stinger by scraping it out with a credit card or fingernail (don't use tweezers)</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Wash</Text> the area thoroughly with soap and water</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Apply</Text> a cold compress or ice wrapped in a cloth for 10-20 minutes</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Elevate</Text> the affected area if possible to reduce swelling</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Take</Text> an over-the-counter antihistamine for allergic reactions</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Apply</Text> hydrocortisone cream or calamine lotion to reduce itching</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Monitor</Text> for signs of infection or severe allergic reaction</Text>
+                </View>
+              </View>
+            </View>
+            
+            {/* When to Seek Medical Help Section */}
+            <View style={styles.section}>
+              <View style={[styles.sectionHeader, { borderLeftColor: '#8E44AD' }]}>
+                <Text style={styles.sectionTitle}>When to seek medical help</Text>
+              </View>
+              <View style={styles.bulletList}>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Difficulty breathing</Text> or swallowing</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Swelling</Text> of face, throat, or mouth</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Dizziness</Text> or rapid pulse</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Widespread hives</Text> or severe itching</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Signs of infection:</Text> increasing redness, warmth, pus, or red streaking</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Fever</Text> develops after the bite</Text>
+                </View>
+                <View style={styles.bulletItem}>
+                  <Text style={styles.bullet}>•</Text>
+                  <Text style={styles.bulletText}><Text style={styles.bold}>Tick bite</Text> where you can't remove the entire tick</Text>
+                </View>
+              </View>
+            </View>
+            
+            {/* Prevention Tips Card */}
+            <View style={[styles.tipCard, { borderColor: 'rgba(142, 68, 173, 0.3)' }]}>
+              <View style={[styles.tipHeader, { backgroundColor: 'rgba(142, 68, 173, 0.1)' }]}>
+                <Text style={[styles.tipTitle, { color: '#8E44AD' }]}>Prevention Tips</Text>
+              </View>
+              <View style={styles.tipContent}>
+                <View style={styles.tipIconContainer}>
+                  <currentTip.iconSet 
+                    name={currentTip.iconName} 
+                    size={28}
+                    color={currentTip.color}
+                    style={{ marginBottom: 6 }}
+                  />
+                </View>
+                <Text style={[styles.tipTitle, { color: currentTip.color }]}>
+                  {currentTip.title}
+                </Text>
+                <Text style={styles.tipText}>{currentTip.content}</Text>
+                <TouchableOpacity 
+                  style={styles.newTipButton}
+                  onPress={handleNewTip}
+                >
+                  <Text style={styles.newTipButtonText}>Show Another Tip</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            
+            {/* See Guides Button */}
+            <TouchableOpacity 
+              style={styles.guideButton}
+              onPress={() => {
+                // Add navigation to guides here if needed
+                console.log('Navigate to insect bite guides');
+              }}
+            >
+              <Ionicons name="book-outline" size={20} color="white" style={styles.guideIcon} />
+              <Text style={styles.guideButtonText}>See Guides</Text>
+            </TouchableOpacity>
+            
+            {/* Bottom padding to ensure content isn't hidden behind the button */}
+            <View style={{ height: 30 }} />
+            
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -116,29 +254,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
   },
   backButton: {
-    padding: 5,
-    marginRight: 10,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    padding: 8,
+    marginRight: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '700',
     color: '#000',
     fontFamily: 'JetBrainsMono-Bold',
+    letterSpacing: 0.5,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
   },
   illustrationContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
+  },
+  imageWrapper: {
+    backgroundColor: 'white',
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: 'rgba(142, 68, 173, 0.3)',
+    shadowColor: '#8E44AD',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   illustration: {
-    width: width * 0.6,
-    height: height * 0.3,
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
   },
   infoContainer: {
     backgroundColor: 'white',
@@ -147,23 +313,157 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingLeft: 10,
+    borderLeftWidth: 4,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#000',
+    marginLeft: 8,
+  },
+  sectionText: {
+    fontSize: 14,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#333',
+    lineHeight: 20,
+    marginBottom: 8,
+    paddingHorizontal: 5,
+  },
+  bulletList: {
+    paddingLeft: 8,
+  },
+  bulletItem: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    paddingLeft: 5,
+    alignItems: 'flex-start',
+  },
+  bullet: {
+    fontSize: 16,
+    color: '#8E44AD',
+    marginRight: 10,
+    lineHeight: 20,
+    marginTop: 2,
+  },
+  bulletText: {
+    flex: 1,
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#333',
+    lineHeight: 20,
+    flexWrap: 'wrap',
+  },
+  nestedBulletList: {
+    marginLeft: 10,
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  nestedBullet: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#555',
+    lineHeight: 18,
+    marginBottom: 3,
+  },
+  bold: {
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#000',
+  },
+  tipCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    borderWidth: 1,
+    marginTop: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  tipHeader: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  tipTitle: {
+    fontSize: 15,
+    fontFamily: 'JetBrainsMono-Bold',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  tipContent: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  tipIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(142, 68, 173, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  tipText: {
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Regular',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  newTipButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(142, 68, 173, 0.3)',
+    alignSelf: 'center',
+  },
+  newTipButtonText: {
+    color: '#8E44AD',
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  // Guide Button Styles
+  guideButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#8E44AD',
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 10,
+  guideButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 8,
   },
-  description: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-    marginBottom: 15,
-    fontFamily: 'JetBrainsMono-Regular',
+  guideIcon: {
+    marginRight: 5,
   },
 });
 

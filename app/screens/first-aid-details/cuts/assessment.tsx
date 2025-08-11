@@ -116,17 +116,38 @@ const CutsControllingBleeding: React.FC = () => {
           
           <View style={styles.infoContainer}>
             <Text style={styles.sectionTitle}>Recommended Products:</Text>
-            <Text style={styles.description}>
-              • Sterile gauze pads or dressings{'\n'}
-              • Adhesive bandages (various sizes){'\n'}
-              • Antiseptic wipes or solution{'\n'}
-              • Medical tape{'\n'}
-              • Disposable gloves{'\n'}
-              • Scissors and tweezers (sterile){'\n'}
-              • Antibiotic ointment
-            </Text>
+            <View style={styles.bulletList}>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Sterile gauze pads or dressings</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Adhesive bandages (various sizes)</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Antiseptic wipes or solution</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Medical tape</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Disposable gloves</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Scissors and tweezers (sterile)</Text>
+              </View>
+              <View style={styles.bulletItem}>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.bulletText}>Antibiotic ointment</Text>
+              </View>
+            </View>
 
-            {/* Tips Card (copied/adapted from DashboardScreen) */}
+            {/* Tips Card */}
             <View style={styles.tipsCard}>
               <View style={styles.tipsHeader}>
                 <Ionicons name="bulb-outline" size={18} color="#aaa" />
@@ -240,6 +261,27 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: 'JetBrainsMono-Bold',
   },
+  bulletList: {
+    marginBottom: 15,
+  },
+  bulletItem: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  bullet: {
+    color: '#D9534F',
+    fontWeight: 'bold',
+    marginRight: 8,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  bulletText: {
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 20,
+    fontFamily: 'JetBrainsMono-Regular',
+    flex: 1,
+  },
   description: {
     fontSize: 14,
     color: '#333',
@@ -255,7 +297,7 @@ const styles = StyleSheet.create({
   nextButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D9534F', // Updated to requested color
+    backgroundColor: '#D9534F', 
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 25,

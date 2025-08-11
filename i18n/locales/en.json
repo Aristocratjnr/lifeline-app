@@ -120,8 +120,12 @@
     "title": "PREPARE FOR YOUR UNIQUE NEEDS",
     "description": "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"
   },
-  "aiAssistant": {
-    "title": "AI Assistant",
+  "bot": {
+    "available247": "Available 24/7",
+    "title": "Medical Assistant",
+    "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
+    "callDoctor": "Call Doctor Now",
+    "connecting": "Connecting to doctor...",
     "welcomeMessage": "Hello! I'm your Lifeline First Aid Assistant. I can help with emergency medical information and first aid procedures. What would you like to know?",
     "placeholder": "Ask me anything about first aid...",
     "send": "Send",
@@ -190,13 +194,6 @@
   "display": {
     "brightness": "Brightness",
     "eyeProtection": "Eye Protection"
-  },
-  "bot": {
-    "title": "Medical Assistant",
-    "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
-    "callDoctor": "Call Doctor Now",
-    "connecting": "Connecting to doctor...",
-    "available24x7": "Available 24x7"
   },
   "callLogs": {
     "title": "Call Logs",

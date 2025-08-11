@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   Dimensions,
   Image,
@@ -31,6 +31,47 @@ const FeverDetail: React.FC = () => {
     } else {
       router.replace('/dashboard');
     }
+  };
+
+  const tips = [
+    {
+      title: "Stay Hydrated",
+      content: "Drink plenty of fluids throughout the day to help regulate body temperature.",
+      iconSet: Ionicons,
+      iconName: "water-outline",
+      color: "#4A90E2",
+    },
+    {
+      title: "Dress Lightly",
+      content: "Wear light, breathable clothing to help your body regulate temperature.",
+      iconSet: Ionicons,
+      iconName: "shirt-outline",
+      color: "#5C6BC0",
+    },
+    {
+      title: "Rest Well",
+      content: "Get adequate sleep to support your immune system in fighting infections.",
+      iconSet: Ionicons,
+      iconName: "moon-outline",
+      color: "#26A69A",
+    },
+    {
+      title: "Practice Good Hygiene",
+      content: "Wash hands frequently to prevent the spread of infections that cause fever.",
+      iconSet: Ionicons,
+      iconName: "hand-left-outline",
+      color: "#4A90E2",
+    },
+  ];
+
+  const [currentTip, setCurrentTip] = React.useState(tips[0]);
+
+  const handleNewTip = () => {
+    let newTip;
+    do {
+      newTip = tips[Math.floor(Math.random() * tips.length)];
+    } while (newTip.title === currentTip.title && tips.length > 1);
+    setCurrentTip(newTip);
   };
 
   if (!fontsLoaded) {
@@ -66,29 +107,76 @@ const FeverDetail: React.FC = () => {
           </View>
           
           <View style={styles.infoContainer}>
+            <Text style={styles.sectionTitle}>Scenario</Text>
+            <Text style={styles.description}>
+              If you or someone you're caring for has an elevated body temperature, follow these steps to manage fever and monitor for serious symptoms.
+            </Text>
+            
             <Text style={styles.sectionTitle}>What to do:</Text>
             <Text style={styles.description}>
-              1. Take your temperature with a thermometer to confirm fever.{'\n'}
-              2. Stay hydrated by drinking plenty of fluids like water, clear broths, or electrolyte solutions.{'\n'}
-              3. Rest as much as possible to help your body fight the infection.{'\n'}
-              4. Take over-the-counter fever reducers like acetaminophen or ibuprofen as directed.{'\n'}
-              5. Take a lukewarm bath or apply cool, damp washcloths to your forehead and wrists.{'\n'}
-              6. Wear lightweight clothing and use a light blanket if you feel chilled.{'\n'}
-              7. Keep the room at a comfortable temperature.
+              • <Text style={{fontWeight: 'bold'}}>Measure</Text> temperature with a reliable thermometer.{'\n'}
+              • <Text style={{fontWeight: 'bold'}}>Hydrate</Text> with water, clear broths, or electrolyte solutions.{'\n'}
+              • <Text style={{fontWeight: 'bold'}}>Rest</Text> to help your body fight infection.{'\n'}
+              • <Text style={{fontWeight: 'bold'}}>Medicate</Text> with acetaminophen or ibuprofen as directed.{'\n'}
+              • <Text style={{fontWeight: 'bold'}}>Cool down</Text> with lukewarm compresses or baths.{'\n'}
+              • Wear lightweight, breathable clothing.{'\n'}
+              • Maintain a comfortable room temperature.
             </Text>
             
             <Text style={styles.sectionTitle}>When to seek medical help:</Text>
             <Text style={styles.description}>
-              • Temperature above 103°F (39.4°C) in adults{'\n'}
-              • Temperature above 100.4°F (38°C) in infants under 3 months{'\n'}
-              • Temperature above 102°F (38.9°C) in children 3-6 months{'\n'}
-              • Signs of dehydration (dry mouth, little or no urination, dizziness when standing){'\n'}
-              • Severe headache, stiff neck, shortness of breath, or other severe symptoms{'\n'}
-              • Rash, sensitivity to light, or confusion{'\n'}
-              • Vomiting that prevents keeping liquids down{'\n'}
-              • Seizures or convulsions
+              • Adults: Temperature above 103°F (39.4°C){'\n'}
+              • Infants (under 3 months): Temperature above 100.4°F (38°C){'\n'}
+              • Children (3-6 months): Temperature above 102°F (38.9°C){'\n'}
+              • Signs of dehydration (dry mouth, no urination, dizziness){'\n'}
+              • Severe symptoms (headache, stiff neck, difficulty breathing){'\n'}
+              • Rash, light sensitivity, or confusion{'\n'}
+              • Persistent vomiting or inability to keep fluids down
             </Text>
+
+            {/* Tips Card */}
+            <View style={styles.tipsCard}>
+              <View style={styles.tipsHeader}>
+                <Ionicons name="bulb-outline" size={18} color="#aaa" />
+                <Text style={styles.tipsTitle}>Prevention Tips</Text>
+              </View>
+              <View style={styles.tipTranslucent}>
+                <View style={styles.tipContent}>
+                  {currentTip.iconSet && currentTip.iconName && (
+                    <currentTip.iconSet
+                      name={currentTip.iconName as React.ComponentProps<typeof Ionicons>['name']}
+                      size={28}
+                      color={currentTip.color}
+                      style={{ marginBottom: 6 }}
+                    />
+                  )}
+                  <Text style={[styles.tipTitle, { color: currentTip.color }]}>
+                    {currentTip.title}
+                  </Text>
+                  <Text style={styles.tipText}>{currentTip.content}</Text>
+                  <TouchableOpacity 
+                    style={styles.newTipButton}
+                    onPress={handleNewTip}
+                  >
+                    <Text style={styles.newTipButtonText}>Show Another Tip</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
           </View>
+          
+          {/* See Guides Button */}
+          <TouchableOpacity
+            style={styles.guideButton}
+            onPress={() => router.push('/screens/first-aid-details/Fever')}
+          >
+            <Ionicons name="book-outline" size={20} color="white" style={styles.guideIcon} />
+            <Text style={styles.guideButtonText}>See Guides</Text>
+          </TouchableOpacity>
+          
+          {/* Bottom padding to ensure content isn't hidden behind the button */}
+          <View style={{ height: 30 }} />
+          
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -108,7 +196,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     zIndex: 2,
   },
   header: {
@@ -116,16 +204,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    backgroundColor: 'transparent',
   },
   backButton: {
-    padding: 5,
-    marginRight: 10,
+    padding: 8,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   headerTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 10,
+    letterSpacing: 0.5,
   },
   content: {
     flex: 1,
@@ -137,33 +234,138 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   illustration: {
-    width: width * 0.6,
-    height: height * 0.3,
+    width: width * 0.25,
+    height: width * 0.25,
+    borderRadius: (width * 0.25) / 2,
+    borderWidth: 3,
+    borderColor: '#4A90E2',
+    backgroundColor: 'white',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   infoContainer: {
     backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 20,
+    borderRadius: 16,
+    padding: 22,
     marginBottom: 20,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 15,
+    marginBottom: 12,
+    color: '#2c3e50',
+    fontFamily: 'JetBrainsMono-Bold',
+    borderLeftWidth: 4,
+    borderLeftColor: '#4A90E2',
+    paddingLeft: 10,
+  },
+  description: {
+    fontSize: 15,
+    lineHeight: 24,
+    color: '#444',
+    marginBottom: 16,
+    fontFamily: 'JetBrainsMono-Regular',
+    letterSpacing: 0.1,
+  },
+  // Tips Card Styles
+  tipsCard: {
+    marginTop: 20,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  sectionTitle: {
+  tipsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: '#f9f9f9',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  tipsTitle: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  tipTranslucent: {
+    padding: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  tipContent: {
+    alignItems: 'center',
+  },
+  tipTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 10,
+    marginBottom: 8,
+    textAlign: 'center',
     fontFamily: 'JetBrainsMono-Bold',
   },
-  description: {
+  tipText: {
     fontSize: 14,
-    color: '#333',
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
     lineHeight: 20,
-    marginBottom: 15,
     fontFamily: 'JetBrainsMono-Regular',
+  },
+  newTipButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: 'rgba(74, 144, 226, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(74, 144, 226, 0.3)',
+  },
+  newTipButtonText: {
+    color: '#4A90E2',
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Medium',
+  },
+  
+  // Guide Button Styles
+  guideButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4A90E2',
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  guideButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 8,
+  },
+  guideIcon: {
+    marginRight: 5,
   },
 });
 

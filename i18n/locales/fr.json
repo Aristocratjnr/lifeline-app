@@ -68,6 +68,7 @@
     "submit": "SOUMETTRE"
   },
   "bot": {
+    "available247": "Disponible 24h/24 et 7j/7",
     "title": "Assistant Médical",
     "description": "Salut ! Je suis votre assistant médical. Je peux vous connecter avec un médecin professionnel pour une consultation immédiate.",
     "callDoctor": "Appeler le Médecin Maintenant",

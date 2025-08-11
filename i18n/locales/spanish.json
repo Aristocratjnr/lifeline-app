@@ -1,4 +1,11 @@
 {
+  "bot": {
+    "available247": "Disponible 24/7",
+    "title": "Asistente de IA",
+    "description": "Obtén ayuda instantánea de nuestro asistente de IA",
+    "callDoctor": "Llamar al médico",
+    "connecting": "Conectando..."
+  },
   "settings": {
     "title": "CONFIGURACIÓN",
     "profile": {

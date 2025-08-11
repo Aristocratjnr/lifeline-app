@@ -75,7 +75,43 @@ export default {
     "water": "Water",
     "dailyTip": "DAILY TIP",
     "lifelineHistory": "Lifeline History",
-    "recentActivity": "Recent Activity"
+    "recentActivity": "Recent Activity",
+    "sentSOSAlert": "Sent SOS Alert",
+    "todayTime": "2:30 PM Today",
+    "viewedMap": "Viewed Emergency Map",
+    "yesterdayTime1": "4:15 PM Yesterday",
+    "readHealthNews": "Read Health News",
+    "yesterdayTime2": "6:45 PM Yesterday",
+    "fracture": "Fracture Treatment",
+    "lastVisited": "Last visited 2 days ago",
+    "cough": "Cough & Cold",
+    "burns": "Burns Treatment",
+    "age": "Age",
+    "gender": "Gender",
+    "location": "Location",
+    "condition": "Condition",
+    "language": "Language",
+    "editProfile": "Edit Profile",
+    "newTipEveryDay": "New tip every day"
+  },
+
+  // Tips
+  "tips": {
+    "handleSharpObjects": "Handle Sharp Objects Safely",
+    "handleSharpObjectsContent": "Always cut away from your body and keep knives sharp for safer use.",
+    "stayHydrated": "Stay Hydrated",
+    "stayHydratedContent": "Drink 8 glasses of water daily to maintain optimal health.",
+    "washHands": "Wash Your Hands",
+    "washHandsContent": "Regular hand washing prevents the spread of germs and illness.",
+    "takeBreaks": "Take Regular Breaks",
+    "takeBreaksContent": "Rest your eyes every 20 minutes when using screens for long periods.",
+    "getSleep": "Get Adequate Sleep",
+    "getSleepContent": "Aim for 7-9 hours of quality sleep each night for better health."
+  },
+
+  // Call Logs
+  "callLogs": {
+    "title": "Call History"
   },
 
   // Bot modal
@@ -84,6 +120,6 @@ export default {
     "description": "Get instant help or connect to a doctor for emergencies.",
     "callDoctor": "Call Doctor",
     "connecting": "Connecting to a doctor...",
-    "available24x7": "Available 24/7 for your medical needs"
+    "available247": "Available 24/7"
   }
 }

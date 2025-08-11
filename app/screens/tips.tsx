@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#000000',
     textAlign: 'center',
-    fontWeight: '900', 
     marginHorizontal: 24,
     marginBottom: 24,
     lineHeight: 22,
