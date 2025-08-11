@@ -35,9 +35,9 @@ const FirstAidGuides: React.FC = () => {
   
   // Define category types for filtering
   const categoryTypes = {
-    emergency: ["1", "4", "5", "9", "10", "12", "13", "14", "15"],
-    exposures: ["2", "3", "6", "7", "8", "11"],
-    internal: ["5", "9"]
+    emergency: ["10","12", "16"],
+    exposures: ["1", "2", "3", "13", "4",  "7", "8", "14","11", "15"],
+    internal: ["5", "9", "6",]
   };
 
   const firstAidCategories: FirstAidCategory[] = [
@@ -56,6 +56,7 @@ const FirstAidGuides: React.FC = () => {
     { id: "13", title: t('firstAid.categories.noseBleed'), imageSource: require("../../assets/images/nose_bleed.png") },
     { id: "14", title: t('firstAid.categories.insectBite'), imageSource: require("../../assets/images/insect_bite.png") },
     { id: "15", title: t('firstAid.categories.sunBurn'), imageSource: require("../../assets/images/sun_burn.png") },
+    { id: "16", title: t('firstAid.categories.fertile'), imageSource: require("../../assets/images/fertile.png") },
   ];
 
   // Load fonts
@@ -101,6 +102,7 @@ const FirstAidGuides: React.FC = () => {
           case "13": router.push('/screens/first-aid-details/nose-bleed'); break;
           case "14": router.push('/screens/first-aid-details/insect-bite'); break;
           case "15": router.push('/screens/first-aid-details/sun-burn'); break;
+          case "16": router.push('/screens/first-aid-details/fertile'); break;
           default: router.push('/screens/firstAidGuide');
         }
       }}

@@ -445,7 +445,8 @@ export default {
       "heatStroke": "HEAT STROKE",
       "noseBleed": "NOSE BLEED",
       "insectBite": "INSECT BITE",
-      "sunBurn": "SUN BURN"
+      "sunBurn": "SUN BURN",
+      "fertile": "FEBRILE SEIZURE"
     }
   }
 }

@@ -24,7 +24,7 @@ export default function OnboardingScreen() {
   }, [i18n]);
   const [fontsLoaded] = useFonts({
     'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'), 
-    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'), 
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'), 
   });
 
   const handleNext = () => {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#222',
     textAlign: 'center',
-    fontFamily: 'Flavours', 
+    fontFamily: 'FjallaOne-Regular', 
     marginTop: 8,
     marginBottom: 8,
     letterSpacing: 1,

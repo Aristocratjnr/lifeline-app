@@ -1,7 +1,7 @@
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,6 +20,7 @@ import Loader from '../../components/Loader';
 
 Dimensions.get('window');
 const SignUpScreen = () => {
+  const router = useRouter();
   const { t, i18n } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -150,7 +151,7 @@ const SignUpScreen = () => {
                     <Text style={styles.checkboxLabel}>{t('buttons.rememberMe')}</Text>
                 </View>
 
-                <TouchableOpacity style={styles.signUpButton}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/screens/guest')}>
                     <Text style={styles.signUpButtonText}>{t('buttons.signUp')}</Text>
                     <Image source={require('../../assets/images/sign.png')} style={styles.soundIcon} />
                 </TouchableOpacity>

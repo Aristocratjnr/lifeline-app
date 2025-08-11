@@ -222,7 +222,8 @@
       "heatStroke": "HEAT\nSTROKE",
       "noseBleed": "NOSE\nBLEED",
       "insectBite": "INSECT\nBITE",
-      "sunBurn": "SUN\nBURN"
+      "sunBurn": "SUN\nBURN",
+      "fertile": "Febrile"
     }
   }
 }
