@@ -240,7 +240,12 @@ const DashboardScreen = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <Text style={styles.statsTitle}>{t("dashboard.healthStats")}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.statsTitle}>{t("dashboard.healthStats")}</Text>
+            <TouchableOpacity onPress={() => router.replace("/main")} style={styles.signOutButton}>
+              <MaterialIcons name="logout" size={24} color="#D9534F" />
+            </TouchableOpacity>
+          </View>
           <View style={styles.statsRow}>
             {/* Steps Stat */}
             <View style={styles.statsItem}>
@@ -495,6 +500,18 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 16,
+  },
+  signOutButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(217, 83, 79, 0.1)',
   },
   container: {
     padding: 24,

@@ -138,6 +138,68 @@
     "brightness": "Hyerɛn",
     "eyeProtection": "Anihwɛ so"
   },
+  "privacyPolicy": {
+    "header": "Nkateaseɛ Ho Nhyehyɛe",
+    "seeMore": "Hwɛ Nkateaseɛ Ho Nhyehyɛe No Nyinaa",
+    "intro": {
+      "privacyImportant": "Wo nkateaseɛ ho hia yɛn. Nkateaseɛ Ho Nhyehyɛɛ yi kyerɛ sɛnea yɛboaboa, yɛde di dwuma, yɛkyerɛ, na yɛbɔ ho ban wo wo app no mu.",
+      "howWeCollect": "Yɛboaboa nneɛma a wode ma yɛn, te sɛ bere a woyɛ wo account, de yɛn nneɛma di dwuma, anaasɛ wokasa akyerɛ yɛn.",
+      "policyExplains": "Nhyehyɛɛ yi kyerɛ yɛn adwumayɛ wɔ nneɛma a yɛboaboa, sɛnea yɛde di dwuma, ne sɛnea yɛkyerɛ wo nkateaseɛ ho."
+    },
+    "links": {
+      "termsUse": "Dwumadi Nsɛm",
+      "faqs": "Nsɛmmisa a Wɔbisa So",
+      "shareApp": "Kyɛ App No",
+      "visitWebsite": "Kɔ Yɛn Website So"
+    },
+    "share": {
+      "title": "Kyɛ Lifeline App No",
+      "message": "Hwɛ saa app a ɛboa wo wɔ ɔhaw mu yi: https://lifeline-mu.vercel.app/"
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Nneɛma a Yɛboaboaa",
+        "description1": "Yɛboaboa nneɛma a wode ma yɛn, te sɛ bere a woyɛ wo account, de yɛn nneɛma di dwuma, anaasɛ wokasa akyerɛ yɛn. Ebetumi aka wo din, wo email adrɛs, wo telefon nɔma, ne afoforo a ɛfa wo ho anaasɛ ɛkyerɛ wo ho.",
+        "description2": "Yɛn nso boaboa nneɛma a ɛfa wo device ne sɛnea wodi nkitahodi ne yɛn app no ho, ebi ne IP adrɛs, device tebea, operating system, ne nneɛma a wode di dwuma ho nkɔsoɔ."
+      },
+      "howWeUseInformation": {
+        "title": "Sɛnea Yɛde Wo Nkateaseɛ Di Dwuma",
+        "description": "Yɛde nneɛma a yɛboaboaa no di dwuma sɛ yɛbɛma yɛn nneɛma ayɛ yiye, yɛbɛhwɛ sɛ nneɛma no ayɛ yiye, yɛbɛma wo nkɔmbɔ a ɛfa ho no, yɛbɛma wo nkyerɛkyerɛmu ne nsɛmmisa, na yɛbɛma wo nkɔsoɔ mu mmoa."
+      },
+      "informationSharing": {
+        "title": "Nkateaseɛ Atoatoa Ho Nkyerɛkyerɛmu",
+        "description": "Yɛntɔn wo nkateaseɛ mma obiara. Ebia yɛbɛkyerɛ wo nkateaseɛ kɔma adwumayɛfo a wɔyɛ adwuma ma yɛn, bere a mmara ka sɛ yɛmmfa nkyerɛ, anaasɛ sɛ yɛpɛ sɛ yɛbɔ yɛn ho ban."
+      },
+      "dataSecurity": {
+        "title": "Nkateaseɛ Ho Nkwaadɔm",
+        "description": "Yɛde nhyehyɛe pa ne adwumayɛbea nhyehyɛe a ɛfata di dwuma sɛ yɛbɛbɔ wo nkateaseɛ ho ban. Nanso, ɔkwan biara a wɔfa so de nneɛma kɔ internet so anaa wɔde sie wɔ ɛlɛktronik mu nnyɛ 100% a wotumi gye atia."
+      },
+      "yourRights": {
+        "title": "Wo Ntamadan",
+        "description": "Wotumi wɔ tumi bi wɔ wo nkateaseɛ so, ebi ne sɛ wobɛhunu, wobɛsesa, anaasɛ wobɛpam wo nkateaseɛ. Yɛsrɛ sɛ kɔka yɛn nkyerɛ sɛ wopɛ sɛ wodi dwuma saa tumi yi."
+      },
+      "childrenPrivacy": {
+        "title": "Mmofra Nkateaseɛ Ho Nkwaadɔm",
+        "description": "Yɛn adwuma nnyɛ dea mmofra a wɔwɔ mfe 13 ase. Yɛnnim sɛ yɛboaboa nkateaseɛ fi mmofra a wɔwɔ mfe 13 ase hɔ. Sɛ yɛahu sɛ yɛaboaboa nkateaseɛ fi ɔba a ɔwɔ mfe 13 ase hɔ a, yɛbɛyɛ ade sɛ yɛbɛpam nkateaseɛ no ntɛm ara."
+      },
+      "changesToPolicy": {
+        "title": "Nsesaeɛ Wɔ Nhyehyɛɛ Yi Mu",
+        "description": "Ebia yɛbɛsesa Nkateaseɛ Ho Nhyehyɛɛ yi bere biara. Yɛbɛkyerɛ wo sɛnea ɛbɛyɛ a yɛbɛkyerɛ wo sɛnea ɛbɛyɛ a wubetumi ahu Nkateaseɛ Ho Nhyehyɛɛ foforo a ɛwɔ saa krataafa yi so na yɛbɛsesa 'Bere a Wɔsesaa No' da no."
+      },
+      "contactUs": {
+        "title": "Ka Yɛn Ho",
+        "description": "Sɛ wowɔ nsɛmmisa biara a ɛfa Nkateaseɛ Ho Nhyehyɛɛ yi ho a, yɛsrɛ sɛ kɔka yɛn ho wɔ support@lifelineapp.com."
+      },
+      "internationalDataTransfers": {
+        "title": "Nkateaseɛ Nsakraeɛ Wɔ Amanaman Nkabom Mu",
+        "description": "Wobetumi de wo nkateaseɛ akɔ wɔn a wɔwɔ aman a wɔn mmara yɛ ne deɛ ɛwɔ wo man mu nyinaa. Ebia wɔde wo nkateaseɛ bɛkɔ aman a wɔn nkwaadɔm mmara yɛ ne deɛ ɛwɔ wo man mu nyinaa."
+      },
+      "lastUpdated": {
+        "title": "Bere a Wɔsesaa No",
+        "description": "Wɔsesaa Nkateaseɛ Ho Nhyehyɛɛ yi wɔ August 12, 2025."
+      }
+    }
+  },
   "firstAid": {
     "title": "FIRST AID GUIDES",
     "subtitle": "Kɔɔ list no mu na\nhwɛ first aid guides no\nna wo atumi\nhunu nneɛma a wo hia",

@@ -23,7 +23,7 @@ export default function TipsScreen() {
     };
   }, [i18n]);
   const [fontsLoaded] = useFonts({
-      'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'), 
+      'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
       'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'), 
     });
 
@@ -152,13 +152,14 @@ const styles = StyleSheet.create({
     marginTop: 150,
   },
   title: {
-    fontSize: 40,
+    fontSize: 36,
     color: '#222',
     textAlign: 'center',
-    fontFamily: 'Flavours', 
+    fontFamily: 'FjallaOne-Regular',
     marginTop: 0,
     marginBottom: 8,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
    subtitle: {
     fontSize: 17,

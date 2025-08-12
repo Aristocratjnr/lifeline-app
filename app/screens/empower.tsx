@@ -25,7 +25,7 @@ export default function EmpowerScreen() {
 
   // Load the fonts
   const [fontsLoaded] = useFonts({
-    'Caveat-Regular': require('@/assets/fonts/Caveat-Bold.ttf'),
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -172,14 +172,15 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   title: {
-    fontSize: 35,
+    fontSize: 34,
     textAlign: 'center',
     color: 'black',
-    marginHorizontal: 20,
+    marginHorizontal: 30,
     marginTop: 30,
     zIndex: 2,
-    fontFamily: 'Caveat-Regular',
+    fontFamily: 'FjallaOne-Regular',
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   description: {
     fontSize: 17,

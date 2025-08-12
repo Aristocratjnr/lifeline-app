@@ -31,7 +31,7 @@ export default function DoctorScreen() {
 
   // Load custom fonts
   const [fontsLoaded] = useFonts({
-    'Caveat-Regular': require('@/assets/fonts/Caveat-Bold.ttf'),
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -202,12 +202,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '600',
+    fontSize: 34,
     marginTop: 0,
     textAlign: 'center',
-    fontFamily: 'Caveat-Regular',
+    fontFamily: 'FjallaOne-Regular',
     color: '#000',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   description: {
     fontSize: 16,

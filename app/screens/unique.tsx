@@ -26,7 +26,7 @@ export default function UniqueScreen() {
 
   // Load the fonts
   const [fontsLoaded] = useFonts({
-    'LuckiestGuy-Regular': require('@/assets/fonts/LuckiestGuy-Regular.ttf'),
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -169,8 +169,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginTop: 0, 
     zIndex: 2,
-    fontFamily: 'LuckiestGuy-Regular',
+    fontFamily: 'FjallaOne-Regular',
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   description: {
     fontSize: 17,

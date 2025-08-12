@@ -42,7 +42,7 @@ export default function GuestScreen() {
   const { t } = useTranslation();
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('+233 (059) 874 1236');
-  const [selectedLanguages, setSelectedLanguages] = useState(['ENG']);
+  const [selectedLanguage, setSelectedLanguage] = useState('ENG');
   const [gender, setGender] = useState('Select Gender');
   const [showGenderModal, setShowGenderModal] = useState(false);
   
@@ -55,12 +55,8 @@ export default function GuestScreen() {
     return <View style={styles.container} />;
   }
 
-  const toggleLanguage = (code: any) => {
-    if (selectedLanguages.includes(code)) {
-      setSelectedLanguages(selectedLanguages.filter(lang => lang !== code));
-    } else {
-      setSelectedLanguages([...selectedLanguages, code]);
-    }
+  const toggleLanguage = (code: string) => {
+    setSelectedLanguage(code);
   };
 
   const handleGenderSelect = (selectedGender: string) => {
@@ -139,7 +135,7 @@ export default function GuestScreen() {
                 key={lang.code}
                 style={[
                   styles.languageButton,
-                  selectedLanguages.includes(lang.code) && styles.selectedLanguage
+                  selectedLanguage === lang.code && styles.selectedLanguage
                 ]}
                 onPress={() => toggleLanguage(lang.code)}
               >
