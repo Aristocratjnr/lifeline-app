@@ -1,10 +1,10 @@
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { Dimensions, Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // Interface for first aid tip items
@@ -19,6 +19,7 @@ interface FirstAidTip {
 export default function MainScreen() {
   const router = useRouter();
   const [showTipsModal, setShowTipsModal] = useState(false);
+  const [showHubModal, setShowHubModal] = useState(false);
 
   // First aid tips data
   const firstAidTips: FirstAidTip[] = [
@@ -213,7 +214,7 @@ export default function MainScreen() {
           {/* Quiz Card */}
           <TouchableOpacity 
             style={styles.quizCard}
-            onPress={() => router.push('/screens/welcome')}
+            onPress={() => router.push('/screens/quiz')}
             activeOpacity={0.9}
           >
             <LinearGradient
@@ -231,12 +232,11 @@ export default function MainScreen() {
                   />
                 </View>
                 <View style={styles.quizTextContainer}>
-                  <Text style={styles.quizTitle}>Take a quiz to</Text>
-                  <Text style={styles.quizSubtitle}>see how well</Text>
-                  <Text style={styles.quizSubtitle}>you can save a life</Text>
+                  <Text style={styles.quizTitle}>Take a quiz to brainstorm</Text>
+                  <Text style={styles.quizSubtitle}>on how well you can save a life</Text>
                   
                   <View style={styles.quizButtonContainer}>
-                    <Text style={styles.quizButtonText}>Take Quiz/Learn Soon</Text>
+                    <Text style={styles.quizButtonText}>Take Quiz Now/Coming Soon</Text>
                   </View>
                 </View>
               </View>
@@ -246,7 +246,7 @@ export default function MainScreen() {
           {/* First Aid Hub Card */}
           <TouchableOpacity 
             style={styles.hubCard}
-            onPress={() => router.push('/screens/firstAidGuide')}
+            onPress={() => setShowHubModal(true)}
             activeOpacity={0.9}
           >
             <LinearGradient
@@ -258,10 +258,11 @@ export default function MainScreen() {
               <View style={styles.hubContent}>
                 <View style={styles.hubTextContainer}>
                   <Text style={styles.hubTitle}>First Aid Hub 🚑</Text>
+                  <Text style={styles.hubSubtitle}>Comprehensive first aid resources</Text>
                 </View>
                 <View style={styles.hubIconContainer}>
                   <Image
-                    source={require('@/assets/images/hub.png')}
+                    source={require('@/assets/images/aid.png')}
                     style={styles.hubImage}
                     resizeMode="contain"
                   />
@@ -269,6 +270,70 @@ export default function MainScreen() {
               </View>
             </LinearGradient>
           </TouchableOpacity>
+
+          {/* First Aid Hub Coming Soon Modal */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={showHubModal}
+            onRequestClose={() => setShowHubModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.hubModalContent}>
+                <TouchableOpacity 
+                  style={styles.hubCloseButton}
+                  onPress={() => setShowHubModal(false)}
+                >
+                  <Ionicons name="close" size={24} color="#666" />
+                </TouchableOpacity>
+                
+                <View style={styles.hubModalHeader}>
+                  <Ionicons name="construct" size={40} color="#1976D2" />
+                  <Text style={styles.hubModalTitle}>Coming Soon!</Text>
+                  <Text style={styles.hubModalSubtitle}>We're working hard to bring you an amazing First Aid Hub experience</Text>
+                </View>
+
+                <View style={styles.hubModalBody}>
+                  <View style={styles.featureItem}>
+                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
+                      <Ionicons name="book" size={24} color="#E53935" />
+                    </View>
+                    <Text style={styles.featureText}>Comprehensive first aid guides</Text>
+                  </View>
+                  
+                  <View style={styles.featureItem}>
+                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
+                      <Ionicons name="videocam" size={24} color="#E53935" />
+                    </View>
+                    <Text style={styles.featureText}>Step-by-step video tutorials</Text>
+                  </View>
+                  
+                  <View style={styles.featureItem}>
+                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
+                      <Ionicons name="search" size={24} color="#E53935" />
+                    </View>
+                    <Text style={styles.featureText}>Quick search for emergencies</Text>
+                  </View>
+                </View>
+
+                <View style={styles.hubModalFooter}>
+                  <Text style={styles.notifyText}>Get notified when we launch!</Text>
+                  <View style={styles.notifyInputContainer}>
+                    <TextInput
+                      style={styles.notifyInput}
+                      placeholder="Enter your email"
+                      placeholderTextColor="#999"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity style={styles.notifyButton}>
+                      <Text style={styles.notifyButtonText}>Notify Me</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
         </SafeAreaView>
       </ImageBackground>
@@ -587,41 +652,169 @@ const styles = StyleSheet.create({
   // Hub Card Styles
   hubCard: {
     width: '100%',
+    height: 140,
     marginBottom: 16,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#E53935',
+    shadowColor: '#1976D2',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowRadius: 10,
     elevation: 6,
   },
   hubGradient: {
-    padding: 16,
-    minHeight: 80,
+    flex: 1,
+    padding: 20,
   },
   hubContent: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   hubTextContainer: {
     flex: 1,
+    paddingRight: 10,
   },
   hubTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#333',
+    marginBottom: 6,
     fontFamily: 'JetBrainsMono-Bold',
   },
+  hubSubtitle: {
+    fontSize: 14,
+    color: '#546E7A',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
   hubIconContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: 'rgba(229, 57, 53, 0.1)',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  hubModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  hubModalContent: {
+    width: '100%',
+    backgroundColor: '#FFE5E5',
+    borderRadius: 24,
+    padding: 24,
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 214, 214, 0.8)',
+  },
+  hubCloseButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    padding: 8,
+    zIndex: 10,
+  },
+  hubModalHeader: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+  },
+  hubModalTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#0D47A1',
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  hubModalSubtitle: {
+    fontSize: 16,
+    color: '#546E7A',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 8,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  hubModalBody: {
+    marginVertical: 20,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 214, 214, 0.8)',
+  },
+  featureIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  featureText: {
+    flex: 1,
+    fontSize: 15,
+    color: '#263238',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  hubModalFooter: {
+    marginTop: 20,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 214, 214, 0.8)',
+  },
+  notifyText: {
+    fontSize: 16,
+    color: '#37474F',
+    textAlign: 'center',
+    marginBottom: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  notifyInputContainer: {
+    flexDirection: 'row',
+    height: 50,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#F5F5F5',
+  },
+  notifyInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    fontSize: 15,
+    color: '#333',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  notifyButton: {
+    backgroundColor: '#E53935',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  notifyButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
   },
   hubImage: {
     width: '150%',
