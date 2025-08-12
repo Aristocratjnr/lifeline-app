@@ -42,7 +42,7 @@ const BeeStingsCleaningWound: React.FC = () => {
   const [highlightedWordIdx, setHighlightedWordIdx] = useState<number>(-1);
 
   const handleNext = () => {
-    router.push('/screens/first-aid-details/Stings/bee-preventing-infection');
+    router.push('/screens/first-aid-details/Stings/bee-final');
   };
 
   const handleSOS = () => {

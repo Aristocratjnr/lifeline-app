@@ -248,7 +248,7 @@ const DashboardScreen = () => {
 
   const user = {
     name: "Daniella Asiedu",
-    age: "18-25",
+    age: "50",
     gender: "Female",
     location: "Ghana",
     medicalCondition: "Common Cold",

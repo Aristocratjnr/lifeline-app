@@ -3,8 +3,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, Platform, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, UrlTile } from 'react-native-maps';
+import { ActivityIndicator, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MapView, { Callout, Marker, UrlTile } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Types for hospital and location to match Nominatim response
@@ -16,6 +16,7 @@ interface Hospital {
   lon: string;
   category: string;
   type: string;
+  phone?: string; // Optional phone number for hospitals
 }
 
 interface UserLocation {
@@ -33,6 +34,20 @@ export default function ExploreScreen() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [sosMarker, setSosMarker] = useState<UserLocation | null>(null);
+
+  // Emergency contact numbers for Ghana (can be expanded for other countries)
+  const emergencyContacts = {
+    ambulance: '193',
+    fire: '192',
+    police: '191',
+    general: '112', // European emergency number, also works in Ghana
+  };
+
+  const handleCallEmergency = (number: string) => {
+    Linking.openURL(`tel:${number}`).catch(() => {
+      alert('Unable to make phone call');
+    });
+  };
 
   useEffect(() => {
     // If lat/lng params are present, use them as SOS marker and center
@@ -77,20 +92,30 @@ export default function ExploreScreen() {
       const viewBox = `${coords.longitude - lonDeg},${coords.latitude + latDeg},${coords.longitude + lonDeg},${coords.latitude - latDeg}`;
 
       // Nominatim API for nearby hospitals, bounded to the viewbox
-      const url = `https://nominatim.openstreetmap.org/search?q=hospital&format=jsonv2&viewbox=${viewBox}&bounded=1&limit=50`;
+      // Include extratags to get additional information like phone numbers
+      const url = `https://nominatim.openstreetmap.org/search?q=hospital&format=jsonv2&viewbox=${viewBox}&bounded=1&limit=50&extratags=1&namedetails=1`;
       
       const response = await fetch(url, {
         headers: {
           'User-Agent': 'LifelineApp/1.0 (https://lifeline-mu.vercel.app)' // Nominatim requires a user-agent
         }
       });
-      const data: Hospital[] = await response.json();
+      const data: any[] = await response.json();
 
       if (data && data.length > 0) {
-        // Filter results to only include actual hospitals
-        const filteredHospitals = data.filter(
-          (place) => place.category === 'amenity' && place.type === 'hospital'
-        );
+        // Filter results to only include actual hospitals and add phone numbers if available
+        const filteredHospitals: Hospital[] = data
+          .filter((place) => place.category === 'amenity' && place.type === 'hospital')
+          .map((place) => ({
+            place_id: place.place_id,
+            name: place.name || place.display_name.split(',')[0],
+            display_name: place.display_name,
+            lat: place.lat,
+            lon: place.lon,
+            category: place.category,
+            type: place.type,
+            phone: place.extratags?.phone || place.extratags?.contact?.phone || place.extratags?.['contact:phone']
+          }));
         
         if (filteredHospitals.length > 0) {
           setHospitals(filteredHospitals);
@@ -163,9 +188,7 @@ export default function ExploreScreen() {
                 longitude: parseFloat(hospital.lon),
               }}
               title={hospital.name}
-              description={hospital.display_name}
               anchor={{ x: 0.5, y: 1 }} // Center the pin tip
-              onPress={() => handleGetDirections(hospital)}
             >
               <View style={styles.markerContainer}>
                 <View style={styles.markerPin}>
@@ -173,6 +196,40 @@ export default function ExploreScreen() {
                 </View>
                 <View style={styles.markerPinTriangle} />
               </View>
+              <Callout style={styles.calloutContainer} onPress={() => handleGetDirections(hospital)}>
+                <View style={styles.calloutContent}>
+                  <Text style={styles.calloutTitle}>{hospital.name}</Text>
+                  <Text style={styles.calloutAddress}>{hospital.display_name}</Text>
+                  
+                  <View style={styles.emergencySection}>
+                    <Text style={styles.emergencyTitle}>📞 Emergency Contacts:</Text>
+                    <TouchableOpacity 
+                      style={styles.emergencyButton}
+                      onPress={() => handleCallEmergency(emergencyContacts.ambulance)}
+                    >
+                      <Text style={styles.emergencyButtonText}>🚑 Ambulance: {emergencyContacts.ambulance}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={styles.emergencyButton}
+                      onPress={() => handleCallEmergency(emergencyContacts.general)}
+                    >
+                      <Text style={styles.emergencyButtonText}>🆘 Emergency: {emergencyContacts.general}</Text>
+                    </TouchableOpacity>
+                    {hospital.phone && (
+                      <TouchableOpacity 
+                        style={styles.emergencyButton}
+                        onPress={() => handleCallEmergency(hospital.phone!)}
+                      >
+                        <Text style={styles.emergencyButtonText}>🏥 Hospital: {hospital.phone}</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  
+                  <View style={styles.directionsSection}>
+                    <Text style={styles.directionsText}>🚗 Tap anywhere to get directions</Text>
+                  </View>
+                </View>
+              </Callout>
             </Marker>
           ))}
           {sosMarker && (
@@ -298,5 +355,60 @@ const styles = StyleSheet.create({
   },
   userMarkerPinTriangle: {
     borderTopColor: '#3498db',
+  },
+  // Callout styles
+  calloutContainer: {
+    width: 280,
+    minHeight: 120,
+  },
+  calloutContent: {
+    padding: 12,
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  calloutAddress: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 8,
+    lineHeight: 16,
+  },
+  emergencySection: {
+    marginVertical: 8,
+  },
+  emergencyTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 6,
+  },
+  emergencyButton: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FC7A7A',
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    marginVertical: 2,
+  },
+  emergencyButtonText: {
+    fontSize: 12,
+    color: '#DC2626',
+    fontWeight: '500',
+  },
+  directionsSection: {
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  directionsText: {
+    fontSize: 11,
+    color: '#6B7280',
+    fontStyle: 'italic',
+    textAlign: 'center',
   },
 });
