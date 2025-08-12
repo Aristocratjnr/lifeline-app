@@ -128,11 +128,12 @@ export default function AIAssistantScreen() {
       
       // Check for local responses first
       const lowerQuery = userQuery.toLowerCase().trim();
-      if (LOCAL_RESPONSES[lowerQuery]) {
+      const localResponses = getLocalResponses();
+      if (localResponses[lowerQuery]) {
         setChatHistory(prev => [...prev, { 
           id: Date.now() + 1, 
           type: 'assistant', 
-          text: LOCAL_RESPONSES[lowerQuery]
+          text: localResponses[lowerQuery]
         }]);
         setIsLoading(false);
         return;

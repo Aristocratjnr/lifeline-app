@@ -185,5 +185,19 @@ export default {
         "description": "This Privacy Policy was last updated on August 12, 2025. Please check back periodically for updates."
       }
     }
+  },
+
+  // AI Assistant
+  "aiAssistant": {
+    "welcomeMessage": "Hello! I'm your Lifeline medical assistant. I can help you with first aid questions and emergency guidance. How can I assist you today?",
+    "errorMessage": "I'm sorry, but I can only help with health and medical questions. Please ask me about first aid, emergency procedures, or health-related topics.",
+    "localResponses": {
+      "cpr": "CPR Steps:\n1. Check responsiveness and breathing\n2. Call emergency services\n3. Place hands on center of chest\n4. Push hard and fast 2 inches deep\n5. Give 30 compressions, then 2 rescue breaths\n6. Continue until help arrives\n\nRemember: Call emergency services immediately!",
+      "choking": "For Choking:\n1. Encourage coughing if person is conscious\n2. If unable to cough, give 5 back blows between shoulder blades\n3. Give 5 abdominal thrusts (Heimlich maneuver)\n4. Repeat back blows and thrusts\n5. Call emergency services if object doesn't dislodge\n\nFor unconscious person: Begin CPR",
+      "burn": "For Burns:\n1. Remove from heat source\n2. Cool with running water for 10-20 minutes\n3. Remove jewelry/clothing from area\n4. Cover with clean cloth\n5. Do NOT use ice, butter, or ointments\n6. Seek medical attention for severe burns\n\nCall emergency services for large or deep burns!",
+      "bleeding": "For Bleeding:\n1. Apply direct pressure with clean cloth\n2. Elevate injured area above heart if possible\n3. Maintain pressure until bleeding stops\n4. If blood soaks through, add more cloths\n5. Apply bandage when bleeding stops\n\nCall emergency services for severe bleeding!",
+      "whoAreYou": "I'm the Lifeline Medical Assistant, an AI designed to provide first aid guidance and emergency medical information. I'm here to help you handle medical emergencies and provide step-by-step instructions for various health situations.",
+      "whatCanYouDo": "I can help you with:\n• First aid procedures\n• Emergency medical guidance\n• Step-by-step instructions for injuries\n• When to call emergency services\n• Basic health and safety information\n\nI cannot diagnose conditions or replace professional medical care. For serious emergencies, always call your local emergency number!"
+    }
   }
 }

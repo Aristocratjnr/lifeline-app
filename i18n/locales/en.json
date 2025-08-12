@@ -120,6 +120,18 @@
     "title": "PREPARE FOR YOUR UNIQUE NEEDS",
     "description": "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"
   },
+  "aiAssistant": {
+    "welcomeMessage": "Hello! I'm your AI medical assistant. How can I help you today?",
+    "suggestions": [
+      "How do I perform CPR?",
+      "What are the symptoms of a stroke?",
+      "How to treat a burn?",
+      "What should I include in a first aid kit?"
+    ],
+    "placeholder": "Type your health question here...",
+    "errorMessage": "I'm sorry, I can only assist with medical and first aid related questions. For emergencies, please contact emergency services immediately.",
+    "disclaimer": "This is not a substitute for professional medical advice. Always consult a healthcare professional for medical concerns."
+  },
   "bot": {
     "available247": "Available 24/7",
     "title": "Medical Assistant",
