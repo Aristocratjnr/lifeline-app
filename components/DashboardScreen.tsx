@@ -88,14 +88,40 @@ const DashboardScreen = () => {
   }
 
   const handleCallDoctor = () => {
+    console.log('Call Doctor button pressed - initiating doctor connection')
     setIsConnectingDoctor(true)
+    
+    // Log the connection attempt
+    const connectionStartTime = new Date().toISOString()
+    console.log(`[${connectionStartTime}] Attempting to connect to doctor...`)
+    
     // Simulate connecting to doctor
     setTimeout(() => {
+      const connectionCompleteTime = new Date().toISOString()
+      console.log(`[${connectionCompleteTime}] Successfully connected to doctor`)
+      console.log('Doctor Details:', {
+        name: 'Dr. Sarah Johnson',
+        specialty: 'Emergency Medicine',
+        connectionTime: connectionStartTime,
+        connectionDuration: '2s',
+        status: 'Connected'
+      })
+      
       setIsConnectingDoctor(false)
       setShowBotModal(false)
+      
+      // Log the alert being shown to user
+      console.log(`[${new Date().toISOString()}] Showing connection success alert to user`)
+      
       Alert.alert(
         'Connected to Doctor',
-        'Connected to Dr. Sarah Johnson\nSpecialty: Emergency Medicine\nEstimated wait time: 2 minutes'
+        'Connected to Dr. Sarah Johnson\nSpecialty: Emergency Medicine\nEstimated wait time: 2 minutes',
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('User acknowledged doctor connection')
+          }
+        ]
       )
     }, 2000)
   }
@@ -233,6 +259,24 @@ const DashboardScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Floating Bot Assistant */}
+      <Animated.View 
+        style={[
+          styles.floatingBot,
+          {
+            transform: [{ scale: botPulseAnim }]
+          }
+        ]}
+      >
+        <TouchableOpacity 
+          style={styles.botButton}
+          onPress={handleBotPress}
+          activeOpacity={0.8}
+        >
+          <MaterialIcons name="support-agent" size={28} color="#fff" />
+        </TouchableOpacity>
+      </Animated.View>
+      
       <ScrollView contentContainerStyle={styles.container}>
         <LinearGradient
           colors={["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
@@ -475,23 +519,17 @@ const DashboardScreen = () => {
         </View>
       </Modal>
       
-      {/* Floating Bot Assistant */}
-      <Animated.View 
-        style={[
-          styles.floatingBot,
-          {
-            transform: [{ scale: botPulseAnim }]
-          }
-        ]}
+      {/* Floating Action Button for Bot */}
+      <TouchableOpacity 
+        style={styles.floatingBot}
+        onPress={() => setShowBotModal(true)}
+        activeOpacity={0.8}
       >
-        <TouchableOpacity 
-          style={styles.botButton}
-          onPress={handleBotPress}
-          activeOpacity={0.8}
-        >
-          <MaterialIcons name="support-agent" size={28} color="#fff" />
-        </TouchableOpacity>
-      </Animated.View>
+        <Animated.View style={[styles.botButton, { transform: [{ scale: botPulseAnim }] }]}>
+          <MaterialIcons name="support-agent" size={24} color="#fff" />
+        </Animated.View>
+      </TouchableOpacity>
+      
     </SafeAreaView>
   )
 }
@@ -500,6 +538,142 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+  },
+  floatingBot: {
+    position: 'absolute',
+    bottom: 24,
+    left: 24,
+    zIndex: 1000,
+  },
+  botButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E53935',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  connectingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  connectingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#E53935',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  callDoctorButton: {
+    flexDirection: 'row',
+    backgroundColor: '#E53935',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+    elevation: 3,
+  },
+  callDoctorButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 8,
+  },
+  callLogsButton: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#E53935',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  callLogsButtonText: {
+    color: '#E53935',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  botModalCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    width: '85%',
+    alignItems: 'center',
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    padding: 4,
+  },
+  botIconContainer: {
+    marginBottom: 20,
+    position: 'relative',
+  },
+  botIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(229, 57, 53, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  botIconRing: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'rgba(229, 57, 53, 0.2)',
+    top: -10,
+    left: -10,
+    zIndex: 1,
+  },
+  botModalTitle: {
+    fontSize: 20,
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  botModalText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  modalButtonsContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  modalFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  modalFooterText: {
+    fontSize: 12,
+    color: '#666',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -936,155 +1110,6 @@ const styles = StyleSheet.create({
     color: "#888",
     marginTop: 2,
     fontFamily: "JetBrainsMono-Regular",
-  },
-  
-  // Bot styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  botModalCard: {
-    width: '85%',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 24,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 24,
-    elevation: 12,
-    position: 'relative',
-  },
-  modalCloseButton: {
-    position: 'absolute',
-    right: 16,
-    top: 16,
-    zIndex: 1,
-    padding: 8,
-  },
-  botIconContainer: {
-    position: 'relative',
-    marginBottom: 16,
-  },
-  botIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
-  },
-  botIconRing: {
-    position: 'absolute',
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    borderWidth: 2,
-    borderColor: '#E53935',
-    top: -8,
-    left: -8,
-    opacity: 0.2,
-  },
-  modalButtonsContainer: {
-    width: '100%',
-    gap: 12,
-    marginTop: 8,
-  },
-  callDoctorButton: {
-    flexDirection: 'row',
-    backgroundColor: '#E53935',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  callLogsButton: {
-    flexDirection: 'row',
-    backgroundColor: '#FFE5E5',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#E53935',
-  },
-  callLogsButtonText: {
-    color: '#E53935',
-    fontSize: 16,
-    fontFamily: 'JetBrainsMono-Bold',
-  },
-  modalFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-  },
-  modalFooterText: {
-    fontSize: 14,
-    color: '#666',
-    fontFamily: 'JetBrainsMono-Regular',
-  },
-  floatingBot: {
-    position: 'absolute',
-    bottom: 30,
-    right: 20,
-    zIndex: 10,
-  },
-  botButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#E53935',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  botModalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    fontFamily: 'JetBrainsMono-Bold',
-    color: '#E53935',
-    textAlign: 'center',
-  },
-  botModalText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
-    fontFamily: 'JetBrainsMono-Regular',
-    lineHeight: 22,
-  },
-  connectingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-  },
-  connectingText: {
-    fontSize: 16,
-    color: '#E53935',
-    fontFamily: 'JetBrainsMono-Regular',
-    textAlign: 'center',
-    marginTop: 12,
-  },
-  callDoctorButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: 'JetBrainsMono-Bold',
   },
 })
 
