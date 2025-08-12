@@ -129,7 +129,7 @@ export default function MainScreen() {
                   
                   <TouchableOpacity 
                     style={styles.getStartedButton}
-                    onPress={() => router.push('/dashboard')}
+                    onPress={() => router.push('/screens/firstAidGuide')}
                     activeOpacity={0.8}
                   >
                     <Text style={styles.getStartedText}>Get Started!</Text>
