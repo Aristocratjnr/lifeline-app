@@ -121,5 +121,69 @@ export default {
     "callDoctor": "Call Doctor",
     "connecting": "Connecting to a doctor...",
     "available247": "Available 24/7"
+  },
+
+  // Privacy Policy
+  "privacyPolicy": {
+    "header": "Privacy Policy",
+    "intro": {
+      "privacyImportant": "Your privacy is important to us. This Privacy Policy explains how LIFELINE collects, uses, and protects your personal information when you use our emergency response application.",
+      "howWeCollect": "We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner.",
+      "policyExplains": "This policy explains what information we collect, how we use it, and what rights you have regarding your data."
+    },
+    "seeMore": "See More",
+    "links": {
+      "termsUse": "Terms of Use",
+      "faqs": "FAQs",
+      "shareApp": "Share App",
+      "visitWebsite": "Visit Website"
+    },
+    "share": {
+      "title": "Share LIFELINE App",
+      "message": "Download LIFELINE - Your emergency response companion. Available on App Store and Google Play."
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Information We Collect",
+        "description1": "We collect information you provide directly to us, such as when you create an account, contact us for support, or use our emergency services.",
+        "description2": "This may include your name, email address, phone number, location data, and emergency contact information."
+      },
+      "howWeUseInformation": {
+        "title": "How We Use Your Information",
+        "description": "We use the information we collect to provide, maintain, and improve our services, respond to emergencies, communicate with you, and ensure the safety and security of our users."
+      },
+      "informationSharing": {
+        "title": "Information Sharing",
+        "description": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except in emergency situations or as required by law."
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "description": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+      },
+      "yourRights": {
+        "title": "Your Rights",
+        "description": "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us."
+      },
+      "childrenPrivacy": {
+        "title": "Children's Privacy",
+        "description": "Our service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13."
+      },
+      "changesToPolicy": {
+        "title": "Changes to This Policy",
+        "description": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page."
+      },
+      "contactUs": {
+        "title": "Contact Us",
+        "description": "If you have any questions about this Privacy Policy, please contact us at privacy@lifeline.app or through our support channels."
+      },
+      "internationalDataTransfers": {
+        "title": "International Data Transfers",
+        "description": "Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your data."
+      },
+      "lastUpdated": {
+        "title": "Last Updated",
+        "description": "This Privacy Policy was last updated on August 12, 2025. Please check back periodically for updates."
+      }
+    }
   }
 }

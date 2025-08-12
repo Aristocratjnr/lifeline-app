@@ -73,7 +73,24 @@
     "water": "Ruwa",
     "dailyTip": "TIP DIN YAU",
     "lifelineHistory": "Tarihin Lifeline",
-    "recentActivity": "Ayyukan kwanan nan"
+    "recentActivity": "Ayyukan kwanan nan",
+    "sentSOSAlert": "Sent SOS alert",
+    "viewedMap": "Viewed map",
+    "readHealthNews": "Read health news",
+    "todayTime": "Today, 09:12",
+    "yesterdayTime1": "Yesterday, 18:45",
+    "yesterdayTime2": "Yesterday, 08:30",
+    "fracture": "Fracture",
+    "cough": "Cough",
+    "burns": "Burns",
+    "lastVisited": "Last Visited: 02, May, 2025",
+    "age": "Age",
+    "gender": "Gender",
+    "location": "Location",
+    "condition": "Condition",
+    "language": "Language",
+    "editProfile": "Edit Profile",
+    "newTipEveryDay": "New tip every day"
   },
   "doctor": {
     "title": "Jagorar Likita Mai Gwani",
@@ -87,12 +104,188 @@
   },
   "tips": {
     "title": "Gaggawa na Cikin Taimako\nA Kwafin Ka",
-    "subtitle": "Sami umarni mai dadi, mataki ɗaya-ɗaya\ndon kowane balo,\nkoda ba tare da intanet ba"
+    "subtitle": "Sami umarni mai dadi, mataki ɗaya-ɗaya\ndon kowane balo,\nkoda ba tare da intanet ba",
+    "handleSharpObjects": "Handle sharp objects carefully:",
+    "handleSharpObjectsContent": "Always cut away from your body and keep blades sharp for safer use.",
+    "stayHydrated": "Stay hydrated:",
+    "stayHydratedContent": "Drink plenty of water throughout the day to maintain optimal health.",
+    "washHands": "Wash your hands regularly:",
+    "washHandsContent": "Frequent handwashing helps prevent the spread of germs and illnesses.",
+    "takeBreaks": "Take breaks from screens:",
+    "takeBreaksContent": "Rest your eyes every 20 minutes to reduce eye strain and fatigue.",
+    "getSleep": "Get enough sleep:",
+    "getSleepContent": "Aim for 7-9 hours of sleep each night to support your overall health."
   },
   "bot": {
     "title": "Mataimakin Likita",
     "description": "Sannu! Na mataimakin likita ne. Na iya haɗa ka da likita mai gwani don tattaunawa nan take.",
     "callDoctor": "Kira Likita Yanzu",
-    "connecting": "Ana haɗawa da likita..."
+    "connecting": "Ana haɗawa da likita...",
+    "available247": "Available 24/7",
+    "welcomeMessage": "Hello! I'm your Lifeline First Aid Assistant. I can help with emergency medical information and first aid procedures. What would you like to know?",
+    "placeholder": "Ask me anything about first aid...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "errorMessage": "I'm sorry, but I can only help with health and medical-related questions. Please ask me about first aid, medical emergencies, or health topics.",
+    "localResponses": {
+      "cpr": "For CPR: 1) Call emergency services first. 2) Place the heel of your hand on the center of the chest. 3) Push hard and fast (100-120 compressions per minute). 4) If trained, give 2 breaths after every 30 compressions.\n\nRemember: For any serious emergency, always call professional help immediately.",
+      "choking": "For a choking adult/child:\n1) Ask \"Are you choking?\"\n2) If they can cough, encourage coughing.\n3) If they can't breathe, perform abdominal thrusts (Heimlich maneuver):\n   - Stand behind, wrap arms around waist\n   - Make a fist above navel\n   - Grasp fist with other hand\n   - Give quick upward thrusts\n4) Continue until object is expelled or person becomes unconscious.",
+      "burn": "For minor burns:\n1) Cool under running water for 10-15 minutes\n2) Remove jewelry/clothing near burn\n3) Cover with sterile non-stick dressing\n4) Don't apply butter, oil or ice\n\nFor serious burns (large, deep, or on face/hands):\n1) Call emergency services\n2) Don't remove stuck clothing\n3) Cover loosely with clean cloth\n4) Monitor for shock",
+      "bleeding": "To control bleeding:\n1) Apply direct pressure with clean cloth\n2) Elevate injured area if possible\n3) Add more layers if blood soaks through\n4) Don't remove original dressing\n5) If severe, call emergency services\n\nFor nosebleeds:\n1) Sit upright, lean forward\n2) Pinch soft part of nose for 10 minutes\n3) Apply ice to bridge of nose\n4) Avoid blowing nose afterward",
+      "whoAreYou": "I'm Lifeline Assistant, your AI first aid helper. I provide emergency medical guidance and first aid instructions. I was created by the Lifeline team to help people get accurate medical information quickly. For serious emergencies, always contact professional medical services immediately.",
+      "whatCanYouDo": "I can help with:\n- First aid instructions\n- Emergency response guidance\n- Basic medical information\n- Wound care\n- CPR instructions\n- Handling burns, fractures, poisoning\n\nI always recommend contacting professional medical help for serious situations."
+    }
+  },
+  "unique": {
+    "title": "PREPARE FOR YOUR UNIQUE NEEDS",
+    "description": "Store your medical history, allergies, and emergency contacts for quick access by you or first responders"
+  },
+  "explore": {
+    "title": "Nearby Hospitals",
+    "loading": "Finding nearby hospitals...",
+    "permissionDenied": "Permission to access location was denied.",
+    "locationError": "Could not get your location.",
+    "noHospitals": "No hospitals found within a 10km radius.",
+    "fetchError": "Error fetching hospitals. Please try again.",
+    "yourLocation": "Your Location",
+    "sosLocation": "SOS Location",
+    "getDirections": "Get Directions",
+    "callHospital": "Call Hospital"
+  },
+  "news": {
+    "title": "Health News",
+    "loading": "Loading health news...",
+    "noNews": "No news articles available at the moment.",
+    "pullToRefresh": "Pull to refresh",
+    "loadingMore": "Loading more articles...",
+    "readMore": "Read More",
+    "source": "Source",
+    "publishedAt": "Published",
+    "errorLoading": "Error loading news. Please try again.",
+    "retry": "Retry"
+  },
+  "sos": {
+    "title": "Emergency SOS",
+    "callEmergency": "Call Emergency",
+    "shareLocation": "Share My Location",
+    "medicalId": "Medical ID",
+    "emergencyContacts": "Emergency Contacts",
+    "locationShared": "Location shared successfully!",
+    "locationError": "Permission to access location was denied.",
+    "callError": "Unable to make emergency call.",
+    "medicalInfo": {
+      "name": "Name",
+      "age": "Age",
+      "gender": "Gender",
+      "bloodType": "Blood Type",
+      "medicalCondition": "Medical Condition",
+      "emergencyContact": "Emergency Contact",
+      "allergies": "Allergies",
+      "medications": "Current Medications",
+      "close": "Close"
+    },
+    "quickActions": {
+      "police": "Police",
+      "fire": "Fire Department",
+      "ambulance": "Ambulance",
+      "poison": "Poison Control"
+    }
+  },
+  "display": {
+    "brightness": "Brightness",
+    "eyeProtection": "Eye Protection"
+  },
+  "callLogs": {
+    "title": "Call Logs",
+    "outgoing": "Outgoing",
+    "incoming": "Incoming",
+    "missed": "Missed"
+  },
+  "privacyPolicy": {
+    "header": "Privacy Policy",
+    "seeMore": "See Full Privacy Policy",
+    "intro": {
+      "privacyImportant": "Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our app.",
+      "howWeCollect": "We collect information that you provide directly to us, such as when you create an account, use our services, or communicate with us.",
+      "policyExplains": "This policy explains our practices regarding the collection, use, and disclosure of your information."
+    },
+    "links": {
+      "termsUse": "Terms of Use",
+      "faqs": "FAQs",
+      "shareApp": "Share App",
+      "visitWebsite": "Visit Our Website"
+    },
+    "share": {
+      "title": "Share Lifeline App",
+      "message": "Check out this helpful first aid app: https://lifeline-mu.vercel.app/"
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Information We Collect",
+        "description1": "We collect information that you provide directly to us, such as when you create an account, use our services, or communicate with us. This may include your name, email address, phone number, and other contact or identifying information.",
+        "description2": "We also automatically collect certain information about your device and how you interact with our app, including IP address, device type, operating system, and usage data."
+      },
+      "howWeUseInformation": {
+        "title": "How We Use Your Information",
+        "description": "We use the information we collect to provide, maintain, and improve our services, process transactions, send you related information, respond to your comments and questions, and provide customer service."
+      },
+      "informationSharing": {
+        "title": "Information Sharing",
+        "description": "We do not sell or rent your personal information to third parties. We may share your information with service providers who perform services on our behalf, when required by law, or to protect our rights and property."
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "description": "We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure."
+      },
+      "yourRights": {
+        "title": "Your Rights",
+        "description": "You may have certain rights regarding your personal information, including the right to access, correct, or delete your data. Please contact us to exercise these rights."
+      },
+      "childrenPrivacy": {
+        "title": "Children's Privacy",
+        "description": "Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13. If we learn we have collected personal information from a child under 13, we will take steps to delete the information as soon as possible."
+      },
+      "changesToPolicy": {
+        "title": "Changes to This Policy",
+        "description": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the 'Last Updated' date."
+      },
+      "contactUs": {
+        "title": "Contact Us",
+        "description": "If you have any questions about this Privacy Policy, please contact us at support@lifelineapp.com."
+      },
+      "internationalDataTransfers": {
+        "title": "International Data Transfers",
+        "description": "Your information may be transferred to and maintained on computers located outside of your state, province, country, or other governmental jurisdiction where the data protection laws may differ from those in your jurisdiction."
+      },
+      "lastUpdated": {
+        "title": "Last Updated",
+        "description": "This Privacy Policy was last updated on August 11, 2025."
+      }
+    }
+  },
+  "firstAid": {
+    "title": "FIRST AID GUIDES",
+    "subtitle": "Navigate through the list of\nfirst aid guides to\nhelp you find\nexactly you need",
+    "searchPlaceholder": "Search for first aid guide",
+    "emergencyTab": "Emergency/External",
+    "exposuresTab": "Exposures/Internal",
+    "categories": {
+      "cuts": "CUTS",
+      "stings": "STINGS",
+      "splinter": "SPLINTER",
+      "sprainStrain": "SPRAIN/\nSTRAIN",
+      "fever": "FEVER",
+      "jockItch": "JOCK ITCH",
+      "rash": "RASH",
+      "hives": "HIVES",
+      "abdominalPains": "ABDOMINAL\nPAINS",
+      "choking": "CHOKING",
+      "frostBite": "FROST\nBITE",
+      "heatStroke": "HEAT\nSTROKE",
+      "noseBleed": "NOSE\nBLEED",
+      "insectBite": "INSECT\nBITE",
+      "sunBurn": "SUN\nBURN",
+      "fertile": "Febrile"
+    }
   }
 }

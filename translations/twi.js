@@ -122,5 +122,69 @@ export default {
     "callDoctor": "Frɛ Oduruyɛfo",
     "connecting": "Ɛrefrɛ oduruyɛfo...",
     "available247": "Ɛwɔ hɔ da 24/7"
+  },
+
+  // Privacy Policy
+  "privacyPolicy": {
+    "header": "Kokoamsɛm Ho Mmara",
+    "intro": {
+      "privacyImportant": "Wo kokoamsɛm ho hia yɛn. Saa Kokoamsɛm Ho Mmara yi kyerɛ sɛnea LIFELINE boaboa w'amansɛm ano, de di dwuma, na ɔbɔ wo ho ban bere a wode yɛn ahokyere dwumadi no di dwuma no.",
+      "howWeCollect": "Yɛde yɛn ho ato hɔ sɛ yɛbɛbɔ wo kokoamsɛm ho ban na yɛahwɛ sɛ wo amansɛm no wɔ ahotɔ ne asɛmhyia mu.",
+      "policyExplains": "Saa mmara yi kyerɛ nsɛm a yɛboaboa ano, sɛnea yɛde di dwuma, ne hokwan a wowɔ wɔ wo nsɛm ho."
+    },
+    "seeMore": "Hwɛ Pii",
+    "links": {
+      "termsUse": "Dwumadi Ho Mmara",
+      "faqs": "Nsɛmmisa a Wɔbisa Taa",
+      "shareApp": "Kyɛ App No",
+      "visitWebsite": "Kɔ Website No So"
+    },
+    "share": {
+      "title": "Kyɛ LIFELINE App",
+      "message": "Download LIFELINE - Wo ahokyere boafo. Ɛwɔ App Store ne Google Play so."
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Nsɛm A Yɛboaboa Ano",
+        "description1": "Yɛboaboa nsɛm a wode ma yɛn tee ano, te sɛ bere a woyɛ akawnt, frɛ yɛn ma mmoa, anaa de yɛn ahokyere dwumadi di dwuma no.",
+        "description2": "Ebia ɛbɛka wo din, email address, telefon nɔma, beaeyɛ nsɛm, ne ahokyere nkitahodi nsɛm."
+      },
+      "howWeUseInformation": {
+        "title": "Sɛnea Yɛde Wo Nsɛm Di Dwuma",
+        "description": "Yɛde nsɛm a yɛboaboa ano no di dwuma de yɛ, kɔ so yɛ, na tu yɛn dwumadi anim, gyina ahokyere ano, ne wo di nkitaho, na yɛhwɛ yɛn dwumadifo ahotɔ ne ahobammɔ."
+      },
+      "informationSharing": {
+        "title": "Nsɛm Kyɛkyɛ",
+        "description": "Yenton, sakyɛ, anaa dan wo amansɛm mma afoforɔ a wo pemiso nni mu, gye ahokyere tebea mu anaa sɛnea mmara kyerɛ."
+      },
+      "dataSecurity": {
+        "title": "Data Ahobammɔ",
+        "description": "Yɛde ahobammɔ akwan a ɛfata di dwuma de bɔ wo amansɛm ho ban fi akwanmu a wɔmpenee so, nsakrae, dafoa, anaa ɔsɛe ho."
+      },
+      "yourRights": {
+        "title": "Wo Hokwan",
+        "description": "Wowɔ hokwan sɛ wobɛkɔ wo amansɛm so, asesa, anaa ayi afi hɔ. Wobetumi afi nkitahodi bi a yɛde brɛ wo no mu nso."
+      },
+      "childrenPrivacy": {
+        "title": "Mmofra Kokoamsɛm",
+        "description": "Yɛn dwumadi no nyɛ mmofra a wɔnnya mfe 13 no de. Yɛmmoa mmofra a wɔnnya mfe 13 no amansɛm ano wɔ nkwanim."
+      },
+      "changesToPolicy": {
+        "title": "Mmara Yi Ho Nsakrae",
+        "description": "Yebetumi asesa Kokoamsɛm Ho Mmara yi bere bi mu. Yɛbɛbɔ wo amanneɛ fa nsakrae biara ho ɛdenam mmara foforo no a yɛde bɛto ha no so."
+      },
+      "contactUs": {
+        "title": "Frɛ Yɛn",
+        "description": "Sɛ wowɔ nsɛmmisa biara fa Kokoamsɛm Ho Mmara yi ho a, yɛsrɛ wo frɛ yɛn wɔ privacy@lifeline.app anaasɛ fa yɛn mmoa akwan so."
+      },
+      "internationalDataTransfers": {
+        "title": "Amanaman Ntam Data Mpoa",
+        "description": "Wobetumi de wo nsɛm akɔ aman foforo so de ayɛ ho adwuma. Yɛhwɛ sɛ ahobammɔ akwan a ɛfata wɔ hɔ de bɔ wo data ho ban."
+      },
+      "lastUpdated": {
+        "title": "Bere A Wɔsaa No",
+        "description": "Wɔsaa Kokoamsɛm Ho Mmara yi wɔ August 12, 2025. Yɛsrɛ wo san ba hwɛ ɛho nsakrae."
+      }
+    }
   }
 }

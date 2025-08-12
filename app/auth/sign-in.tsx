@@ -182,7 +182,7 @@ export default function SignInScreen() {
                     style={[styles.modalConfirmButton, { backgroundColor: '#43A047' }]}
                     onPress={() => {
                       setShowHelpCheck(false);
-                      setTimeout(() => router.replace('/dashboard'), 200);
+                      setTimeout(() => router.replace('/(tabs)/dashboard'), 200);
                     }}
                   >
                     <Text style={styles.modalConfirmButtonText}>{t('buttons.proceedToDashboard')}</Text>
