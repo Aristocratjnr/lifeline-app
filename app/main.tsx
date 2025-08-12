@@ -1,14 +1,70 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Interface for first aid tip items
+interface FirstAidTip {
+  id: string;
+  title: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  color: string;
+  description: string;
+}
 
 export default function MainScreen() {
   const router = useRouter();
+  const [showTipsModal, setShowTipsModal] = useState(false);
+
+  // First aid tips data
+  const firstAidTips: FirstAidTip[] = [
+    {
+      id: '1',
+      title: 'CPR',
+      icon: 'heart-circle-outline',
+      color: '#FF6B6B',
+      description: '30 chest compressions followed by 2 rescue breaths',
+    },
+    {
+      id: '2',
+      title: 'Choking',
+      icon: 'person-remove-outline',
+      color: '#4ECDC4',
+      description: '5 back blows between shoulder blades, then 5 abdominal thrusts',
+    },
+    {
+      id: '3',
+      title: 'Bleeding',
+      icon: 'water-outline',
+      color: '#FF9F43',
+      description: 'Apply direct pressure with a clean cloth or bandage',
+    },
+    {
+      id: '4',
+      title: 'Burns',
+      icon: 'flame-outline',
+      color: '#FF9F43',
+      description: 'Cool with running water for 10-15 minutes',
+    },
+    {
+      id: '5',
+      title: 'Fractures',
+      icon: 'body-outline',
+      color: '#5F27CD',
+      description: 'Immobilize the injured area and seek medical help',
+    },
+    {
+      id: '6',
+      title: 'Poisoning',
+      icon: 'flask-outline',
+      color: '#1DD1A1',
+      description: 'Call poison control immediately',
+    },
+  ];
 
   // Load JetBrains Mono font
   const [fontsLoaded] = useFonts({
@@ -96,7 +152,7 @@ export default function MainScreen() {
           {/* First Aid Tips Card */}
           <TouchableOpacity 
             style={styles.tipsCard}
-            onPress={() => router.push('/(screens)/tips')}
+            onPress={() => setShowTipsModal(true)}
             activeOpacity={0.9}
           >
             <LinearGradient
@@ -117,6 +173,42 @@ export default function MainScreen() {
               </View>
             </LinearGradient>
           </TouchableOpacity>
+
+          {/* First Aid Tips Modal */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showTipsModal}
+            onRequestClose={() => setShowTipsModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>First Aid Tips</Text>
+                  <TouchableOpacity 
+                    onPress={() => setShowTipsModal(false)}
+                    style={styles.closeButton}
+                  >
+                    <Ionicons name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                
+                <ScrollView style={styles.tipsList}>
+                  {firstAidTips.map((tip) => (
+                    <View key={tip.id} style={styles.tipItem}>
+                      <View style={[styles.tipIconContainer, { backgroundColor: `${tip.color}20` }]}>
+                        <Ionicons name={tip.icon} size={28} color={tip.color} />
+                      </View>
+                      <View style={styles.tipTextContainer}>
+                        <Text style={styles.tipTitle}>{tip.title}</Text>
+                        <Text style={styles.tipDescription}>{tip.description}</Text>
+                      </View>
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
 
           {/* Quiz Card */}
           <TouchableOpacity 
@@ -354,6 +446,77 @@ const styles = StyleSheet.create({
   tipsImage: {
     width: 100,
     height: 100,
+  },
+
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 20,
+    maxHeight: Dimensions.get('window').height * 0.8,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  closeButton: {
+    padding: 4,
+  },
+  tipsList: {
+    marginBottom: 20,
+  },
+  tipItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tipIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  tipTextContainer: {
+    flex: 1,
+  },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  tipDescription: {
+    fontSize: 13,
+    color: '#666',
+    lineHeight: 18,
   },
 
   // Quiz Card Styles
