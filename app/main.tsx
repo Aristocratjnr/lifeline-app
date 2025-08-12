@@ -290,7 +290,7 @@ export default function MainScreen() {
                 <View style={styles.hubModalHeader}>
                   <Ionicons name="construct" size={40} color="#1976D2" />
                   <Text style={styles.hubModalTitle}>Coming Soon!</Text>
-                  <Text style={styles.hubModalSubtitle}>We're working hard to bring you an amazing First Aid Hub experience</Text>
+                  <Text style={styles.hubModalSubtitle}>We&apos;re working hard to bring you an amazing First Aid Hub experience</Text>
                 </View>
 
                 <View style={styles.hubModalBody}>
