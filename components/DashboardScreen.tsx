@@ -285,10 +285,20 @@ const DashboardScreen = () => {
           end={{ x: 1, y: 1 }}
         >
           <View style={styles.headerContainer}>
-            <Text style={styles.statsTitle}>{t("dashboard.healthStats")}</Text>
-            <TouchableOpacity onPress={() => router.replace("/main")} style={styles.signOutButton}>
-              <MaterialIcons name="logout" size={24} color="#D9534F" />
-            </TouchableOpacity>
+            <View style={styles.headerLeft}>
+              <Text style={styles.statsTitle}>{t("dashboard.healthStats")}</Text>
+              <View style={styles.headerIcons}>
+                <TouchableOpacity onPress={() => router.push("/explore")} style={styles.iconButton}>
+                  <MaterialIcons name="map" size={24} color="#D9534F" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/screens/firstAidGuide")} style={styles.iconButton}>
+                  <MaterialIcons name="medical-services" size={24} color="#D9534F" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.replace("/main")} style={styles.iconButton}>
+                  <MaterialIcons name="logout" size={24} color="#D9534F" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
           <View style={styles.statsRow}>
             {/* Steps Stat */}
@@ -676,11 +686,24 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Regular',
   },
   headerContainer: {
+    marginBottom: 24,
+    width: '100%',
+  },
+  headerLeft: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 16,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(217, 83, 79, 0.1)',
   },
   signOutButton: {
     padding: 8,

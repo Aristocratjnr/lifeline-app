@@ -70,6 +70,24 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
+            name="explore"
+            options={{
+              title: 'Explore',
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons size={28} name="explore" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="firstAidNews"
+            options={{
+              title: 'Health News',
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons size={28} name="article" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
             name="ai-assistant"
             options={{
               title: 'A.I Assistant',
