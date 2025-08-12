@@ -1,6 +1,6 @@
 "use client"
 
-import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons"
+import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
@@ -293,6 +293,9 @@ const DashboardScreen = () => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.push("/screens/firstAidGuide")} style={styles.iconButton}>
                   <MaterialIcons name="medical-services" size={24} color="#D9534F" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/(tabs)/settings")} style={styles.iconButton}>
+                  <Ionicons name="settings-outline" size={24} color="#D9534F" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.replace("/main")} style={styles.iconButton}>
                   <MaterialIcons name="logout" size={24} color="#D9534F" />
