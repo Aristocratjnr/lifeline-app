@@ -21,7 +21,7 @@ export default function QuizScreen() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [answered, setAnswered] = useState(false);
 
-  // Sample quiz questions
+  // First Aid Quiz Questions
   const questions: Question[] = [
     {
       id: 1,
@@ -58,6 +58,114 @@ export default function QuizScreen() {
       ],
       correctAnswer: 1,
       explanation: 'The correct ratio is 30 chest compressions followed by 2 rescue breaths for adult CPR.'
+    },
+    {
+      id: 4,
+      question: 'What should you do if someone is choking but can still speak or cough?',
+      options: [
+        'Perform abdominal thrusts immediately',
+        'Encourage them to keep coughing',
+        'Slap them on the back forcefully',
+        'Give them water to drink'
+      ],
+      correctAnswer: 1,
+      explanation: 'If the person can speak, cough, or breathe, encourage them to keep coughing as this is the most effective way to clear the obstruction.'
+    },
+    {
+      id: 5,
+      question: 'How should you treat a minor burn?',
+      options: [
+        'Apply butter or oil',
+        'Use ice directly on the burn',
+        'Run cool water for 10-15 minutes',
+        'Pop any blisters that form'
+      ],
+      correctAnswer: 2,
+      explanation: 'Cool the burn under cool (not cold) running water for 10-15 minutes. Avoid ice, butter, or other home remedies.'
+    },
+    {
+      id: 6,
+      question: 'What is the first step in treating a bleeding wound?',
+      options: [
+        'Apply a tourniquet',
+        'Elevate the injured area',
+        'Apply direct pressure with a clean cloth',
+        'Clean the wound with alcohol'
+      ],
+      correctAnswer: 2,
+      explanation: 'The first step is to apply direct pressure to the wound with a clean cloth or bandage to stop the bleeding.'
+    },
+    {
+      id: 7,
+      question: 'What should you do if someone is having a seizure?',
+      options: [
+        'Hold them down to stop the shaking',
+        'Put something in their mouth',
+        'Move objects away and protect their head',
+        'Give them water when it stops'
+      ],
+      correctAnswer: 2,
+      explanation: 'Clear the area around them, protect their head, and time the seizure. Never put anything in their mouth or restrain them.'
+    },
+    {
+      id: 8,
+      question: 'What does FAST stand for in stroke recognition?',
+      options: [
+        'Fever, Aches, Sore throat, Tiredness',
+        'Face, Arm, Speech, Time',
+        'Fainting, Abdominal, Sweating, Thirst',
+        'Fever, Appetite, Soreness, Thirst'
+      ],
+      correctAnswer: 1,
+      explanation: 'FAST stands for Face (drooping), Arm (weakness), Speech (difficulty), Time (to call emergency).'
+    },
+    {
+      id: 9,
+      question: 'What is the correct treatment for a nosebleed?',
+      options: [
+        'Tilt the head back',
+        'Pinch the soft part of the nose and lean forward',
+        'Lie down flat',
+        'Blow the nose forcefully'
+      ],
+      correctAnswer: 1,
+      explanation: 'Pinch the soft part of the nose, lean forward slightly, and breathe through your mouth for 10-15 minutes.'
+    },
+    {
+      id: 10,
+      question: 'What should you do if someone is experiencing heat exhaustion?',
+      options: [
+        'Give them alcohol to drink',
+        'Have them take a hot shower',
+        'Move them to a cool place and give water',
+        'Wrap them in warm blankets'
+      ],
+      correctAnswer: 2,
+      explanation: 'Move them to a cool place, have them drink cool water, and apply cool, wet cloths to their skin.'
+    },
+    {
+      id: 11,
+      question: 'How should you treat a sprained ankle?',
+      options: [
+        'Apply heat immediately',
+        'Use the RICE method (Rest, Ice, Compression, Elevation)',
+        'Continue normal activities',
+        'Massage the area'
+      ],
+      correctAnswer: 1,
+      explanation: 'The RICE method (Rest, Ice, Compression, Elevation) is the recommended treatment for sprains.'
+    },
+    {
+      id: 12,
+      question: 'What is the first thing to do when someone is stung by a bee?',
+      options: [
+        'Squeeze the stinger out',
+        'Scrape the stinger out with a credit card',
+        'Apply a tourniquet',
+        'Suck out the venom'
+      ],
+      correctAnswer: 1,
+      explanation: 'Gently scrape the stinger out with a credit card or your fingernail. Don\'t squeeze it, as this can release more venom.'
     }
   ];
 
@@ -196,7 +304,7 @@ export default function QuizScreen() {
         ) : (
           <View style={styles.scoreContainer}>
             <LinearGradient
-              colors={['#FF6B6B', '#FF8E8E']}
+              colors={score / questions.length >= 0.8 ? ['#4CAF50', '#66BB6A'] : ['#FF6B6B', '#FF8E8E']}
               style={styles.scoreCard}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
