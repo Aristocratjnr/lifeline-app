@@ -96,7 +96,10 @@ export default function MainScreen() {
           <View style={styles.header}>
             <Text style={styles.welcomeText}>Hello! Welcome</Text>
             <View style={styles.headerRight}>
-              <TouchableOpacity style={styles.menuButton}>
+              <TouchableOpacity 
+                style={styles.menuButton}
+                onPress={() => router.push('/screens/guest')}
+              >
                 <MaterialIcons name="person" size={24} color="#E53935" />
               </TouchableOpacity>
               <View style={styles.verticalLine} />
