@@ -141,7 +141,10 @@ export default function MainScreen() {
                 <MaterialIcons name="person" size={24} color="#E53935" />
               </TouchableOpacity>
               <View style={styles.verticalLine} />
-              <TouchableOpacity style={styles.menuButton}>
+              <TouchableOpacity 
+                style={styles.menuButton}
+                onPress={() => router.push('/settings')}
+              >
                 <MaterialIcons name="more-vert" size={24} color="#666" />
               </TouchableOpacity>
             </View>
