@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // Interface for first aid tip items
@@ -77,6 +77,43 @@ export default function MainScreen() {
     return <View style={styles.loadingContainer} />;
   }
 
+  // Tab bar component
+  const TabBar = () => (
+    <View style={styles.tabBar}>
+      <TouchableOpacity 
+        style={[styles.tabItem, styles.activeTab]}
+        onPress={() => router.push('/main')}
+      >
+        <MaterialIcons name="home" size={24} color="#E53935" />
+        <Text style={[styles.tabText, { color: '#E53935' }]}>Home</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
+        style={styles.tabItem}
+        onPress={() => router.push('/(tabs)/explore')}
+      >
+        <MaterialIcons name="place" size={24} color="#666" />
+        <Text style={styles.tabText}>Maps</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
+        style={styles.tabItem}
+        onPress={() => router.push('/(tabs)/firstAidNews')}
+      >
+        <MaterialIcons name="newspaper" size={24} color="#666" />
+        <Text style={styles.tabText}>News</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
+        style={styles.tabItem}
+        onPress={() => router.push('/(tabs)/settings')}
+      >
+        <MaterialIcons name="settings" size={24} color="#666" />
+        <Text style={styles.tabText}>Settings</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
@@ -88,6 +125,7 @@ export default function MainScreen() {
       >
         <View style={styles.overlay} />
         <SafeAreaView style={styles.container} edges={['right', 'left']}>
+          <TabBar />
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -239,7 +277,7 @@ export default function MainScreen() {
                   <Text style={styles.quizSubtitle}>on how well you can save a life</Text>
                   
                   <View style={styles.quizButtonContainer}>
-                    <Text style={styles.quizButtonText}>Take Quiz Now/Coming Soon</Text>
+                    <Text style={styles.quizButtonText}>Take Quiz Now</Text>
                   </View>
                 </View>
               </View>
@@ -359,6 +397,47 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.89)',
     zIndex: 2,
+    paddingBottom: Platform.OS === 'ios' ? 80 : 60, // Add padding for the tab bar
+  },
+  // Tab Bar Styles
+  tabBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    paddingVertical: 8,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  tabItem: {
+    alignItems: 'center',
+    padding: 8,
+    flex: 1,
+  },
+  activeTab: {
+    // Active tab styles
+  },
+  tabText: {
+    fontSize: 12,
+    marginTop: 4,
+    color: '#666',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   loadingContainer: {
     flex: 1,
