@@ -243,14 +243,14 @@ const styles = StyleSheet.create({
   // Emergency Card Styles
   emergencyCard: {
     width: '100%',
-    marginBottom: 20,
-    borderRadius: 20,
+    marginBottom: 16,
+    borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: '#E53935',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 6,
   },
   emergencyGradient: {
     padding: 20,
@@ -316,11 +316,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: '#E53935',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   tipsGradient: {
     padding: 16,
@@ -344,15 +344,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tipsTitle: {
-    fontSize: 16,
+    fontSize: 21,
     fontWeight: 'bold',
     color: '#333',
+    marginBottom: 8,
+    lineHeight: 32,
     fontFamily: 'JetBrainsMono-Bold',
-    lineHeight: 20,
   },
   tipsImage: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
   },
 
   // Quiz Card Styles
@@ -361,11 +362,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: '#E53935',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   quizGradient: {
     padding: 16,
@@ -376,18 +377,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   quizIconContainer: {
-    width: 60,  // Increased from 50 to 60
-    height: 60, // Increased from 50 to 60
-    borderRadius: 30, // Adjusted for new size
+    width: 60, 
+    height: 60, 
+    borderRadius: 30, 
     backgroundColor: 'rgba(229, 57, 53, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 14, // Slightly increased for better spacing
+    marginRight: 20,  // Increased from 14 to 20 for more spacing
     marginTop: 4,
   },
   quizImage: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
   },
   quizTextContainer: {
     flex: 1,
@@ -426,11 +427,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: '#E53935',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   hubGradient: {
     padding: 16,
@@ -451,16 +452,16 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
   },
   hubIconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: 'rgba(229, 57, 53, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
   },
   hubImage: {
-    width: '100%',
-    height: '100%',
+    width: '150%',
+    height: '150%',
   },
 });
