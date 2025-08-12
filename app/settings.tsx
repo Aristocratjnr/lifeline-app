@@ -6,13 +6,13 @@ import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
+import { useDisplayPreferences } from '../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
   await Font.loadAsync({
-    'JetBrainsMono': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),
-    'JetBrainsMono-Bold': require('../../assets/fonts/JetBrainsMono-Bold.ttf'),
+    'JetBrainsMono': require('../assets/fonts/JetBrainsMono-Regular.ttf'),
+    'JetBrainsMono-Bold': require('../assets/fonts/JetBrainsMono-Bold.ttf'),
   });
 };
 
@@ -79,7 +79,7 @@ export default function Settings() {
 
   return (
     <ImageBackground 
-      source={require('../../assets/images/blur.png')} 
+      source={require('../assets/images/blur.png')} 
       style={styles.backgroundImage}
       resizeMode="cover"
     >

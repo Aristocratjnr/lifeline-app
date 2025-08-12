@@ -3,10 +3,10 @@ import LoaderWrapper from '@/components/loaderWrapper';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Tabs, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Platform, StyleSheet, TouchableOpacity, View, Modal, Text, ActivityIndicator, Alert, Linking } from 'react-native';
+import { ActivityIndicator, Alert, Linking, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -15,6 +15,7 @@ export default function TabLayout() {
   const [isConnectingDoctor, setIsConnectingDoctor] = useState(false);
 
   const handleCallDoctor = async () => {
+    setIsConnectingDoctor(true);
     try {
       const phoneNumber = '+233203430787';
       const url = `tel:${phoneNumber}`;
@@ -37,6 +38,7 @@ export default function TabLayout() {
         'An error occurred while trying to make the call. Please try again.'
       );
     } finally {
+      setIsConnectingDoctor(false);
       setShowBotModal(false);
     }
   };
@@ -68,24 +70,6 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
-            name="explore"
-            options={{
-              title: 'Maps',
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons size={28} name="place" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="firstAidNews"
-            options={{
-              title: 'News',
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons size={28} name="newspaper" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
             name="ai-assistant"
             options={{
               title: 'A.I Assistant',
@@ -93,15 +77,6 @@ export default function TabLayout() {
                 <MaterialIcons size={28} name="auto-awesome" color={color} />
               ),
               tabBarStyle: { display: 'none' },
-            }}
-          />
-          <Tabs.Screen
-            name="settings"
-            options={{
-              title: 'Settings',
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons size={28} name="settings" color={color} />
-              ),
             }}
           />
         </Tabs>
