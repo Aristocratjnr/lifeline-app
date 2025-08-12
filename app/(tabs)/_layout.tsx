@@ -88,6 +88,15 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
+            name="settings"
+            options={{
+              title: 'Settings',
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons size={28} name="settings" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
             name="ai-assistant"
             options={{
               title: 'A.I Assistant',
