@@ -94,7 +94,7 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </Link>
 
-            <Link href="/screens/guest" asChild>
+            <Link href="/main" asChild>
               <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
                 <Image 
                 source={require('@/assets/images/guest.png')} 
