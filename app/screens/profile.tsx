@@ -1,7 +1,8 @@
 import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,7 +23,24 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState(countries[0]); // Default to Ghana
   const [showCountryModal, setShowCountryModal] = useState(false);
-  
+  const { t, i18n } = useTranslation();
+
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = useState(0);
+
+  // Re-render when language changes
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in ProfileScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
+
   // Load fonts
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -39,18 +57,18 @@ export default function ProfileScreen() {
   };
 
   const handleConfirm = () => {
-    router.push('/(tabs)/explore');
+    router.push('/explore');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>What Is Your Location?</Text>
-        
+        <Text style={styles.title}>{t('profile.title')}</Text>
+
         <Text style={styles.description}>
-          Allow Lifeline to provide local emergency numbers and nearby help. Help us find you faster in an emergency.
+          {t('profile.description')}
         </Text>
-        
+
         {/* Location Illustration */}
       <View style={styles.illustrationContainer}>
           <ExpoImage
@@ -59,23 +77,28 @@ export default function ProfileScreen() {
             contentFit="contain"
           />
         </View>
-        
+
         {/* Country Selection */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Country</Text>
+          <Text style={styles.inputLabel}>{t('profile.country')}</Text>
           <TouchableOpacity style={styles.countrySelector} onPress={() => setShowCountryModal(true)}>
             <ExpoImage
               source={selectedCountry.flag}
               style={styles.flagIcon}
+              contentFit="cover"
             />
             <Text style={styles.countryText}>{selectedCountry.name}</Text>
             <Text style={styles.dropdownIcon}>▼</Text>
           </TouchableOpacity>
         </View>
-        
+
         {/* Confirm Button */}
         <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-          <Text style={styles.confirmButtonText}>Confirm Location</Text>
+          <Text style={styles.confirmButtonText}>{t('profile.confirmLocation')}</Text>
+        </TouchableOpacity>
+        {/* Next Button */}
+        <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/screens/completed')}>
+          <Text style={styles.nextButtonText}>{t('common.next')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -86,21 +109,21 @@ export default function ProfileScreen() {
         animationType="fade"
         onRequestClose={() => setShowCountryModal(false)}
       >
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
           onPress={() => setShowCountryModal(false)}
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Country</Text>
+              <Text style={styles.modalTitle}>{t('profile.selectCountry')}</Text>
               <TouchableOpacity onPress={() => setShowCountryModal(false)}>
                 <Text style={styles.closeButton}>✕</Text>
               </TouchableOpacity>
             </View>
-            
+
             {countries.map((country) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 key={country.code}
                 style={[styles.countryOption, selectedCountry.code === country.code && styles.selectedCountryOption]}
                 onPress={() => handleCountrySelect(country)}
@@ -109,6 +132,7 @@ export default function ProfileScreen() {
                   <ExpoImage
                     source={country.flag}
                     style={styles.countryOptionFlag}
+                    contentFit="cover"
                   />
                   <Text style={styles.countryOptionText}>{country.name}</Text>
                 </View>
@@ -134,7 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 50, 
+    paddingBottom: 50,
   },
   title: {
     fontSize: 24,
@@ -173,7 +197,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     transform: [{ scaleX: 2 }],
     zIndex: 1,
-  }, 
+  },
   inputGroup: {
     width: '100%',
     marginBottom: 40,
@@ -283,5 +307,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  nextButton: {
+    backgroundColor: '#F9A6A6',
+    borderRadius: 8,
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  nextButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Regular',
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
 });

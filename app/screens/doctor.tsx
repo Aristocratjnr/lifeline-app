@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,10 +11,27 @@ const maroon = '#8E2A2A';
 
 export default function DoctorScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in DoctorScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   // Load custom fonts
   const [fontsLoaded] = useFonts({
-    'Caveat-Regular': require('@/assets/fonts/Caveat-Bold.ttf'),
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -31,10 +49,11 @@ export default function DoctorScreen() {
     router.push('/screens/privacy-policy');
   };
 
+  // Force re-render on language change
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']} key={`doctor-${i18n.language}`}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      
+
      {/* Blurred Background Image */}
            <ExpoImage
              source={require('@/assets/images/blur.png')}
@@ -46,14 +65,14 @@ export default function DoctorScreen() {
            <View style={styles.bgOverlay} />
 
          {/* Top curve */}
-         <ExpoImage 
+         <ExpoImage
            source={require('@/assets/images/top.png')}
            style={styles.topCurve}
            contentFit="cover"
          />
-   
+
          {/* Bottom curve */}
-         <ExpoImage 
+         <ExpoImage
            source={require('@/assets/images/bottom.png')}
            style={styles.bottomCurve}
            contentFit="cover"
@@ -68,11 +87,11 @@ export default function DoctorScreen() {
             style={styles.doctorImage}
             contentFit="contain"
           />
-          
+
           {/* Plus signs */}
           {[...Array(6)].map((_, index) => (
-            <Text key={index} style={[styles.plusSign, { 
-              top: 50 + Math.random() * 200, 
+            <Text key={index} style={[styles.plusSign, {
+              top: 50 + Math.random() * 200,
               left: 20 + Math.random() * (width - 40),
               opacity: 0.3 + Math.random() * 0.5,
               transform: [{ rotate: `${Math.random() * 90}deg` }]
@@ -81,20 +100,20 @@ export default function DoctorScreen() {
         </View>
 
         {/* Text sections - No margin/padding between image and title */}
-        <Text style={styles.title}>Your LIFELINE Starts Now</Text>
-        
+        <Text style={styles.title}>{t('doctor.title')}</Text>
+
         <Text style={styles.description}>
-          Join thousands who trust LIFELINE to navigate emergencies with confidence and care
+          {t('doctor.description')}
         </Text>
 
         {/* Button */}
         <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
-          <Text style={styles.buttonText}>GET STARTED</Text>
+          <Text style={styles.buttonText}>{t('doctor.getStarted')}</Text>
         </TouchableOpacity>
 
         {/* Privacy Policy */}
         <TouchableOpacity onPress={handlePrivacyPolicy}>
-          <Text style={styles.privacyText}>Privacy Policy</Text>
+          <Text style={styles.privacyText}>{t('doctor.privacyPolicy')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -128,7 +147,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(228, 225, 220, 0.32)', 
+    backgroundColor: 'rgba(228, 225, 220, 0.32)',
     zIndex: 1,
   },
   background: {
@@ -159,21 +178,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     zIndex: 2,
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   illustrationContainer: {
     width: width * 0.9,
-    height: height * 0.45, 
+    height: height * 0.45,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    marginTop: height * 0.05, 
-    marginBottom: 0, 
+    marginTop: height * 0.05,
+    marginBottom: 0,
   },
   doctorImage: {
     width: width * 0.8,
     height: height * 0.45,
-    marginBottom: -10, 
+    marginBottom: -10,
   },
   // Other icon styles remain the same
   plusSign: {
@@ -183,12 +202,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '600',
-    marginTop: 0, 
+    fontSize: 34,
+    marginTop: 0,
     textAlign: 'center',
-    fontFamily: 'Caveat-Regular',
+    fontFamily: 'FjallaOne-Regular',
     color: '#000',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   description: {
     fontSize: 16,
@@ -207,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 38, 
+    marginTop: 38,
     borderWidth: 1,
     borderColor: maroon,
   },

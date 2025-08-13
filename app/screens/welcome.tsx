@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -9,9 +10,21 @@ const red = '#FC1C1C';
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in WelcomeScreen - forcing update");
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
   const [fontsLoaded] = useFonts({
     'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'), 
-    'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'), 
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'), 
   });
 
   const handleNext = () => {
@@ -22,8 +35,9 @@ export default function OnboardingScreen() {
     return null;
   }
 
+  // Force re-render on language change
   return (
-  <View style={styles.container}>
+  <View style={styles.container} key={`welcome-${i18n.language}`}>
      {/* Blurred Background Image */}
           <ExpoImage
             source={require('@/assets/images/blur.png')}
@@ -57,11 +71,13 @@ export default function OnboardingScreen() {
     </View>
 
     {/* Title */}
-    <Text style={styles.title}>Welcome To Lifeline</Text>
+    <Text style={styles.title}>
+      {t('welcome.title')}
+    </Text>
 
     {/* Subtitle */}
     <Text style={styles.subtitle}>
-      Your essential companion for emergencies. Be ready to act with confidence when every second counts.
+      {t('welcome.subtitle')}
     </Text>
 
     {/* Pagination Dots */}
@@ -75,7 +91,9 @@ export default function OnboardingScreen() {
 
     {/* Next Button */}
     <TouchableOpacity style={styles.nextButton} onPress={handleNext} activeOpacity={0.85}>
-      <Text style={styles.nextButtonText}>NEXT</Text>
+      <Text style={styles.nextButtonText}>
+        {t('buttons.next')}
+      </Text>
     </TouchableOpacity>
   </View>
   );
@@ -138,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#222',
     textAlign: 'center',
-    fontFamily: 'Flavours', 
+    fontFamily: 'FjallaOne-Regular', 
     marginTop: 8,
     marginBottom: 8,
     letterSpacing: 1,
@@ -147,7 +165,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     textAlign: 'center',
-    fontWeight: 'bold', 
     marginHorizontal: 24,
     marginBottom: 24,
     lineHeight: 22,

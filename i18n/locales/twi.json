@@ -1,0 +1,292 @@
+{
+  "settings": {
+    "title": "NHYEHYƐE",
+    "profile": {
+      "title": "Wo ho nsɛm",
+      "subtitle": "Kyerɛw wo din"
+    },
+    "notifications": {
+      "title": "Amanneɛbɔ",
+      "subtitle": "Hwɛ nkɔkɔ so"
+    },
+    "language": {
+      "title": "Kasa",
+      "subtitle": "Yi wo kasa"
+    },
+    "display": {
+      "title": "Mpaeɛ",
+      "subtitle": "Sesa nsɛm ne hann",
+      "brightness": "Hann",
+      "textSize": "Nkɔɔ nsɛm kɛse",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Nsɛm kɛse",
+      "theme": "Ahosu",
+      "light": "Kɔɔ kɛse",
+      "dark": "Tutu",
+      "eyeProtection": "Ani ho banbɔ",
+      "selectTheme": "Paw ahosu",
+      "lightMode": "Kɔɔ kɛse teɛ",
+      "darkMode": "Tutu teɛ"
+    },
+    "terms": {
+      "title": "Mmara a wɔde di dwuma",
+      "subtitle": "Mmara ho nsɛm"
+    },
+    "about": {
+      "title": "Ɛho nsɛm",
+      "subtitle": "App ho nsɛm"
+    },
+    "offline": {
+      "title": "Nsɛm a enni intanɛt",
+      "subtitle": "Download ma offline"
+    },
+    "help": {
+      "title": "Mmoa ne Begyeɛ",
+      "subtitle": "Nya mmoa"
+    },
+    "delete": {
+      "title": "Yi Account no fi",
+      "subtitle": "Yi wo account no fi"
+    },
+    "brightness": "Hann",
+    "eyeProtection": "Ani ho banbɔ"
+  },
+  "common": {
+    "on": "Asi",
+    "off": "Ansi",
+    "next": "NKANODƆ",
+    "back": "Sane"
+  },
+  "languages": {
+    "title": "KASA",
+    "searchPlaceholder": "Hwehwɛ kasa bi",
+    "noResults": "Wɔannya kasa biara",
+    "tryAgain": "Sɔ foforɔ hwɛ",
+    "comingSoon": "KASA FOFORƆ REBA!!!",
+    "submit": "SOMA"
+  },
+  "dashboard": {
+    "healthStats": "Apɔmuden Stats",
+    "steps": "Anammɔntuo",
+    "water": "Nsuo",
+    "dailyTip": "DA BIARA AFOTUO",
+    "lifelineHistory": "Lifeline Abakɔsɛm",
+    "recentActivity": "Nnɛyi adwuma",
+    "sentSOSAlert": "SOS frɛ a wɔsomaa",
+    "viewedMap": "Hwɛɛ mepɔ",
+    "readHealthNews": "Kenkan apɔmuden nsɛm",
+    "todayTime": "Nnɛ, 09:12",
+    "yesterdayTime1": "Nnora, 18:45",
+    "yesterdayTime2": "Nnora, 08:30",
+    "fracture": "Nnompe mu paapae",
+    "cough": "Ɔwa",
+    "burns": "Ogya hyeɛ",
+    "lastVisited": "Bere a ɔtwaa mu: 02, May, 2025",
+    "age": "Mfeɛ",
+    "gender": "Onipa su",
+    "location": "Beaeɛ",
+    "condition": "Yadeɛ",
+    "language": "Kasa",
+    "editProfile": "Sesa wo ho nsɛm",
+    "newTipEveryDay": "Afotuo foforɔ da biara"
+  },
+  "doctor": {
+    "title": "Dɔkota Nimdeɛ Akwankyerɛ",
+    "description": "Nya apɔmuden ho afotuo ne nsɛmmisa wɔ adɔkota a wɔnim wɔn adwuma mu. Nya ɔhwɛ a wohia, bere a wohia.",
+    "getStarted": "Hyɛ Ase",
+    "privacyPolicy": "Privacy Nhyehyɛe"
+  },
+  "welcome": {
+    "title": "Akwaaba Lifeline",
+    "subtitle": "Wo yɔnko paa ma ahokyere. Siesie woho na wode ahotoso ayɛ adwuma bere a sɛkɛnd biara ho hia."
+  },
+  "tips": {
+    "title": "Ahoɔhare Nkwagyeɛ wɔ wo Nsateaa so",
+    "subtitle": "Nya akwankyerɛ a ɛho da hɔ ma ahokyere biara, mpo sɛ wo nni intanɛt koraa",
+    "handleSharpObjects": "Di nneɛma a ano yɛ nam ho dwuma yiye:",
+    "handleSharpObjectsContent": "Twa nneɛma wɔ wo ho akyi na ma sekan no ano nyɛ nam sɛnea ɛbɛyɛ a wobɛdi ho dwuma yiye.",
+    "stayHydrated": "Nom nsuo pii:",
+    "stayHydratedContent": "Nom nsuo pii da mu nyinaa na ama wo apɔmuden ayɛ yiye.",
+    "washHands": "Hohoro wo nsa daa:",
+    "washHandsContent": "Nsa hohoroo pii boa ma mmoawa ne yadeɛ ntrɛ.",
+    "takeBreaks": "Gye wo ahome wɔ screen anim:",
+    "takeBreaksContent": "Ma w'ani ngye ahome simma 20 biara mu na amma w'ani anyɛ ɔhaw.",
+    "getSleep": "Da yiye:",
+    "getSleepContent": "Bɔ mmɔden sɛ wobɛda nnɔnhwerew 7-9 anadwo biara na ama wo apɔmuden ayɛ yiye."
+  },
+  "unique": {
+    "title": "SIESIE WO HO MA WO NKOAA AHIADEƐ",
+    "description": "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
+  },
+  "bot": {
+    "available247": "Wɔ hɔ bere nyinaa (24/7)",
+    "title": "AI Boafo a Ɔyɛ Aduruyɛfoɔ",
+    "description": "Akwaba! Me ne wo aduruyɛ kyerɛkyerɛfoɔ. Nya mmoa ntɛmntɛm fi yɛn AI boafo hɔ.",
+    "callDoctor": "Frɛ Dɔkota",
+    "connecting": "Ɛrekɔ...",
+    "available24x7": "Wɔ hɔ daa 24/7",
+    "welcomeMessage": "Hello! I'm your Lifeline First Aid Assistant. I can help with emergency medical information and first aid procedures. What would you like to know?",
+    "placeholder": "Ask me anything about first aid...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "errorMessage": "I'm sorry, but I can only help with health and medical-related questions. Please ask me about first aid, medical emergencies, or health topics.",
+    "localResponses": {
+      "cpr": "For CPR: 1) Call emergency services first. 2) Place the heel of your hand on the center of the chest. 3) Push hard and fast (100-120 compressions per minute). 4) If trained, give 2 breaths after every 30 compressions.\n\nRemember: For any serious emergency, always call professional help immediately.",
+      "choking": "For a choking adult/child:\n1) Ask \"Are you choking?\"\n2) If they can cough, encourage coughing.\n3) If they can't breathe, perform abdominal thrusts (Heimlich maneuver):\n   - Stand behind, wrap arms around waist\n   - Make a fist above navel\n   - Grasp fist with other hand\n   - Give quick upward thrusts\n4) Continue until object is expelled or person becomes unconscious.",
+      "burn": "For minor burns:\n1) Cool under running water for 10-15 minutes\n2) Remove jewelry/clothing near burn\n3) Cover with sterile non-stick dressing\n4) Don't apply butter, oil or ice\n\nFor serious burns (large, deep, or on face/hands):\n1) Call emergency services\n2) Don't remove stuck clothing\n3) Cover loosely with clean cloth\n4) Monitor for shock",
+      "bleeding": "To control bleeding:\n1) Apply direct pressure with clean cloth\n2) Elevate injured area if possible\n3) Add more layers if blood soaks through\n4) Don't remove original dressing\n5) If severe, call emergency services\n\nFor nosebleeds:\n1) Sit upright, lean forward\n2) Pinch soft part of nose for 10 minutes\n3) Apply ice to bridge of nose\n4) Avoid blowing nose afterward",
+      "whoAreYou": "I'm Lifeline Assistant, your AI first aid helper. I provide emergency medical guidance and first aid instructions. I was created by the Lifeline team to help people get accurate medical information quickly. For serious emergencies, always contact professional medical services immediately.",
+      "whatCanYouDo": "I can help with:\n- First aid instructions\n- Emergency response guidance\n- Basic medical information\n- Wound care\n- CPR instructions\n- Handling burns, fractures, poisoning\n\nI always recommend contacting professional medical help for serious situations."
+    }
+  },
+  "callLogs": {
+    "title": "Frɛ Logs",
+    "outgoing": "Nea wɔfrɛɛ",
+    "incoming": "Nea wɔatwa frɔɔ wo",
+    "missed": "Nea wɔanya yie"
+  },
+  "display": {
+    "brightness": "Hyerɛn",
+    "eyeProtection": "Anihwɛ so"
+  },
+  "privacyPolicy": {
+    "header": "Nkateaseɛ Ho Nhyehyɛe",
+    "seeMore": "Hwɛ Nkateaseɛ Ho Nhyehyɛe No Nyinaa",
+    "intro": {
+      "privacyImportant": "Wo nkateaseɛ ho hia yɛn. Nkateaseɛ Ho Nhyehyɛɛ yi kyerɛ sɛnea yɛboaboa, yɛde di dwuma, yɛkyerɛ, na yɛbɔ ho ban wo wo app no mu.",
+      "howWeCollect": "Yɛboaboa nneɛma a wode ma yɛn, te sɛ bere a woyɛ wo account, de yɛn nneɛma di dwuma, anaasɛ wokasa akyerɛ yɛn.",
+      "policyExplains": "Nhyehyɛɛ yi kyerɛ yɛn adwumayɛ wɔ nneɛma a yɛboaboa, sɛnea yɛde di dwuma, ne sɛnea yɛkyerɛ wo nkateaseɛ ho."
+    },
+    "links": {
+      "termsUse": "Dwumadi Nsɛm",
+      "faqs": "Nsɛmmisa a Wɔbisa So",
+      "shareApp": "Kyɛ App No",
+      "visitWebsite": "Kɔ Yɛn Website So"
+    },
+    "share": {
+      "title": "Kyɛ Lifeline App No",
+      "message": "Hwɛ saa app a ɛboa wo wɔ ɔhaw mu yi: https://lifeline-mu.vercel.app/"
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Nneɛma a Yɛboaboaa",
+        "description1": "Yɛboaboa nneɛma a wode ma yɛn, te sɛ bere a woyɛ wo account, de yɛn nneɛma di dwuma, anaasɛ wokasa akyerɛ yɛn. Ebetumi aka wo din, wo email adrɛs, wo telefon nɔma, ne afoforo a ɛfa wo ho anaasɛ ɛkyerɛ wo ho.",
+        "description2": "Yɛn nso boaboa nneɛma a ɛfa wo device ne sɛnea wodi nkitahodi ne yɛn app no ho, ebi ne IP adrɛs, device tebea, operating system, ne nneɛma a wode di dwuma ho nkɔsoɔ."
+      },
+      "howWeUseInformation": {
+        "title": "Sɛnea Yɛde Wo Nkateaseɛ Di Dwuma",
+        "description": "Yɛde nneɛma a yɛboaboaa no di dwuma sɛ yɛbɛma yɛn nneɛma ayɛ yiye, yɛbɛhwɛ sɛ nneɛma no ayɛ yiye, yɛbɛma wo nkɔmbɔ a ɛfa ho no, yɛbɛma wo nkyerɛkyerɛmu ne nsɛmmisa, na yɛbɛma wo nkɔsoɔ mu mmoa."
+      },
+      "informationSharing": {
+        "title": "Nkateaseɛ Atoatoa Ho Nkyerɛkyerɛmu",
+        "description": "Yɛntɔn wo nkateaseɛ mma obiara. Ebia yɛbɛkyerɛ wo nkateaseɛ kɔma adwumayɛfo a wɔyɛ adwuma ma yɛn, bere a mmara ka sɛ yɛmmfa nkyerɛ, anaasɛ sɛ yɛpɛ sɛ yɛbɔ yɛn ho ban."
+      },
+      "dataSecurity": {
+        "title": "Nkateaseɛ Ho Nkwaadɔm",
+        "description": "Yɛde nhyehyɛe pa ne adwumayɛbea nhyehyɛe a ɛfata di dwuma sɛ yɛbɛbɔ wo nkateaseɛ ho ban. Nanso, ɔkwan biara a wɔfa so de nneɛma kɔ internet so anaa wɔde sie wɔ ɛlɛktronik mu nnyɛ 100% a wotumi gye atia."
+      },
+      "yourRights": {
+        "title": "Wo Ntamadan",
+        "description": "Wotumi wɔ tumi bi wɔ wo nkateaseɛ so, ebi ne sɛ wobɛhunu, wobɛsesa, anaasɛ wobɛpam wo nkateaseɛ. Yɛsrɛ sɛ kɔka yɛn nkyerɛ sɛ wopɛ sɛ wodi dwuma saa tumi yi."
+      },
+      "childrenPrivacy": {
+        "title": "Mmofra Nkateaseɛ Ho Nkwaadɔm",
+        "description": "Yɛn adwuma nnyɛ dea mmofra a wɔwɔ mfe 13 ase. Yɛnnim sɛ yɛboaboa nkateaseɛ fi mmofra a wɔwɔ mfe 13 ase hɔ. Sɛ yɛahu sɛ yɛaboaboa nkateaseɛ fi ɔba a ɔwɔ mfe 13 ase hɔ a, yɛbɛyɛ ade sɛ yɛbɛpam nkateaseɛ no ntɛm ara."
+      },
+      "changesToPolicy": {
+        "title": "Nsesaeɛ Wɔ Nhyehyɛɛ Yi Mu",
+        "description": "Ebia yɛbɛsesa Nkateaseɛ Ho Nhyehyɛɛ yi bere biara. Yɛbɛkyerɛ wo sɛnea ɛbɛyɛ a yɛbɛkyerɛ wo sɛnea ɛbɛyɛ a wubetumi ahu Nkateaseɛ Ho Nhyehyɛɛ foforo a ɛwɔ saa krataafa yi so na yɛbɛsesa 'Bere a Wɔsesaa No' da no."
+      },
+      "contactUs": {
+        "title": "Ka Yɛn Ho",
+        "description": "Sɛ wowɔ nsɛmmisa biara a ɛfa Nkateaseɛ Ho Nhyehyɛɛ yi ho a, yɛsrɛ sɛ kɔka yɛn ho wɔ support@lifelineapp.com."
+      },
+      "internationalDataTransfers": {
+        "title": "Nkateaseɛ Nsakraeɛ Wɔ Amanaman Nkabom Mu",
+        "description": "Wobetumi de wo nkateaseɛ akɔ wɔn a wɔwɔ aman a wɔn mmara yɛ ne deɛ ɛwɔ wo man mu nyinaa. Ebia wɔde wo nkateaseɛ bɛkɔ aman a wɔn nkwaadɔm mmara yɛ ne deɛ ɛwɔ wo man mu nyinaa."
+      },
+      "lastUpdated": {
+        "title": "Bere a Wɔsesaa No",
+        "description": "Wɔsesaa Nkateaseɛ Ho Nhyehyɛɛ yi wɔ August 12, 2025."
+      }
+    }
+  },
+  "firstAid": {
+    "title": "FIRST AID GUIDES",
+    "subtitle": "Kɔɔ list no mu na\nhwɛ first aid guides no\nna wo atumi\nhunu nneɛma a wo hia",
+    "searchPlaceholder": "Hwehwɛ first aid guide bi",
+    "emergencyTab": "Emergency/External",
+    "exposuresTab": "Exposures/Internal",
+    "categories": {
+      "cuts": "CUTS",
+      "stings": "STINGS",
+      "splinter": "SPLINTER",
+      "sprainStrain": "SPRAIN/STRAIN",
+      "fever": "FEVER",
+      "jockItch": "JOCK ITCH",
+      "rash": "RASH",
+      "hives": "HIVES",
+      "abdominalPains": "ABDOMINAL PAINS",
+      "choking": "CHOKING",
+      "frostBite": "FROST BITE",
+      "heatStroke": "HEAT STROKE",
+      "noseBleed": "NOSE BLEED",
+      "insectBite": "INSECT BITE",
+      "sunBurn": "SUN BURN",
+      "fertile": "Febrile"
+    }
+  },
+  "explore": {
+    "title": "Nearby Hospitals",
+    "loading": "Finding nearby hospitals...",
+    "permissionDenied": "Permission to access location was denied.",
+    "locationError": "Could not get your location.",
+    "noHospitals": "No hospitals found within a 10km radius.",
+    "fetchError": "Error fetching hospitals. Please try again.",
+    "yourLocation": "Your Location",
+    "sosLocation": "SOS Location",
+    "getDirections": "Get Directions",
+    "callHospital": "Call Hospital"
+  },
+  "news": {
+    "title": "Health News",
+    "loading": "Loading health news...",
+    "noNews": "No news articles available at the moment.",
+    "pullToRefresh": "Pull to refresh",
+    "loadingMore": "Loading more articles...",
+    "readMore": "Read More",
+    "source": "Source",
+    "publishedAt": "Published",
+    "errorLoading": "Error loading news. Please try again.",
+    "retry": "Retry"
+  },
+  "sos": {
+    "title": "Emergency SOS",
+    "callEmergency": "Call Emergency",
+    "shareLocation": "Share My Location",
+    "medicalId": "Medical ID",
+    "emergencyContacts": "Emergency Contacts",
+    "locationShared": "Location shared successfully!",
+    "locationError": "Permission to access location was denied.",
+    "callError": "Unable to make emergency call.",
+    "medicalInfo": {
+      "name": "Name",
+      "age": "Age",
+      "gender": "Gender",
+      "bloodType": "Blood Type",
+      "medicalCondition": "Medical Condition",
+      "emergencyContact": "Emergency Contact",
+      "allergies": "Allergies",
+      "medications": "Current Medications",
+      "close": "Close"
+    },
+    "quickActions": {
+      "police": "Police",
+      "fire": "Fire Department",
+      "ambulance": "Ambulance",
+      "poison": "Poison Control"
+    }
+  }
+}

@@ -1,8 +1,9 @@
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Dimensions,
     Image,
@@ -19,9 +20,27 @@ import Loader from '../../components/Loader';
 
 Dimensions.get('window');
 const SignUpScreen = () => {
+  const router = useRouter();
+  const { t, i18n } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
   const [isReady, setIsReady] = useState(false);
   
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in SignUpScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
+
   // Load JetBrains Mono font
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -64,18 +83,18 @@ const SignUpScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.container}>
                 <Image source={require('../../assets/images/signup.png')} style={styles.headerImage} />
-                <Text style={styles.headerText}>Join our community for better healthcare</Text>
+                <Text style={styles.headerText}>{t('auth.signUp.joinCommunity')}</Text>
 
                 <View style={styles.formCard}>
-                <Text style={styles.welcomeText}>Welcome LIFELINER!</Text>
-                <Text style={styles.title}>Create your account</Text>
+                <Text style={styles.welcomeText}>{t('auth.signUp.welcome')}</Text>
+                <Text style={styles.title}>{t('auth.signUp.title')}</Text>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Name</Text>
+                    <Text style={styles.label}>{t('auth.signUp.nameLabel')}</Text>
                     <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Your full name"
+                        placeholder={t('auth.signUp.namePlaceholder')}
                         placeholderTextColor="#999"
                     />
                     <Image source={require('../../assets/images/user.png')} style={styles.inputIcon} />
@@ -83,11 +102,11 @@ const SignUpScreen = () => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Email</Text>
+                    <Text style={styles.label}>{t('auth.signUp.emailLabel')}</Text>
                     <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.input}
-                        placeholder="username@example.com"
+                        placeholder={t('auth.signUp.emailPlaceholder')}
                         placeholderTextColor="#999"
                         keyboardType="email-address"
                         autoCapitalize="none"
@@ -97,11 +116,11 @@ const SignUpScreen = () => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Password</Text>
+                    <Text style={styles.label}>{t('auth.signUp.passwordLabel')}</Text>
                     <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Create a strong password"
+                        placeholder={t('auth.signUp.passwordPlaceholder')}
                         placeholderTextColor="#999"
                         secureTextEntry
                     />
@@ -129,11 +148,11 @@ const SignUpScreen = () => {
                     >
                     {rememberMe && <Text style={styles.checkboxCheck}>✓</Text>}
                     </TouchableOpacity>
-                    <Text style={styles.checkboxLabel}>Remember me</Text>
+                    <Text style={styles.checkboxLabel}>{t('buttons.rememberMe')}</Text>
                 </View>
 
-                <TouchableOpacity style={styles.signUpButton}>
-                    <Text style={styles.signUpButtonText}>Sign Up</Text>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/screens/guest')}>
+                    <Text style={styles.signUpButtonText}>{t('buttons.signUp')}</Text>
                     <Image source={require('../../assets/images/sign.png')} style={styles.soundIcon} />
                 </TouchableOpacity>
 
@@ -145,15 +164,15 @@ const SignUpScreen = () => {
 
                 <TouchableOpacity style={styles.googleButton}>
                     <Image source={{ uri: 'https://img.icons8.com/color/48/000000/google-logo.png' }} style={styles.googleIcon} />
-                    <Text style={styles.googleButtonText}>Continue with Google</Text>
+                    <Text style={styles.googleButtonText}>{t('buttons.continueWithGoogle')}</Text>
                 </TouchableOpacity>
 
                 </View>
                 <View style={styles.loginContainer}>
-                    <Text style={styles.loginText}>Already have an account? </Text>
+                    <Text style={styles.loginText}>{t('auth.signUp.alreadyHaveAccount')} </Text>
                     <Link href="/auth/sign-in" asChild>
                         <TouchableOpacity>
-                            <Text style={styles.loginLink}>Login</Text>
+                            <Text style={styles.loginLink}>{t('buttons.login')}</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>

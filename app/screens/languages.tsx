@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
+  Alert,
   Image,
   ImageBackground,
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,7 +16,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-
+import { useLanguage } from '../../i18n/LanguageContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -25,18 +28,18 @@ const loadFonts = async () => {
 
 // Language data structure
 const languages = [
-  { id: 1, name: 'ENG', flag: require('../../assets/images/flags/us.png') },
-  { id: 2, name: 'FRAFRA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 3, name: 'TWI', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 4, name: 'GA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 5, name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 6, name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 7, name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
-  { id: 8, name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
-  { id: 9, name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
-  { id: 10, name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
-  { id: 11, name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
-  { id: 12, name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
+  { id: 1, code: 'en', name: 'ENG', flag: require('../../assets/images/flags/us.png') },
+  { id: 2, code: 'frafra', name: 'FRAFRA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 3, code: 'twi', name: 'TWI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 4, code: 'ga', name: 'GA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 5, code: 'ewe', name: 'EWE', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 6, code: 'hausa', name: 'HAUSA', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 7, code: 'dagbani', name: 'DAGBANI', flag: require('../../assets/images/flags/ghana.png') },
+  { id: 8, code: 'fr', name: 'FRENCH', flag: require('../../assets/images/flags/france.png') },
+  { id: 9, code: 'es', name: 'SPANISH', flag: require('../../assets/images/flags/spain.png') },
+  { id: 10, code: 'ar', name: 'ARABIC', flag: require('../../assets/images/flags/egypt.png') },
+  { id: 11, code: 'hi', name: 'HINDI', flag: require('../../assets/images/flags/india.png') },
+  { id: 12, code: 'ru', name: 'RUSSIAN', flag: require('../../assets/images/flags/russia.png') },
 ];
 
 type LanguageItemProps = {
@@ -57,7 +60,19 @@ export default function Languages() {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [filteredLanguages, setFilteredLanguages] = useState(languages);
-  const [selectedLanguage, setSelectedLanguage] = useState<number | null>(null);
+  const [selectedLanguageId, setSelectedLanguageId] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const { t } = useTranslation();
+  const { currentLanguage, setLanguage } = useLanguage();
+
+  // Set initial selected language based on current language
+  useEffect(() => {
+    const currentLangObj = languages.find(lang => lang.code === currentLanguage);
+    if (currentLangObj) {
+      setSelectedLanguageId(currentLangObj.id);
+    }
+  }, [currentLanguage]);
 
   useEffect(() => {
     loadFonts();
@@ -75,9 +90,53 @@ export default function Languages() {
     }
   }, [searchText]);
 
+  // Apply language selection immediately when a language is selected
+  const handleLanguageSelect = async (languageId: number) => {
+    setSelectedLanguageId(languageId);
+
+    const selectedLang = languages.find(lang => lang.id === languageId);
+    if (selectedLang) {
+      try {
+        await setLanguage(selectedLang.code);
+      } catch (error) {
+        console.error("Failed to change language:", error);
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedLanguageId) {
+      setModalVisible(true);
+      return;
+    }
+
+    const selectedLang = languages.find(lang => lang.id === selectedLanguageId);
+    if (selectedLang) {
+      try {
+        // Apply the language change
+        await setLanguage(selectedLang.code);
+
+        // Reset navigation stack to Welcome screen for seamless language update
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'screens/welcome' }], 
+          })
+        );
+      } catch (error) {
+        console.error("Failed to change language:", error);
+        Alert.alert(
+          t('languages.error'),
+          t('languages.languageChangeFailed'),
+          [{ text: "OK" }]
+        );
+      }
+    }
+  };
+
   return (
-    <ImageBackground 
-      source={require('../../assets/images/blur.png')} 
+    <ImageBackground
+      source={require('../../assets/images/blur.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
@@ -85,13 +144,13 @@ export default function Languages() {
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>LANGUAGE</Text>
+          <Text style={styles.headerTitle}>{t('languages.title')}</Text>
         </View>
 
         {/* Search Bar */}
@@ -100,7 +159,7 @@ export default function Languages() {
             <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search for language"
+              placeholder={t('languages.searchPlaceholder')}
               placeholderTextColor="#999"
               value={searchText}
               onChangeText={setSearchText}
@@ -122,8 +181,8 @@ export default function Languages() {
                   key={language.id}
                   flag={<Image source={language.flag} style={styles.flagIcon} />}
                   name={language.name}
-                  onSelect={() => setSelectedLanguage(language.id)}
-                  selected={selectedLanguage === language.id}
+                  onSelect={() => handleLanguageSelect(language.id)}
+                  selected={selectedLanguageId === language.id}
                 />
               ))}
             </View>
@@ -131,19 +190,44 @@ export default function Languages() {
             {filteredLanguages.length === 0 && (
               <View style={styles.noResultsContainer}>
                 <Ionicons name="search-outline" size={48} color="#ccc" />
-                <Text style={styles.noResultsText}>No languages found</Text>
-                <Text style={styles.noResultsSubtext}>Try a different search term</Text>
+                <Text style={styles.noResultsText}>{t('languages.noResults')}</Text>
+                <Text style={styles.noResultsSubtext}>{t('languages.tryAgain')}</Text>
               </View>
             )}
 
-            <Text style={styles.comingSoon}>MORE LANGUAGES COMING SOON!!!</Text>
+            <Text style={styles.comingSoon}>{t('languages.comingSoon')}</Text>
           </ScrollView>
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton}>
-          <Text style={styles.submitText}>SUBMIT</Text>
+        <TouchableOpacity 
+          style={styles.submitButton}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.submitText}>{t('languages.submit')}</Text>
         </TouchableOpacity>
+
+        {/* Modal for no language selected */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Ionicons name="alert-circle" size={48} color="red" style={{ marginBottom: 10 }} />
+              <Text style={styles.modalTitle}>{t('languages.noLanguageSelected')}</Text>
+              <Text style={styles.modalMessage}>{t('languages.pleaseSelectLanguage')}</Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -289,5 +373,50 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'red',
     backgroundColor: '#fff0f0',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    width: 300,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 18,
+    color: 'red',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  modalMessage: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: 'red',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 10,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });

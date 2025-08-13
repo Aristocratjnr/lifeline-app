@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -9,8 +10,20 @@ const red = '#FC1C1C';
 
 export default function TipsScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in TipsScreen - forcing update");
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
   const [fontsLoaded] = useFonts({
-      'Flavours': require('@/assets/fonts/Flavors-Regular.ttf'), 
+      'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
       'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'), 
     });
 
@@ -22,8 +35,9 @@ export default function TipsScreen() {
     return null;
   }
 
+  // Force re-render on language change
   return (
-    <View style={styles.container}>
+    <View style={styles.container} key={`tips-${i18n.language}`}>
       {/* Blurred Background Image */}
       <ExpoImage
         source={require('@/assets/images/blur.png')}
@@ -54,14 +68,11 @@ export default function TipsScreen() {
         />
 
         <Text style={styles.title}>
-          Instant First Aid at{'\n'}
-          Your Fingertips
+          {t('tips.title')}
         </Text>
 
         <Text style={styles.subtitle}>
-          Get clear, Step-by-step{'\n'}
-          instructions for any emergency,{'\n'}
-          even without internet
+          {t('tips.subtitle')}
         </Text>
 
         {/* Pagination Dots */}
@@ -79,7 +90,9 @@ export default function TipsScreen() {
           onPress={handleNext}
           activeOpacity={0.85}
         >
-          <Text style={styles.nextButtonText}>NEXT</Text>
+          <Text style={styles.nextButtonText}>
+            {t('buttons.next')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -139,19 +152,19 @@ const styles = StyleSheet.create({
     marginTop: 150,
   },
   title: {
-    fontSize: 40,
+    fontSize: 36,
     color: '#222',
     textAlign: 'center',
-    fontFamily: 'Flavours', 
+    fontFamily: 'FjallaOne-Regular',
     marginTop: 0,
     marginBottom: 8,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
    subtitle: {
     fontSize: 17,
     color: '#000000',
     textAlign: 'center',
-    fontWeight: '900', 
     marginHorizontal: 24,
     marginBottom: 24,
     lineHeight: 22,

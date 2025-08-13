@@ -1,0 +1,123 @@
+{
+  "settings": {
+    "title": "NHYEHYƐE",
+    "profile": {
+      "title": "Wo ho nsɛm",
+      "subtitle": "Kyerɛw wo din"
+    },
+    "notifications": {
+      "title": "Amanneɛbɔ",
+      "subtitle": "Hwɛ nkɔkɔ so"
+    },
+    "language": {
+      "title": "Kasa",
+      "subtitle": "Yi wo kasa"
+    },
+    "display": {
+      "title": "Mpaeɛ",
+      "subtitle": "Sesa nsɛm ne hann",
+      "brightness": "Hann",
+      "textSize": "Nkɔɔ nsɛm kɛse",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Nsɛm kɛse",
+      "theme": "Ahosu",
+      "light": "Kɔɔ kɛse",
+      "dark": "Tutu",
+      "eyeProtection": "Ani ho banbɔ",
+      "selectTheme": "Paw ahosu",
+      "lightMode": "Kɔɔ kɛse teɛ",
+      "darkMode": "Tutu teɛ"
+    },
+    "terms": {
+      "title": "Mmara a wɔde di dwuma",
+      "subtitle": "Mmara ho nsɛm"
+    },
+    "about": {
+      "title": "Ɛho nsɛm",
+      "subtitle": "App ho nsɛm"
+    },
+    "offline": {
+      "title": "Nsɛm a enni intanɛt",
+      "subtitle": "Download ma offline"
+    },
+    "help": {
+      "title": "Mmoa ne Begyeɛ",
+      "subtitle": "Nya mmoa"
+    },
+    "delete": {
+      "title": "Yi Account no fi",
+      "subtitle": "Yi wo account no fi"
+    },
+    "brightness": "Hann",
+    "eyeProtection": "Ani ho banbɔ"
+  },
+  "common": {
+    "on": "Asi",
+    "off": "Ansi",
+    "next": "NKANODƆ",
+    "back": "Sane"
+  },
+  "languages": {
+    "title": "KASA",
+    "searchPlaceholder": "Hwehwɛ kasa bi",
+    "noResults": "Wɔannya kasa biara",
+    "tryAgain": "Sɔ foforɔ hwɛ",
+    "comingSoon": "KASA FOFORƆ REBA!!!",
+    "submit": "SOMA"
+  },
+  "dashboard": {
+    "healthStats": "Apɔmuden Stats",
+    "steps": "Anammɔntuo",
+    "water": "Nsuo",
+    "dailyTip": "DA BIARA AFOTUO",
+    "lifelineHistory": "Lifeline Abakɔsɛm",
+    "recentActivity": "Nnɛyi adwuma",
+    "sentSOSAlert": "SOS frɛ a wɔsomaa",
+    "viewedMap": "Hwɛɛ mepɔ",
+    "readHealthNews": "Kenkan apɔmuden nsɛm",
+    "todayTime": "Nnɛ, 09:12",
+    "yesterdayTime1": "Nnora, 18:45",
+    "yesterdayTime2": "Nnora, 08:30",
+    "fracture": "Nnompe mu paapae",
+    "cough": "Ɔwa",
+    "burns": "Ogya hyeɛ",
+    "lastVisited": "Bere a ɔtwaa mu: 02, May, 2025",
+    "age": "Mfeɛ",
+    "gender": "Onipa su",
+    "location": "Beaeɛ",
+    "condition": "Yadeɛ",
+    "language": "Kasa",
+    "editProfile": "Sesa wo ho nsɛm",
+    "newTipEveryDay": "Afotuo foforɔ da biara"
+  },
+  "doctor": {
+    "title": "Dɔkota Nimdeɛ Akwankyerɛ",
+    "description": "Nya apɔmuden ho afotuo ne nsɛmmisa wɔ adɔkota a wɔnim wɔn adwuma mu. Nya ɔhwɛ a wohia, bere a wohia.",
+    "getStarted": "Hyɛ Ase",
+    "privacyPolicy": "Privacy Nhyehyɛe"
+  },
+  "welcome": {
+    "title": "Akwaaba Lifeline",
+    "subtitle": "Wo yɔnko paa ma ahokyere. Siesie woho na wode ahotoso ayɛ adwuma bere a sɛkɛnd biara ho hia."
+  },
+  "tips": {
+    "title": "Ahoɔhare Nkwagyeɛ wɔ wo Nsateaa so",
+    "subtitle": "Nya akwankyerɛ a ɛho da hɔ ma ahokyere biara, mpo sɛ wo nni intanɛt koraa",
+    "handleSharpObjects": "Di nneɛma a ano yɛ nam ho dwuma yiye:",
+    "handleSharpObjectsContent": "Twa nneɛma wɔ wo ho akyi na ma sekan no ano nyɛ nam sɛnea ɛbɛyɛ a wobɛdi ho dwuma yiye.",
+    "stayHydrated": "Nom nsuo pii:",
+    "stayHydratedContent": "Nom nsuo pii da mu nyinaa na ama wo apɔmuden ayɛ yiye.",
+    "washHands": "Hohoro wo nsa daa:",
+    "washHandsContent": "Nsa hohoroo pii boa ma mmoawa ne yadeɛ ntrɛ.",
+    "takeBreaks": "Gye wo ahome wɔ screen anim:",
+    "takeBreaksContent": "Ma w'ani ngye ahome simma 20 biara mu na amma w'ani anyɛ ɔhaw.",
+    "getSleep": "Da yiye:",
+    "getSleepContent": "Bɔ mmɔden sɛ wobɛda nnɔnhwerew 7-9 anadwo biara na ama wo apɔmuden ayɛ yiye."
+  },
+  "unique": {
+    "title": "SIESIE WO HO MA WO NKOAA AHIADEƐ",
+    "description": "Fa wo apɔmuden abakɔsɛm, nneɛma a ɛma wo ho yerɛ wo ne ɔhaw mu nkyerɛ nwoma sie, ma wo anaa nkwagyefoɔ atumi ahu ntɛm"
+  }
+}

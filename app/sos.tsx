@@ -14,7 +14,7 @@ export default function SOSScreen() {
   // Simulated user data for Medical ID
   const user = {
     name: 'Daniella',
-    age: '18-25',
+    age: '50',
     gender: 'Female',
     medicalCondition: 'Common Cold',
     contact: '0203430787',

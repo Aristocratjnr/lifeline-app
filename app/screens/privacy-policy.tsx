@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   SafeAreaView,
@@ -39,6 +40,7 @@ const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
 export default function PrivacyPolicy() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { t } = useTranslation();
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   useEffect(() => {
@@ -48,8 +50,8 @@ export default function PrivacyPolicy() {
   const handleShareApp = async () => {
     try {
       const result = await Share.share({
-        message: 'Check out Lifeline - Your emergency first aid companion! Get instant access to crucial medical information during emergencies. Download now: https://lifeline-mu.vercel.app/',
-        title: 'Lifeline - First Aid App',
+        message: t('privacyPolicy.share.message'),
+        title: t('privacyPolicy.share.title'),
         url: 'https://lifeline-mu.vercel.app/'
       });
       
@@ -77,22 +79,22 @@ export default function PrivacyPolicy() {
         >
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>PRIVACY POLICY</Text>
+        <Text style={styles.headerTitle}>{t('privacyPolicy.header')}</Text>
       </View>
 
       <ScrollView style={styles.scrollContent}>
         {/* Privacy Content */}
         <View style={styles.privacyContainer}>
           <Text style={styles.privacyText}>
-            Your privacy is important to us. We are committed to protecting your personal information.
+            {t('privacyPolicy.intro.privacyImportant')}
           </Text>
           
           <Text style={[styles.privacyText, styles.spacingTop]}>
-            Learn how we collect, use, and safeguard your data when you use Lifeline
+            {t('privacyPolicy.intro.howWeCollect')}
           </Text>
           
           <Text style={[styles.privacyText, styles.spacingTop]}>
-            This Privacy Policy explains our practices regarding the collection and use of information through our application.
+            {t('privacyPolicy.intro.policyExplains')}
           </Text>
           
           {/* See More Button */}
@@ -100,31 +102,29 @@ export default function PrivacyPolicy() {
             style={styles.seeMoreButton}
             onPress={() => setShowPrivacyModal(true)}
           >
-            <Text style={styles.seeMoreText}>SEE MORE</Text>
+            <Text style={styles.seeMoreText}>{t('privacyPolicy.seeMore')}</Text>
             <Ionicons name="chevron-forward" size={18} color="white" />
           </TouchableOpacity>
         </View>
 
         {/* Links */}
         <View style={styles.linksContainer}>
-          <LinkItem title="Terms & Use" onPress={() => router.push('/screens/terms-use')} />
-          <LinkItem title="FAQs" onPress={() => router.push('/screens/faqs')} />
-          <LinkItem title="Share App" onPress={handleShareApp} />
+          <LinkItem title={t('privacyPolicy.links.termsUse')} onPress={() => router.push('/screens/terms-use')} />
+          <LinkItem title={t('privacyPolicy.links.faqs')} onPress={() => router.push('/screens/faqs')} />
+          <LinkItem title={t('privacyPolicy.links.shareApp')} onPress={handleShareApp} />
           <ExternalLink href="https://lifeline-mu.vercel.app/">
-            <LinkItem title="Visit Our Website" />
+            <LinkItem title={t('privacyPolicy.links.visitWebsite')} />
           </ExternalLink>
         </View>
       </ScrollView>
 
-      {/* Privacy Policy Modal */}
+      {/* Privacy Modal */}
       <Modal
         visible={showPrivacyModal}
-        transparent={true}
         animationType="slide"
-        onRequestClose={() => setShowPrivacyModal(false)}
+        presentationStyle="pageSheet"
       >
         <SafeAreaView style={styles.modalContainer}>
-          {/* Modal Header */}
           <View style={styles.modalHeader}>
             <TouchableOpacity 
               style={styles.closeButton}
@@ -132,85 +132,83 @@ export default function PrivacyPolicy() {
             >
               <Ionicons name="close" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Privacy Policy</Text>
+            <Text style={styles.modalTitle}>{t('privacyPolicy.header')}</Text>
             <View style={styles.placeholder} />
           </View>
-
-          {/* Modal Content */}
-          <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+          <ScrollView style={styles.modalContent}>
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>1. Information We Collect</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.informationWeCollect.title')}</Text>
               <Text style={styles.sectionText}>
-                We collect information you provide directly to us, such as when you create an account, use our features, or contact us for support. This may include your name, email address, and any other information you choose to provide.
+                {t('privacyPolicy.sections.informationWeCollect.description1')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>2. How We Use Your Information</Text>
               <Text style={styles.sectionText}>
-                We use the information we collect to provide, maintain, and improve our services, communicate with you, and ensure the security of our application. We do not sell your personal information to third parties.
+                {t('privacyPolicy.sections.informationWeCollect.description2')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>3. Information Sharing</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.howWeUseInformation.title')}</Text>
               <Text style={styles.sectionText}>
-                We do not share your personal information with third parties except in the following circumstances:{'\n'}
-                • With your explicit consent{'\n'}
-                • To comply with legal obligations{'\n'}
-                • To protect our rights and safety{'\n'}
-                • With service providers who assist in app operations
+                {t('privacyPolicy.sections.howWeUseInformation.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>4. Data Security</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.informationSharing.title')}</Text>
               <Text style={styles.sectionText}>
-                We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.
+                {t('privacyPolicy.sections.informationSharing.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>5. Data Retention</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.dataSecurity.title')}</Text>
               <Text style={styles.sectionText}>
-                We retain your personal information only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
+                {t('privacyPolicy.sections.dataSecurity.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>6. Your Rights</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.yourRights.title')}</Text>
               <Text style={styles.sectionText}>
-                You have the right to access, update, or delete your personal information. You may also opt out of certain communications. Contact us to exercise these rights.
+                {t('privacyPolicy.sections.yourRights.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>7. Children&apos;s Privacy</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.childrenPrivacy.title')}</Text>
               <Text style={styles.sectionText}>
-                Our application is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent and believe your child has provided us with personal information, please contact us.
+                {t('privacyPolicy.sections.childrenPrivacy.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>8. Changes to This Policy</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.changesToPolicy.title')}</Text>
               <Text style={styles.sectionText}>
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date.
+                {t('privacyPolicy.sections.changesToPolicy.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>9. Contact Us</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.contactUs.title')}</Text>
               <Text style={styles.sectionText}>
-                If you have any questions about this Privacy Policy or our privacy practices, please contact us at:{'\n'}
-                Email: privacy@lifeline-app.com{'\n'}
-                Website: https://lifeline-mu.vercel.app
+                {t('privacyPolicy.sections.contactUs.description')}
               </Text>
             </View>
 
             <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>10. Last Updated</Text>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.internationalDataTransfers.title')}</Text>
               <Text style={styles.sectionText}>
-                This Privacy Policy was last updated on May 2025.
+                {t('privacyPolicy.sections.internationalDataTransfers.description')}
+              </Text>
+            </View>
+
+            <View style={styles.privacySection}>
+              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.lastUpdated.title')}</Text>
+              <Text style={styles.sectionText}>
+                {t('privacyPolicy.sections.lastUpdated.description')}
               </Text>
             </View>
           </ScrollView>
@@ -232,6 +230,14 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    backgroundColor: 'white',
+    borderRadius: 0,
+    margin: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 1,
   },
   backButton: {
     padding: 5,
@@ -243,12 +249,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'JetBrainsMono-Bold',
     marginRight: 30,
+    color: '#333',
   },
   scrollContent: {
     flex: 1,
   },
   privacyContainer: {
+    backgroundColor: 'white',
+    borderRadius: 20,
     padding: 20,
+    margin: 20,
+    marginBottom: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 2,
   },
   privacyText: {
     fontSize: 16,
@@ -260,14 +276,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   seeMoreButton: {
-    backgroundColor: '#FC7C7C',
+    backgroundColor: '#ff0000',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 25,
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.13,
+    shadowRadius: 3,
+    elevation: 2,
   },
   seeMoreText: {
     color: 'white',
@@ -279,6 +300,7 @@ const styles = StyleSheet.create({
   linksContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,
+    marginTop: 10,
   },
   linkItem: {
     flexDirection: 'row',
@@ -296,6 +318,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -304,6 +328,14 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 2,
   },
   closeButton: {
     padding: 5,
@@ -314,16 +346,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'JetBrainsMono-Bold',
+    color: '#333',
   },
   placeholder: {
     width: 34,
   },
   modalContent: {
-    flex: 1,
+    backgroundColor: 'white',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 18,
+    width: '92%',
+    maxWidth: 420,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.13,
+    shadowRadius: 8,
+    elevation: 4,
   },
   privacySection: {
     marginVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+    paddingBottom: 12,
   },
   sectionTitle: {
     fontSize: 18,

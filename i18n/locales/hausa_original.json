@@ -1,0 +1,65 @@
+{
+  "settings": {
+    "title": "SAITI",
+    "profile": {
+      "title": "Bayanka",
+      "subtitle": "Rubuta sunanka"
+    },
+    "notifications": {
+      "title": "Sanarwa",
+      "subtitle": "Sarrafa faɗakarwa"
+    },
+    "language": {
+      "title": "Harshe",
+      "subtitle": "Zaɓi harshenka"
+    },
+    "display": {
+      "title": "Nuni",
+      "subtitle": "Gyara rubutu da haske",
+      "brightness": "Haske",
+      "eyeProtection": "Kariyar Ido"
+    },
+    "terms": {
+      "title": "Sharuɗan Amfani",
+      "subtitle": "Bayanan doka"
+    },
+    "about": {
+      "title": "Game da",
+      "subtitle": "Bayanan app"
+    },
+    "offline": {
+      "title": "Abun ciki na offline",
+      "subtitle": "Download don offline"
+    },
+    "help": {
+      "title": "Taimako da Tallafi",
+      "subtitle": "Sami taimako"
+    },
+    "delete": {
+      "title": "Share Asusu",
+      "subtitle": "Cire asusunka"
+    },
+    "brightness": "Haske",
+    "eyeProtection": "Kariyar Ido"
+  },
+  "common": {
+    "on": "A kunne",
+    "off": "A kashe"
+  },
+  "languages": {
+    "title": "HARSHE",
+    "searchPlaceholder": "Nemo harshe",
+    "noResults": "Ba a sami harshe ba",
+    "tryAgain": "Gwada wani kalmar bincike",
+    "comingSoon": "HARSUNAN DA SUKA ZUWA!!!",
+    "submit": "AIKA"
+  },
+  "dashboard": {
+    "healthStats": "Alkalinsa Stats",
+    "steps": "Matakai",
+    "water": "Ruwa",
+    "dailyTip": "SHAWARAR YAU DA KULLUM",
+    "lifelineHistory": "Tarihin Lifeline",
+    "recentActivity": "Ayyukan Kwanan Nan"
+  }
+}

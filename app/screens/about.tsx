@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ImageBackground,
   SafeAreaView,
@@ -22,6 +23,7 @@ const loadFonts = async () => {
 
 export default function About() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadFonts();
@@ -43,15 +45,15 @@ export default function About() {
           >
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>ABOUT</Text>
+          <Text style={styles.headerTitle}>{t('about.header')}</Text>
         </View>
 
         <ScrollView style={styles.scrollContent}>
           {/* About Lifeline Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About LIFELINE</Text>
+            <Text style={styles.sectionTitle}>{t('about.aboutLifeline')}</Text>
             <Text style={styles.sectionText}>
-              Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you&apos;re prepared to act quickly and effectively.
+              {t('about.lifelineDescription')}
             </Text>
              <View style={styles.divider} />
           </View>
@@ -59,31 +61,31 @@ export default function About() {
 
           {/* App Version Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>App Version</Text>
-            <Text style={styles.sectionText}>1.0.0</Text>
+            <Text style={styles.sectionTitle}>{t('about.appVersion')}</Text>
+            <Text style={styles.sectionText}>{t('about.versionNumber')}</Text>
             <View style={styles.divider} />
           </View>
 
           {/* Acknowledgement Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Acknowledgement of Credit:</Text>
+            <Text style={styles.sectionTitle}>{t('about.acknowledgement')}</Text>
             <Text style={styles.sectionText}>
-              This application was made possible through the collaborative efforts and support of the following individuals and entities. We extend our sincere gratitude to:
+              {t('about.acknowledgementDescription')}
             </Text>
             
             <Text style={[styles.creditName, styles.spacingTop]}>
-              Daniella Asiedu - Lead UI/UX & Developer
+              {t('about.daniellaCredit')}
             </Text>
             
             <Text style={[styles.creditName, styles.spacingTop]}>
-              David Ayim Obuobi - Assistance Developer Credits
+              {t('about.davidCredit')}
             </Text>
             
             <Text style={[styles.creditName, styles.spacingTop]}>
-              Special Mention:
+              {t('about.specialMention')}
             </Text>
             <Text style={styles.sectionText}>
-              Stephen Adingo, for guidance and mentorship throughout the project.
+              {t('about.stephenCredit')}
             </Text>
           </View>
         </ScrollView>

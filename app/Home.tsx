@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../components/Loader';
@@ -11,6 +12,7 @@ import Loader from '../components/Loader';
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
   
   // Load JetBrains Mono font
@@ -53,15 +55,15 @@ export default function HomeScreen() {
               />
             </View>
             
-            <Text style={styles.title}>Welcome to LIFELINE</Text>
+            <Text style={styles.title}>{t('home.title')}</Text>
             
             <Text style={styles.subtitle}>
-              Your trusted first aid & emergency companion
+              {t('home.subtitle')}
             </Text>
             
             <View style={styles.featureHighlight}>
               <FontAwesome name="shield" size={16} color="#106B40" />
-              <Text style={styles.featureText}>Always Ready - Always Safe</Text>
+              <Text style={styles.featureText}>{t('home.featureText')}</Text>
             </View>
           </View>
 
@@ -81,25 +83,25 @@ export default function HomeScreen() {
             <Link href="/auth/sign-in" asChild>
               <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
                 <FontAwesome name="sign-in" size={18} color="#fff" style={styles.buttonIcon} />
-                <Text style={styles.primaryButtonText}>Sign In</Text>
+                <Text style={styles.primaryButtonText}>{t('home.signIn')}</Text>
               </TouchableOpacity>
             </Link>
             
             <Link href="/auth/sign-up" asChild>
               <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.85}>
                 <FontAwesome name="user-plus" size={18} color="#FF5252" style={styles.buttonIcon} />
-                <Text style={styles.secondaryButtonText}>Create Account</Text>
+                <Text style={styles.secondaryButtonText}>{t('home.createAccount')}</Text>
               </TouchableOpacity>
             </Link>
 
-            <Link href="/screens/guest" asChild>
+            <Link href="/main" asChild>
               <TouchableOpacity style={styles.tertiaryButton} activeOpacity={0.85}>
                 <Image 
                 source={require('@/assets/images/guest.png')} 
                 style={styles.guestIcon} 
                 resizeMode="contain"
               />
-                <Text style={styles.tertiaryButtonText}>Continue as a Guest</Text>
+                <Text style={styles.tertiaryButtonText}>{t('home.continueAsGuest')}</Text>
               </TouchableOpacity>
             </Link>
           </View>

@@ -1,8 +1,9 @@
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
 import { BlurView } from 'expo-blur';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Animated,
@@ -23,6 +24,7 @@ import {
 import Loader from '../../components/Loader';
 
 export default function SignInScreen() {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -35,6 +37,22 @@ export default function SignInScreen() {
   const [isTransitioningToAI, setIsTransitioningToAI] = useState(false);
   const checkAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
+
+  // State to force re-render when language changes
+  const [, setLanguageUpdate] = React.useState(0);
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in SignInScreen - forcing update");
+      // Force re-render by updating state
+      setLanguageUpdate(prev => prev + 1);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   useEffect(() => {
     async function loadAssets() {
@@ -122,15 +140,15 @@ export default function SignInScreen() {
               </Pressable>
               {!answered && !checkComplete ? (
                 <>
-                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16 }} />
-                  <Text style={styles.modalTitle}>Health Check</Text>
-                  <Text style={styles.modalText}>Are you feeling good today?</Text>
+                  <Ionicons name="heart" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Text style={styles.modalTitle}>{t('auth.signIn.healthCheck')}</Text>
+                  <Text style={styles.modalText}>{t('auth.signIn.feelingGoodToday')}</Text>
                   <View style={{ flexDirection: 'row', marginTop: 18 }}>
                     <TouchableOpacity
                       style={[styles.modalConfirmButton, { backgroundColor: '#43A047', marginRight: 10 }]}
                       onPress={handleYes}
                     >
-                      <Text style={styles.modalConfirmButtonText}>Yes</Text>
+                      <Text style={styles.modalConfirmButtonText}>{t('auth.signIn.yes')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.modalConfirmButton, { backgroundColor: '#E53935' }]}
@@ -145,41 +163,41 @@ export default function SignInScreen() {
                         }, 700);
                       }}
                     >
-                      <Text style={styles.modalConfirmButtonText}>No</Text>
+                      <Text style={styles.modalConfirmButtonText}>{t('auth.signIn.no')}</Text>
                     </TouchableOpacity>
                   </View>
                 </>
               ) : feelingGood && isChecking ? (
                 <View style={{ alignItems: 'center' }}>
-                  <FontAwesome5 name="heartbeat" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
-                  <Text style={styles.modalTitle}>Checking status...</Text>
+                  <Ionicons name="heart" size={48} color="#E53935" style={{ marginBottom: 16, opacity: 0.7 }} />
+                  <Text style={styles.modalTitle}>{t('auth.signIn.checkingStatus')}</Text>
                   <ActivityIndicator size="large" color="#E53935" style={{ marginVertical: 18 }} />
                 </View>
               ) : feelingGood && checkComplete ? (
                 <Animated.View style={{ alignItems: 'center', opacity: checkAnim, transform: [{ scale: checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0.7, 1] }) }] }}>
-                  <MaterialIcons name="health-and-safety" size={48} color="#43A047" style={{ marginBottom: 16 }} />
-                  <Text style={[styles.modalTitle, { color: '#43A047' }]}>You&apos;re good to go!</Text>
-                  <Text style={styles.modalText}>All checks passed. You can proceed to the dashboard.</Text>
+                  <Ionicons name="medkit" size={48} color="#43A047" style={{ marginBottom: 16 }} />
+                  <Text style={[styles.modalTitle, { color: '#43A047' }]}>{t('auth.signIn.youAreGood')}</Text>
+                  <Text style={styles.modalText}>{t('auth.signIn.allChecksPassed')}</Text>
                   <TouchableOpacity
                     style={[styles.modalConfirmButton, { backgroundColor: '#43A047' }]}
                     onPress={() => {
                       setShowHelpCheck(false);
-                      setTimeout(() => router.replace('/dashboard'), 200);
+                      setTimeout(() => router.replace('/(tabs)/dashboard'), 200);
                     }}
                   >
-                    <Text style={styles.modalConfirmButtonText}>Proceed to Dashboard</Text>
+                    <Text style={styles.modalConfirmButtonText}>{t('buttons.proceedToDashboard')}</Text>
                   </TouchableOpacity>
                 </Animated.View>
               ) : !feelingGood && answered ? (
                 <View style={{ alignItems: 'center' }}>
-                  <MaterialIcons name="mood-bad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
-                  <Text style={[styles.modalTitle, { color: '#E53935' }]}>Take Care!</Text>
-                  <Text style={styles.modalText}>Remember to rest and reach out for help if needed.</Text>
+                  <Ionicons name="sad" size={48} color="#E53935" style={{ marginBottom: 16 }} />
+                  <Text style={[styles.modalTitle, { color: '#E53935' }]}>{t('auth.signIn.takeCare')}</Text>
+                  <Text style={styles.modalText}>{t('auth.signIn.rememberToRest')}</Text>
                   <TouchableOpacity
                     style={[styles.modalConfirmButton, { backgroundColor: '#E53935', marginTop: 10 }]}
                     onPress={() => setShowHelpCheck(false)}
                   >
-                    <Text style={styles.modalConfirmButtonText}>Close</Text>
+                    <Text style={styles.modalConfirmButtonText}>{t('auth.signIn.close')}</Text>
                   </TouchableOpacity>
                 </View>
               ) : null}
@@ -197,10 +215,10 @@ export default function SignInScreen() {
           <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled">
             <View style={styles.container}>
               <View style={styles.header}>
-                  <Text style={styles.headerText}>Don&apos;t have an account?</Text>
+                  <Text style={styles.headerText}>{t('auth.signIn.noAccount')}</Text>
                   <Link href="/auth/sign-up" asChild>
                       <TouchableOpacity>
-                          <Text style={styles.signUpLink}>Sign Up</Text>
+                          <Text style={styles.signUpLink}>{t('buttons.signUp')}</Text>
                       </TouchableOpacity>
                   </Link>
               </View>
@@ -208,15 +226,15 @@ export default function SignInScreen() {
               <Image source={require('../../assets/images/medical-kit.png')} style={styles.headerImage} />
             
               <View style={styles.formCard}>
-              <Text style={styles.welcomeText}>Welcome back <Text style={{ fontWeight: 'bold' }}>LIFELINER!</Text></Text>
-              <Text style={styles.title}>Sign in to your account</Text>
+              <Text style={styles.welcomeText}>{t('auth.signIn.welcomeBack')} <Text style={{ fontWeight: 'bold' }}>LIFELINER!</Text></Text>
+              <Text style={styles.title}>{t('auth.signIn.title')}</Text>
 
               <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Email</Text>
+                  <Text style={styles.label}>{t('auth.signIn.emailLabel')}</Text>
                   <View style={styles.inputWrapper}>
                   <TextInput
                       style={styles.input}
-                      placeholder="username@example.com"
+                      placeholder={t('auth.signIn.emailPlaceholder')}
                       value={email}
                       onChangeText={setEmail}
                       keyboardType="email-address"
@@ -228,11 +246,11 @@ export default function SignInScreen() {
               </View>
 
               <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Password</Text>
+                  <Text style={styles.label}>{t('auth.signIn.passwordLabel')}</Text>
                   <View style={styles.inputWrapper}>
                   <TextInput
                       style={styles.input}
-                      placeholder="Enter your password"
+                      placeholder={t('auth.signIn.passwordPlaceholder')}
                       value={password}
                       onChangeText={setPassword}
                       secureTextEntry
@@ -247,17 +265,17 @@ export default function SignInScreen() {
                   <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
                       {rememberMe && <Text style={styles.checkboxCheck}>✓</Text>}
                   </View>
-                  <Text style={styles.rememberMeText}>Remember me</Text>
+                  <Text style={styles.rememberMeText}>{t('buttons.rememberMe')}</Text>
                   </TouchableOpacity>
                   <Link href="/auth/forgot-password" asChild>
                       <TouchableOpacity>
-                          <Text style={styles.forgotText}>Forgot password?</Text>
+                          <Text style={styles.forgotText}>{t('buttons.forgotPassword')}</Text>
                       </TouchableOpacity>
                   </Link>
               </View>
 
               <TouchableOpacity style={styles.signInButton} onPress={() => setShowHelpCheck(true)}>
-                  <Text style={styles.signInButtonText}>Sign In →</Text>
+                  <Text style={styles.signInButtonText}>{t('buttons.signIn')} →</Text>
               </TouchableOpacity>
 
               <View style={styles.dividerContainer}>
@@ -268,7 +286,7 @@ export default function SignInScreen() {
 
               <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
                   <Image source={{ uri: 'https://img.icons8.com/color/48/000000/google-logo.png' }} style={styles.googleIcon} />
-                  <Text style={styles.googleButtonText}>Continue with Google</Text>
+                  <Text style={styles.googleButtonText}>{t('buttons.continueWithGoogle')}</Text>
               </TouchableOpacity>
               </View>
             </View>
@@ -553,4 +571,90 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
     textAlign: 'center',
   },
+  floatingBot: {
+    position: 'absolute',
+    bottom: 30,
+    right: 20,
+    zIndex: 10,
+  },
+  botButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#E53935',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  botModalCard: {
+    width: '85%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 12,
+  },
+  botIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  botModalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+    color: '#E53935',
+    textAlign: 'center',
+  },
+  botModalText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+    fontFamily: 'JetBrainsMono-Regular',
+    lineHeight: 22,
+  },
+  callDoctorButton: {
+    flexDirection: 'row',
+    backgroundColor: '#E53935',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 160,
+  },
+  callDoctorButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  connectingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+  },
+  connectingText: {
+    fontSize: 16,
+    color: '#E53935',
+    fontFamily: 'JetBrainsMono-Regular',
+    textAlign: 'center',
+  },
 });
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

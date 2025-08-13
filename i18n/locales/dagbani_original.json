@@ -1,0 +1,76 @@
+{
+  "settings": {
+    "title": "PAHIM",
+    "profile": {
+      "title": "A yuri",
+      "subtitle": "Nyɛ a yuri"
+    },
+    "notifications": {
+      "title": "Zuɣusimi",
+      "subtitle": "Lahi zuɣusimi"
+    },
+    "language": {
+      "title": "Gbali",
+      "subtitle": "Pahi a gbali"
+    },
+    "display": {
+      "title": "Yeli ka",
+      "subtitle": "Mali ka pam ni nimdi",
+      "brightness": "Nimdi",
+      "textSize": "Pam nimdi",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Pam zuɣu",
+      "theme": "Lahabali",
+      "light": "Nabila",
+      "dark": "Tɔli",
+      "eyeProtection": "Nini kpɛri",
+      "selectTheme": "Piimi Lahabali",
+      "lightMode": "Nabila Mode",
+      "darkMode": "Tɔli Mode"
+    },
+    "terms": {
+      "title": "Tuma pahim",
+      "subtitle": "Pahim vihigu"
+    },
+    "about": {
+      "title": "N-ka ti",
+      "subtitle": "App vihigu"
+    },
+    "offline": {
+      "title": "Offline vihigu",
+      "subtitle": "Download bi offline"
+    },
+    "help": {
+      "title": "Dɔɣim ni Yiɣim",
+      "subtitle": "Nyɛ dɔɣim"
+    },
+    "delete": {
+      "title": "Dihi account ni",
+      "subtitle": "Dihi a account"
+    },
+    "brightness": "Nimdi",
+    "eyeProtection": "Nɛŋkpɛŋ dɔɣim"
+  },
+  "common": {
+    "on": "N be",
+    "off": "N kpa be"
+  },
+  "languages": {
+    "title": "GBALI",
+    "searchPlaceholder": "Nahi gbali",
+    "noResults": "Gbali kɛ ka nyɛ",
+    "tryAgain": "Nahi fɔɣ",
+    "comingSoon": "GBALI FƆƔƆ N-DANI ZUU!!!",
+    "submit": "KƆLI"
+  },
+  "dashboard": {
+    "healthStats": "Kɔlga Stats",
+    "steps": "Diɣinga",
+    "water": "Koom",
+    "dailyTip": "AYUBU VIHIM",
+    "lifelineHistory": "Lifeline Tuma",
+    "recentActivity": "Tuma yɛltɔɣu"
+  }
+}

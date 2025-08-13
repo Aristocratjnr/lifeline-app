@@ -1,14 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -46,6 +49,8 @@ const FAQItem = ({ question, answer, isExpanded, onToggle }: FAQItemProps) => (
 
 export default function FAQs() {
   const navigation = useNavigation();
+  const router = useRouter();
+  const { t } = useTranslation();
   const [expandedFAQs, setExpandedFAQs] = useState<number[]>([]);
 
   useEffect(() => {
@@ -62,105 +67,100 @@ export default function FAQs() {
 
   const faqs = [
     {
-      question: "What is Lifeline?",
-      answer: "Lifeline is a comprehensive first aid and emergency response mobile application designed to provide instant access to crucial medical information during emergencies. It offers step-by-step guidance for various medical situations, helping users act quickly and effectively when professional help may not be immediately available."
+      question: t('faqs.questions.whatIsLifeline'),
+      answer: t('faqs.questions.whatIsLifelineAnswer')
     },
     {
-      question: "Is Lifeline a substitute for professional medical help?",
-      answer: "No, Lifeline is not a substitute for professional medical care. It's designed to provide immediate guidance and support while waiting for professional help to arrive. Always call emergency services (like 911 or your local emergency number) for serious medical situations. Lifeline complements professional care by providing valuable first aid information."
+      question: t('faqs.questions.substituteForProfessionalHelp'),
+      answer: t('faqs.questions.substituteForProfessionalHelpAnswer')
     },
     {
-      question: "How does the Symptom Checker work?",
-      answer: "The Symptom Checker helps you identify potential medical conditions based on your symptoms. Simply select the symptoms you're experiencing, and the app will provide information about possible conditions and recommended actions. However, this is for informational purposes only and should not replace professional medical diagnosis."
+      question: t('faqs.questions.symptomCheckerWork'),
+      answer: t('faqs.questions.symptomCheckerWorkAnswer')
     },
     {
-      question: "Can the Symptom Checker diagnose my medical condition?",
-      answer: "The Symptom Checker provides information and guidance but cannot provide a definitive medical diagnosis. It's designed to help you understand your symptoms and determine whether you should seek professional medical attention. Always consult with a healthcare provider for proper diagnosis and treatment."
+      question: t('faqs.questions.symptomCheckerDiagnose'),
+      answer: t('faqs.questions.symptomCheckerDiagnoseAnswer')
     },
     {
-      question: "Are the first-aid guides easy to follow?",
-      answer: "Yes! All first-aid guides in Lifeline are designed to be clear, concise, and easy to follow, even in stressful situations. They include step-by-step instructions, visual aids where applicable, and are written in simple language. The guides are regularly updated to reflect current medical best practices."
+      question: t('faqs.questions.firstAidGuides'),
+      answer: t('faqs.questions.firstAidGuidesAnswer')
     },
     {
-      question: "How do I update Lifeline?",
-      answer: "Lifeline updates are available through your device's app store (Google Play Store for Android or App Store for iOS). Enable automatic updates in your device settings to ensure you always have the latest version with the most current medical information and features."
+      question: t('faqs.questions.updateLifeline'),
+      answer: t('faqs.questions.updateLifelineAnswer')
     },
     {
-      question: "Do I need to create an account to use Lifeline?",
-      answer: "No, you can use Lifeline as a guest without creating an account. However, creating an account allows you to save your preferences, access personalized features, and sync your data across devices. Guest mode provides full access to all emergency features and first aid guides."
+      question: t('faqs.questions.offlineUse'),
+      answer: t('faqs.questions.offlineUseAnswer')
     },
     {
-      question: "Is my personal information secure?",
-      answer: "Yes, we take your privacy and data security very seriously. All personal information is encrypted and stored securely. We never share your personal data with third parties without your explicit consent. You can review our complete Privacy Policy for detailed information about data handling."
+      question: t('faqs.questions.dataSecurity'),
+      answer: t('faqs.questions.dataSecurityAnswer')
     },
     {
-      question: "Can I use Lifeline offline?",
-      answer: "Yes! Many of Lifeline's core features work offline, including first aid guides and emergency procedures. This ensures you have access to crucial information even when you don't have an internet connection. Some features like the AI assistant require an internet connection."
-    },
-    {
-      question: "What should I do if I find incorrect information?",
-      answer: "If you find any information that seems incorrect or outdated, please contact us immediately through the app's help section or email us at support@lifeline.com. We regularly review and update our content to ensure accuracy, and your feedback helps us maintain the highest standards."
-    },
-    {
-      question: "How often is the medical information updated?",
-      answer: "Our medical content is reviewed and updated regularly by healthcare professionals to ensure it reflects current best practices and guidelines. We follow standards from reputable medical organizations and update content as new information becomes available."
-    },
-    {
-      question: "Can I share Lifeline with family and friends?",
-      answer: "Absolutely! We encourage you to share Lifeline with your family and friends. The more people who have access to reliable first aid information, the safer our communities become. You can share the app through your device's app store or use the 'Share App' feature in the settings."
+      question: t('faqs.questions.contactSupport'),
+      answer: t('faqs.questions.contactSupportAnswer')
     }
   ];
 
+  const handleContactSupport = () => {
+    router.push('/screens/help');
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>FREQUENTLY ASKED{'\n'}QUESTIONS</Text>
-      </View>
-
-      <ScrollView 
-        style={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Introduction */}
-        <View style={styles.introContainer}>
-          <Text style={styles.introTitle}>Need Help?</Text>
-          <Text style={styles.introText}>
-            Find answers to the most commonly asked questions about Lifeline. If you can't find what you're looking for, feel free to contact our support team.
-          </Text>
-        </View>
-
-        {/* FAQ Items */}
-        <View style={styles.faqsContainer}>
-          {faqs.map((faq, index) => (
-            <FAQItem
-              key={index}
-              question={faq.question}
-              answer={faq.answer}
-              isExpanded={expandedFAQs.includes(index)}
-              onToggle={() => toggleFAQ(index)}
-            />
-          ))}
-        </View>
-
-        {/* Contact Section */}
-        <View style={styles.contactContainer}>
-          <Text style={styles.contactTitle}>Still Have Questions?</Text>
-          <Text style={styles.contactText}>
-            If you couldn't find the answer you're looking for, our support team is here to help.
-          </Text>
-          <TouchableOpacity style={styles.contactButton}>
-            <Text style={styles.contactButtonText}>Contact Support</Text>
+    <ImageBackground 
+      source={require('../../assets/images/blur.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>{t('faqs.headerTitle')}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        
+        <ScrollView style={styles.scrollContent}>
+          {/* Intro Section */}
+          <View style={styles.introContainer}>
+            <Text style={styles.introTitle}>{t('faqs.introTitle')}</Text>
+            <Text style={styles.introText}>
+              {t('faqs.introText')}
+            </Text>
+          </View>
+
+          {/* FAQ Items */}
+          <View style={styles.faqsContainer}>
+            {faqs.map((faq, index) => (
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isExpanded={expandedFAQs.includes(index)}
+                onToggle={() => toggleFAQ(index)}
+              />
+            ))}
+          </View>
+
+          {/* Contact Section */}
+          <View style={styles.contactContainer}>
+            <Text style={styles.contactTitle}>{t('faqs.contactTitle')}</Text>
+            <Text style={styles.contactText}>
+              {t('faqs.contactText')}
+            </Text>
+            <TouchableOpacity style={styles.contactButton} onPress={handleContactSupport}>
+              <Text style={styles.contactButtonText}>{t('faqs.contactButton')}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -284,5 +284,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 14,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 }); 

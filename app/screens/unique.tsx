@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Image as ExpoImage } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
@@ -10,10 +11,22 @@ const red = '#FC1C1C';
 
 export default function UniqueScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+
+  // Re-render when language changes
+  React.useEffect(() => {
+    const handleLanguageChanged = () => {
+      console.log("Language changed in UniqueScreen - forcing update");
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
 
   // Load the fonts
   const [fontsLoaded] = useFonts({
-    'LuckiestGuy-Regular': require('@/assets/fonts/LuckiestGuy-Regular.ttf'),
+    'FjallaOne-Regular': require('@/assets/fonts/FjallaOne-Regular.ttf'),
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
   });
 
@@ -26,8 +39,9 @@ export default function UniqueScreen() {
     router.push('/screens/empower');
   };
 
+  // Force re-render on language change
   return (
-    <View style={styles.container}>
+    <View style={styles.container} key={`unique-${i18n.language}`}>
       {/* Background */}
       <View style={styles.background} />
       {/* Blurred Background Image */}
@@ -62,11 +76,13 @@ export default function UniqueScreen() {
       />
 
       {/* Title with Luckiest Guy font */}
-      <Text style={styles.title}>PREPARE FOR YOUR UNIQUE NEEDS</Text>
+      <Text style={styles.title}>
+        {t('unique.title')}
+      </Text>
 
       {/* Description with JetBrains Mono font */}
       <Text style={styles.description}>
-        Store your medical history, allergies, and emergency contacts for quick access by you or first responders
+        {t('unique.description')}
       </Text>
 
       {/* Pagination dots */}
@@ -80,7 +96,9 @@ export default function UniqueScreen() {
 
       {/* Next button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-        <Text style={styles.nextButtonText}>NEXT</Text>
+        <Text style={styles.nextButtonText}>
+          {t('buttons.next')}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -151,8 +169,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginTop: 0, 
     zIndex: 2,
-    fontFamily: 'LuckiestGuy-Regular',
+    fontFamily: 'FjallaOne-Regular',
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   description: {
     fontSize: 17,
