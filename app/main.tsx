@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // Interface for first aid tip items
@@ -14,14 +14,15 @@ interface FirstAidTip {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   description: string;
+  detailedTips: string[];
 }
 
 export default function MainScreen() {
   const router = useRouter();
   const [showTipsModal, setShowTipsModal] = useState(false);
-  const [showHubModal, setShowHubModal] = useState(false);
+  const [selectedTip, setSelectedTip] = useState<FirstAidTip | null>(null);
 
-  // First aid tips data
+  // First aid tips data with detailed tips for each category
   const firstAidTips: FirstAidTip[] = [
     {
       id: '1',
@@ -29,6 +30,16 @@ export default function MainScreen() {
       icon: 'heart-circle-outline',
       color: '#FF6B6B',
       description: '30 chest compressions followed by 2 rescue breaths',
+      detailedTips: [
+        'Check for responsiveness - tap shoulders and shout',
+        'Call 911 immediately or have someone else do it',
+        'Place heel of hand on center of chest, between nipples',
+        'Push hard and fast at least 2 inches deep',
+        'Allow complete chest recoil between compressions',
+        'Give 30 chest compressions at 100-120 per minute',
+        'Tilt head back, lift chin, give 2 rescue breaths',
+        'Continue cycles of 30 compressions and 2 breaths'
+      ]
     },
     {
       id: '2',
@@ -36,6 +47,16 @@ export default function MainScreen() {
       icon: 'person-remove-outline',
       color: '#4ECDC4',
       description: '5 back blows between shoulder blades, then 5 abdominal thrusts',
+      detailedTips: [
+        'Ask "Are you choking?" - if they can\'t speak, act immediately',
+        'Stand behind the person and lean them forward',
+        'Give 5 sharp back blows between shoulder blades',
+        'If unsuccessful, perform abdominal thrusts (Heimlich)',
+        'Place fist above navel, below ribcage',
+        'Grab fist with other hand and thrust inward and upward',
+        'Give 5 quick upward thrusts',
+        'Continue alternating back blows and abdominal thrusts'
+      ]
     },
     {
       id: '3',
@@ -43,6 +64,16 @@ export default function MainScreen() {
       icon: 'water-outline',
       color: '#FF9F43',
       description: 'Apply direct pressure with a clean cloth or bandage',
+      detailedTips: [
+        'Put on gloves or use barrier if available',
+        'Apply direct pressure to wound with clean cloth',
+        'Maintain continuous pressure - don\'t peek at wound',
+        'Elevate injured area above heart level if possible',
+        'If blood soaks through, add more cloth on top',
+        'Apply pressure bandage when bleeding slows',
+        'Watch for signs of shock - pale, cold, weak pulse',
+        'Seek medical attention for severe bleeding'
+      ]
     },
     {
       id: '4',
@@ -50,6 +81,16 @@ export default function MainScreen() {
       icon: 'flame-outline',
       color: '#FF9F43',
       description: 'Cool with running water for 10-15 minutes',
+      detailedTips: [
+        'Remove from heat source immediately',
+        'Cool with running water for 10-15 minutes',
+        'Remove jewelry/clothing before swelling occurs',
+        'Cover with sterile, non-adhesive bandage',
+        'Do NOT use ice, butter, or home remedies',
+        'Take over-the-counter pain medication if needed',
+        'Watch for signs of infection',
+        'Seek medical care for burns larger than palm size'
+      ]
     },
     {
       id: '5',
@@ -57,6 +98,16 @@ export default function MainScreen() {
       icon: 'body-outline',
       color: '#5F27CD',
       description: 'Immobilize the injured area and seek medical help',
+      detailedTips: [
+        'Do not move the person unless in immediate danger',
+        'Support the injured area above and below the fracture',
+        'Immobilize with splint or sling if trained to do so',
+        'Apply ice wrapped in cloth to reduce swelling',
+        'Watch for signs of shock or decreased circulation',
+        'Do NOT try to straighten or push bone back in',
+        'Keep person warm and comfortable',
+        'Get medical attention immediately'
+      ]
     },
     {
       id: '6',
@@ -64,6 +115,16 @@ export default function MainScreen() {
       icon: 'flask-outline',
       color: '#1DD1A1',
       description: 'Call poison control immediately',
+      detailedTips: [
+        'Call Poison Control: 1-800-222-1222 (US)',
+        'Have poison container or substance information ready',
+        'Follow poison control instructions exactly',
+        'Do NOT induce vomiting unless instructed',
+        'If person is unconscious, call 911 immediately',
+        'If poison is on skin, rinse with water for 15-20 minutes',
+        'If poison is in eyes, flush with water for 15-20 minutes',
+        'Stay with person and monitor breathing/consciousness'
+      ]
     },
   ];
 
@@ -224,33 +285,90 @@ export default function MainScreen() {
             animationType="slide"
             transparent={true}
             visible={showTipsModal}
-            onRequestClose={() => setShowTipsModal(false)}
+            onRequestClose={() => {
+              setShowTipsModal(false);
+              setSelectedTip(null);
+            }}
           >
             <View style={styles.modalOverlay}>
               <View style={styles.modalContent}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>First Aid Tips</Text>
+                  <Text style={styles.modalTitle}>
+                    {selectedTip ? selectedTip.title : 'First Aid Tips'}
+                  </Text>
                   <TouchableOpacity 
-                    onPress={() => setShowTipsModal(false)}
+                    onPress={() => {
+                      if (selectedTip) {
+                        setSelectedTip(null);
+                      } else {
+                        setShowTipsModal(false);
+                      }
+                    }}
                     style={styles.closeButton}
                   >
-                    <Ionicons name="close" size={24} color="#666" />
+                    <Ionicons 
+                      name={selectedTip ? "arrow-back" : "close"} 
+                      size={24} 
+                      color="#666" 
+                    />
                   </TouchableOpacity>
                 </View>
                 
-                <ScrollView style={styles.tipsList}>
-                  {firstAidTips.map((tip) => (
-                    <View key={tip.id} style={styles.tipItem}>
-                      <View style={[styles.tipIconContainer, { backgroundColor: `${tip.color}20` }]}>
-                        <Ionicons name={tip.icon} size={28} color={tip.color} />
+                {!selectedTip ? (
+                  // Show all categories
+                  <ScrollView style={styles.tipsList}>
+                    <Text style={styles.instructionText}>
+                      Tap on any category to see detailed tips
+                    </Text>
+                    {firstAidTips.map((tip) => (
+                      <TouchableOpacity 
+                        key={tip.id} 
+                        style={styles.tipItem}
+                        onPress={() => setSelectedTip(tip)}
+                        activeOpacity={0.7}
+                      >
+                        <View style={[styles.tipIconContainer, { backgroundColor: `${tip.color}20` }]}>
+                          <Ionicons name={tip.icon} size={28} color={tip.color} />
+                        </View>
+                        <View style={styles.tipTextContainer}>
+                          <Text style={styles.tipTitle}>{tip.title}</Text>
+                          <Text style={styles.tipDescription}>{tip.description}</Text>
+                        </View>
+                        <Ionicons name="chevron-forward" size={20} color="#999" />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                ) : (
+                  // Show detailed tips for selected category
+                  <ScrollView style={styles.detailedTipsList}>
+                    <View style={styles.selectedTipHeader}>
+                      <View style={[styles.selectedTipIcon, { backgroundColor: `${selectedTip.color}20` }]}>
+                        <Ionicons name={selectedTip.icon} size={32} color={selectedTip.color} />
                       </View>
-                      <View style={styles.tipTextContainer}>
-                        <Text style={styles.tipTitle}>{tip.title}</Text>
-                        <Text style={styles.tipDescription}>{tip.description}</Text>
-                      </View>
+                      <Text style={styles.selectedTipDescription}>
+                        {selectedTip.description}
+                      </Text>
                     </View>
-                  ))}
-                </ScrollView>
+                    
+                    <Text style={styles.detailedTipsTitle}>Step-by-Step Guide:</Text>
+                    
+                    {selectedTip.detailedTips.map((tip, index) => (
+                      <View key={index} style={styles.detailedTipItem}>
+                        <View style={styles.stepNumber}>
+                          <Text style={styles.stepNumberText}>{index + 1}</Text>
+                        </View>
+                        <Text style={styles.detailedTipText}>{tip}</Text>
+                      </View>
+                    ))}
+                    
+                    <View style={styles.emergencyNote}>
+                      <Ionicons name="warning" size={20} color="#FF6B6B" />
+                      <Text style={styles.emergencyNoteText}>
+                        Always call emergency services (911) for serious injuries
+                      </Text>
+                    </View>
+                  </ScrollView>
+                )}
               </View>
             </View>
           </Modal>
@@ -565,6 +683,14 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 4,
   },
+  instructionText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 16,
+    fontStyle: 'italic',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
   tipsList: {
     marginBottom: 20,
   },
@@ -603,6 +729,94 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#666',
     lineHeight: 18,
+  },
+  
+  // Detailed Tips Styles
+  detailedTipsList: {
+    marginBottom: 20,
+  },
+  selectedTipHeader: {
+    alignItems: 'center',
+    marginBottom: 20,
+    padding: 16,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+  },
+  selectedTipIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  selectedTipDescription: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  detailedTipsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  detailedTipItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  stepNumber: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#E53935',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    marginTop: 2,
+  },
+  stepNumberText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  detailedTipText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 20,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  emergencyNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF3E0',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: '#FFE0B2',
+  },
+  emergencyNoteText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#E65100',
+    marginLeft: 8,
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
   },
 
   // Quiz Card Styles
@@ -721,121 +935,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  hubModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  hubModalContent: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    width: '90%',
-    maxWidth: 500,
-    maxHeight: '90%',
-    alignSelf: 'center',
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    marginHorizontal: 16,
-  },
-  hubCloseButton: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    zIndex: 1,
-    padding: 4,
-  },
-  hubModalHeader: {
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingTop: 10,
-  },
-  hubModalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
-    marginTop: 12,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  hubModalSubtitle: {
-    fontSize: 15,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  hubModalBody: {
-    marginBottom: 20,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    padding: 12,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-  },
-  featureIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  featureText: {
-    flex: 1,
-    fontSize: 15,
-    color: '#263238',
-    fontFamily: 'JetBrainsMono-Regular',
-  },
-  hubModalFooter: {
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#EEE',
-  },
-  notifyText: {
-    fontSize: 16,
-    color: '#37474F',
-    textAlign: 'center',
-    marginBottom: 16,
-    fontFamily: 'JetBrainsMono-Bold',
-  },
-  notifyInputContainer: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#DDD',
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  notifyInput: {
-    flex: 1,
-    padding: 12,
-    fontSize: 14,
-    color: '#333',
-    backgroundColor: '#FFF',
-    minWidth: 0, 
-  },
-  notifyButton: {
-    backgroundColor: '#E53935',
-    paddingHorizontal: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  notifyButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
-    fontFamily: 'JetBrainsMono-Bold',
   },
   hubImage: {
     width: '150%',
