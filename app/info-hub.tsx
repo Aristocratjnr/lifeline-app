@@ -67,12 +67,6 @@ export default function InfoHubScreen() {
     return <View style={styles.loadingContainer} />;
   }
 
-  const handleItemPress = (item: InfoHubItem) => {
-    if (item.route) {
-      router.push(item.route as any);
-    }
-  };
-
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />

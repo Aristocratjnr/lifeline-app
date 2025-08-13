@@ -1,20 +1,17 @@
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-const { width } = Dimensions.get('window');
-
-const firstAidPrinciples: Array<{
+const firstAidPrinciples: {
   id: string;
   title: string;
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
-}> = [
+}[] = [
   {
     id: '1',
     title: 'Assess the Situation',
