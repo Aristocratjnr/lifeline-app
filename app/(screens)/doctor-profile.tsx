@@ -113,7 +113,10 @@ export default function DoctorProfileScreen() {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Doctor Profile</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.headerIcon}>
+          <TouchableOpacity 
+            style={styles.headerIcon}
+            onPress={() => router.push('/(tabs)/settings')}
+          >
             <MaterialIcons name="more-vert" size={24} color="#333" />
           </TouchableOpacity>
         </View>

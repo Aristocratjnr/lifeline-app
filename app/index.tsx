@@ -45,7 +45,7 @@ export default function SplashScreen() {
     // Navigate after 4 seconds
     const timeout = setTimeout(() => {
       pump.stop();
-      router.replace('/screens/languages');
+      router.replace('/screens/welcome');
     }, 4000);
 
     return () => {
@@ -55,7 +55,7 @@ export default function SplashScreen() {
   }, [fadeAnim, scaleAnim, heartScale, router]);
 
   const handlePress = () => {
-    router.replace('/screens/languages');
+    router.replace('/screens/welcome');
   };
 
   return (

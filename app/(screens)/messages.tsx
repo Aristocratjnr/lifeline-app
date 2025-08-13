@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing, Modal, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Audio } from 'expo-av';
 
@@ -31,6 +31,7 @@ export default function MessagesScreen() {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [recordingPermission, setRecordingPermission] = useState(false);
+  const [isCallModalVisible, setIsCallModalVisible] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const recordingAnimation = useRef(new Animated.Value(0)).current;
   
@@ -220,6 +221,35 @@ export default function MessagesScreen() {
     }
   };
 
+  const handleMessage = () => {
+    if (message.trim() === '') return;
+    
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      sender: 'user',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    
+    setMessages([...messages, newMessage]);
+    setMessage('');
+  };
+
+  const handleCallPress = () => {
+    setIsCallModalVisible(true);
+  };
+
+  const handleCallConfirm = () => {
+    // Close modal and initiate call
+    setIsCallModalVisible(false);
+    // Add your call initiation logic here
+    // For example: Linking.openURL(`tel:${doctorPhoneNumber}`);
+  };
+
+  const handleCallCancel = () => {
+    setIsCallModalVisible(false);
+  };
+
   const handleSend = () => {
     if (message.trim() === '') return;
     
@@ -227,7 +257,7 @@ export default function MessagesScreen() {
       id: Date.now().toString(),
       text: message,
       sender: 'user',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
     
     setMessages(prev => [...prev, newMessage]);
@@ -367,13 +397,50 @@ export default function MessagesScreen() {
             </View>
           </View>
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleCallPress}
+            >
               <MaterialIcons name="phone" size={24} color="#EF4444" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={() => router.push('/(tabs)/settings')}
+            >
               <MaterialIcons name="more-vert" size={24} color="#333" />
             </TouchableOpacity>
           </View>
+
+          {/* Call Confirmation Modal */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isCallModalVisible}
+            onRequestClose={() => setIsCallModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Call Doctor</Text>
+                <Text style={styles.modalText}>
+                  Are you sure you want to call {doctor.name}?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <Pressable 
+                    style={[styles.modalButton, styles.cancelButton]} 
+                    onPress={handleCallCancel}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </Pressable>
+                  <Pressable 
+                    style={[styles.modalButton, styles.confirmButton]} 
+                    onPress={handleCallConfirm}
+                  >
+                    <Text style={styles.confirmButtonText}>Call</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
 
@@ -578,6 +645,15 @@ const styles = StyleSheet.create({
     borderTopColor: '#f0f0f0',
     alignItems: 'center',
   },
+  messageInput: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginRight: 10,
+    maxHeight: 120,
+  },
   input: {
     flex: 1,
     minHeight: 42,
@@ -661,5 +737,68 @@ const styles = StyleSheet.create({
   },
   doctorAudioDuration: {
     color: '#666',
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 20,
+    width: '100%',
+    maxWidth: 320,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 12,
+    color: '#333',
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 4,
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButton: {
+    backgroundColor: '#EF4444',
+  },
+  cancelButtonText: {
+    color: '#333',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });
