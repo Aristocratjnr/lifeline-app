@@ -3,14 +3,14 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // Interface for info hub items
 interface InfoHubItem {
   id: string;
   title: string;
-  icon: keyof typeof MaterialIcons.glyphMap;
+  image: any; // Will be used with require()
   color: string;
   description: string;
   route?: string;
@@ -26,34 +26,34 @@ export default function InfoHubScreen() {
     {
       id: '1',
       title: 'What is First Aid?',
-      icon: 'local-hospital',
+      image: require('@/assets/images/first-aid.png'),
       color: '#E53935',
       description: 'Learn the fundamentals of first aid care',
-      route: '/screens/firstAidGuide',
+      route: '/screens/first-aid',
     },
     {
       id: '2',
       title: 'Myth Buster',
-      icon: 'lightbulb',
+      image: require('@/assets/images/myth.png'),
       color: '#FFB300',
       description: 'Debunk common first aid myths and misconceptions',
-      route: '/screens/tips',
+      route: '/screens/myth-buster',
     },
     {
       id: '3',
       title: 'Home Kits To Get',
-      icon: 'home',
+      image: require('@/assets/images/kit.png'),
       color: '#43A047',
       description: 'Essential items to include in your first aid kit',
-      route: '/screens/tips',
+      route: '/screens/home-kits',
     },
     {
       id: '4',
-      title: 'Glossary (Coming Soon)',
-      icon: 'book',
+      title: 'Glossary',
+      image: require('@/assets/images/book.png'),
       color: '#5E35B1',
       description: 'Key medical terms explained',
-      comingSoon: true,
+      route: '/screens/glossary',
     },
   ];
 
@@ -68,9 +68,7 @@ export default function InfoHubScreen() {
   }
 
   const handleItemPress = (item: InfoHubItem) => {
-    if (item.comingSoon) {
-      setShowGlossaryModal(true);
-    } else if (item.route) {
+    if (item.route) {
       router.push(item.route as any);
     }
   };
@@ -101,21 +99,45 @@ export default function InfoHubScreen() {
               
               <Text style={styles.headerTitle}>INFO HUB</Text>
               
-              <TouchableOpacity 
-                style={styles.menuButton}
-                onPress={() => router.push('/screens/guest')}
-              >
-                <MaterialIcons name="person" size={24} color="#333" />
-              </TouchableOpacity>
+              <View style={styles.headerRight}>
+                <TouchableOpacity 
+                  style={[styles.menuButton, styles.headerIconButton]}
+                  onPress={() => router.push('/screens/guest')}
+                >
+                  <MaterialIcons name="person" size={24} color="#E53935" />
+                </TouchableOpacity>
+                <View style={styles.verticalLine} />
+                <TouchableOpacity 
+                  style={[styles.menuButton, styles.headerIconButton]}
+                  onPress={() => router.push('/settings')}
+                >
+                  <MaterialIcons name="more-vert" size={24} color="#666" />
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Info Hub Items */}
             <View style={styles.itemsContainer}>
-              {infoHubItems.map((item) => (
+              {infoHubItems.map((item, index) => (
                 <TouchableOpacity 
-                  key={item.id}
-                  style={styles.infoCard}
-                  onPress={() => handleItemPress(item)}
+                  key={index} 
+                  style={[styles.infoCard, { backgroundColor: item.color + '15' }]}
+                  onPress={() => {
+                    switch(index) {
+                      case 0: // First Aid
+                        router.push('/screens/first-aid');
+                        break;
+                      case 1: // Myth Buster
+                        router.push('/screens/myth-buster');
+                        break;
+                      case 2: // Home Kits
+                        router.push('/screens/home-kits');
+                        break;
+                      case 3: // Glossary
+                        router.push('/screens/glossary');
+                        break;
+                    }
+                  }}
                   activeOpacity={0.8}
                 >
                   <LinearGradient
@@ -125,8 +147,12 @@ export default function InfoHubScreen() {
                     end={{ x: 1, y: 1 }}
                   >
                     <View style={styles.cardContent}>
-                      <View style={[styles.iconContainer, { backgroundColor: `${item.color}15` }]}>
-                        <MaterialIcons name={item.icon} size={32} color={item.color} />
+                      <View style={styles.iconContainer}>
+                        <Image 
+                          source={item.image} 
+                          style={styles.iconImage} 
+                          resizeMode="contain"
+                        />
                       </View>
                       
                       <View style={styles.textContainer}>
@@ -219,7 +245,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    backgroundColor: 'rgba(255, 255, 255, 0.74)',
     zIndex: 2,
   },
   loadingContainer: {
@@ -258,12 +284,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    padding: 8,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 20,
+    paddingHorizontal: 4,
+  },
+  headerIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  verticalLine: {
+    width: 1,
+    height: 24,
+    backgroundColor: '#E0E0E0',
   },
 
   // Items Container
@@ -293,10 +333,13 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 60,
     height: 60,
-    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+  },
+  iconImage: {
+    width: 32,
+    height: 32,
   },
   textContainer: {
     flex: 1,
