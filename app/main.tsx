@@ -143,7 +143,7 @@ export default function MainScreen() {
               <View style={styles.verticalLine} />
               <TouchableOpacity 
                 style={styles.menuButton}
-                onPress={() => router.push('/info-hub')}
+                onPress={() => router.push('/(tabs)/settings')}
               >
                 <MaterialIcons name="more-vert" size={24} color="#666" />
               </TouchableOpacity>
@@ -290,7 +290,7 @@ export default function MainScreen() {
           {/* First Aid Hub Card */}
           <TouchableOpacity 
             style={styles.hubCard}
-            onPress={() => setShowHubModal(true)}
+            onPress={() => router.push('/info-hub')}
             activeOpacity={0.9}
           >
             <LinearGradient
@@ -314,70 +314,6 @@ export default function MainScreen() {
               </View>
             </LinearGradient>
           </TouchableOpacity>
-
-          {/* First Aid Hub Coming Soon Modal */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={showHubModal}
-            onRequestClose={() => setShowHubModal(false)}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.hubModalContent}>
-                <TouchableOpacity 
-                  style={styles.hubCloseButton}
-                  onPress={() => setShowHubModal(false)}
-                >
-                  <Ionicons name="close" size={24} color="#666" />
-                </TouchableOpacity>
-                
-                <View style={styles.hubModalHeader}>
-                  <Ionicons name="construct" size={40} color="#1976D2" />
-                  <Text style={styles.hubModalTitle}>Coming Soon!</Text>
-                  <Text style={styles.hubModalSubtitle}>We&apos;re working hard to bring you an amazing First Aid Hub experience</Text>
-                </View>
-
-                <View style={styles.hubModalBody}>
-                  <View style={styles.featureItem}>
-                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
-                      <Ionicons name="book" size={24} color="#E53935" />
-                    </View>
-                    <Text style={styles.featureText}>Comprehensive first aid guides</Text>
-                  </View>
-                  
-                  <View style={styles.featureItem}>
-                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
-                      <Ionicons name="videocam" size={24} color="#E53935" />
-                    </View>
-                    <Text style={styles.featureText}>Step-by-step video tutorials</Text>
-                  </View>
-                  
-                  <View style={styles.featureItem}>
-                    <View style={[styles.featureIcon, { backgroundColor: 'rgba(229, 57, 53, 0.1)' }]}>
-                      <Ionicons name="search" size={24} color="#E53935" />
-                    </View>
-                    <Text style={styles.featureText}>Quick search for emergencies</Text>
-                  </View>
-                </View>
-
-                <View style={styles.hubModalFooter}>
-                  <Text style={styles.notifyText}>Get notified when we launch!</Text>
-                  <View style={styles.notifyInputContainer}>
-                    <TextInput
-                      style={styles.notifyInput}
-                      placeholder="Enter your email"
-                      placeholderTextColor="#999"
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                    />
-                    <TouchableOpacity style={styles.notifyButton}>
-                      <Text style={styles.notifyButtonText}>Notify Me</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Modal>
         </ScrollView>
         </SafeAreaView>
       </ImageBackground>
