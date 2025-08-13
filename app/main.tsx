@@ -14,7 +14,11 @@ interface FirstAidTip {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   description: string;
-  detailedTips: string[];
+  preventionTips: {
+    title: string;
+    content: string;
+    icon: keyof typeof Ionicons.glyphMap;
+  }[];
 }
 
 export default function MainScreen() {
@@ -30,15 +34,22 @@ export default function MainScreen() {
       icon: 'heart-circle-outline',
       color: '#FF6B6B',
       description: '30 chest compressions followed by 2 rescue breaths',
-      detailedTips: [
-        'Check for responsiveness - tap shoulders and shout',
-        'Call 911 immediately or have someone else do it',
-        'Place heel of hand on center of chest, between nipples',
-        'Push hard and fast at least 2 inches deep',
-        'Allow complete chest recoil between compressions',
-        'Give 30 chest compressions at 100-120 per minute',
-        'Tilt head back, lift chin, give 2 rescue breaths',
-        'Continue cycles of 30 compressions and 2 breaths'
+      preventionTips: [
+        {
+          title: "Learn CPR",
+          content: "Take a certified CPR course to be prepared for emergencies and practice regularly to maintain skills.",
+          icon: "school-outline"
+        },
+        {
+          title: "Keep Emergency Numbers Handy",
+          content: "Program emergency numbers in your phone and keep them easily accessible for quick dialing.",
+          icon: "call-outline"
+        },
+        {
+          title: "Know Risk Factors",
+          content: "Be aware of heart disease risk factors and encourage regular health checkups for family members.",
+          icon: "heart-outline"
+        }
       ]
     },
     {
@@ -47,15 +58,22 @@ export default function MainScreen() {
       icon: 'person-remove-outline',
       color: '#4ECDC4',
       description: '5 back blows between shoulder blades, then 5 abdominal thrusts',
-      detailedTips: [
-        'Ask "Are you choking?" - if they can\'t speak, act immediately',
-        'Stand behind the person and lean them forward',
-        'Give 5 sharp back blows between shoulder blades',
-        'If unsuccessful, perform abdominal thrusts (Heimlich)',
-        'Place fist above navel, below ribcage',
-        'Grab fist with other hand and thrust inward and upward',
-        'Give 5 quick upward thrusts',
-        'Continue alternating back blows and abdominal thrusts'
+      preventionTips: [
+        {
+          title: "Cut Food Properly",
+          content: "Cut food into small pieces, especially for children and elderly. Avoid hard candies for small children.",
+          icon: "restaurant-outline"
+        },
+        {
+          title: "Eat Slowly",
+          content: "Chew food thoroughly and eat slowly. Avoid talking or laughing while chewing large bites.",
+          icon: "time-outline"
+        },
+        {
+          title: "Supervise Children",
+          content: "Watch young children while eating and keep small objects that could cause choking out of reach.",
+          icon: "eye-outline"
+        }
       ]
     },
     {
@@ -64,15 +82,22 @@ export default function MainScreen() {
       icon: 'water-outline',
       color: '#FF9F43',
       description: 'Apply direct pressure with a clean cloth or bandage',
-      detailedTips: [
-        'Put on gloves or use barrier if available',
-        'Apply direct pressure to wound with clean cloth',
-        'Maintain continuous pressure - don\'t peek at wound',
-        'Elevate injured area above heart level if possible',
-        'If blood soaks through, add more cloth on top',
-        'Apply pressure bandage when bleeding slows',
-        'Watch for signs of shock - pale, cold, weak pulse',
-        'Seek medical attention for severe bleeding'
+      preventionTips: [
+        {
+          title: "Keep First Aid Kit Stocked",
+          content: "Maintain a well-stocked first aid kit with sterile gauze, bandages, and antiseptic supplies.",
+          icon: "medical-outline"
+        },
+        {
+          title: "Handle Sharp Objects Safely",
+          content: "Use proper technique when handling knives, glass, or sharp tools. Keep them clean and stored safely.",
+          icon: "warning-outline"
+        },
+        {
+          title: "Wear Protective Gear",
+          content: "Use appropriate safety equipment when doing activities that could cause cuts or injuries.",
+          icon: "shield-outline"
+        }
       ]
     },
     {
@@ -81,15 +106,22 @@ export default function MainScreen() {
       icon: 'flame-outline',
       color: '#FF9F43',
       description: 'Cool with running water for 10-15 minutes',
-      detailedTips: [
-        'Remove from heat source immediately',
-        'Cool with running water for 10-15 minutes',
-        'Remove jewelry/clothing before swelling occurs',
-        'Cover with sterile, non-adhesive bandage',
-        'Do NOT use ice, butter, or home remedies',
-        'Take over-the-counter pain medication if needed',
-        'Watch for signs of infection',
-        'Seek medical care for burns larger than palm size'
+      preventionTips: [
+        {
+          title: "Kitchen Safety",
+          content: "Keep pot handles turned inward, use oven mitts, and be careful around hot surfaces and liquids.",
+          icon: "flame-outline"
+        },
+        {
+          title: "Check Water Temperature",
+          content: "Test bath water temperature before use, especially for children and elderly. Set water heater below 120°F.",
+          icon: "thermometer-outline"
+        },
+        {
+          title: "Fire Safety",
+          content: "Install smoke detectors, have fire extinguishers accessible, and create family fire escape plans.",
+          icon: "alarm-outline"
+        }
       ]
     },
     {
@@ -98,15 +130,22 @@ export default function MainScreen() {
       icon: 'body-outline',
       color: '#5F27CD',
       description: 'Immobilize the injured area and seek medical help',
-      detailedTips: [
-        'Do not move the person unless in immediate danger',
-        'Support the injured area above and below the fracture',
-        'Immobilize with splint or sling if trained to do so',
-        'Apply ice wrapped in cloth to reduce swelling',
-        'Watch for signs of shock or decreased circulation',
-        'Do NOT try to straighten or push bone back in',
-        'Keep person warm and comfortable',
-        'Get medical attention immediately'
+      preventionTips: [
+        {
+          title: "Home Safety",
+          content: "Remove tripping hazards, use non-slip mats, ensure good lighting, and install handrails on stairs.",
+          icon: "home-outline"
+        },
+        {
+          title: "Bone Health",
+          content: "Maintain strong bones with calcium-rich diet, vitamin D, and regular weight-bearing exercise.",
+          icon: "fitness-outline"
+        },
+        {
+          title: "Fall Prevention",
+          content: "Wear appropriate footwear, use assistive devices if needed, and be extra careful on wet surfaces.",
+          icon: "walk-outline"
+        }
       ]
     },
     {
@@ -115,17 +154,24 @@ export default function MainScreen() {
       icon: 'flask-outline',
       color: '#1DD1A1',
       description: 'Call poison control immediately',
-      detailedTips: [
-        'Call Poison Control: 1-800-222-1222 (US)',
-        'Have poison container or substance information ready',
-        'Follow poison control instructions exactly',
-        'Do NOT induce vomiting unless instructed',
-        'If person is unconscious, call 911 immediately',
-        'If poison is on skin, rinse with water for 15-20 minutes',
-        'If poison is in eyes, flush with water for 15-20 minutes',
-        'Stay with person and monitor breathing/consciousness'
+      preventionTips: [
+        {
+          title: "Secure Household Chemicals",
+          content: "Store cleaning products, medications, and chemicals in locked cabinets away from children.",
+          icon: "lock-closed-outline"
+        },
+        {
+          title: "Label Everything",
+          content: "Keep all substances in original containers with labels. Never store chemicals in food containers.",
+          icon: "pricetag-outline"
+        },
+        {
+          title: "Install Safety Latches",
+          content: "Use child-proof latches on cabinets containing potentially dangerous substances.",
+          icon: "shield-checkmark-outline"
+        }
       ]
-    },
+    }
   ];
 
   // Load JetBrains Mono font
@@ -350,14 +396,17 @@ export default function MainScreen() {
                       </Text>
                     </View>
                     
-                    <Text style={styles.detailedTipsTitle}>Step-by-Step Guide:</Text>
+                    <Text style={styles.detailedTipsTitle}>Prevention Tips:</Text>
                     
-                    {selectedTip.detailedTips.map((tip, index) => (
+                    {selectedTip.preventionTips.map((tip, index) => (
                       <View key={index} style={styles.detailedTipItem}>
-                        <View style={styles.stepNumber}>
-                          <Text style={styles.stepNumberText}>{index + 1}</Text>
+                        <View style={styles.tipIconContainer}>
+                          <Ionicons name={tip.icon} size={20} color={selectedTip.color} />
                         </View>
-                        <Text style={styles.detailedTipText}>{tip}</Text>
+                        <View style={styles.tipContentContainer}>
+                          <Text style={styles.preventionTipTitle}>{tip.title}</Text>
+                          <Text style={styles.detailedTipText}>{tip.content}</Text>
+                        </View>
                       </View>
                     ))}
                     
@@ -777,20 +826,15 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  stepNumber: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#E53935',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-    marginTop: 2,
+  tipContentContainer: {
+    flex: 1,
+    marginLeft: 8,
   },
-  stepNumberText: {
-    color: '#fff',
-    fontSize: 12,
+  preventionTipTitle: {
+    fontSize: 14,
     fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
   },
   detailedTipText: {
