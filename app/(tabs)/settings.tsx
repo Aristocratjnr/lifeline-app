@@ -172,14 +172,14 @@ export default function Settings() {
           {/* Show brightness value */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
             <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              {t('display.brightness')}: {Math.round(brightness * 100)}%
+              {t('settings.display.brightness')}: {Math.round(brightness * 100)}%
             </Text>
           </View>
           
           {/* Show eye protection status */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
             <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              {t('display.eyeProtection')}: {eyeProtection ? t('common.on') : t('common.off')}
+              {t('settings.display.eyeProtection')}: {eyeProtection ? t('common.on') : t('common.off')}
             </Text>
           </View>
           
