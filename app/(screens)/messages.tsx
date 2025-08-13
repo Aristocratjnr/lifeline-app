@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing, Modal, Pressable, Linking, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Audio } from 'expo-av';
 
@@ -239,11 +239,28 @@ export default function MessagesScreen() {
     setIsCallModalVisible(true);
   };
 
-  const handleCallConfirm = () => {
-    // Close modal and initiate call
-    setIsCallModalVisible(false);
-    // Add your call initiation logic here
-    // For example: Linking.openURL(`tel:${doctorPhoneNumber}`);
+  const handleCallConfirm = async () => {
+    try {
+      // Close modal
+      setIsCallModalVisible(false);
+      
+      // Initiate call using the provided phone number
+      const phoneNumber = '+233203430787';
+      const phoneUrl = `tel:${phoneNumber}`;
+      
+      // Check if the device can open the URL
+      const supported = await Linking.canOpenURL(phoneUrl);
+      
+      if (supported) {
+        await Linking.openURL(phoneUrl);
+      } else {
+        console.error("Device doesn't support phone calls");
+        // Optionally show an alert to the user
+        Alert.alert("Error", "Your device doesn't support phone calls");
+      }
+    } catch (error) {
+      console.error('Error making call:', error);
+    }
   };
 
   const handleCallCancel = () => {
