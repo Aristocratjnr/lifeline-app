@@ -143,7 +143,7 @@ export default function MainScreen() {
               <View style={styles.verticalLine} />
               <TouchableOpacity 
                 style={styles.menuButton}
-                onPress={() => router.push('/settings')}
+                onPress={() => router.push('/info-hub')}
               >
                 <MaterialIcons name="more-vert" size={24} color="#666" />
               </TouchableOpacity>
