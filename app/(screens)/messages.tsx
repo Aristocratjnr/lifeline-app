@@ -383,7 +383,13 @@ export default function MessagesScreen() {
           <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
             <MaterialIcons name="arrow-back-ios" size={22} color="#333" />
           </TouchableOpacity>
-          <View style={styles.doctorInfo}>
+          <TouchableOpacity 
+            style={styles.doctorInfo}
+            onPress={() => router.push({
+              pathname: '/(screens)/doctor-profile',
+              params: { doctorId: doctor.id }
+            })}
+          >
             <Image 
               source={{ uri: doctor.avatar }} 
               style={styles.doctorAvatar} 
@@ -412,7 +418,7 @@ export default function MessagesScreen() {
                 </Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.headerIcons}>
             <TouchableOpacity 
               style={styles.headerButton}
