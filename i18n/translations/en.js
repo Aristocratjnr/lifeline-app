@@ -429,6 +429,17 @@ export default {
     "incoming": "Incoming",
     "missed": "Missed"
   },
+  "aiAssistant": {
+    "welcomeMessage": "Hello! I'm your Lifeline AI Assistant. How can I help you with first aid or emergency care today?",
+    "localResponses": {
+      "cpr": "CPR (Cardiopulmonary Resuscitation) is an emergency procedure performed when someone's breathing or heartbeat has stopped. Here are the basic steps:\n\n1. Call emergency services\n2. Place the heel of one hand on the center of the chest\n3. Place the other hand on top and interlock your fingers\n4. Press down hard and fast (100-120 compressions per minute)\n5. After 30 compressions, give 2 rescue breaths if trained\n6. Continue until help arrives or the person starts breathing\n\nNote: This is general advice. For proper CPR training, please take a certified course.",
+      "choking": "If someone is choking, follow these steps:\n\n1. Ask: \"Are you choking?\"\n2. If they can't speak or breathe, stand behind them\n3. Place one foot between their feet for balance\n4. Make a fist with one hand, thumb side in\n5. Place just above their belly button\n6. Grasp your fist with your other hand\n7. Give quick, upward thrusts (Heimlich maneuver)\n8. Continue until object is expelled or person becomes unconscious\n\nCall emergency services if the obstruction isn't cleared quickly.",
+      "burn": "For minor burns:\n\n1. Cool the burn under cool (not cold) running water for 10-15 minutes\n2. Remove tight items before swelling starts\n3. Apply aloe vera or moisturizer\n4. Cover with sterile, non-stick bandage\n5. Take over-the-counter pain relievers if needed\n\nFor severe burns (larger than 3 inches, or on face, hands, feet, etc.):\n1. Call emergency services\n2. Don't remove burned clothing stuck to skin\n3. Don't immerse large burns in cold water\n4. Cover loosely with clean cloth\n5. Elevate burned area if possible",
+      "bleeding": "To control bleeding:\n\n1. Have the injured person lie down\n2. Remove any visible debris but don't probe the wound\n3. Apply direct pressure using a clean cloth or bandage\n4. Maintain pressure until bleeding stops\n5. If blood soaks through, don't remove the cloth - add more layers\n6. Once bleeding stops, secure the dressing with a bandage\n\nSeek emergency care if:\n- Bleeding is severe\n- Blood is spurting\n- Bleeding doesn't stop after 10 minutes of pressure\n- The wound is deep, large, or caused by a serious injury",
+      "whoAreYou": "I'm your Lifeline AI Assistant, here to provide guidance on first aid and emergency care. I can help with:\n\n• First aid instructions\n• Emergency procedures\n• Health and safety tips\n• And more!\n\nRemember, while I can provide general information, I'm not a substitute for professional medical advice in an emergency.",
+      "whatCanYouDo": "I can help you with various first aid and emergency situations including:\n\n• CPR and choking procedures\n• Wound care and bleeding control\n• Burn treatment\n• Fracture and sprain management\n• Allergic reactions\n• Poisoning\n• And many other medical emergencies\n\nJust ask me about any first aid topic, and I'll provide clear, step-by-step guidance."
+    }
+  },
   "firstAid": {
     "title": "FIRST AID GUIDES",
     "subtitle": "Navigate through the list of\nfirst aid guides to\nhelp you find\nexactly you need",
