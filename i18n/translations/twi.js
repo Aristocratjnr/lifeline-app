@@ -230,12 +230,26 @@ export default {
 
   // Home screen
   "home": {
-    "title": "Akwaaba LIFELINE",
-    "subtitle": "Wo ahotoso ne ahokyere yɔnko a wotumi de ho to so",
+    "title": "Aane, akwaaba",
+    "subtitle": "Wɔ ɔhaw bi mu no, yɛne wo nkwa nkwa",
+    "tapForTips": "Tɔ fa Yareɛ Ho Nsɛm",
     "featureText": "Siesie Daa - Ahobammɔ Daa",
     "signIn": "Hyɛn Mu",
     "createAccount": "Yɛ Akawnt",
-    "continueAsGuest": "Kɔ so sɛ Ɔhɔhɔ"
+    "continueAsGuest": "Kɔ so sɛ Ɔhɔhɔ",
+    "welcome": "Akwaaba!",
+    "emergencyTitle1": "Wɔ ɔhaw bi mu a,",
+    "emergencyTitle2": "Ɔhaw Kɛseɛ",
+    "emergencyTitle3": "Yɛyɛ wo",
+    "emergencyTitle4": "Nkwa Nkwa",
+    "quizTitle": "Fa nhwɛsoɔ nhwɛ wo nimdeɛ",
+    "quizSubtitle": "wo nkwa a wubetumi agye no ho",
+    "takeQuiz": "Fa Nhwehwɛmu Seesei",
+    "hubTitle": "Yareɛ Ho Nsɛm",
+    "hubSubtitle": "Nnuruyɛ ho nsɛm a ɛyɛ nnamɔne",
+    "tapCategoryInstruction": "Tɔ kuw bi so hwɛ nsɛm a ɛwɔ mu",
+    "preventionTipsTitle": "Akwankyere a ɛbɛma yareɛ no atwam",
+    "emergencyNote": "Frɛ ɔhawfoɔ a wɔyɛ adwuma daa (191) ma yareɛ a ɛyɛ den"
   },
 
   // Donate screen
@@ -450,6 +464,31 @@ export default {
     "description": "Yɛ! Mɛ ne wo dɔkta panidzi. Mɛ betumi de wo kɔnɛkt kyerɛ dɔkta bi a ɔnim adwuma mu ama wo nhwɛe kwa.",
     "callDoctor": "Frɛ Dɔkta Sei",
     "connecting": "Ɛkɔnɛkt kyerɛ dɔkta..."
+  },
+  "tabs": {
+    "home": "Fie",
+    "maps": "Mfonini",
+    "news": "Amanneɛbɔ",
+    "settings": "Nsesaeɛ"
+  },
+  "home": {
+    "welcome": "Akwaaba!",
+    "emergencyTitle1": "Wɔ ɔhaw bi mu a,",
+    "emergencyTitle2": "Ɔhaw Kɛseɛ",
+    "emergencyTitle3": "Yɛyɛ wo",
+    "emergencyTitle4": "Nkwa Nkwa",
+    "tapForTips": "Tɔ fa Yareɛ Ho Nsɛm",
+    "quizTitle": "Fa nhwɛsoɔ nhwɛ wo nimdeɛ",
+    "quizSubtitle": "wo nkwa a wubetumi agye no ho",
+    "takeQuiz": "Fa Nhwehwɛmu Seesei",
+    "hubTitle": "Yareɛ Ho Nsɛm",
+    "hubSubtitle": "Nnuruyɛ ho nsɛm a ɛyɛ nnamɔne",
+    "tapCategoryInstruction": "Tɔ kuw bi so hwɛ nsɛm a ɛwɔ mu",
+    "preventionTipsTitle": "Akwankyere a ɛbɛma yareɛ no atwam",
+    "emergencyNote": "Frɛ ɔhawfoɔ a wɔyɛ adwuma daa (191) ma yareɛ a ɛyɛ den"
+  },
+  "common": {
+    "getStarted": "Hyɛ ase"
   },
   "callLogs": {
     "title": "Frɛ Logs",

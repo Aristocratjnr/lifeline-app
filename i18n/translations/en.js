@@ -11,10 +11,17 @@ export default {
     "next": "Next",
     "search": "Search",
     "off": "Off",
-    "on": "On"
+    "on": "On",
+    "getStarted": "Get Started"
   },
 
   // Navigation and tabs
+  "tabs": {
+    "home": "Home",
+    "maps": "Maps",
+    "news": "News",
+    "settings": "Settings"
+  },
   "navigation": {
     "home": "Home",
     "profile": "Profile",
@@ -203,12 +210,26 @@ export default {
 
   // Home screen
   "home": {
-    "title": "Welcome to LIFELINE",
-    "subtitle": "Your trusted first aid & emergency companion",
+    "title": "Hello, welcome",
+    "subtitle": "In an emergency, we're your lifeline",
+    "tapForTips": "Tap to get your first aid tips",
     "featureText": "Always Ready - Always Safe",
     "signIn": "Sign In",
     "createAccount": "Create Account",
-    "continueAsGuest": "Continue as a Guest"
+    "continueAsGuest": "Continue as a Guest",
+    "welcome": "Hello, Welcome!",
+    "emergencyTitle1": "In an",
+    "emergencyTitle2": "Emergency",
+    "emergencyTitle3": "We're your",
+    "emergencyTitle4": "LIFELINE",
+    "quizTitle": "Test Your Knowledge",
+    "quizSubtitle": "and potentially save a life",
+    "takeQuiz": "Take Quiz Now",
+    "hubTitle": "First Aid Hub",
+    "hubSubtitle": "Essential medical information at your fingertips",
+    "tapCategoryInstruction": "Tap any category to view its contents",
+    "preventionTipsTitle": "Prevention Tips",
+    "emergencyNote": "Call emergency services (191) for life-threatening conditions"
   },
 
   // Donate screen
