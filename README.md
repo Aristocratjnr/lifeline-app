@@ -5,31 +5,45 @@ A comprehensive first aid and emergency medical assistance application.
 ## 📱 Screenshots
 
 ### First Aid Instructions
-![First Aid Instructions](screenshots/image8.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image8.jpeg" alt="First Aid Instructions" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Detailed first aid instructions for various medical situations*
 
 ### Maps Feature
-![Maps](screenshots/image10.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image10.jpeg" alt="Maps Feature" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Maps feature to help users find emergency services*
 
 ### Multilingual Support
-![Language Selection](screenshots/image2.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image2.jpeg" alt="Multilingual Support" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Supports multiple languages including English, French, Spanish, Twi and more*
 
 ### Messages Feature
-![Messages](screenshots/image1.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image1.jpeg" alt="Messages Feature" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Send messages to emergency services*
 
 ### Guest Profile
-![Guest Profile](screenshots/image5.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image5.jpeg" alt="Guest Profile" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Guest profile to store user information*
 
-### Settings 
-![Settings](screenshots/image3.jpeg)
+### Settings
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image3.jpeg" alt="Settings" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Settings to change user information*
 
 ### Get Started
-![Get Started](screenshots/image7.jpeg)
+<div style="display: flex; justify-content: center; margin: 10px 0;">
+  <img src="screenshots/image7.jpeg" alt="Get Started" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+</div>
 *Get started to start using the app*
 
 ---
