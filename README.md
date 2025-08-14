@@ -4,46 +4,43 @@ A comprehensive first aid and emergency medical assistance application.
 
 ## 📱 Screenshots
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
-  <!-- Row 1 -->
-  <div style="text-align: center;">
-    <img src="screenshots/image8.jpeg" alt="First Aid" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+<div style="display: flex; flex-wrap: nowrap; gap: 20px; padding: 20px 0; overflow-x: auto;">
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image8.jpeg" alt="First Aid" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">First Aid Instructions</p>
   </div>
-  
-  <div style="text-align: center;">
-    <img src="screenshots/image10.jpeg" alt="Maps" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image10.jpeg" alt="Maps" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Maps</p>
   </div>
-  
-  <div style="text-align: center;">
-    <img src="screenshots/image2.jpeg" alt="Languages" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image2.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Multilingual</p>
   </div>
-  
-  <div style="text-align: center;">
-    <img src="screenshots/image1.jpeg" alt="Messages" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image1.jpeg" alt="Messages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Messages</p>
   </div>
-  
-  <!-- Row 2 -->
-  <div style="text-align: center;">
-    <img src="screenshots/image5.jpeg" alt="Profile" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image5.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Guest Profile</p>
   </div>
-  
-  <div style="text-align: center;">
-    <img src="screenshots/image3.jpeg" alt="Settings" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image3.jpeg" alt="Settings" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Settings</p>
   </div>
-  
-  <div style="text-align: center;">
-    <img src="screenshots/image7.jpeg" alt="Get Started" style="width: 20%; max-width: 50px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image7.jpeg" alt="Get Started" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Get Started</p>
   </div>
 </div>
 
----
 
 ## Welcome to your Expo app 👋
 
