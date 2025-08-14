@@ -74,6 +74,12 @@ export default {
     "about": "Yɛfiri",
     "logout": "Pipie",
     "privacy": "Bra fam",
+    "guest": {
+      "title": "Hɔhɔfo Nsiesiei",
+      "subtitle": "Hyɛn mu sɛ wopɛ sɛ wuhu nneɛma nyinaa na wugyina wo ho nsiesiei",
+      "authTitle": "Hyɛn mu sɛ wopɛ sɛ wuhu nneɛma pii",
+      "authSubtitle": "Fa wo ho nkyerɛ nwoma a wode bɛfrɛ wɔn a wɔbɛboa wo, gye wo ho nsiesiei, na wugyina wo ho nsiesiei"
+    },
     "profile": {
       "title": "Profael",
       "subtitle": "Hwɛ wo nsɛm",
@@ -450,5 +456,69 @@ export default {
     "outgoing": "Nea wɔfrɛɛ",
     "incoming": "Nea wɔatwa frɔɔ wo",
     "missed": "Nea wɔanya yie"
+  },
+  
+  // Privacy Policy
+  "privacyPolicy": {
+    "header": "Bra Fam Nsiesiei",
+    "intro": {
+      "privacyImportant": "Wo bra fam yɛ hia ma yɛn. Bra Fam Nsiesiei yi kyerɛ sɛnea LIFELINE boaboaa, de, na ɛhwɛ wo ho nsɛm a wode di dwuma bere a wode yɛn dwumadi a ɛyɛ ahokyere mu nkitahodie no di dwuma no.",
+      "howWeCollect": "Yɛgye nkuran sɛ yɛbɛhwɛ wo bra fam na yɛbɛhwɛ sɛ wo ho nsɛm no wɔ hɔ na wɔde di dwuma wɔ ɔkwan a ɛfata so.",
+      "policyExplains": "Nhyehyɛe yi kyerɛ sɛdeɛ yɛboaboaa nsɛm no, sɛnea yɛde di dwuma, ne sɛnea wubetumi ahu wo ho nsɛm a wode maa yɛn no."
+    },
+    "seeMore": "Hunu Bɛkyɛ",
+    "links": {
+      "termsUse": "Mmbusua a Yɛde Di Dwuma",
+      "faqs": "FAQs",
+      "shareApp": "Fa App no Ma",
+      "visitWebsite": "Kɔ Website no"
+    },
+    "share": {
+      "message": "Download LIFELINE - Wo kɔmpiɛda a ɔbɛboa wo wɔ ahokyere mu. Wobɛtumi ahu no wɔ App Store ne Google Play so.",
+      "title": "Fa LIFELINE App no Ma"
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Nsɛm a Yɛboaboaa",
+        "description1": "Yɛboaboaa nsɛm a wode maa yɛn, te sɛ bere a woyɛ akaunt bi, kɔntak yɛn ma mmoa, anaa de yɛn ahokyere adwuma no di dwuma no.",
+        "description2": "Eyi betumi aka wo din, email adrɛs, telefon nɔma, beaeyɛ nsɛm, ne ahokyere mu nkyerɛ nwoma nsɛm."
+      },
+      "howWeUseInformation": {
+        "title": "Sɛnea Yɛde Wo Nsɛm no Di Dwuma",
+        "description": "Yɛde nsɛm a yɛboaboaa no di dwuma de ma yɛn adwuma no ayɛ yiye, gye yɛn ho nsiesiei, na yɛn adwumayɛfoɔ no nso anya nkɔsoɔ."
+      },
+      "informationSharing": {
+        "title": "Sɛnea Yɛde Wo Nsɛm no Di Dwuma Wɔ Abusuakuo Mu",
+        "description": "Yɛrentɔn wo ho nsɛm a wode maa yɛn kɔma obi foforo, gye sɛ ɛyɛ ahokyere mu nkitahodie mu anaa sɛ mmara ka sɛ yɛnyɛ saa."
+      },
+      "dataSecurity": {
+        "title": "Nsɛm a Wɔde Bɛyɛ Adwuma",
+        "description": "Yɛde nneɛma a ɛfata a wɔde bɛyɛ adwuma no di dwuma de hwɛ wo ho nsɛm a wode maa yɛn no ho ban."
+      },
+      "yourRights": {
+        "title": "Wo Ntamadan",
+        "description": "Wo wɔ kwan sɛ wuhu, sesa, anaa pepa wo ho nsɛm a wode maa yɛn no. Wobɛtumi nso yɛ nhyehyɛe sɛ wunnyɛ nhwehwɛmu biara a yɛde reyɛ wo ho nsɛm no ho."
+      },
+      "childrenPrivacy": {
+        "title": "Mma Nsiesiei",
+        "description": "Yɛn adwuma no nnyɛ mma a wɔwɔ mfe 13 ase. Yɛnnyɛ mma a wɔwɔ mfe 13 ase ho nhwehwɛmu."
+      },
+      "changesToPolicy": {
+        "title": "Nsakraeɛ a Wɔbɛyɛ Wɔ Nhyehyɛe Yi Mu",
+        "description": "Yɛbetumi asakra Bra Fam Nsiesiei yi bere biara. Yɛbɛkyerɛ wo sɛ nhyehyɛe biara a yɛayɛ no."
+      },
+      "contactUs": {
+        "title": "Yɛn Nkitahodie",
+        "description": "Sɛ wowɔ nhwehwɛmu biara a fa Bra Fam Nsiesiei yi ho a, yɛsrɛ sɛ kɔntak yɛn wɔ privacy@lifeline.app anaa yɛn mmoa kwan so."
+      },
+      "internationalDataTransfers": {
+        "title": "Aman Ntam Nsakraeɛ a Wɔde Nsɛm Di Dwuma",
+        "description": "Wobɛtumi de wo ho nsɛm no akɔ aman foforo. Yɛde nneɛma a ɛfata a wɔde bɛyɛ adwuma no di dwuma de hwɛ wo ho nsɛm no ho ban."
+      },
+      "lastUpdated": {
+        "title": "Ɛwɔ Mu Kɔsii Sɛn",
+        "description": "Wɔasakra Bra Fam Nsiesiei yi wɔ Ɔsanaa 14, 2025. Yɛsrɛ sɛ hwɛ bio bere biara sɛ wopɛ sɛ wuhu nsakraeɛ foforo."
+      }
+    }
   }
 }
