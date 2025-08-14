@@ -3,8 +3,8 @@ import { ResizeMode, Video } from 'expo-av';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -252,7 +252,7 @@ export default function MainScreen() {
               <View style={styles.verticalLine} />
               <TouchableOpacity 
                 style={styles.menuButton}
-                onPress={() => router.push('/(tabs)/settings')}
+                onPress={() => router.push('/screens/guest-settings')}
               >
                 <MaterialIcons name="more-vert" size={24} color="#666" />
               </TouchableOpacity>
