@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,6 +24,7 @@ interface FirstAidTip {
 
 export default function MainScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [showTipsModal, setShowTipsModal] = useState(false);
   const [selectedTip, setSelectedTip] = useState<FirstAidTip | null>(null);
 
@@ -192,7 +194,7 @@ export default function MainScreen() {
         onPress={() => router.push('/main')}
       >
         <MaterialIcons name="home" size={24} color="#E53935" />
-        <Text style={[styles.tabText, { color: '#E53935' }]}>Home</Text>
+        <Text style={[styles.tabText, { color: '#E53935' }]}>{t('tabs.home')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
@@ -200,7 +202,7 @@ export default function MainScreen() {
         onPress={() => router.push('/ExploreScreen')}
       >
         <MaterialIcons name="place" size={24} color="#666" />
-        <Text style={styles.tabText}>Maps</Text>
+        <Text style={styles.tabText}>{t('tabs.maps')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
@@ -208,7 +210,7 @@ export default function MainScreen() {
         onPress={() => router.push('/NewsScreen')}
       >
         <MaterialIcons name="newspaper" size={24} color="#666" />
-        <Text style={styles.tabText}>News</Text>
+        <Text style={styles.tabText}>{t('tabs.news')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
@@ -216,7 +218,7 @@ export default function MainScreen() {
         onPress={() => router.push('/screens/guest-settings')}
       >
         <MaterialIcons name="settings" size={24} color="#666" />
-        <Text style={styles.tabText}>Settings</Text>
+        <Text style={styles.tabText}>{t('tabs.settings')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -239,7 +241,7 @@ export default function MainScreen() {
         >
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.welcomeText}>Hello! Welcome</Text>
+            <Text style={styles.welcomeText}>{t('home.welcome')}</Text>
             <View style={styles.headerRight}>
               <TouchableOpacity 
                 style={styles.menuButton}
@@ -250,7 +252,7 @@ export default function MainScreen() {
               <View style={styles.verticalLine} />
               <TouchableOpacity 
                 style={styles.menuButton}
-                onPress={() => router.push('/(tabs)/settings')}
+                onPress={() => router.push('/screens/guest-settings')}
               >
                 <MaterialIcons name="more-vert" size={24} color="#666" />
               </TouchableOpacity>
@@ -272,10 +274,10 @@ export default function MainScreen() {
               <View style={styles.emergencyContent}>
                 <View style={styles.emergencyTextContainer}>
                   <Text style={styles.emergencyTitle}>
-                    In an{'\n'}
-                    <Text style={{fontWeight: '900'}}>Emergency</Text>,
-                    {'\n'}We&apos;re your{'\n'}
-                    <Text style={styles.emergencyHighlight}>Lifeline</Text>
+                    {t('home.emergencyTitle1')}{'\n'}
+                    <Text style={{fontWeight: '900'}}>{t('home.emergencyTitle2')}</Text>{'\n'}
+                    {t('home.emergencyTitle3')}{'\n'}
+                    <Text style={styles.emergencyHighlight}>{t('home.emergencyTitle4')}</Text>
                   </Text>
                   
                   <TouchableOpacity 
@@ -283,7 +285,7 @@ export default function MainScreen() {
                     onPress={() => router.push('/screens/firstAidGuide')}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.getStartedText}>Get Started!</Text>
+                    <Text style={styles.getStartedText}>{t('common.getStarted')}</Text>
                   </TouchableOpacity>
                 </View>
                 
@@ -315,7 +317,7 @@ export default function MainScreen() {
             >
               <View style={styles.tipsContent}>
                 <View style={styles.tipsTextContainer}>
-                  <Text style={styles.tipsTitle}>Tap to get{'\n'}First Aid Tips</Text>
+                  <Text style={styles.tipsTitle}>{t('home.tapForTips')}</Text>
                 </View>
                 <Image
                   source={require('@/assets/images/aid.png')}
@@ -364,7 +366,7 @@ export default function MainScreen() {
                   // Show all categories
                   <ScrollView style={styles.tipsList}>
                     <Text style={styles.instructionText}>
-                      Tap on any category to see detailed tips
+                      {t('home.tapCategoryInstruction')}
                     </Text>
                     {firstAidTips.map((tip) => (
                       <TouchableOpacity 
@@ -396,7 +398,7 @@ export default function MainScreen() {
                       </Text>
                     </View>
                     
-                    <Text style={styles.detailedTipsTitle}>Prevention Tips:</Text>
+                    <Text style={styles.detailedTipsTitle}>{t('home.preventionTipsTitle')}</Text>
                     
                     {selectedTip.preventionTips.map((tip, index) => (
                       <View key={index} style={styles.detailedTipItem}>
@@ -413,7 +415,7 @@ export default function MainScreen() {
                     <View style={styles.emergencyNote}>
                       <Ionicons name="warning" size={20} color="#FF6B6B" />
                       <Text style={styles.emergencyNoteText}>
-                        Always call emergency services (911) for serious injuries
+                        {t('home.emergencyNote')}
                       </Text>
                     </View>
                   </ScrollView>
@@ -443,11 +445,11 @@ export default function MainScreen() {
                   />
                 </View>
                 <View style={styles.quizTextContainer}>
-                  <Text style={styles.quizTitle}>Take a quiz to brainstorm</Text>
-                  <Text style={styles.quizSubtitle}>on how well you can save a life</Text>
+                  <Text style={styles.quizTitle}>{t('home.quizTitle')}</Text>
+                  <Text style={styles.quizSubtitle}>{t('home.quizSubtitle')}</Text>
                   
                   <View style={styles.quizButtonContainer}>
-                    <Text style={styles.quizButtonText}>Take Quiz Now</Text>
+                    <Text style={styles.quizButtonText}>{t('home.takeQuiz')}</Text>
                   </View>
                 </View>
               </View>
@@ -468,8 +470,8 @@ export default function MainScreen() {
             >
               <View style={styles.hubContent}>
                 <View style={styles.hubTextContainer}>
-                  <Text style={styles.hubTitle}>First Aid Hub 🚑</Text>
-                  <Text style={styles.hubSubtitle}>Comprehensive first aid resources</Text>
+                  <Text style={styles.hubTitle}>{t('home.hubTitle')} 🚑</Text>
+                  <Text style={styles.hubSubtitle}>{t('home.hubSubtitle')}</Text>
                 </View>
                 <View style={styles.hubIconContainer}>
                   <Image

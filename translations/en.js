@@ -69,7 +69,20 @@ export default {
     },
     "display": {
       "title": "Display",
-      "subtitle": "Text size and appearance"
+      "subtitle": "Customize display settings",
+      "brightness": "Brightness",
+      "textSize": "Text Size",
+      "small": "A",
+      "large": "A",
+      "bold": "B",
+      "textBold": "Text Bold",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "eyeProtection": "Eye Protection",
+      "selectTheme": "Select Theme",
+      "lightMode": "Light Mode",
+      "darkMode": "Dark Mode"
     },
     "terms": {
       "title": "Terms of Use",
