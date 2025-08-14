@@ -1,4 +1,40 @@
-# Welcome to your Expo app 👋
+# Lifeline App 🚑
+
+A comprehensive first aid and emergency medical assistance application.
+
+## 📱 Screenshots
+
+### First Aid Instructions
+![First Aid Instructions](screenshots/image8.jpeg)
+*Detailed first aid instructions for various medical situations*
+
+### Maps Feature
+![Maps](screenshots/image10.jpeg)
+*Maps feature to help users find emergency services*
+
+### Multilingual Support
+![Language Selection](screenshots/image2.jpeg)
+*Supports multiple languages including English, French, Spanish, Twi and more*
+
+### Messages Feature
+![Messages](screenshots/image1.jpeg)
+*Send messages to emergency services*
+
+### Guest Profile
+![Guest Profile](screenshots/image5.jpeg)
+*Guest profile to store user information*
+
+### Settings 
+![Settings](screenshots/image3.jpeg)
+*Settings to change user information*
+
+### Get Started
+![Get Started](screenshots/image7.jpeg)
+*Get started to start using the app*
+
+---
+
+## Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
