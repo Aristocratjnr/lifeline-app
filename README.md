@@ -4,47 +4,44 @@ A comprehensive first aid and emergency medical assistance application.
 
 ## 📱 Screenshots
 
-### First Aid Instructions
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image8.jpeg" alt="First Aid Instructions" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+  <!-- Row 1 -->
+  <div style="text-align: center;">
+    <img src="screenshots/image8.jpeg" alt="First Aid" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">First Aid Instructions</p>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="screenshots/image10.jpeg" alt="Maps" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Maps</p>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="screenshots/image2.jpeg" alt="Languages" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Multilingual</p>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="screenshots/image1.jpeg" alt="Messages" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Messages</p>
+  </div>
+  
+  <!-- Row 2 -->
+  <div style="text-align: center;">
+    <img src="screenshots/image5.jpeg" alt="Profile" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Guest Profile</p>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="screenshots/image3.jpeg" alt="Settings" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Settings</p>
+  </div>
+  
+  <div style="text-align: center;">
+    <img src="screenshots/image7.jpeg" alt="Get Started" style="width: 100%; max-width: 250px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Get Started</p>
+  </div>
 </div>
-*Detailed first aid instructions for various medical situations*
-
-### Maps Feature
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image10.jpeg" alt="Maps Feature" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Maps feature to help users find emergency services*
-
-### Multilingual Support
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image2.jpeg" alt="Multilingual Support" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Supports multiple languages including English, French, Spanish, Twi and more*
-
-### Messages Feature
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image1.jpeg" alt="Messages Feature" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Send messages to emergency services*
-
-### Guest Profile
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image5.jpeg" alt="Guest Profile" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Guest profile to store user information*
-
-### Settings
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image3.jpeg" alt="Settings" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Settings to change user information*
-
-### Get Started
-<div style="display: flex; justify-content: center; margin: 10px 0;">
-  <img src="screenshots/image7.jpeg" alt="Get Started" style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
-*Get started to start using the app*
 
 ---
 
