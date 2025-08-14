@@ -3,11 +3,18 @@
     "title": "Settings",
     "profile": {
       "title": "Profile",
-      "subtitle": "Manage your profile"
+      "subtitle": "Manage your profile",
+      "selectGender": ""
     },
     "notifications": {
       "title": "Notifications",
-      "subtitle": "Configure alerts"
+      "subtitle": "Configure alerts",
+      "general": "",
+      "dailyTips": "",
+      "appUpdate": "",
+      "upToDate": "",
+      "email": "",
+      "sound": ""
     },
     "language": {
       "title": "Language",
@@ -40,7 +47,9 @@
     },
     "offline": {
       "title": "Offline Content",
-      "subtitle": "Manage downloads"
+      "subtitle": "Manage downloads",
+      "headerTitle": "",
+      "description": ""
     },
     "help": {
       "title": "Help",
@@ -51,7 +60,16 @@
       "subtitle": "Remove your data"
     },
     "brightness": "Brightness",
-    "eyeProtection": "Eye Protection"
+    "eyeProtection": "Eye Protection",
+    "profileSettings": {
+      "passwordPlaceholder": "",
+      "valuePlaceholder": "",
+      "maskedPassword": "",
+      "saveChanges": "",
+      "male": "",
+      "female": "",
+      "other": ""
+    }
   },
   "common": {
     "on": "On",
@@ -65,7 +83,11 @@
     "noResults": "No languages found",
     "tryAgain": "Try a different search term",
     "comingSoon": "MORE LANGUAGES COMING SOON!!!",
-    "submit": "SUBMIT"
+    "submit": "SUBMIT",
+    "error": "",
+    "languageChangeFailed": "",
+    "noLanguageSelected": "",
+    "pleaseSelectLanguage": ""
   },
   "dashboard": {
     "healthStats": "Health Stats",
@@ -308,6 +330,180 @@
       "insectBite": "INSECT\nBITE",
       "sunBurn": "SUN\nBURN",
       "fertile": "Febrile"
+    },
+    "splinter": {
+      "title": "",
+      "initialAssessment": "",
+      "initialDescription": "",
+      "removal": "",
+      "removalDescription": "",
+      "cleaning": "",
+      "cleaningDescription": "",
+      "whenToSeekHelp": "",
+      "whenToSeekHelpDescription": ""
+    }
+  },
+  "buttons": {
+    "next": ""
+  },
+  "termsUse": {
+    "share": {
+      "message": "",
+      "title": ""
+    },
+    "header": "",
+    "intro": {
+      "agreement": "",
+      "rightsResponsibilities": "",
+      "reviewTerms": ""
+    },
+    "seeMore": "",
+    "links": {
+      "privacyPolicy": "",
+      "faqs": "",
+      "shareApp": "",
+      "visitWebsite": ""
+    },
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "",
+        "description": ""
+      },
+      "useOfApplication": {
+        "title": "",
+        "description": ""
+      },
+      "userResponsibilities": {
+        "title": "",
+        "description": ""
+      },
+      "intellectualProperty": {
+        "title": "",
+        "description": ""
+      },
+      "disclaimerOfWarranties": {
+        "title": "",
+        "description": ""
+      },
+      "limitationOfLiability": {
+        "title": "",
+        "description": ""
+      },
+      "updatesAndChanges": {
+        "title": "",
+        "description": ""
+      },
+      "contactInformation": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+  "profile": {
+    "title": "",
+    "description": "",
+    "country": "",
+    "confirmLocation": "",
+    "selectCountry": ""
+  },
+  "help": {
+    "header": "",
+    "title": "",
+    "description": "",
+    "donate": "",
+    "startLiveChat": "",
+    "contactUs": "",
+    "email": "",
+    "phone": "",
+    "solution": ""
+  },
+  "guest": {
+    "title": "",
+    "description": "",
+    "name": "",
+    "namePlaceholder": "",
+    "phoneNumber": "",
+    "preferredLanguages": "",
+    "gender": "",
+    "selectGender": "",
+    "confirm": ""
+  },
+  "faqs": {
+    "questions": {
+      "whatIsLifeline": "",
+      "whatIsLifelineAnswer": "",
+      "substituteForProfessionalHelp": "",
+      "substituteForProfessionalHelpAnswer": "",
+      "symptomCheckerWork": "",
+      "symptomCheckerWorkAnswer": "",
+      "symptomCheckerDiagnose": "",
+      "symptomCheckerDiagnoseAnswer": "",
+      "firstAidGuides": "",
+      "firstAidGuidesAnswer": "",
+      "updateLifeline": "",
+      "updateLifelineAnswer": "",
+      "offlineUse": "",
+      "offlineUseAnswer": "",
+      "dataSecurity": "",
+      "dataSecurityAnswer": "",
+      "contactSupport": "",
+      "contactSupportAnswer": ""
+    },
+    "headerTitle": "",
+    "introTitle": "",
+    "introText": "",
+    "contactTitle": "",
+    "contactText": "",
+    "contactButton": ""
+  },
+  "empower": {
+    "title": "",
+    "description": ""
+  },
+  "donate": {
+    "title": "",
+    "subtitle": "",
+    "donateNow": "",
+    "paymentDetails": "",
+    "telecelCash": "",
+    "mtnMomo": "",
+    "davidAccount": "",
+    "bankGcb": "",
+    "daniellaAccount": "",
+    "usdtWallet": "",
+    "thankYouAlert": "",
+    "close": ""
+  },
+  "completed": {
+    "title": "",
+    "subtitle": "",
+    "goHome": ""
+  },
+  "about": {
+    "header": "",
+    "aboutLifeline": "",
+    "lifelineDescription": "",
+    "appVersion": "",
+    "versionNumber": "",
+    "acknowledgement": "",
+    "acknowledgementDescription": "",
+    "daniellaCredit": "",
+    "davidCredit": "",
+    "specialMention": "",
+    "stephenCredit": ""
+  },
+  "Calling emergency services": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "Finding a doctor near you": {
+    "": {
+      "": {
+        "": ""
+      }
     }
   }
 }
