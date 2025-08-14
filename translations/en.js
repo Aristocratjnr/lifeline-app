@@ -24,6 +24,9 @@ export default {
   "auth": {
     "login": "Log In",
     "signup": "Sign Up",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "or": "or",
     "forgotPassword": "Forgot Password?",
     "email": "Email",
     "password": "Password",
@@ -60,11 +63,34 @@ export default {
   // Settings
   "settings": {
     "title": "Settings",
-    "language": "Language",
+    "language": {
+      "title": "Language",
+      "subtitle": "Change app language"
+    },
+    "display": {
+      "title": "Display",
+      "subtitle": "Text size and appearance"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "subtitle": "App terms and conditions"
+    },
+    "about": {
+      "title": "About",
+      "subtitle": "App info and version"
+    },
+    "help": {
+      "title": "Help",
+      "subtitle": "Get support and FAQs"
+    },
+    "guest": {
+      "title": "Guest Settings",
+      "authTitle": "Sign in to access more features",
+      "authSubtitle": "Get personalized emergency contacts, save preferences, and sync across devices"
+    },
     "notifications": "Notifications",
     "theme": "Theme",
     "privacy": "Privacy",
-    "about": "About",
     "logout": "Log out"
   },
 

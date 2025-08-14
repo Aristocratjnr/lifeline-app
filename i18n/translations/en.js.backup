@@ -26,6 +26,9 @@ export default {
   "auth": {
     "login": "Log In",
     "signup": "Sign Up",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "or": "or",
     "forgotPassword": "Forgot Password?",
     "email": "Email",
     "password": "Password",

@@ -103,6 +103,16 @@ export default function Settings() {
         {/* Settings Grid */}
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.grid}>
+            {!username && (
+              <SettingItem
+                icon={<Ionicons name="person-outline" size={24} color="black" />}
+                title={t('settings.guest.title')}
+                subtitle={t('settings.guest.subtitle')}
+                onPress={() => router.push('/screens/guest-settings')}
+                textSize={textSize}
+                fontBold={fontBold}
+              />
+            )}
             <SettingItem
               icon={<Ionicons name="person-outline" size={24} color="black" />}
               title={t('settings.profile.title')}

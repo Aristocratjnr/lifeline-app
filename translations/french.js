@@ -23,12 +23,15 @@ export default {
 
   // Auth screens
   "auth": {
-    "login": "Log In",
-    "signup": "Sign Up",
-    "forgotPassword": "Forgot Password?",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password"
+    "login": "Se connecter",
+    "signup": "S'inscrire",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "or": "ou",
+    "forgotPassword": "Mot de passe oublié?",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe"
   },
 
   // Doctor screen
@@ -61,11 +64,34 @@ export default {
   // Settings
   "settings": {
     "title": "Paramètres",
-    "language": "Langue",
+    "language": {
+      "title": "Langue",
+      "subtitle": "Changer la langue de l'application"
+    },
+    "display": {
+      "title": "Affichage",
+      "subtitle": "Taille du texte et apparence"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "subtitle": "Termes et conditions de l'application"
+    },
+    "about": {
+      "title": "À propos",
+      "subtitle": "Informations et version de l'application"
+    },
+    "help": {
+      "title": "Aide",
+      "subtitle": "Obtenir du support et des FAQ"
+    },
+    "guest": {
+      "title": "Paramètres Invité",
+      "authTitle": "Connectez-vous pour accéder à plus de fonctionnalités",
+      "authSubtitle": "Obtenez des contacts d'urgence personnalisés, sauvegardez les préférences et synchronisez sur les appareils"
+    },
     "notifications": "Notifications",
     "theme": "Thème",
     "privacy": "Confidentialité",
-    "about": "À propos",
     "logout": "Se déconnecter"
   },
 

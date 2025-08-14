@@ -213,7 +213,7 @@ export default function MainScreen() {
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/settings')}
+        onPress={() => router.push('/screens/guest-settings')}
       >
         <MaterialIcons name="settings" size={24} color="#666" />
         <Text style={styles.tabText}>Settings</Text>

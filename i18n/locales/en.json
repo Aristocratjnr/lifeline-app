@@ -1,6 +1,23 @@
 {
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account? ",
+    "alreadyHaveAccount": "Already have an account? ",
+    "or": "or"
+  },
   "settings": {
     "title": "Settings",
+    "guest": {
+      "title": "Guest Settings",
+      "subtitle": "Access basic settings",
+      "authTitle": "Sign in to access more features",
+      "authSubtitle": "Get personalized emergency contacts, save preferences, and sync across devices"
+    },
     "profile": {
       "title": "Profile",
       "subtitle": "Manage your profile",
@@ -18,11 +35,11 @@
     },
     "language": {
       "title": "Language",
-      "subtitle": "Change language"
+      "subtitle": "Change app language"
     },
     "display": {
       "title": "Display",
-      "subtitle": "Text & appearance",
+      "subtitle": "Text size and appearance",
       "brightness": "Brightness",
       "textSize": "Text Size",
       "small": "A",
@@ -39,11 +56,11 @@
     },
     "terms": {
       "title": "Terms of Use",
-      "subtitle": "Legal information"
+      "subtitle": "App terms and conditions"
     },
     "about": {
       "title": "About",
-      "subtitle": "App information"
+      "subtitle": "App info and version"
     },
     "offline": {
       "title": "Offline Content",
@@ -53,7 +70,7 @@
     },
     "help": {
       "title": "Help",
-      "subtitle": "Support & FAQ"
+      "subtitle": "Get support and FAQs"
     },
     "delete": {
       "title": "Delete Account",

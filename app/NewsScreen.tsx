@@ -1,9 +1,10 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Easing,
   FlatList,
   Linking,
   RefreshControl,
@@ -34,6 +35,43 @@ type NewsArticle = {
 };
 
 export default function FirstAidNewsScreen() {
+  // Background animation
+  const gradientAnim = useRef(new Animated.Value(0)).current;
+  
+  useEffect(() => {
+    const animateGradient = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(gradientAnim, {
+            toValue: 1,
+            duration: 10000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false,
+          }),
+          Animated.timing(gradientAnim, {
+            toValue: 0,
+            duration: 10000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false,
+          }),
+        ])
+      ).start();
+    };
+    
+    animateGradient();
+    return () => gradientAnim.stopAnimation();
+  }, [gradientAnim]);
+  
+  const color1 = gradientAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#F0F9FF', '#EFF6FF'],
+  });
+  
+  const color2 = gradientAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#EFF6FF', '#F0F9FF'],
+  });
+
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -306,6 +344,23 @@ export default function FirstAidNewsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+<Animated.View 
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            backgroundColor: color1,
+          },
+        ]}
+      />
+      <Animated.View 
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            opacity: gradientAnim,
+            backgroundColor: color2,
+          },
+        ]}
+      />
       <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
       
       <View style={styles.gradient}>
@@ -403,10 +458,12 @@ export default function FirstAidNewsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: '#F8FAFC',
   },
   gradient: {
     flex: 1,
+    backgroundColor: '#F8FAFC',
+    backgroundImage: 'linear-gradient(135deg, #F8FAFC 0%, #F0F9FF 50%, #EFF6FF 100%)',
   },
   header: {
     paddingHorizontal: 20,
@@ -438,7 +495,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: '500',
     color: '#1F2937',
     marginBottom: 4,
   },
@@ -451,15 +508,18 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 3,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
+    backdropFilter: 'blur(10px)',
   },
   statItem: {
     alignItems: 'center',
@@ -486,11 +546,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    padding: 8,
-    borderRadius: 8,
+    padding: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   refreshContainerActive: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: 'rgba(254, 226, 226, 0.7)',
+    transform: [{ scale: 0.98 }],
   },
   refreshIcon: {
     marginRight: 6,
@@ -517,8 +586,16 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   cardGradient: {
-    borderRadius: 0,
+    borderRadius: 12,
     overflow: 'hidden',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
   },
   imageContainer: {
     width: '100%',

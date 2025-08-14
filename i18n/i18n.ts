@@ -8,14 +8,14 @@ import { initReactI18next } from 'react-i18next';
 import arabic from './locales/arabic.json';
 import dagbani from './locales/dagbani.json';
 import en from './locales/en.json';
+import spanish from './locales/es.json';
 import ewe from './locales/ewe.json';
-import frafra from './locales/frafra.json';
 import french from './locales/fr.json';
+import frafra from './locales/frafra.json';
 import ga from './locales/ga.json';
 import hausa from './locales/hausa.json';
 import hindi from './locales/hindi.json';
 import russian from './locales/russian.json';
-import spanish from './locales/es.json';
 import twi from './locales/twi.json';
 
 // Define supported languages
@@ -54,10 +54,6 @@ i18n
     lng: detectLanguage(),
     fallbackLng: 'en',
 
-    interpolation: {
-      escapeValue: false, // React already escapes
-    },
-
     debug: __DEV__,
 
     missingKeyHandler: (lng, ns, key) => {
@@ -66,7 +62,28 @@ i18n
       }
     },
 
+    // Enable nested translations with dot notation
+    keySeparator: '.',
+    nsSeparator: ':',
+    
+    // Return the key if translation is missing
     returnEmptyString: false,
+    // Disable returnObjects to prevent React rendering issues
+    returnObjects: false,
+    returnNull: false,
+    
+    // Interpolation configuration
+    interpolation: {
+      escapeValue: false, // Not needed for React as it escapes by default
+      format: (value, format, lng) => {
+        if (typeof value === 'string') {
+          if (format === 'uppercase') return value.toUpperCase();
+          if (format === 'lowercase') return value.toLowerCase();
+        }
+        return value;
+      },
+      skipOnVariables: false
+    },
 
     defaultNS: 'translation',
     ns: ['translation'],

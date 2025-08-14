@@ -89,6 +89,12 @@
       "male": "",
       "female": "",
       "other": ""
+    },
+    "guest": {
+      "title": "",
+      "authTitle": "",
+      "authSubtitle": "",
+      "subtitle": ""
     }
   },
   "common": {
@@ -505,5 +511,16 @@
     },
     "placeholder": "Type your health question here...",
     "disclaimer": "This is not a substitute for professional medical advice. Always consult a healthcare professional for medical concerns."
+  },
+  "auth": {
+    "signIn": "",
+    "or": "",
+    "signUp": "",
+    "createAccount": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account? ",
+    "alreadyHaveAccount": "Already have an account? "
   }
 }

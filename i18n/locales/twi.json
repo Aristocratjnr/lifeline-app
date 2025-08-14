@@ -1,6 +1,23 @@
 {
+  "auth": {
+    "signIn": "Hyɛ mu",
+    "signUp": "Yɛ Dwumadi Foforo",
+    "createAccount": "Yɛ Nkontabuo Foforo",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Wo werɛ afi Password no ho?",
+    "dontHaveAccount": "Wonni nkontabuo biara? ",
+    "alreadyHaveAccount": "Wowo nkontabuo wɔ hɔ? ",
+    "or": "ANAASƐ"
+  },
   "settings": {
     "title": "NHYEHYƐE",
+    "guest": {
+      "title": "Ɔhɔhoɔ Mɔde",
+      "subtitle": "Kɔ nhyehyɛe a ɛtɔ mmere so",
+      "authTitle": "Hyɛ mu anaasɛ Yɛ Wo Dwumadi Foforo",
+      "authSubtitle": "Yɛ wo ho dwumadi foforo na wua nhyehyɛe nyinaa na fa wo nkonta so"
+    },
     "profile": {
       "title": "Wo ho nsɛm",
       "subtitle": "Kyerɛw wo din",
