@@ -421,7 +421,8 @@ export default {
     "title": "Medical Assistant",
     "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
     "callDoctor": "Call Doctor Now",
-    "connecting": "Connecting to doctor..."
+    "connecting": "Connecting to doctor...",
+    "available247": "Available 24/7"
   },
   "callLogs": {
     "title": "Call Logs",
