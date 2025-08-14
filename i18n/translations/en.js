@@ -146,6 +146,7 @@ export default {
     },
     "guest": {
       "title": "Guest Settings",
+      "subtitle": "Sign in to access all features and save your preferences",
       "authTitle": "Sign in to access more features",
       "authSubtitle": "Get personalized emergency contacts, save preferences, and sync across devices"
     }
