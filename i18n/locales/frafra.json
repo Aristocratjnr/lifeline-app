@@ -3,11 +3,18 @@
     "title": "SELINSE",
     "profile": {
       "title": "A yure",
-      "subtitle": "Tari a yure"
+      "subtitle": "Tari a yure",
+      "selectGender": ""
     },
     "notifications": {
       "title": "Nɔɔre",
-      "subtitle": "Kɔ nɔɔre"
+      "subtitle": "Kɔ nɔɔre",
+      "general": "",
+      "dailyTips": "",
+      "appUpdate": "",
+      "upToDate": "",
+      "email": "",
+      "sound": ""
     },
     "language": {
       "title": "Ninkanse",
@@ -40,7 +47,9 @@
     },
     "offline": {
       "title": "Offline zukɔ",
-      "subtitle": "Download tɔɔ offline"
+      "subtitle": "Download tɔɔ offline",
+      "headerTitle": "",
+      "description": ""
     },
     "help": {
       "title": "Sɔɔlengo ni Bɔɔkum",
@@ -51,7 +60,22 @@
       "subtitle": "Kpi a account"
     },
     "brightness": "Yelɛm",
-    "eyeProtection": "Ninkɔlɔk bɔɔkum"
+    "eyeProtection": "Ninkɔlɔk bɔɔkum",
+    "profileSettings": {
+      "passwordPlaceholder": "",
+      "valuePlaceholder": "",
+      "maskedPassword": "",
+      "saveChanges": "",
+      "male": "",
+      "female": "",
+      "other": ""
+    },
+    "guest": {
+      "title": "",
+      "authTitle": "",
+      "authSubtitle": "",
+      "subtitle": ""
+    }
   },
   "common": {
     "on": "A wɛla",
@@ -65,7 +89,11 @@
     "noResults": "Ninkanse kɛ ka nyɛ",
     "tryAgain": "Sɔɔri fɔk",
     "comingSoon": "NINKANSE FƆHƆ BA ZAMA!!!",
-    "submit": "KƆLI"
+    "submit": "KƆLI",
+    "error": "",
+    "languageChangeFailed": "",
+    "noLanguageSelected": "",
+    "pleaseSelectLanguage": ""
   },
   "dashboard": {
     "healthStats": "Kɔlgo Stats",
@@ -286,6 +314,213 @@
       "insectBite": "INSECT\nBITE",
       "sunBurn": "SUN\nBURN",
       "fertile": "Febrile"
+    },
+    "splinter": {
+      "title": "",
+      "initialAssessment": "",
+      "initialDescription": "",
+      "removal": "",
+      "removalDescription": "",
+      "cleaning": "",
+      "cleaningDescription": "",
+      "whenToSeekHelp": "",
+      "whenToSeekHelpDescription": ""
     }
+  },
+  "buttons": {
+    "next": ""
+  },
+  "termsUse": {
+    "share": {
+      "message": "",
+      "title": ""
+    },
+    "header": "",
+    "intro": {
+      "agreement": "",
+      "rightsResponsibilities": "",
+      "reviewTerms": ""
+    },
+    "seeMore": "",
+    "links": {
+      "privacyPolicy": "",
+      "faqs": "",
+      "shareApp": "",
+      "visitWebsite": ""
+    },
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "",
+        "description": ""
+      },
+      "useOfApplication": {
+        "title": "",
+        "description": ""
+      },
+      "userResponsibilities": {
+        "title": "",
+        "description": ""
+      },
+      "intellectualProperty": {
+        "title": "",
+        "description": ""
+      },
+      "disclaimerOfWarranties": {
+        "title": "",
+        "description": ""
+      },
+      "limitationOfLiability": {
+        "title": "",
+        "description": ""
+      },
+      "updatesAndChanges": {
+        "title": "",
+        "description": ""
+      },
+      "contactInformation": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+  "profile": {
+    "title": "",
+    "description": "",
+    "country": "",
+    "confirmLocation": "",
+    "selectCountry": ""
+  },
+  "help": {
+    "header": "",
+    "title": "",
+    "description": "",
+    "donate": "",
+    "startLiveChat": "",
+    "contactUs": "",
+    "email": "",
+    "phone": "",
+    "solution": ""
+  },
+  "guest": {
+    "title": "",
+    "description": "",
+    "name": "",
+    "namePlaceholder": "",
+    "phoneNumber": "",
+    "preferredLanguages": "",
+    "gender": "",
+    "selectGender": "",
+    "confirm": ""
+  },
+  "faqs": {
+    "questions": {
+      "whatIsLifeline": "",
+      "whatIsLifelineAnswer": "",
+      "substituteForProfessionalHelp": "",
+      "substituteForProfessionalHelpAnswer": "",
+      "symptomCheckerWork": "",
+      "symptomCheckerWorkAnswer": "",
+      "symptomCheckerDiagnose": "",
+      "symptomCheckerDiagnoseAnswer": "",
+      "firstAidGuides": "",
+      "firstAidGuidesAnswer": "",
+      "updateLifeline": "",
+      "updateLifelineAnswer": "",
+      "offlineUse": "",
+      "offlineUseAnswer": "",
+      "dataSecurity": "",
+      "dataSecurityAnswer": "",
+      "contactSupport": "",
+      "contactSupportAnswer": ""
+    },
+    "headerTitle": "",
+    "introTitle": "",
+    "introText": "",
+    "contactTitle": "",
+    "contactText": "",
+    "contactButton": ""
+  },
+  "empower": {
+    "title": "",
+    "description": ""
+  },
+  "donate": {
+    "title": "",
+    "subtitle": "",
+    "donateNow": "",
+    "paymentDetails": "",
+    "telecelCash": "",
+    "mtnMomo": "",
+    "davidAccount": "",
+    "bankGcb": "",
+    "daniellaAccount": "",
+    "usdtWallet": "",
+    "thankYouAlert": "",
+    "close": ""
+  },
+  "completed": {
+    "title": "",
+    "subtitle": "",
+    "goHome": ""
+  },
+  "about": {
+    "header": "",
+    "aboutLifeline": "",
+    "lifelineDescription": "",
+    "appVersion": "",
+    "versionNumber": "",
+    "acknowledgement": "",
+    "acknowledgementDescription": "",
+    "daniellaCredit": "",
+    "davidCredit": "",
+    "specialMention": "",
+    "stephenCredit": ""
+  },
+  "Calling emergency services": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "Finding a doctor near you": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "aiAssistant": {
+    "localResponses": {
+      "cpr": "",
+      "choking": "",
+      "burn": "",
+      "bleeding": "",
+      "whoAreYou": "",
+      "whatCanYouDo": "",
+      "who are you": "I'm the Lifeline Medical Assistant, an AI designed to provide first aid guidance and emergency medical information. I'm here to help you handle medical emergencies and provide step-by-step instructions for various health situations.",
+      "what can you do": "I can help you with:\n• First aid procedures\n• Emergency medical guidance\n• Step-by-step instructions for injuries\n• When to call emergency services\n• Basic health and safety information\n\nI cannot diagnose conditions or replace professional medical care. For serious emergencies, always call your local emergency number!"
+    },
+    "welcomeMessage": "",
+    "errorMessage": "",
+    "suggestions": {
+      "0": "How do I perform CPR?",
+      "1": "What are the symptoms of a stroke?",
+      "2": "How to treat a burn?",
+      "3": "What should I include in a first aid kit?"
+    },
+    "placeholder": "Type your health question here...",
+    "disclaimer": "This is not a substitute for professional medical advice. Always consult a healthcare professional for medical concerns."
+  },
+  "auth": {
+    "signIn": "",
+    "or": "",
+    "signUp": "",
+    "createAccount": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account? ",
+    "alreadyHaveAccount": "Already have an account? "
   }
 }

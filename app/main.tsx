@@ -197,7 +197,7 @@ export default function MainScreen() {
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/explore')}
+        onPress={() => router.push('/ExploreScreen')}
       >
         <MaterialIcons name="place" size={24} color="#666" />
         <Text style={styles.tabText}>Maps</Text>
@@ -205,7 +205,7 @@ export default function MainScreen() {
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/firstAidNews')}
+        onPress={() => router.push('/NewsScreen')}
       >
         <MaterialIcons name="newspaper" size={24} color="#666" />
         <Text style={styles.tabText}>News</Text>
@@ -213,7 +213,7 @@ export default function MainScreen() {
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/settings')}
+        onPress={() => router.push('/screens/guest-settings')}
       >
         <MaterialIcons name="settings" size={24} color="#666" />
         <Text style={styles.tabText}>Settings</Text>

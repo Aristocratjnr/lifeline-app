@@ -63,6 +63,13 @@ export default function RootLayout() {
               presentation: 'modal',
               animation: 'slide_from_bottom',
             }} />
+            <Stack.Screen 
+              name="screens/guest-settings" 
+              options={{
+                presentation: 'modal',
+                animation: 'slide_from_bottom',
+              }} 
+            />
           </Stack>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </ThemeProvider>

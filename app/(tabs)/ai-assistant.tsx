@@ -126,7 +126,7 @@ export default function AIAssistantScreen() {
     try {
       setIsLoading(true);
       
-      // Check for local responses first
+      
       const lowerQuery = userQuery.toLowerCase().trim();
       const localResponses = getLocalResponses();
       if (localResponses[lowerQuery]) {

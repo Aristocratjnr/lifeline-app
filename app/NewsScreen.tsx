@@ -1,9 +1,10 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Easing,
   FlatList,
   Linking,
   RefreshControl,
@@ -34,6 +35,43 @@ type NewsArticle = {
 };
 
 export default function FirstAidNewsScreen() {
+  // Background animation
+  const gradientAnim = useRef(new Animated.Value(0)).current;
+  
+  useEffect(() => {
+    const animateGradient = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(gradientAnim, {
+            toValue: 1,
+            duration: 10000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false,
+          }),
+          Animated.timing(gradientAnim, {
+            toValue: 0,
+            duration: 10000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false,
+          }),
+        ])
+      ).start();
+    };
+    
+    animateGradient();
+    return () => gradientAnim.stopAnimation();
+  }, [gradientAnim]);
+  
+  const color1 = gradientAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#F0F9FF', '#EFF6FF'],
+  });
+  
+  const color2 = gradientAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#EFF6FF', '#F0F9FF'],
+  });
+
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -99,7 +137,7 @@ export default function FirstAidNewsScreen() {
       <View style={styles.imageContainer}>
         {loading && !error && (
           <View style={styles.imageLoader}>
-            <ActivityIndicator size="small" color="#FC7A7A" />
+            <ActivityIndicator size="small" color="#6366F1" />
           </View>
         )}
         {!error ? (
@@ -111,7 +149,7 @@ export default function FirstAidNewsScreen() {
               setLoading(false);
               Animated.timing(opacity, { 
                 toValue: 1, 
-                duration: 500, 
+                duration: 300, 
                 useNativeDriver: true 
               }).start();
             }}
@@ -122,7 +160,7 @@ export default function FirstAidNewsScreen() {
           />
         ) : (
           <View style={styles.placeholderImage}>
-            <MaterialIcons name="broken-image" size={40} color="#FC7A7A" />
+            <Ionicons name="image-outline" size={40} color="#9CA3AF" />
             <Text style={styles.placeholderText}>Image unavailable</Text>
           </View>
         )}
@@ -144,43 +182,62 @@ export default function FirstAidNewsScreen() {
 
   const NewsCard = ({ item, index }: { item: NewsArticle; index: number }) => {
     const cardAnimation = React.useRef(new Animated.Value(0)).current;
+    const scaleValue = React.useRef(new Animated.Value(1)).current;
   
     React.useEffect(() => {
-      Animated.timing(cardAnimation, {
+      Animated.spring(cardAnimation, {
         toValue: 1,
-        duration: 600,
-        delay: index * 100,
+        tension: 70,
+        friction: 8,
+        delay: index * 80,
         useNativeDriver: true,
       }).start();
     }, [cardAnimation, index]);
+
+    const onPressIn = () => {
+      Animated.spring(scaleValue, {
+        toValue: 0.98,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const onPressOut = () => {
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        friction: 5,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    };
   
     const animatedStyle = {
       opacity: cardAnimation,
-      transform: [{
-        translateY: cardAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [50, 0],
-        }),
-      }],
+      transform: [
+        {
+          translateY: cardAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [30, 0],
+          }),
+        },
+        { scale: scaleValue },
+      ],
     };
   
     return (
-      <Animated.View style={animatedStyle}>
+      <Animated.View style={[styles.card, animatedStyle]}>
         <TouchableOpacity
-          style={styles.card}
-          activeOpacity={0.92}
+          activeOpacity={0.9}
           onPress={() => item.url && Linking.openURL(item.url)}
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
         >
-          <LinearGradient
-            colors={['#fff', '#FEFEFE']}
-            style={styles.cardGradient}
-          >
+          <View style={styles.cardGradient}>
             {item.image ? (
               <FadeInImage uri={item.image} />
             ) : (
               <View style={styles.imageContainer}>
                 <View style={styles.placeholderImage}>
-                  <MaterialIcons name="article" size={48} color="#FC7A7A" />
+                  <Ionicons name="newspaper-outline" size={48} color="#6366F1" />
                   <Text style={styles.placeholderText}>Health News</Text>
                 </View>
               </View>
@@ -188,7 +245,7 @@ export default function FirstAidNewsScreen() {
             
             <View style={styles.cardContent}>
               <View style={styles.categoryBadge}>
-                <MaterialIcons name="local-hospital" size={14} color="#10B981" />
+                <Ionicons name="medkit-outline" size={14} color="#6366F1" />
                 <Text style={styles.categoryText}>Health</Text>
               </View>
               
@@ -204,23 +261,21 @@ export default function FirstAidNewsScreen() {
               
               <View style={styles.cardFooter}>
                 <View style={styles.sourceContainer}>
-                  <View style={styles.sourceIcon}>
-                    <MaterialIcons name="public" size={14} color="#6B7280" />
-                  </View>
+                  <Ionicons name="globe-outline" size={14} color="#6B7280" style={styles.sourceIcon} />
                   <Text style={styles.cardSource} numberOfLines={1}>
                     {item.source || 'Unknown Source'}
                   </Text>
                 </View>
                 
                 <View style={styles.timeContainer}>
-                  <MaterialIcons name="access-time" size={14} color="#6B7280" />
+                  <Ionicons name="time-outline" size={14} color="#6B7280" />
                   <Text style={styles.cardDate}>
                     {item.published_at ? formatTimeAgo(item.published_at) : ''}
                   </Text>
                 </View>
               </View>
             </View>
-          </LinearGradient>
+          </View>
         </TouchableOpacity>
       </Animated.View>
     );
@@ -232,22 +287,50 @@ export default function FirstAidNewsScreen() {
 
   const LoadingComponent = () => (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#FC7A7A" />
-      <Text style={styles.loadingText}>Loading health news...</Text>
+      <View style={styles.loadingAnimation}>
+        <Ionicons name="newspaper" size={48} color="#E0E7FF" />
+        <ActivityIndicator size="large" color="#6366F1" style={styles.loadingSpinner} />
+      </View>
+      <Text style={styles.loadingText}>Loading Health News</Text>
+      <Text style={styles.loadingSubtext}>Bringing you the latest updates...</Text>
     </View>
   );
 
-  const ErrorComponent = () => (
-    <View style={styles.errorContainer}>
-      <MaterialIcons name="error-outline" size={48} color="#FC7A7A" />
-      <Text style={styles.errorTitle}>Oops! Something went wrong</Text>
-      <Text style={styles.errorText}>{error}</Text>
-      <TouchableOpacity style={styles.retryButton} onPress={() => fetchNews(1)}>
-        <MaterialIcons name="refresh" size={20} color="#fff" />
-        <Text style={styles.retryButtonText}>Try Again</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const ErrorComponent = () => {
+    const [isRetrying, setIsRetrying] = useState(false);
+    
+    const handleRetry = () => {
+      setIsRetrying(true);
+      fetchNews(1);
+      setTimeout(() => setIsRetrying(false), 1500);
+    };
+    
+    return (
+      <View style={styles.errorContainer}>
+        <View style={styles.errorIconContainer}>
+          <Ionicons name="alert-circle-outline" size={64} color="#EF4444" />
+        </View>
+        <Text style={styles.errorTitle}>Connection Error</Text>
+        <Text style={styles.errorText}>
+          {error || 'Unable to load health news at this time.'}
+        </Text>
+        <TouchableOpacity 
+          style={[styles.retryButton, isRetrying && styles.retryButtonDisabled]} 
+          onPress={handleRetry}
+          disabled={isRetrying}
+        >
+          {isRetrying ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <>
+              <Ionicons name="refresh" size={18} color="#fff" style={styles.retryIcon} />
+              <Text style={styles.retryButtonText}>Try Again</Text>
+            </>
+          )}
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const headerAnimatedStyle = {
     opacity: headerAnimation,
@@ -261,33 +344,43 @@ export default function FirstAidNewsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF5F5" />
+<Animated.View 
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            backgroundColor: color1,
+          },
+        ]}
+      />
+      <Animated.View 
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            opacity: gradientAnim,
+            backgroundColor: color2,
+          },
+        ]}
+      />
+      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
       
-      <LinearGradient
-        colors={['#FFFFFF', '#FFFFFF']}
-        style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
+      <View style={styles.gradient}>
         <Animated.View style={[styles.header, headerAnimatedStyle]}>
           <View style={styles.headerTop}>
             <View style={styles.iconContainer}>
               <LinearGradient
-                colors={['#FFFFF', '#FFFFF']}
+                colors={['#EEF2FF', '#E0E7FF']}
                 style={styles.iconGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
               >
-                <Animated.Image
-                  source={require('@/assets/images/woman.png')}
-                  style={{ width: 40, height: 40, borderRadius: 20 }}
-                  resizeMode="cover"
-                />
+                <Ionicons name="newspaper" size={24} color="#4F46E5" />
               </LinearGradient>
             </View>
             
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Health News & Alerts</Text>
               <Text style={styles.subtitle}>
-                Stay informed with the latest health emergencies and first aid updates
+                Stay informed with the latest health updates
               </Text>
             </View>
           </View>
@@ -299,14 +392,14 @@ export default function FirstAidNewsScreen() {
             </View>
             <View style={styles.statDivider} />
             <TouchableOpacity 
-              style={styles.refreshContainer} 
+              style={[styles.refreshContainer, (isRefreshing || isLoading) && styles.refreshContainerActive]} 
               onPress={onRefresh} 
               disabled={isRefreshing || isLoading}
             >
-              <MaterialIcons 
-                name="refresh" 
-                size={20} 
-                color="#FC7A7A" 
+              <Ionicons 
+                name="reload" 
+                size={18} 
+                color="#4F46E5" 
                 style={[
                   styles.refreshIcon,
                   (isRefreshing || isLoading) && styles.refreshingIcon
@@ -357,7 +450,7 @@ export default function FirstAidNewsScreen() {
             showsVerticalScrollIndicator={false}
           />
         )}
-      </LinearGradient>
+      </View>
     </SafeAreaView>
   );
 }
@@ -365,10 +458,12 @@ export default function FirstAidNewsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: '#F8FAFC',
   },
   gradient: {
     flex: 1,
+    backgroundColor: '#F8FAFC',
+    backgroundImage: 'linear-gradient(135deg, #F8FAFC 0%, #F0F9FF 50%, #EFF6FF 100%)',
   },
   header: {
     paddingHorizontal: 20,
@@ -413,15 +508,18 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 3,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
+    backdropFilter: 'blur(10px)',
   },
   statItem: {
     alignItems: 'center',
@@ -448,6 +546,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    padding: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  refreshContainerActive: {
+    backgroundColor: 'rgba(254, 226, 226, 0.7)',
+    transform: [{ scale: 0.98 }],
   },
   refreshIcon: {
     marginRight: 6,
@@ -474,8 +586,16 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   cardGradient: {
-    borderRadius: 0,
+    borderRadius: 12,
     overflow: 'hidden',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
   },
   imageContainer: {
     width: '100%',
@@ -582,7 +702,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 60,
+    padding: 32,
+  },
+  loadingAnimation: {
+    position: 'relative',
+    marginBottom: 24,
+  },
+  loadingSpinner: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  loadingSubtext: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    fontFamily: 'System',
   },
   loadingText: {
     fontSize: 16,
@@ -594,8 +731,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-    paddingTop: 60,
+    padding: 32,
+  },
+  errorIconContainer: {
+    marginBottom: 16,
+  },
+  retryButtonDisabled: {
+    opacity: 0.7,
+  },
+  retryIcon: {
+    marginRight: 6,
   },
   errorTitle: {
     fontSize: 20,
