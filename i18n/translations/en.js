@@ -210,8 +210,8 @@ export default {
 
   // Home screen
   "home": {
-    "title": "Hello, welcome",
-    "subtitle": "In an emergency, we're your lifeline",
+    "title": "Welcome to LIFELINE",
+    "subtitle": "Your trusted first aid & emergency companion",
     "tapForTips": "Tap to get your first aid tips",
     "featureText": "Always Ready - Always Safe",
     "signIn": "Sign In",
