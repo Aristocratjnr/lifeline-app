@@ -12,7 +12,8 @@ export default {
     "search": "Search",
     "off": "Off",
     "on": "On",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "close": "Close"
   },
 
   // Navigation and tabs
@@ -245,7 +246,10 @@ export default {
     "bankGcb": "Bank(GCB):",
     "usdtWallet": "USDT Wallet TRC20:",
     "close": "Close",
-    "thankYouAlert": "Thank you so much! 🥲"
+    "thankYouAlert": "Thank you so much! 🥲",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
   },
 
   // Help screen
@@ -263,6 +267,8 @@ export default {
 
   // About screen
   "about": {
+    "title": "About Us",
+    "aboutUs": "About Us",
     "header": "ABOUT",
     "aboutLifeline": "About LIFELINE",
     "lifelineDescription": "Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you're prepared to act quickly and effectively.",

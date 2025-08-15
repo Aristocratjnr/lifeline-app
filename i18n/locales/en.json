@@ -92,7 +92,8 @@
     "on": "On",
     "off": "Off",
     "next": "NEXT",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "languages": {
     "title": "LANGUAGE",
@@ -478,18 +479,21 @@
     "description": ""
   },
   "donate": {
-    "title": "",
-    "subtitle": "",
-    "donateNow": "",
-    "paymentDetails": "",
-    "telecelCash": "",
-    "mtnMomo": "",
-    "davidAccount": "",
-    "bankGcb": "",
-    "daniellaAccount": "",
-    "usdtWallet": "",
-    "thankYouAlert": "",
-    "close": ""
+    "title": "Support Lifeline",
+    "subtitle": "Your donation helps us continue providing life-saving first aid information and emergency assistance to those in need.",
+    "donateNow": "Donate Now",
+    "paymentDetails": "Payment Details",
+    "telecelCash": "Telecel Cash",
+    "mtnMomo": "MTN Mobile Money",
+    "davidAccount": "David Asiedu",
+    "bankGcb": "GCB Bank Account",
+    "daniellaAccount": "Daniella Asiedu",
+    "usdtWallet": "USDT Wallet (TRC20)",
+    "thankYouAlert": "Thank you for your generous donation! Your support helps save lives.",
+    "close": "Close",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
   },
   "completed": {
     "title": "",

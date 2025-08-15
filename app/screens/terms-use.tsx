@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 import {
   ImageBackground,
   Modal,
@@ -29,20 +30,22 @@ type LinkItemProps = {
   title: string;
   hasArrow?: boolean;
   onPress?: () => void;
+  darkMode?: boolean;
 };
 
-const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
+const LinkItem = ({ title, hasArrow = true, onPress, darkMode = false }: LinkItemProps) => (
   <TouchableOpacity style={styles.linkItem} onPress={onPress}>
-    <Text style={styles.linkText}>{title}</Text>
-    {hasArrow && <Ionicons name="chevron-forward" size={20} color="black" />}
+    <Text style={[styles.linkText, darkMode && styles.darkLinkText]}>{title}</Text>
+    {hasArrow && <Ionicons name="chevron-forward" size={20} color={darkMode ? 'white' : 'black'} />}
   </TouchableOpacity>
 );
 
-export default function TermsUse() {
+export default function TermsOfUse() {
   const navigation = useNavigation();
   const router = useRouter();
   const { t } = useTranslation();
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const { darkMode } = useDisplayPreferences();
 
   useEffect(() => {
     loadFonts();
@@ -80,30 +83,30 @@ export default function TermsUse() {
       resizeMode="cover"
     >
       <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, darkMode && styles.darkHeader]}>
           <TouchableOpacity 
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('termsUse.header')}</Text>
+          <Text style={[styles.headerTitle, darkMode && styles.darkHeaderTitle]}>{t('termsUse.header')}</Text>
         </View>
 
-        <ScrollView style={styles.scrollContent}>
+        <ScrollView style={[styles.scrollContent, darkMode && styles.darkScrollContent]}>
           {/* Terms Content */}
-          <View style={styles.termsContainer}>
-            <Text style={styles.termsText}>
+          <View style={[styles.termsContainer, darkMode && styles.darkTermsContainer]}>
+            <Text style={[styles.termsText, darkMode && styles.darkText]}>
               {t('termsUse.intro.agreement')}
             </Text>
             
-            <Text style={[styles.termsText, styles.spacingTop]}>
+            <Text style={[styles.termsText, styles.spacingTop, darkMode && styles.darkText]}>
               {t('termsUse.intro.rightsResponsibilities')}
             </Text>
             
-            <Text style={[styles.termsText, styles.spacingTop]}>
+            <Text style={[styles.termsText, styles.spacingTop, darkMode && styles.darkText]}>
               {t('termsUse.intro.reviewTerms')}
             </Text>
             
@@ -118,12 +121,33 @@ export default function TermsUse() {
           </View>
 
           {/* Links */}
-          <View style={styles.linksContainer}>
-            <LinkItem title={t('termsUse.links.privacyPolicy')} onPress={() => router.push('/screens/privacy-policy')} />
-            <LinkItem title={t('termsUse.links.faqs')} onPress={() => router.push('/screens/faqs')} />
-            <LinkItem title={t('termsUse.links.shareApp')} onPress={handleShareApp} />
+          <View style={[styles.linksContainer, darkMode && styles.darkLinksContainer]}>
+            <View style={[styles.linkItem, darkMode && styles.darkLinkItem]}>
+              <LinkItem 
+                title={t('termsUse.links.privacyPolicy')} 
+                onPress={() => router.push('/screens/privacy-policy')} 
+                darkMode={darkMode}
+              />
+            </View>
+            <View style={[styles.linkItem, darkMode && styles.darkLinkItem]}>
+              <LinkItem 
+                title={t('termsUse.links.faqs')} 
+                onPress={() => router.push('/screens/faqs')} 
+                darkMode={darkMode}
+              />
+            </View>
+            <View style={[styles.linkItem, darkMode && styles.darkLinkItem]}>
+              <LinkItem 
+                title={t('termsUse.links.shareApp')} 
+                onPress={handleShareApp} 
+                darkMode={darkMode}
+              />
+            </View>
             <ExternalLink href="https://lifeline-mu.vercel.app/">
-              <LinkItem title={t('termsUse.links.visitWebsite')} />
+              <LinkItem 
+                title={t('termsUse.links.visitWebsite')} 
+                darkMode={darkMode}
+              />
             </ExternalLink>
           </View>
         </ScrollView>
@@ -134,70 +158,70 @@ export default function TermsUse() {
           animationType="slide"
           presentationStyle="pageSheet"
         >
-          <SafeAreaView style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
+          <SafeAreaView style={[styles.modalContainer, darkMode && styles.darkModalContainer]}>
+            <View style={[styles.modalHeader, darkMode && styles.darkModalHeader]}>
               <TouchableOpacity 
                 style={styles.closeButton}
                 onPress={() => setShowTermsModal(false)}
               >
-                <Ionicons name="close" size={24} color="black" />
+                <Ionicons name="close" size={24} color={darkMode ? 'white' : 'black'} />
               </TouchableOpacity>
-              <Text style={styles.modalTitle}>{t('termsUse.header')}</Text>
+              <Text style={[styles.modalTitle, darkMode && styles.darkModalTitle]}>{t('termsUse.header')}</Text>
               <View style={styles.placeholder} />
             </View>
-            <ScrollView style={styles.modalContent}>
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.acceptanceOfTerms.title')}</Text>
-                <Text style={styles.sectionText}>
+            <ScrollView style={[styles.modalContent, darkMode && styles.darkModalContent]}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('termsUse.sections.acceptanceOfTerms.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.acceptanceOfTerms.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.useOfApplication.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('termsUse.sections.useOfApplication.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.useOfApplication.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.userResponsibilities.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.userResponsibilities.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.userResponsibilities.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.intellectualProperty.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.intellectualProperty.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.intellectualProperty.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.disclaimerOfWarranties.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.disclaimerOfWarranties.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.disclaimerOfWarranties.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.limitationOfLiability.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.limitationOfLiability.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.limitationOfLiability.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.updatesAndChanges.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.updatesAndChanges.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.updatesAndChanges.description')}
                 </Text>
               </View>
 
-              <View style={styles.termsSection}>
-                <Text style={styles.sectionTitle}>{t('termsUse.sections.contactInformation.title')}</Text>
-                <Text style={styles.sectionText}>
+              <View style={[styles.termsSection, darkMode && styles.darkTermsSection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>{t('termsUse.sections.contactInformation.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
                   {t('termsUse.sections.contactInformation.description')}
                 </Text>
               </View>
@@ -280,24 +304,62 @@ const styles = StyleSheet.create({
   },
   linksContainer: {
     marginTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginHorizontal: 15,
+    overflow: 'hidden',
+  },
+  darkLinksContainer: {
+    backgroundColor: '#2d2d2d',
+  },
+  darkContainer: {
+    backgroundColor: '#1a1a1a',
+  },
+  darkHeader: {
+    backgroundColor: '#2d2d2d',
+  },
+  darkHeaderTitle: {
+    color: 'white',
+  },
+  darkScrollContent: {
+    backgroundColor: '#1a1a1a',
+  },
+  darkTermsContainer: {
+    backgroundColor: '#2d2d2d',
+  },
+  darkTermsSection: {
+    backgroundColor: '#2d2d2d',
+  },
+  darkSectionTitle: {
+    color: 'white',
   },
   linkItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
+  darkLinkItem: {
+    borderBottomColor: '#3d3d3d',
+    backgroundColor: '#2d2d2d',
+  },
   linkText: {
     fontFamily: 'JetBrainsMono',
-    fontSize: 16,
+    fontSize: 15,
     color: '#333',
+  },
+  darkLinkText: {
+    color: 'white',
   },
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff4f5',
+  },
+  darkModalContainer: {
+    backgroundColor: '#1a1a1a',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -308,6 +370,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
     backgroundColor: 'white',
+  },
+  darkModalHeader: {
+    backgroundColor: '#2d2d2d',
+    borderBottomColor: '#3d3d3d',
   },
   closeButton: {
     padding: 5,
@@ -325,6 +391,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
+  darkModalContent: {
+    backgroundColor: '#1a1a1a',
+  },
   termsSection: {
     marginBottom: 25,
   },
@@ -339,6 +408,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: '#666',
+  },
+  darkText: {
+    color: 'white',
+  },
+  darkModalTitle: {
+    color: 'white',
+  },
+  darkSectionText: {
+    color: '#b0b0b0',
   },
   bottomPadding: {
     height: 40,

@@ -15,17 +15,28 @@ type SettingItemProps = {
   fontBold: boolean;
 };
 
-const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: SettingItemProps) => (
-  <TouchableOpacity style={styles.settingItem} onPress={onPress}>
-    <View style={styles.iconContainer}>
-      {icon}
-    </View>
-    <View style={styles.textContainer}>
-      <Text style={getTextStyle(textSize, fontBold, styles.title)}>{title}</Text>
-      <Text style={getTextStyle(textSize, fontBold, styles.subtitle)}>{subtitle}</Text>
-    </View>
-  </TouchableOpacity>
-);
+const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: SettingItemProps) => {
+  const { darkMode } = useDisplayPreferences();
+  
+  return (
+    <TouchableOpacity 
+      style={[styles.settingItem, darkMode && styles.darkSettingItem]} 
+      onPress={onPress}
+    >
+      <View style={[styles.iconContainer, darkMode && styles.darkIconContainer]}>
+        {icon}
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={[getTextStyle(textSize, fontBold, styles.title), darkMode && styles.darkTitle]}>
+          {title}
+        </Text>
+        <Text style={[getTextStyle(textSize, fontBold, styles.subtitle), darkMode && styles.darkSubtitle]}>
+          {subtitle}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 // Helper for dynamic text style
 const getTextStyle = (textSize: number, fontBold: boolean, baseStyle = {}) => {
@@ -37,7 +48,7 @@ const getTextStyle = (textSize: number, fontBold: boolean, baseStyle = {}) => {
 export default function GuestSettings() {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { textSize, fontBold } = useDisplayPreferences();
+  const { textSize, fontBold, darkMode } = useDisplayPreferences();
 
   const navigateToScreen = (screen: string) => {
     router.push(`/screens/${screen}` as any);
@@ -45,13 +56,13 @@ export default function GuestSettings() {
 
   return (
     <ImageBackground 
-      source={require('../../assets/images/blur.png')} 
-      style={styles.backgroundImage}
+      source={darkMode ? require('../../assets/images/blur.png') : require('../../assets/images/blur.png')} 
+      style={[styles.backgroundImage, darkMode && { opacity: 0.9 }]}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+      <View style={[styles.overlay, darkMode && styles.darkOverlay]} />
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
+        <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
         
         {/* Header */}
         <View style={styles.header}>
@@ -59,9 +70,9 @@ export default function GuestSettings() {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? '#fff' : '#000'} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, getTextStyle(textSize, fontBold, {fontSize: 18})]}>
+          <Text style={[styles.headerTitle, getTextStyle(textSize, fontBold, {fontSize: 18}), darkMode && styles.darkHeaderTitle]}>
             {t('settings.guest.title')}
           </Text>
         </View>
@@ -69,7 +80,7 @@ export default function GuestSettings() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.grid}>
             <SettingItem
-              icon={<Ionicons name="language" size={24} color="black" />}
+              icon={<Ionicons name="language" size={24} color={darkMode ? '#fff' : '#000'} />}
               title={t('settings.language.title')}
               subtitle={t('settings.language.subtitle')}
               onPress={() => navigateToScreen('languages')}
@@ -77,7 +88,7 @@ export default function GuestSettings() {
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<MaterialIcons name="display-settings" size={24} color="black" />}
+              icon={<MaterialIcons name="display-settings" size={24} color={darkMode ? '#fff' : '#000'} />}
               title={t('settings.display.title')}
               subtitle={t('settings.display.subtitle')}
               onPress={() => navigateToScreen('display')}
@@ -85,7 +96,7 @@ export default function GuestSettings() {
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<FontAwesome5 name="file-contract" size={22} color="black" />}
+              icon={<FontAwesome5 name="file-contract" size={22} color={darkMode ? '#fff' : '#000'} />}
               title={t('settings.terms.title')}
               subtitle={t('settings.terms.subtitle')}
               onPress={() => navigateToScreen('terms-use')}
@@ -93,7 +104,7 @@ export default function GuestSettings() {
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<AntDesign name="infocirlceo" size={22} color="black" />}
+              icon={<AntDesign name="infocirlceo" size={22} color={darkMode ? '#fff' : '#000'} />}
               title={t('settings.about.title')}
               subtitle={t('settings.about.subtitle')}
               onPress={() => navigateToScreen('about')}
@@ -101,7 +112,7 @@ export default function GuestSettings() {
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<Feather name="help-circle" size={24} color="black" />}
+              icon={<Feather name="help-circle" size={24} color={darkMode ? '#fff' : '#000'} />}
               title={t('settings.help.title')}
               subtitle={t('settings.help.subtitle')}
               onPress={() => navigateToScreen('help')}
@@ -111,11 +122,19 @@ export default function GuestSettings() {
           </View>
           
           {/* Sign In/Sign Up Section */}
-          <View style={styles.authContainer}>
-            <Text style={[styles.authTitle, getTextStyle(textSize, fontBold)]}>
+          <View style={[styles.authContainer, darkMode && styles.darkAuthContainer]}>
+            <Text style={[
+              styles.authTitle, 
+              getTextStyle(textSize, fontBold),
+              darkMode && styles.darkAuthTitle
+            ]}>
               {t('settings.guest.authTitle')}
             </Text>
-            <Text style={[styles.authSubtitle, getTextStyle(textSize, fontBold, { fontSize: 12 })]}>
+            <Text style={[
+              styles.authSubtitle, 
+              getTextStyle(textSize, fontBold, { fontSize: 12 }),
+              darkMode && styles.darkAuthSubtitle
+            ]}>
               {t('settings.guest.authSubtitle')}
             </Text>
             
@@ -135,15 +154,24 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
   },
+  darkOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+  },
   container: {
     flex: 1,
+  },
+  darkContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  darkHeaderTitle: {
+    color: '#fff',
   },
   backButton: {
     marginRight: 16,
@@ -173,14 +201,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  darkSettingItem: {
+    backgroundColor: '#1e1e1e',
+    shadowColor: '#000',
+  },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+  },
+  darkIconContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   textContainer: {
     flex: 1,
@@ -191,10 +226,16 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     color: '#333',
   },
+  darkTitle: {
+    color: '#fff',
+  },
   subtitle: {
     fontSize: 12,
     color: '#666',
     lineHeight: 16,
+  },
+  darkSubtitle: {
+    color: '#aaa',
   },
   authContainer: {
     backgroundColor: 'white',
@@ -202,6 +243,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 16,
     alignItems: 'center',
+  },
+  darkAuthContainer: {
+    backgroundColor: '#1e1e1e',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   authButtonsContainer: {
     width: '100%',
@@ -232,12 +278,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
     textAlign: 'center',
+    color: '#333',
+  },
+  darkAuthTitle: {
+    color: '#fff',
   },
   authSubtitle: {
     color: '#666',
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 18,
+  },
+  darkAuthSubtitle: {
+    color: '#aaa',
   },
   authButton: {
     backgroundColor: '#007AFF',

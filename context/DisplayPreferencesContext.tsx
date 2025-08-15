@@ -11,6 +11,8 @@ export type DisplayPreferences = {
   setBrightness: (value: number) => void;
   eyeProtection: boolean;
   setEyeProtection: (value: boolean) => void;
+  darkMode: boolean;
+  setDarkMode: (value: boolean) => void;
 };
 
 const DisplayPreferencesContext = createContext<DisplayPreferences | undefined>(undefined);
@@ -20,6 +22,7 @@ export const DisplayPreferencesProvider: React.FC<{ children: React.ReactNode }>
   const [fontBold, setFontBoldState] = useState(false);
   const [brightness, setBrightnessState] = useState(0.7);
   const [eyeProtection, setEyeProtectionState] = useState(false);
+  const [darkMode, setDarkModeState] = useState(false);
 
   useEffect(() => {
     const loadPrefs = async () => {
@@ -31,6 +34,7 @@ export const DisplayPreferencesProvider: React.FC<{ children: React.ReactNode }>
           if (parsed.fontBold !== undefined) setFontBoldState(parsed.fontBold);
           if (parsed.brightness !== undefined) setBrightnessState(parsed.brightness);
           if (parsed.eyeProtection !== undefined) setEyeProtectionState(parsed.eyeProtection);
+          if (parsed.darkMode !== undefined) setDarkModeState(parsed.darkMode);
         }
       } catch {}
     };
@@ -38,16 +42,23 @@ export const DisplayPreferencesProvider: React.FC<{ children: React.ReactNode }>
   }, []);
 
   useEffect(() => {
-    AsyncStorage.setItem('displayPrefs', JSON.stringify({ textSize, fontBold, brightness, eyeProtection }));
-  }, [textSize, fontBold, brightness, eyeProtection]);
+    AsyncStorage.setItem('displayPrefs', JSON.stringify({ textSize, fontBold, brightness, eyeProtection, darkMode }));
+  }, [textSize, fontBold, brightness, eyeProtection, darkMode]);
 
   const setTextSize = (size: number) => setTextSizeState(size);
   const setFontBold = (bold: boolean) => setFontBoldState(bold);
   const setBrightness = (value: number) => setBrightnessState(value);
   const setEyeProtection = (value: boolean) => setEyeProtectionState(value);
+  const setDarkMode = (value: boolean) => setDarkModeState(value);
 
   return (
-    <DisplayPreferencesContext.Provider value={{ textSize, setTextSize, fontBold, setFontBold, brightness, setBrightness, eyeProtection, setEyeProtection }}>
+    <DisplayPreferencesContext.Provider value={{ 
+      textSize, setTextSize, 
+      fontBold, setFontBold, 
+      brightness, setBrightness, 
+      eyeProtection, setEyeProtection,
+      darkMode, setDarkMode 
+    }}>
       {children}
     </DisplayPreferencesContext.Provider>
   );
