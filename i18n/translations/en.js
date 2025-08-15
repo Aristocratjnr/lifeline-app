@@ -13,7 +13,9 @@ export default {
     "off": "Off",
     "on": "On",
     "getStarted": "Get Started",
-    "close": "Close"
+    "close": "Close",
+    "delete": "Delete",
+    "deactivate": "Deactivate"
   },
 
   // Navigation and tabs
@@ -76,6 +78,18 @@ export default {
   // Settings
   "settings": {
     "title": "Settings",
+    "deleteAccount": {
+      "title": "Delete Account",
+      "manageTitle": "Manage Your Account",
+      "manageDescription": "Control your account settings, including deactivation and deletion options.",
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDescription": "Temporarily disable your account. You can reactivate it by logging in again.",
+      "deactivateButton": "DEACTIVATE ACCOUNT",
+      "deleteTitle": "Delete Account Permanently",
+      "deleteDescription": "We are really sorry to see you go. Are you sure you want to delete your account?",
+      "deleteWarning": "This is irreversible and will remove your account and all data from Lifeline.",
+      "deleteButton": "DELETE ACCOUNT"
+    },
     "account": "Account",
     "language": "Language",
     "notifications": "Notifications",
@@ -451,6 +465,16 @@ export default {
     "callDoctor": "Call Doctor Now",
     "connecting": "Connecting to doctor...",
     "available247": "Available 24/7"
+  },
+  "alerts": {
+    "deactivateAccount": {
+      "title": "Deactivate Account",
+      "message": "Are you sure you want to deactivate your account? You can reactivate it later by logging in."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "message": "This action is irreversible. All your data will be permanently deleted."
+    }
   },
   "callLogs": {
     "title": "Call Logs",

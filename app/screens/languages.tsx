@@ -17,6 +17,7 @@ import {
   View
 } from 'react-native';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -47,12 +48,20 @@ type LanguageItemProps = {
   name: string;
   onSelect?: () => void;
   selected?: boolean;
+  darkMode?: boolean;
 };
 
-const LanguageItem = ({ flag, name, onSelect, selected }: LanguageItemProps) => (
-  <TouchableOpacity style={[styles.languageItem, selected && styles.languageItemSelected]} onPress={onSelect}>
+const LanguageItem = ({ flag, name, onSelect, selected, darkMode = false }: LanguageItemProps) => (
+  <TouchableOpacity 
+    style={[
+      styles.languageItem, 
+      darkMode && styles.darkLanguageItem,
+      selected && (darkMode ? styles.darkLanguageItemSelected : styles.languageItemSelected)
+    ]} 
+    onPress={onSelect}
+  >
     {flag}
-    <Text style={styles.languageName}>{name}</Text>
+    <Text style={[styles.languageName, darkMode && styles.darkLanguageName]}>{name}</Text>
   </TouchableOpacity>
 );
 
@@ -65,6 +74,7 @@ export default function Languages() {
 
   const { t } = useTranslation();
   const { currentLanguage, setLanguage } = useLanguage();
+  const { darkMode } = useDisplayPreferences();
 
   // Set initial selected language based on current language
   useEffect(() => {
@@ -140,25 +150,25 @@ export default function Languages() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.overlay, darkMode && styles.darkOverlay]} />
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? '#fff' : 'black'} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('languages.title')}</Text>
+          <Text style={[styles.headerTitle, darkMode && styles.darkHeaderTitle]}>{t('languages.title')}</Text>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+            <Ionicons name="search" size={20} color={darkMode ? '#aaa' : '#999'} style={styles.searchIcon} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, darkMode && styles.darkSearchInput]}
               placeholder={t('languages.searchPlaceholder')}
               placeholderTextColor="#999"
               value={searchText}
@@ -166,7 +176,7 @@ export default function Languages() {
             />
             {searchText.length > 0 && (
               <TouchableOpacity onPress={() => setSearchText('')}>
-                <Ionicons name="close-circle" size={20} color="#999" />
+                <Ionicons name="close-circle" size={20} color={darkMode ? '#aaa' : '#999'} />
               </TouchableOpacity>
             )}
           </View>
@@ -175,7 +185,7 @@ export default function Languages() {
         {/* Language Selection */}
         <View style={styles.contentContainer}>
           <ScrollView>
-            <View style={styles.languageGrid}>
+            <View style={[styles.languageGrid, darkMode && styles.darkLanguageGrid]}>
               {filteredLanguages.map((language) => (
                 <LanguageItem
                   key={language.id}
@@ -183,19 +193,20 @@ export default function Languages() {
                   name={language.name}
                   onSelect={() => handleLanguageSelect(language.id)}
                   selected={selectedLanguageId === language.id}
+                  darkMode={darkMode}
                 />
               ))}
             </View>
 
             {filteredLanguages.length === 0 && (
               <View style={styles.noResultsContainer}>
-                <Ionicons name="search-outline" size={48} color="#ccc" />
-                <Text style={styles.noResultsText}>{t('languages.noResults')}</Text>
-                <Text style={styles.noResultsSubtext}>{t('languages.tryAgain')}</Text>
+                <Ionicons name="search-outline" size={48} color={darkMode ? '#555' : '#ccc'} />
+                <Text style={[styles.noResultsText, darkMode && styles.darkText]}>{t('languages.noResults')}</Text>
+                <Text style={[styles.noResultsSubtext, darkMode && styles.darkSubtext]}>{t('languages.tryAgain')}</Text>
               </View>
             )}
 
-            <Text style={styles.comingSoon}>{t('languages.comingSoon')}</Text>
+            <Text style={[styles.comingSoon, darkMode && styles.darkComingSoon]}>{t('languages.comingSoon')}</Text>
           </ScrollView>
         </View>
 
@@ -215,10 +226,10 @@ export default function Languages() {
           onRequestClose={() => setModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
+            <View style={[styles.modalContent, darkMode && styles.darkModalContent]}>
               <Ionicons name="alert-circle" size={48} color="red" style={{ marginBottom: 10 }} />
-              <Text style={styles.modalTitle}>{t('languages.noLanguageSelected')}</Text>
-              <Text style={styles.modalMessage}>{t('languages.pleaseSelectLanguage')}</Text>
+              <Text style={[styles.modalTitle, darkMode && styles.darkModalMessage]}>{t('languages.noLanguageSelected')}</Text>
+              <Text style={[styles.modalMessage, darkMode && styles.darkModalMessage]}>{t('languages.pleaseSelectLanguage')}</Text>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => setModalVisible(false)}
@@ -244,10 +255,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
+  darkOverlay: {
+    backgroundColor: 'rgba(0,0,0,0.85)',
+  },
   container: {
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.89)',
     zIndex: 2,
+  },
+  darkContainer: {
+    backgroundColor: 'rgba(25, 25, 25, 0.95)',
   },
   header: {
     flexDirection: 'row',
@@ -265,6 +282,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
     marginRight: 30,
+    color: '#000',
+  },
+  darkHeaderTitle: {
+    color: '#fff',
   },
   searchContainer: {
     paddingHorizontal: 20,
@@ -276,18 +297,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     paddingHorizontal: 15,
-    height: 40,
+    height: 45,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
+  },
+  darkSearchBar: {
+    backgroundColor: '#2d2d2d',
+    borderColor: '#444',
   },
   searchIcon: {
     marginRight: 10,
   },
   searchInput: {
     flex: 1,
-    height: 40,
+    height: 45,
     fontFamily: 'JetBrainsMono',
-    fontSize: 14,
+    fontSize: 15,
+    color: '#000',
+    paddingVertical: 0,
+  },
+  darkSearchInput: {
+    color: '#fff',
   },
   contentContainer: {
     flex: 1,
@@ -306,19 +336,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    marginBottom: 15,
+  },
+  darkLanguageGrid: {
+    backgroundColor: '#1e1e1e',
+    shadowColor: '#000',
   },
   languageItem: {
     width: '30%',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 12,
-    padding: 10,
+    padding: 12,
     marginBottom: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  darkLanguageItem: {
+    backgroundColor: '#2d2d2d',
+    borderColor: '#444',
   },
   flagIcon: {
     width: 24,
@@ -329,6 +370,10 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono',
     fontSize: 12,
     textAlign: 'center',
+    color: '#000',
+  },
+  darkLanguageName: {
+    color: '#fff',
   },
   comingSoon: {
     fontFamily: 'JetBrainsMono-Bold',
@@ -336,6 +381,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     marginBottom: 20,
+  },
+  noResultsContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  noResultsText: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 16,
+    color: '#666',
+    marginTop: 10,
+  },
+  darkText: {
+    color: '#f0f0f0',
+  },
+  darkComingSoon: {
+    color: '#aaa',
+  },
+  noResultsSubtext: {
+    fontFamily: 'JetBrainsMono',
+    fontSize: 14,
+    color: '#999',
+    marginTop: 5,
+  },
+  darkSubtext: {
+    color: '#aaa',
   },
   submitButton: {
     position: 'absolute',
@@ -353,26 +423,15 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 16,
   },
-  noResultsContainer: {
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  noResultsText: {
-    fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 16,
-    color: '#666',
-    marginTop: 10,
-  },
-  noResultsSubtext: {
-    fontFamily: 'JetBrainsMono',
-    fontSize: 14,
-    color: '#999',
-    marginTop: 5,
-  },
   languageItemSelected: {
     borderWidth: 2,
-    borderColor: 'red',
-    backgroundColor: '#fff0f0',
+    borderColor: '#e63946',
+    backgroundColor: '#ffebee',
+  },
+  darkLanguageItemSelected: {
+    borderWidth: 2,
+    borderColor: '#ff6b6b',
+    backgroundColor: '#3a0d0d',
   },
   modalOverlay: {
     flex: 1,
@@ -392,10 +451,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
   },
+  darkModalContent: {
+    backgroundColor: '#2d2d2d',
+  },
   modalTitle: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 18,
-    color: 'red',
+    color: '#e63946',
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -406,8 +468,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  darkModalMessage: {
+    color: '#e0e0e0',
+  },
   modalButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#e63946',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 30,
