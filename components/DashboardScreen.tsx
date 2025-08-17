@@ -1,14 +1,14 @@
 "use client"
 
 import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
-import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons"
+import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
+import { Alert, Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -17,6 +17,22 @@ const DashboardScreen = () => {
   const circleSize = Math.min(80, windowWidth / 4);
   const { t } = useTranslation()
   const { darkMode } = useDisplayPreferences()
+  const router = useRouter()
+
+  // Handle emergency calls
+  const handleEmergencyCall = useCallback((phoneNumber: string) => {
+    const url = `tel:${phoneNumber}`;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        return Linking.openURL(url);
+      } else {
+        Alert.alert('Error', 'Unable to make a call. Please try again later.');
+      }
+    }).catch(err => {
+      console.error('Error making call:', err);
+      Alert.alert('Error', 'Unable to make a call. Please try again later.');
+    });
+  }, []);
 
   // Load fonts (first hook)
   const [fontsLoaded] = useFonts({
@@ -68,16 +84,125 @@ const DashboardScreen = () => {
       steps: 1700,
       lastCheckup: "25/06/25",
       waterIntake: 4, 
+      heartRate: 72,
+      bloodPressure: "120/80",
+      weight: "65 kg",
+      temperature: "36.5°C",
     }),
     [],
   )
+
+  // Weather data (mock)
+  const weatherData = useMemo(() => ({
+    location: "Accra, Ghana",
+    temperature: 28,
+    condition: "Partly Cloudy",
+    humidity: 65,
+    windSpeed: 12,
+    icon: "partly-sunny"
+  }), [])
+
+  // Emergency Contacts
+  const emergencyContacts = useMemo(() => [
+    {
+      id: 1,
+      name: "Emergency Services",
+      number: "911",
+      type: "emergency",
+      icon: "emergency"
+    },
+    {
+      id: 2,
+      name: "Family Doctor",
+      number: "+233 24 123 4567",
+      type: "doctor",
+      icon: "medical-services"
+    },
+    {
+      id: 3,
+      name: "Mom",
+      number: "+233 24 987 6543",
+      type: "family",
+      icon: "phone"
+    }
+  ], [])
+
+  // Medication Reminders
+  const medications = useMemo(() => [
+    {
+      id: 1,
+      name: "Vitamin D",
+      dosage: "1 tablet",
+      time: "8:00 AM",
+      taken: false,
+      color: "#FF9800"
+    },
+    {
+      id: 2,
+      name: "Blood Pressure Med",
+      dosage: "2 tablets",
+      time: "2:00 PM",
+      taken: true,
+      color: "#4CAF50"
+    },
+    {
+      id: 3,
+      name: "Omega-3",
+      dosage: "1 capsule",
+      time: "8:00 PM",
+      taken: false,
+      color: "#2196F3"
+    }
+  ], [])
+
+  // Appointments
+  const upcomingAppointments = useMemo(() => [
+    {
+      id: 1,
+      doctor: "Dr. Smith",
+      specialty: "Cardiologist",
+      date: "Aug 20, 2025",
+      time: "10:30 AM",
+      type: "Check-up"
+    },
+    {
+      id: 2,
+      doctor: "Dr. Johnson",
+      specialty: "Dentist",
+      date: "Aug 25, 2025",
+      time: "3:00 PM",
+      type: "Cleaning"
+    }
+  ], [])
+
+  // Handle medication toggle
+  const toggleMedication = useCallback((medicationId: number) => {
+    Alert.alert(
+      "Medication Reminder",
+      "Did you take your medication?",
+      [
+        { text: "Not Yet", style: "cancel" },
+        { text: "Yes, Taken", onPress: () => console.log("Medication marked as taken") }
+      ]
+    )
+  }, [])
+
+  // Handle emergency contact call
+  const callEmergencyContact = useCallback((phoneNumber: string, name: string) => {
+    Alert.alert(
+      "Call Emergency Contact",
+      `Do you want to call ${name}?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Call", onPress: () => Linking.openURL(`tel:${phoneNumber}`) }
+      ]
+    )
+  }, [])
 
   const animatedSteps = useRef(new Animated.Value(0)).current
   const animatedWater = useRef(new Animated.Value(0)).current
   const [displayedSteps, setDisplayedSteps] = useState(0)
   const [displayedWater, setDisplayedWater] = useState(0)
-
-  const router = useRouter()
 
   useEffect(() => {
     Animated.timing(animatedSteps, {
@@ -231,7 +356,7 @@ const DashboardScreen = () => {
           style={styles.gradient}>
           
           {/* Profile Card */}
-          <View style={[styles.profileCard, themeStyles.profileCard]}>
+          <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
             <View style={styles.profileHeader}>
               <Image 
                 source={user.avatar} 
@@ -275,58 +400,171 @@ const DashboardScreen = () => {
             </View>
           </View>
           
-          {/* Health Stats */}
+          {/* Weather Widget */}
+          <View style={[styles.weatherWidget, themeStyles.profileCard, { marginBottom: 20 }]}>
+            <View style={styles.weatherHeader}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 0 }]}>
+                Weather
+              </Text>
+              <Ionicons name={weatherData.icon as any} size={24} color="#FFA726" />
+            </View>
+            <View style={styles.weatherContent}>
+              <View style={styles.weatherMain}>
+                <Text style={[styles.weatherTemp, themeStyles.profileName]}>
+                  {weatherData.temperature}°C
+                </Text>
+                <Text style={[styles.weatherCondition, themeStyles.profileStatus]}>
+                  {weatherData.condition}
+                </Text>
+                <Text style={[styles.weatherLocation, themeStyles.detailLabel]}>
+                  {weatherData.location}
+                </Text>
+              </View>
+              <View style={styles.weatherContent}>
+                <View style={styles.weatherMain}>
+                  <Text style={[styles.weatherTemp, themeStyles.profileName]}>
+                    {weatherData.temperature}°C
+                  </Text>
+                  <Text style={[styles.weatherCondition, themeStyles.profileStatus]}>
+                    {weatherData.condition}
+                  </Text>
+                  <Text style={[styles.weatherLocation, themeStyles.detailLabel]}>
+                    {weatherData.location}
+                  </Text>
+                </View>
+                <View style={styles.weatherDetails}>
+                  <View style={styles.weatherDetailItem}>
+                    <Feather name="droplet" size={16} color="#2196F3" />
+                    <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                      {weatherData.humidity}%
+                    </Text>
+                  </View>
+                  <View style={styles.weatherDetailItem}>
+                    <Feather name="wind" size={16} color="#4CAF50" />
+                    <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                      {weatherData.windSpeed} km/h
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+          
+          {/* Enhanced Health Stats */}
           <View style={styles.healthStatsContainer}>
             <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 16 }]}>
-              {t('dashboard.healthStats')}
+              Health Metrics Summary
             </Text>
             
+            {/* Primary Stats Row */}
             <View style={styles.statsRow}>
               {/* Steps */}
-              <View style={[styles.statCard, themeStyles.statCard]}>
-                <View style={styles.circularProgressContainer}>
-                  <AnimatedCircularProgress
-                    size={circleSize}
-                    width={6}
-                    fill={(healthStats.steps / 10000) * 100}
-                    tintColor="#4CAF50"
-                    backgroundColor={darkMode ? '#333' : '#E0E0E0'}
-                    rotation={0}
-                    lineCap="round"
-                  >
-                    {() => (
-                      <View style={styles.circularProgressContent}>
-                        <FontAwesome5 name="walking" size={24} color="#4CAF50" />
-                        <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
-                      </View>
-                    )}
-                  </AnimatedCircularProgress>
-                  <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
-                </View>
+              <View style={styles.circularProgressContainer}>
+                <AnimatedCircularProgress
+                  size={circleSize}
+                  width={6}
+                  fill={(healthStats.steps / 10000) * 100}
+                  tintColor="#4CAF50"
+                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                  rotation={0}
+                  lineCap="round"
+                >
+                  {() => (
+                    <View style={styles.circularProgressContent}>
+                      <FontAwesome5 name="walking" size={24} color="#4CAF50" />
+                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
+                    </View>
+                  )}
+                </AnimatedCircularProgress>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
               </View>
               
               {/* Water Intake */}
-              <View style={[styles.statCard, themeStyles.statCard]}>
-                <View style={styles.circularProgressContainer}>
-                  <AnimatedCircularProgress
-                    size={circleSize}
-                    width={6}
-                    fill={(healthStats.waterIntake / 8) * 100}
-                    tintColor="#2196F3"
-                    backgroundColor={darkMode ? '#333' : '#E0E0E0'}
-                    rotation={0}
-                    lineCap="round"
-                  >
-                    {() => (
-                      <View style={styles.circularProgressContent}>
-                        <FontAwesome5 name="tint" size={24} color="#2196F3" />
-                        <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
-                      </View>
-                    )}
-                  </AnimatedCircularProgress>
-                  <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.water')}</Text>
-                </View>
+              <View style={styles.circularProgressContainer}>
+                <AnimatedCircularProgress
+                  size={circleSize}
+                  width={6}
+                  fill={(healthStats.waterIntake / 8) * 100}
+                  tintColor="#2196F3"
+                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                  rotation={0}
+                  lineCap="round"
+                >
+                  {() => (
+                    <View style={styles.circularProgressContent}>
+                      <FontAwesome5 name="tint" size={24} color="#2196F3" />
+                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
+                    </View>
+                  )}
+                </AnimatedCircularProgress>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.water')}</Text>
               </View>
+            </View>
+          </View>
+          
+          {/* Medication Reminders & Appointments */}
+          <View style={[styles.medicationSection, themeStyles.profileCard]}>
+            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 16 }]}>
+              Medications & Appointments
+            </Text>
+            
+            {/* Medication Reminders */}
+            <View style={styles.medicationList}>
+              <Text style={[styles.subsectionTitle, themeStyles.detailLabel]}>Today&apos;s Medications</Text>
+              {medications.map((med) => (
+                <TouchableOpacity
+                  key={med.id}
+                  style={[styles.medicationItem, themeStyles.timelineItem]}
+                  onPress={() => toggleMedication(med.id)}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.medicationIndicator, { backgroundColor: med.color }]} />
+                  <View style={styles.medicationInfo}>
+                    <Text style={[styles.medicationName, themeStyles.timelineTitle]}>
+                      {med.name}
+                    </Text>
+                    <Text style={[styles.medicationDetails, themeStyles.timelineDate]}>
+                      {med.dosage} • {med.time}
+                    </Text>
+                  </View>
+                  <View style={[styles.medicationStatus, { backgroundColor: med.taken ? '#4CAF50' : '#FFC107' }]}>
+                    <Feather 
+                      name={med.taken ? "check" : "clock"} 
+                      size={16} 
+                      color="white" 
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+            
+            {/* Upcoming Appointments */}
+            <View style={styles.appointmentsList}>
+              <Text style={[styles.subsectionTitle, themeStyles.detailLabel]}>Upcoming Appointments</Text>
+              {upcomingAppointments.map((appointment) => (
+                <View key={appointment.id} style={[styles.appointmentItem, themeStyles.timelineItem]}>
+                  <View style={styles.appointmentDate}>
+                    <Text style={[styles.appointmentDay, themeStyles.timelineTitle]}>
+                      {appointment.date.split(' ')[1]}
+                    </Text>
+                    <Text style={[styles.appointmentMonth, themeStyles.timelineDate]}>
+                      {appointment.date.split(' ')[0]}
+                    </Text>
+                  </View>
+                  <View style={styles.appointmentInfo}>
+                    <Text style={[styles.appointmentDoctor, themeStyles.timelineTitle]}>
+                      {appointment.doctor}
+                    </Text>
+                    <Text style={[styles.appointmentSpecialty, themeStyles.timelineDate]}>
+                      {appointment.specialty} • {appointment.type}
+                    </Text>
+                    <Text style={[styles.appointmentTime, themeStyles.detailValue]}>
+                      {appointment.time}
+                    </Text>
+                  </View>
+                  <Feather name="calendar" size={16} color="#2196F3" />
+                </View>
+              ))}
             </View>
           </View>
           
@@ -367,7 +605,7 @@ const DashboardScreen = () => {
                 )}
               </View>
               <View style={styles.dailyTipTextContainer}>
-                <Text style={[styles.dailyTipTitle, themeStyles.dailyTipTitle]}>
+                <Text style={[styles.dailyTipTitleText, themeStyles.dailyTipTitle]}>
                   {dailyTips[currentTipIndex]?.title || dailyTip.title}
                 </Text>
                 <Text style={[styles.dailyTipDescription, themeStyles.dailyTipDescription]}>
@@ -626,7 +864,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40, 
     alignItems: 'center',
-    marginTop: 160,
+    marginTop: 90,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.1)',
   },
@@ -683,8 +921,9 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginBottom: 16,
+    gap: 8,
   },
   circularProgressContainer: {
     alignItems: 'center',
@@ -773,14 +1012,6 @@ const styles = StyleSheet.create({
   refreshButton: {
     padding: 6,
     borderRadius: 20,
-  },
-  dailyTipTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    fontFamily: 'JetBrainsMono-Bold',
-    marginBottom: 6,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
   },
   dailyTipText: {
     fontSize: 14,
@@ -902,6 +1133,250 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     fontFamily: 'JetBrainsMono-Regular',
+  },
+  
+  // Weather Widget Styles
+  weatherWidget: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  weatherHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  weatherContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  weatherMain: {
+    flex: 1,
+  },
+  weatherTemp: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  weatherCondition: {
+    fontSize: 14,
+    marginTop: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  weatherLocation: {
+    fontSize: 12,
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  weatherDetails: {
+    alignItems: 'flex-end',
+  },
+  weatherDetailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  weatherDetailText: {
+    fontSize: 12,
+    marginLeft: 6,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  
+  // Enhanced Health Metrics Styles
+  additionalMetrics: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  metricCard: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  metricHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  metricLabel: {
+    fontSize: 10,
+    marginLeft: 6,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  metricValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Emergency Contacts Styles
+  emergencySection: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  emergencySectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  emergencyContactsList: {
+    gap: 8,
+  },
+  emergencyContactItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  emergencyContactIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(229, 57, 53, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  emergencyContactInfo: {
+    flex: 1,
+  },
+  emergencyContactName: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  emergencyContactNumber: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  
+  // Medication & Appointments Styles
+  medicationSection: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  subsectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  medicationList: {
+    marginBottom: 24,
+  },
+  medicationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  medicationIndicator: {
+    width: 4,
+    height: 40,
+    borderRadius: 2,
+    marginRight: 12,
+  },
+  medicationInfo: {
+    flex: 1,
+  },
+  medicationName: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  medicationDetails: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  medicationStatus: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  appointmentsList: {
+    gap: 8,
+  },
+  appointmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  appointmentDate: {
+    width: 60,
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  appointmentDay: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  appointmentMonth: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  appointmentInfo: {
+    flex: 1,
+  },
+  appointmentDoctor: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  appointmentSpecialty: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginBottom: 2,
+  },
+  appointmentTime: {
+    fontSize: 12,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Daily Tip Text Style (renamed to avoid conflict)
+  dailyTipTitleText: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 4,
   },
 });
 
