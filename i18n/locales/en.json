@@ -282,6 +282,37 @@
     "brightness": "Brightness",
     "eyeProtection": "Eye Protection"
   },
+  "dashboard": {
+    "callDoctor": "Call Doctor",
+    "emergencyAssistance": "Emergency Assistance",
+    "emergencyAssistanceText": "Need immediate medical help? Connect with a doctor now.",
+    "healthStats": "Health Stats",
+    "steps": "Steps",
+    "water": "Water Intake",
+    "dailyTip": "DAILY TIP",
+    "lifelineHistory": "Lifeline History"
+  },
+  "common": {
+    "female": "Female",
+    "male": "Male",
+    "other": "Other"
+  },
+  "conditions": {
+    "commonCold": "Common Cold"
+  },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish",
+    "french": "French"
+  },
+  "status": {
+    "active": "Active"
+  },
+  "profile": {
+    "age": "Age",
+    "gender": "Gender",
+    "language": "Language"
+  },
   "callLogs": {
     "title": "Call Logs",
     "outgoing": "Outgoing",

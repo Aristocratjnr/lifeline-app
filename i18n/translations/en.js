@@ -15,7 +15,19 @@ export default {
     "getStarted": "Get Started",
     "close": "Close",
     "delete": "Delete",
-    "deactivate": "Deactivate"
+    "deactivate": "Deactivate",
+    "female": "Female",
+    "male": "Male"
+  },
+  
+  // Medical conditions
+  "conditions": {
+    "commonCold": "Common Cold"
+  },
+  
+  // Status indicators
+  "status": {
+    "active": "Active"
   },
 
   // Navigation and tabs
@@ -59,7 +71,7 @@ export default {
     "selectCountry": "Select Country"
   },
 
-  // Languages screen
+  // Languages
   "languages": {
     "title": "LANGUAGE",
     "searchPlaceholder": "Search for language",
@@ -72,7 +84,8 @@ export default {
     "languageChanged": "Language Changed",
     "languageChangedTo": "Language has been changed to",
     "error": "Error",
-    "languageChangeFailed": "Failed to change language. Please try again."
+    "languageChangeFailed": "Failed to change language. Please try again.",
+    "english": "English"
   },
 
   // Settings
@@ -176,6 +189,9 @@ export default {
 
   // Dashboard
   "dashboard": {
+    "emergencyAssistance": "Emergency Assistance",
+    "emergencyAssistanceText": "Need immediate medical help? Connect with a doctor now.",
+    "callDoctor": "Call Doctor",
     "healthStats": "Health Stats",
     "steps": "Steps",
     "water": "Water",
@@ -191,7 +207,7 @@ export default {
     "fracture": "Fracture",
     "cough": "Cough",
     "burns": "Burns",
-    "lastVisited": "Last Visited: 02, May, 2025",
+    "lastVisited": "Last Visited",
     "age": "Age",
     "gender": "Gender",
     "location": "Location",
@@ -199,6 +215,15 @@ export default {
     "language": "Language",
     "editProfile": "Edit Profile",
     "newTipEveryDay": "New tip every day"
+  },
+  
+  // Profile translations
+  "profile": {
+    "age": "Age",
+    "gender": "Gender",
+    "language": "Language",
+    "location": "Location",
+    "condition": "Condition"
   },
 
   // Tips section (new)
