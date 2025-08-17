@@ -1,5 +1,6 @@
 "use client"
 
+import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
 import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
 import { Image } from "expo-image"
@@ -7,8 +8,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ActivityIndicator, Alert, Animated, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
-import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
+import { ActivityIndicator, Alert, Animated, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -371,23 +371,47 @@ const DashboardScreen = () => {
             <View style={styles.statsRow}>
               {/* Steps */}
               <View style={[styles.statCard, themeStyles.statCard]}>
-                <View style={styles.statIconContainer}>
-                  <FontAwesome5 name="walking" size={24} color="#4CAF50" />
-                </View>
-                <View style={styles.statTextContainer}>
-                  <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
-                  <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.steps')}</Text>
+                <View style={styles.circularProgressContainer}>
+                  <AnimatedCircularProgress
+                    size={circleSize}
+                    width={6}
+                    fill={(healthStats.steps / 10000) * 100}
+                    tintColor="#4CAF50"
+                    backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                    rotation={0}
+                    lineCap="round"
+                  >
+                    {() => (
+                      <View style={styles.circularProgressContent}>
+                        <FontAwesome5 name="walking" size={24} color="#4CAF50" />
+                        <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
+                        <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.steps')}</Text>
+                      </View>
+                    )}
+                  </AnimatedCircularProgress>
                 </View>
               </View>
               
               {/* Water Intake */}
               <View style={[styles.statCard, themeStyles.statCard]}>
-                <View style={styles.statIconContainer}>
-                  <FontAwesome5 name="tint" size={24} color="#2196F3" />
-                </View>
-                <View style={styles.statTextContainer}>
-                  <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
-                  <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.water')}</Text>
+                <View style={styles.circularProgressContainer}>
+                  <AnimatedCircularProgress
+                    size={circleSize}
+                    width={6}
+                    fill={(healthStats.waterIntake / 8) * 100}
+                    tintColor="#2196F3"
+                    backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                    rotation={0}
+                    lineCap="round"
+                  >
+                    {() => (
+                      <View style={styles.circularProgressContent}>
+                        <FontAwesome5 name="tint" size={24} color="#2196F3" />
+                        <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
+                        <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.water')}</Text>
+                      </View>
+                    )}
+                  </AnimatedCircularProgress>
                 </View>
               </View>
             </View>
@@ -418,7 +442,17 @@ const DashboardScreen = () => {
                 </Animated.View>
               </TouchableOpacity>
             </View>
-            <Animated.View style={{ opacity: fadeAnim }}>
+            <Animated.View style={[styles.dailyTipContent, { opacity: fadeAnim }]}>
+              <View style={styles.dailyTipIconContainer}>
+                {React.createElement(
+                  dailyTips[currentTipIndex]?.iconSet || MaterialIcons,
+                  {
+                    name: dailyTips[currentTipIndex]?.iconName || 'lightbulb-outline',
+                    size: 24,
+                    color: darkMode ? '#4CAF50' : '#2E7D32',
+                  }
+                )}
+              </View>
               <Text style={[styles.dailyTipText, themeStyles.dailyTipText]}>
                 {dailyTips[currentTipIndex]?.title || dailyTip.title}
               </Text>
@@ -689,6 +723,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },
+  circularProgressContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  circularProgressContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   statCard: {
     flex: 1,
     flexDirection: 'row',
@@ -730,6 +773,20 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
+  },
+  dailyTipContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  dailyTipIconContainer: {
+    marginRight: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dailyTipHeader: {
     flexDirection: 'row',
