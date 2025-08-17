@@ -1,5 +1,6 @@
 "use client"
 
+import AppointmentModal from "@/components/AppointmentModal"
 import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
 import { fetchWeatherData, WeatherData } from "@/services/weatherService"
 import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
@@ -167,7 +168,8 @@ const DashboardScreen = () => {
       specialty: "Cardiologist",
       date: "Aug 20, 2025",
       time: "10:30 AM",
-      type: "Check-up"
+      type: "Check-up",
+      location: "Korle Bu Teaching Hospital, Accra"
     },
     {
       id: 2,
@@ -175,9 +177,21 @@ const DashboardScreen = () => {
       specialty: "Dentist",
       date: "Aug 25, 2025",
       time: "3:00 PM",
-      type: "Cleaning"
+      type: "Cleaning",
+      location: "Dental Care Clinic, East Legon"
     }
   ], [])
+
+  // Appointment modal state
+  const [selectedAppointment, setSelectedAppointment] = useState<{
+    id: string;
+    doctor: string;
+    specialty: string;
+    date: string;
+    time: string;
+    location: string;
+  } | null>(null);
+  const [appointmentModalVisible, setAppointmentModalVisible] = useState(false);
 
 
   // Handle medication toggle
@@ -398,8 +412,50 @@ const DashboardScreen = () => {
     }
   }, []);
 
+  // Handle appointment modal
+  const handleAppointmentPress = useCallback((appointment: typeof upcomingAppointments[0]) => {
+    setSelectedAppointment({
+      id: appointment.id.toString(),
+      doctor: appointment.doctor,
+      specialty: appointment.specialty,
+      date: appointment.date,
+      time: appointment.time,
+      location: appointment.location,
+    });
+    setAppointmentModalVisible(true);
+  }, []);
+
+  const handleCloseAppointmentModal = useCallback(() => {
+    setAppointmentModalVisible(false);
+    setSelectedAppointment(null);
+  }, []);
+
+  // Handle logout
+  const handleLogout = useCallback(() => {
+    // In a real app, you would clear auth state here
+    router.replace('/');
+  }, [router]);
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: themeStyles.container.backgroundColor }]}>
+      <View style={styles.headerContainer}>
+        <View style={styles.header}>
+          <View style={styles.headerLeft} />
+          <TouchableOpacity 
+            style={[styles.logoutButton, darkMode && styles.logoutButtonDark]}
+            onPress={handleLogout}
+          >
+            <Ionicons 
+              name="log-out-outline" 
+              size={20} 
+              color={darkMode ? '#FF6B6B' : '#FF4444'} 
+            />
+            <Text style={[styles.logoutText, { color: darkMode ? '#FF6B6B' : '#FF4444' }]}>
+              {t('common.logout')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
         {/* Medication Confirmation Modal */}
         <Modal
@@ -439,6 +495,14 @@ const DashboardScreen = () => {
             </View>
           </View>
         </Modal>
+
+        {/* Appointment Modal */}
+        <AppointmentModal
+          visible={appointmentModalVisible}
+          onClose={handleCloseAppointmentModal}
+          appointment={selectedAppointment || undefined}
+        />
+
         <LinearGradient
           colors={darkMode ? ["#1E1E1E", "#1A1A1A", "#121212"] : ["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
           style={styles.gradient}>
@@ -641,7 +705,12 @@ const DashboardScreen = () => {
             <View style={styles.appointmentsList}>
               <Text style={[styles.subsectionTitle, themeStyles.detailLabel]}>Upcoming Appointments</Text>
               {upcomingAppointments.map((appointment) => (
-                <View key={appointment.id} style={[styles.appointmentItem, themeStyles.timelineItem]}>
+                <TouchableOpacity
+                  key={appointment.id}
+                  style={[styles.appointmentItem, themeStyles.timelineItem]}
+                  onPress={() => handleAppointmentPress(appointment)}
+                  activeOpacity={0.7}
+                >
                   <View style={styles.appointmentDate}>
                     <Text style={[styles.appointmentDay, themeStyles.timelineTitle]}>
                       {appointment.date.split(' ')[1]}
@@ -662,7 +731,7 @@ const DashboardScreen = () => {
                     </Text>
                   </View>
                   <Feather name="calendar" size={16} color="#2196F3" />
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
@@ -912,6 +981,36 @@ const getThemeStyles = (isDark: boolean) => ({
 });
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  headerLeft: {
+    width: 24, // For balance since we only have right-aligned content
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 68, 68, 0.1)',
+  },
+  logoutButtonDark: {
+    backgroundColor: 'rgba(255, 107, 107, 0.15)',
+  },
+  logoutText: {
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: '500',
+  },
   safeArea: {
     flex: 1,
   },

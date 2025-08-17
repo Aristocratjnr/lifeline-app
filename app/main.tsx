@@ -5,8 +5,30 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyCard: string;
+  emergencyText: string;
+  tabActive: string;
+  tabInactive: string;
+  modalBackground: string;
+  modalContent: string;
+}
+
+// Define props for TabBar component
+interface TabBarProps {
+  isDarkMode: boolean;
+  colors: ColorScheme;
+  router: any; // You might want to properly type this with your router type
+}
 
 // Interface for first aid tip items
 interface FirstAidTip {
@@ -25,8 +47,25 @@ interface FirstAidTip {
 export default function MainScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
   const [showTipsModal, setShowTipsModal] = useState(false);
   const [selectedTip, setSelectedTip] = useState<FirstAidTip | null>(null);
+  
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyCard: isDarkMode ? '#2A1A1A' : '#FFE5E5',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    tabActive: isDarkMode ? '#FF6B6B' : '#E53935',
+    tabInactive: isDarkMode ? '#666666' : '#666666',
+    modalBackground: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+    modalContent: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+  };
 
   // First aid tips data with detailed tips for each category
   const firstAidTips: FirstAidTip[] = [
@@ -187,74 +226,74 @@ export default function MainScreen() {
   }
 
   // Tab bar component
-  const TabBar = () => (
-    <View style={styles.tabBar}>
+  const TabBar = ({ isDarkMode, colors, router }: TabBarProps) => (
+    <View style={[styles.tabBar, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
       <TouchableOpacity 
-        style={[styles.tabItem, styles.activeTab]}
-        onPress={() => router.push('/main')}
+        style={styles.tabItem}
+        onPress={() => router.push('/')}
       >
-        <MaterialIcons name="home" size={24} color="#E53935" />
-        <Text style={[styles.tabText, { color: '#E53935' }]}>{t('tabs.home')}</Text>
+        <MaterialIcons name="home" size={24} color={colors.tabActive} />
+        <Text style={[styles.tabText, { color: colors.tabActive }]}>{t('tabs.home')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
         onPress={() => router.push('/ExploreScreen')}
       >
-        <MaterialIcons name="place" size={24} color="#666" />
-        <Text style={styles.tabText}>{t('tabs.maps')}</Text>
+        <MaterialIcons name="place" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.maps')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
         onPress={() => router.push('/NewsScreen')}
       >
-        <MaterialIcons name="newspaper" size={24} color="#666" />
-        <Text style={styles.tabText}>{t('tabs.news')}</Text>
+        <MaterialIcons name="newspaper" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.news')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
         onPress={() => router.push('/screens/guest-settings')}
       >
-        <MaterialIcons name="settings" size={24} color="#666" />
-        <Text style={styles.tabText}>{t('tabs.settings')}</Text>
+        <MaterialIcons name="settings" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.settings')}</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
-        source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        source={isDarkMode ? require('@/assets/images/blur.png') : require('@/assets/images/blur.png')}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['right', 'left']}>
-          <TabBar />
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['right', 'left']}>
+          <TabBar isDarkMode={isDarkMode} colors={colors} router={router} />
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.welcomeText}>{t('home.welcome')}</Text>
+            <Text style={[styles.welcomeText, { color: colors.text }]}>{t('home.welcome')}</Text>
             <View style={styles.headerRight}>
               <TouchableOpacity 
                 style={styles.menuButton}
                 onPress={() => router.push('/screens/guest')}
               >
-                <MaterialIcons name="person" size={24} color="#E53935" />
+                <MaterialIcons name="person" size={24} color={colors.emergencyText} />
               </TouchableOpacity>
-              <View style={styles.verticalLine} />
+              <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
               <TouchableOpacity 
                 style={styles.menuButton}
                 onPress={() => router.push('/screens/guest-settings')}
               >
-                <MaterialIcons name="more-vert" size={24} color="#666" />
+                <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -266,18 +305,18 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE', '#FFB5B5']}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A', '#4A3A3A'] : ['#FFE5E5', '#FFCECE', '#FFB5B5']}
               style={styles.emergencyGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.emergencyContent}>
                 <View style={styles.emergencyTextContainer}>
-                  <Text style={styles.emergencyTitle}>
+                  <Text style={[styles.emergencyTitle, { color: colors.emergencyText }]}>
                     {t('home.emergencyTitle1')}{'\n'}
                     <Text style={{fontWeight: '900'}}>{t('home.emergencyTitle2')}</Text>{'\n'}
                     {t('home.emergencyTitle3')}{'\n'}
-                    <Text style={styles.emergencyHighlight}>{t('home.emergencyTitle4')}</Text>
+                    <Text style={[styles.emergencyHighlight, { color: colors.emergencyText }]}>{t('home.emergencyTitle4')}</Text>
                   </Text>
                   
                   <TouchableOpacity 
@@ -285,7 +324,7 @@ export default function MainScreen() {
                     onPress={() => router.push('/screens/firstAidGuide')}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.getStartedText}>{t('common.getStarted')}</Text>
+                    <Text style={[styles.getStartedText, { color: '#FFFFFF' }]}>{t('common.getStarted')}</Text>
                   </TouchableOpacity>
                 </View>
                 
@@ -431,8 +470,8 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE']}
-              style={styles.quizGradient}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A'] : ['#FFE5E5', '#FFCECE']}
+              style={[styles.quizGradient, { backgroundColor: colors.card }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
@@ -445,8 +484,8 @@ export default function MainScreen() {
                   />
                 </View>
                 <View style={styles.quizTextContainer}>
-                  <Text style={styles.quizTitle}>{t('home.quizTitle')}</Text>
-                  <Text style={styles.quizSubtitle}>{t('home.quizSubtitle')}</Text>
+                  <Text style={[styles.quizTitle, { color: colors.text }]}>{t('home.quizTitle')}</Text>
+                  <Text style={[styles.quizSubtitle, { color: colors.textSecondary }]}>{t('home.quizSubtitle')}</Text>
                   
                   <View style={styles.quizButtonContainer}>
                     <Text style={styles.quizButtonText}>{t('home.takeQuiz')}</Text>
@@ -463,15 +502,15 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE']}
-              style={styles.hubGradient}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A'] : ['#FFE5E5', '#FFCECE']}
+              style={[styles.hubGradient, { backgroundColor: colors.card }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.hubContent}>
                 <View style={styles.hubTextContainer}>
-                  <Text style={styles.hubTitle}>{t('home.hubTitle')} 🚑</Text>
-                  <Text style={styles.hubSubtitle}>{t('home.hubSubtitle')}</Text>
+                  <Text style={[styles.hubTitle, { color: colors.text }]}>{t('home.hubTitle')} 🚑</Text>
+                  <Text style={[styles.hubSubtitle, { color: colors.textSecondary }]}>{t('home.hubSubtitle')}</Text>
                 </View>
                 <View style={styles.hubIconContainer}>
                   <Image

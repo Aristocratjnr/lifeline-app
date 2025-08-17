@@ -23,7 +23,8 @@ export default {
     "privacyPolicy": "Privacy Policy",
     "termsOfUse": "Terms of Use",
     "allRightsReserved": "All rights reserved",
-    "version": "Version"
+    "version": "Version",
+    "logout": "Logout"
   },
   
   // Medical conditions
@@ -562,6 +563,25 @@ export default {
     "rightsReserved": "All rights reserved"
   },
   
+  "appointments": {
+    "upcoming": "Upcoming Appointments",
+    "past": "Past Appointments",
+    "noUpcoming": "No upcoming appointments",
+    "noPast": "No past appointments",
+    "bookNow": "Book Now",
+    "viewAll": "View All",
+    "viewDetails": "View Details",
+    "appointmentDetails": "Appointment Details",
+    "appointmentInfo": "Appointment Information",
+    "doctor": "Doctor",
+    "specialty": "Specialty",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "notes": "Notes",
+    "reschedule": "Reschedule"
+  },
+
   "privacyPolicy": {
     "header": "Privacy Policy",
     "intro": {
