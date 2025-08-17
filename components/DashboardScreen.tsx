@@ -8,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ActivityIndicator, Alert, Animated, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
+import { Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -65,9 +65,9 @@ const DashboardScreen = () => {
 
   const healthStats = useMemo(
     () => ({
-      steps: 7421,
+      steps: 1700,
       lastCheckup: "25/06/25",
-      waterIntake: 6, // out of 8 glasses
+      waterIntake: 4, 
     }),
     [],
   )
@@ -77,76 +77,7 @@ const DashboardScreen = () => {
   const [displayedSteps, setDisplayedSteps] = useState(0)
   const [displayedWater, setDisplayedWater] = useState(0)
 
-  // Bot state variables
-  const [showBotModal, setShowBotModal] = useState(false)
-  const [isConnectingDoctor, setIsConnectingDoctor] = useState(false)
-  const botPulseAnim = useRef(new Animated.Value(1)).current
-
   const router = useRouter()
-
-  // Bot functions
-  const handleBotPress = () => {
-    setShowBotModal(true)
-  }
-
-  const handleCallDoctor = () => {
-    console.log('Call Doctor button pressed - initiating doctor connection')
-    setIsConnectingDoctor(true)
-    
-    // Log the connection attempt
-    const connectionStartTime = new Date().toISOString()
-    console.log(`[${connectionStartTime}] Attempting to connect to doctor...`)
-    
-    // Simulate connecting to doctor
-    setTimeout(() => {
-      const connectionCompleteTime = new Date().toISOString()
-      console.log(`[${connectionCompleteTime}] Successfully connected to doctor`)
-      console.log('Doctor Details:', {
-        name: 'Dr. Sarah Johnson',
-        specialty: 'Emergency Medicine',
-        connectionTime: connectionStartTime,
-        connectionDuration: '2s',
-        status: 'Connected'
-      })
-      
-      setIsConnectingDoctor(false)
-      setShowBotModal(false)
-      
-      // Log the alert being shown to user
-      console.log(`[${new Date().toISOString()}] Showing connection success alert to user`)
-      
-      Alert.alert(
-        'Connected to Doctor',
-        'Connected to Dr. Sarah Johnson\nSpecialty: Emergency Medicine\nEstimated wait time: 2 minutes',
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('User acknowledged doctor connection')
-          }
-        ]
-      )
-    }, 2000)
-  }
-
-  // Bot pulse animation
-  useEffect(() => {
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(botPulseAnim, {
-          toValue: 1.1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(botPulseAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    )
-    pulseAnimation.start()
-    return () => pulseAnimation.stop()
-  }, [botPulseAnim])
 
   useEffect(() => {
     Animated.timing(animatedSteps, {
@@ -294,24 +225,6 @@ const DashboardScreen = () => {
   
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: themeStyles.container.backgroundColor }]}>
-      {/* Floating Bot Assistant */}
-      <Animated.View 
-        style={[
-          styles.floatingBot,
-          {
-            transform: [{ scale: botPulseAnim }]
-          }
-        ]}
-      >
-        <TouchableOpacity 
-          style={styles.botButton}
-          onPress={handleBotPress}
-          activeOpacity={0.8}
-        >
-          <MaterialIcons name="support-agent" size={28} color="#fff" />
-        </TouchableOpacity>
-      </Animated.View>
-      
       <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
         <LinearGradient
           colors={darkMode ? ["#1E1E1E", "#1A1A1A", "#121212"] : ["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
@@ -385,10 +298,10 @@ const DashboardScreen = () => {
                       <View style={styles.circularProgressContent}>
                         <FontAwesome5 name="walking" size={24} color="#4CAF50" />
                         <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
-                        <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.steps')}</Text>
                       </View>
                     )}
                   </AnimatedCircularProgress>
+                  <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
                 </View>
               </View>
               
@@ -408,10 +321,10 @@ const DashboardScreen = () => {
                       <View style={styles.circularProgressContent}>
                         <FontAwesome5 name="tint" size={24} color="#2196F3" />
                         <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
-                        <Text style={[styles.statLabel, themeStyles.statLabel]}>{t('dashboard.water')}</Text>
                       </View>
                     )}
                   </AnimatedCircularProgress>
+                  <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.water')}</Text>
                 </View>
               </View>
             </View>
@@ -453,9 +366,14 @@ const DashboardScreen = () => {
                   }
                 )}
               </View>
-              <Text style={[styles.dailyTipText, themeStyles.dailyTipText]}>
-                {dailyTips[currentTipIndex]?.title || dailyTip.title}
-              </Text>
+              <View style={styles.dailyTipTextContainer}>
+                <Text style={[styles.dailyTipTitle, themeStyles.dailyTipTitle]}>
+                  {dailyTips[currentTipIndex]?.title || dailyTip.title}
+                </Text>
+                <Text style={[styles.dailyTipDescription, themeStyles.dailyTipDescription]}>
+                  {dailyTips[currentTipIndex]?.content || dailyTip.content}
+                </Text>
+              </View>
             </Animated.View>
           </View>
           
@@ -497,45 +415,40 @@ const DashboardScreen = () => {
             ))}
           </View>
           
+          {/* Footer */}
+          <View style={[styles.footer, themeStyles.footer]}>
+            <View style={styles.footerLinks}>
+              <TouchableOpacity onPress={() => router.push('/screens/about')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.about')}</Text>
+              </TouchableOpacity>
+              <Text style={[styles.footerDivider, themeStyles.footerDivider]}>•</Text>
+              <TouchableOpacity onPress={() => router.push('/screens/privacy-policy')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.privacyPolicy')}</Text>
+              </TouchableOpacity>
+              <Text style={[styles.footerDivider, themeStyles.footerDivider]}>•</Text>
+              <TouchableOpacity onPress={() => router.push('/screens/terms-use')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.termsOfUse')}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.footerText, themeStyles.footerText]}>
+              {t('common.copyright')} {new Date().getFullYear()} {t('app.name')}. {t('common.allRightsReserved')}
+            </Text>
+            <Text style={[styles.footerVersion, themeStyles.footerVersion]}>
+              {t('common.version')} 1.0.0
+            </Text>
+            <Text style={[styles.footerBuiltBy, themeStyles.footerBuiltBy]}>
+              Built by{' '}
+              <Text 
+                style={styles.githubLink}
+                onPress={() => Linking.openURL('https://github.com/yourusername')}
+              >
+                Daniella Asiedu
+              </Text>
+            </Text>
+          </View>
         </LinearGradient>
       </ScrollView>
       
-      {/* Bot Modal */}
-      <Modal
-        visible={showBotModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowBotModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, themeStyles.modalContent]}>
-            <Text style={[styles.modalTitle, themeStyles.modalTitle]}>{t('dashboard.emergencyAssistance')}</Text>
-            <Text style={[styles.modalText, themeStyles.modalText]}>
-              {t('dashboard.emergencyAssistanceText')}
-            </Text>
-            <TouchableOpacity 
-              style={styles.callButton}
-              onPress={handleCallDoctor}
-              disabled={isConnectingDoctor}
-            >
-              {isConnectingDoctor ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.callButtonText}>{t('dashboard.callDoctor')}</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.cancelButton}
-              onPress={() => setShowBotModal(false)}
-              disabled={isConnectingDoctor}
-            >
-              <Text style={[styles.cancelButtonText, themeStyles.cancelButtonText]}>
-                {t('common.cancel')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
@@ -583,8 +496,8 @@ const getThemeStyles = (isDark: boolean) => ({
   dailyTipTitle: {
     color: isDark ? '#4CAF50' : '#2E7D32',
   },
-  dailyTipText: {
-    color: isDark ? '#E0E0E0' : '#333333',
+  dailyTipDescription: {
+    color: isDark ? '#A0A0A0' : '#666666',
   },
   timelineItem: {
     backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
@@ -614,7 +527,26 @@ const getThemeStyles = (isDark: boolean) => ({
     color: isDark ? '#E0E0E0' : '#555555',
   },
   cancelButtonText: {
-    color: isDark ? '#E0E0E0' : '#555555',
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footer: {
+    backgroundColor: 'transparent',
+    borderTopColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+  },
+  footerLink: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerDivider: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerText: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerVersion: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerBuiltBy: {
+    color: isDark ? '#A0A0A0' : '#666666',
   },
 });
 
@@ -625,25 +557,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingBottom: 100,
-  },
-  floatingBot: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    zIndex: 1000,
-  },
-  botButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#E53935',
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
   timelineItem: {
     flexDirection: 'row',
@@ -707,6 +620,56 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginBottom: 12,
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  // Footer styles
+  footer: {
+    padding: 20,
+    paddingBottom: 40, 
+    alignItems: 'center',
+    marginTop: 160,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
+  },
+  footerLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 8,
+  },
+  footerLink: {
+    fontSize: 12,
+    marginHorizontal: 8,
+    paddingVertical: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  footerDivider: {
+    fontSize: 12,
+    opacity: 0.5,
+    marginHorizontal: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  footerText: {
+    fontSize: 11,
+    opacity: 0.7,
+    textAlign: 'center',
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  footerVersion: {
+    fontSize: 10,
+    opacity: 0.5,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginBottom: 4,
+  },
+  footerBuiltBy: {
+    fontSize: 11,
+    opacity: 0.7,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginTop: 8,
+  },
+  githubLink: {
+    color: '#E53935',
+    textDecorationLine: 'underline',
   },
   modalContent: {
     width: '85%',
@@ -776,8 +739,21 @@ const styles = StyleSheet.create({
   },
   dailyTipContent: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
+    alignItems: 'flex-start',
+    padding: 16,
+  },
+  dailyTipTextContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  dailyTipTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  dailyTipDescription: {
+    fontSize: 13,
+    lineHeight: 18,
   },
   dailyTipIconContainer: {
     marginRight: 12,

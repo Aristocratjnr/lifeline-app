@@ -17,7 +17,12 @@ export default {
     "delete": "Delete",
     "deactivate": "Deactivate",
     "female": "Female",
-    "male": "Male"
+    "male": "Male",
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "allRightsReserved": "All rights reserved",
+    "version": "Version"
   },
   
   // Medical conditions
@@ -545,6 +550,17 @@ export default {
   },
 
   // Privacy Policy
+  "app": {
+    "name": "Lifeline"
+  },
+  
+  "footer": {
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "rightsReserved": "All rights reserved"
+  },
+  
   "privacyPolicy": {
     "header": "Privacy Policy",
     "intro": {
