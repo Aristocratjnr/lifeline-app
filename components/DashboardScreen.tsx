@@ -1,6 +1,7 @@
 "use client"
 
 import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
+import { fetchWeatherData, WeatherData } from "@/services/weatherService"
 import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
 import { Image } from "expo-image"
@@ -8,7 +9,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Alert, Animated, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
+import { Alert, Animated, Linking, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -92,15 +93,17 @@ const DashboardScreen = () => {
     [],
   )
 
-  // Weather data (mock)
-  const weatherData = useMemo(() => ({
-    location: "Accra, Ghana",
-    temperature: 28,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 12,
-    icon: "partly-sunny"
-  }), [])
+  // Weather data (real-time)
+  const [weatherData, setWeatherData] = useState<WeatherData>({
+    location: "Loading...",
+    temperature: 0,
+    condition: "Loading",
+    humidity: 0,
+    windSpeed: 0,
+    icon: "partly-sunny",
+    description: "Loading weather data..."
+  });
+  const [weatherLoading, setWeatherLoading] = useState(true);
 
   // Emergency Contacts
   const emergencyContacts = useMemo(() => [
@@ -127,8 +130,9 @@ const DashboardScreen = () => {
     }
   ], [])
 
-  // Medication Reminders
-  const medications = useMemo(() => [
+  // State for medication modal and data
+  const [selectedMedication, setSelectedMedication] = useState<number | null>(null);
+  const [medications, setMedications] = useState([
     {
       id: 1,
       name: "Vitamin D",
@@ -142,7 +146,7 @@ const DashboardScreen = () => {
       name: "Blood Pressure Med",
       dosage: "2 tablets",
       time: "2:00 PM",
-      taken: true,
+      taken: false,
       color: "#4CAF50"
     },
     {
@@ -153,7 +157,7 @@ const DashboardScreen = () => {
       taken: false,
       color: "#2196F3"
     }
-  ], [])
+  ]);
 
   // Appointments
   const upcomingAppointments = useMemo(() => [
@@ -175,17 +179,26 @@ const DashboardScreen = () => {
     }
   ], [])
 
+
   // Handle medication toggle
   const toggleMedication = useCallback((medicationId: number) => {
-    Alert.alert(
-      "Medication Reminder",
-      "Did you take your medication?",
-      [
-        { text: "Not Yet", style: "cancel" },
-        { text: "Yes, Taken", onPress: () => console.log("Medication marked as taken") }
-      ]
-    )
-  }, [])
+    setSelectedMedication(medicationId);
+  }, []);
+
+  // Handle medication confirmation
+  const handleMedicationConfirmation = useCallback((confirm: boolean) => {
+    if (selectedMedication === null) return;
+    
+    if (confirm) {
+      setMedications(prevMedications =>
+        prevMedications.map(med =>
+          med.id === selectedMedication ? { ...med, taken: !med.taken } : med
+        )
+      );
+    }
+    
+    setSelectedMedication(null);
+  }, [selectedMedication]);
 
   // Handle emergency contact call
   const callEmergencyContact = useCallback((phoneNumber: string, name: string) => {
@@ -227,6 +240,24 @@ const DashboardScreen = () => {
       animatedWater.removeListener(waterListener)
     }
   }, [animatedSteps, animatedWater])
+
+  // Fetch weather data
+  useEffect(() => {
+    const loadWeatherData = async () => {
+      setWeatherLoading(true);
+      try {
+        const data = await fetchWeatherData();
+        setWeatherData(data);
+      } catch (error) {
+        console.error('Failed to load weather data:', error);
+        // Keep the default loading state data
+      } finally {
+        setWeatherLoading(false);
+      }
+    };
+
+    loadWeatherData();
+  }, []);
 
   const recentActivity = useMemo(
     () => [
@@ -348,9 +379,66 @@ const DashboardScreen = () => {
     });
   }, [currentTipIndex, dailyTips.length, fadeAnim, isRefreshingTip]);
   
+  // Get the selected medication data
+  const selectedMedicationData = selectedMedication 
+    ? medications.find(med => med.id === selectedMedication) 
+    : null;
+
+  // Refresh weather data
+  const refreshWeatherData = useCallback(async () => {
+    setWeatherLoading(true);
+    try {
+      const data = await fetchWeatherData();
+      setWeatherData(data);
+    } catch (error) {
+      console.error('Failed to refresh weather data:', error);
+      Alert.alert('Weather Update', 'Unable to refresh weather data. Please try again later.');
+    } finally {
+      setWeatherLoading(false);
+    }
+  }, []);
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: themeStyles.container.backgroundColor }]}>
       <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
+        {/* Medication Confirmation Modal */}
+        <Modal
+          visible={selectedMedication !== null}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setSelectedMedication(null)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, themeStyles.modalContent]}>
+              <Text style={[styles.modalTitle, themeStyles.modalTitle]}>
+                {selectedMedicationData?.taken ? 'Mark as Not Taken?' : 'Medication Reminder'}
+              </Text>
+              <Text style={[styles.modalText, themeStyles.modalText]}>
+                {selectedMedicationData?.taken 
+                  ? `Mark ${selectedMedicationData.name} as not taken?`
+                  : `Did you take your ${selectedMedicationData?.name}?`}
+              </Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity 
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={() => handleMedicationConfirmation(false)}
+                >
+                  <Text style={[styles.cancelButtonText, themeStyles.cancelButtonText]}>
+                    {selectedMedicationData?.taken ? 'Cancel' : 'Not Yet'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={() => handleMedicationConfirmation(true)}
+                >
+                  <Text style={styles.confirmButtonText}>
+                    {selectedMedicationData?.taken ? 'Mark Not Taken' : 'Taken'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         <LinearGradient
           colors={darkMode ? ["#1E1E1E", "#1A1A1A", "#121212"] : ["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
           style={styles.gradient}>
@@ -406,12 +494,31 @@ const DashboardScreen = () => {
               <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 0 }]}>
                 Weather
               </Text>
-              <Ionicons name={weatherData.icon as any} size={24} color="#FFA726" />
+              <View style={styles.weatherHeaderActions}>
+                <TouchableOpacity 
+                  onPress={refreshWeatherData}
+                  disabled={weatherLoading}
+                  style={styles.weatherRefreshButton}
+                  activeOpacity={0.7}
+                >
+                  <Feather 
+                    name="refresh-cw" 
+                    size={18} 
+                    color={darkMode ? '#4CAF50' : '#2E7D32'}
+                    style={weatherLoading ? styles.spinningIcon : undefined}
+                  />
+                </TouchableOpacity>
+                {weatherLoading ? (
+                  <Ionicons name="refresh" size={24} color="#FFA726" />
+                ) : (
+                  <Ionicons name={weatherData.icon as any} size={24} color="#FFA726" />
+                )}
+              </View>
             </View>
             <View style={styles.weatherContent}>
               <View style={styles.weatherMain}>
                 <Text style={[styles.weatherTemp, themeStyles.profileName]}>
-                  {weatherData.temperature}°C
+                  {weatherLoading ? '--' : `${weatherData.temperature}°C`}
                 </Text>
                 <Text style={[styles.weatherCondition, themeStyles.profileStatus]}>
                   {weatherData.condition}
@@ -419,32 +526,24 @@ const DashboardScreen = () => {
                 <Text style={[styles.weatherLocation, themeStyles.detailLabel]}>
                   {weatherData.location}
                 </Text>
+                {weatherData.description && weatherData.description !== weatherData.condition && (
+                  <Text style={[styles.weatherDescription, themeStyles.detailLabel]}>
+                    {weatherData.description}
+                  </Text>
+                )}
               </View>
-              <View style={styles.weatherContent}>
-                <View style={styles.weatherMain}>
-                  <Text style={[styles.weatherTemp, themeStyles.profileName]}>
-                    {weatherData.temperature}°C
-                  </Text>
-                  <Text style={[styles.weatherCondition, themeStyles.profileStatus]}>
-                    {weatherData.condition}
-                  </Text>
-                  <Text style={[styles.weatherLocation, themeStyles.detailLabel]}>
-                    {weatherData.location}
+              <View style={styles.weatherDetails}>
+                <View style={styles.weatherDetailItem}>
+                  <Feather name="droplet" size={16} color="#2196F3" />
+                  <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                    {weatherLoading ? '--' : `${weatherData.humidity}%`}
                   </Text>
                 </View>
-                <View style={styles.weatherDetails}>
-                  <View style={styles.weatherDetailItem}>
-                    <Feather name="droplet" size={16} color="#2196F3" />
-                    <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
-                      {weatherData.humidity}%
-                    </Text>
-                  </View>
-                  <View style={styles.weatherDetailItem}>
-                    <Feather name="wind" size={16} color="#4CAF50" />
-                    <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
-                      {weatherData.windSpeed} km/h
-                    </Text>
-                  </View>
+                <View style={styles.weatherDetailItem}>
+                  <Feather name="wind" size={16} color="#4CAF50" />
+                  <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                    {weatherLoading ? '--' : `${weatherData.windSpeed} km/h`}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -654,7 +753,13 @@ const DashboardScreen = () => {
           </View>
           
           {/* Footer */}
-          <View style={[styles.footer, themeStyles.footer]}>
+          <View style={[{
+            padding: 20,
+            paddingBottom: 40, 
+            alignItems: 'center',
+            marginTop: 90,
+            borderTopWidth: 1,
+          }, themeStyles.footer]}>
             <View style={styles.footerLinks}>
               <TouchableOpacity onPress={() => router.push('/screens/about')}>
                 <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.about')}</Text>
@@ -737,6 +842,9 @@ const getThemeStyles = (isDark: boolean) => ({
   dailyTipDescription: {
     color: isDark ? '#A0A0A0' : '#666666',
   },
+  modalText: {
+    color: isDark ? '#E0E0E0' : '#555555',
+  },
   timelineItem: {
     backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
   },
@@ -759,17 +867,28 @@ const getThemeStyles = (isDark: boolean) => ({
     backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
   },
   modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold' as const,
+    marginBottom: 16,
+    textAlign: 'center' as const,
     color: isDark ? '#FFFFFF' : '#000000',
+    fontFamily: 'JetBrainsMono-Bold',
   },
-  modalText: {
-    color: isDark ? '#E0E0E0' : '#555555',
+  modalButton: {
+    backgroundColor: isDark ? '#2D2D2D' : '#F5F5F5',
+  },
+  cancelButton: {
+    backgroundColor: isDark ? '#2D2D2D' : '#F5F5F5',
+  },
+  confirmButton: {
+    backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
   },
   cancelButtonText: {
-    color: isDark ? '#A0A0A0' : '#666666',
+    color: isDark ? '#E0E0E0' : '#333333',
   },
-  footer: {
-    backgroundColor: 'transparent',
-    borderTopColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
   footerLink: {
     color: isDark ? '#A0A0A0' : '#666666',
@@ -785,6 +904,10 @@ const getThemeStyles = (isDark: boolean) => ({
   },
   footerBuiltBy: {
     color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footer: {
+    backgroundColor: 'transparent',
+    borderTopColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
   },
 });
 
@@ -846,28 +969,64 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontFamily: 'JetBrainsMono-Regular',
   },
+
+  // Modal styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 16,
-    marginBottom: 12,
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    width: '85%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold' as const,
+    marginBottom: 16,
+    textAlign: 'center' as const,
+    color: '#000000',
     fontFamily: 'JetBrainsMono-Bold',
   },
-  // Footer styles
-  footer: {
-    padding: 20,
-    paddingBottom: 40, 
-    alignItems: 'center',
-    marginTop: 90,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
+  modalText: {
+    fontSize: 16,
+    marginBottom: 24,
+    textAlign: 'center' as const,
+    lineHeight: 24,
+    fontFamily: 'JetBrainsMono-Regular',
   },
+  modalButtons: {
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    marginHorizontal: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#F5F5F5',
+  },
+  confirmButton: {
+    backgroundColor: '#4CAF50',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600' as const,
+  },
+  cancelButtonText: {
+    color: '#333333',
+    fontWeight: '600' as const,
+  },
+  // Footer styles - using themeStyles.footer for theming
   footerLinks: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -908,12 +1067,6 @@ const styles = StyleSheet.create({
   githubLink: {
     color: '#E53935',
     textDecorationLine: 'underline',
-  },
-  modalContent: {
-    width: '85%',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
   },
   healthStatsContainer: {
     paddingHorizontal: 16,
@@ -1018,13 +1171,6 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Regular',
     lineHeight: 20,
   },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center',
-    fontFamily: 'JetBrainsMono-Bold',
-  },
   profileCard: {
     margin: 16,
     borderRadius: 16,
@@ -1120,20 +1266,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
   },
-  cancelButton: {
-    padding: 10,
-  },
-  cancelButtonText: {
-    fontSize: 15,
-    fontFamily: 'JetBrainsMono-Regular',
-  },
-  modalText: {
-    fontSize: 15,
-    marginBottom: 25,
-    textAlign: 'center',
-    lineHeight: 22,
-    fontFamily: 'JetBrainsMono-Regular',
-  },
   
   // Weather Widget Styles
   weatherWidget: {
@@ -1152,6 +1284,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  weatherHeaderActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  weatherRefreshButton: {
+    padding: 6,
+    borderRadius: 20,
+  },
+  spinningIcon: {
+    transform: [{ rotate: '45deg' }],
   },
   weatherContent: {
     flexDirection: 'row',
@@ -1175,6 +1319,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
     fontFamily: 'JetBrainsMono-Regular',
+  },
+  weatherDescription: {
+    fontSize: 11,
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
+    fontStyle: 'italic',
   },
   weatherDetails: {
     alignItems: 'flex-end',
@@ -1286,6 +1436,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600' as const,
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
   subsectionTitle: {
     fontSize: 14,
     fontWeight: '600',
@@ -1368,15 +1524,16 @@ const styles = StyleSheet.create({
   },
   appointmentTime: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     fontFamily: 'JetBrainsMono-Bold',
   },
   
-  // Daily Tip Text Style (renamed to avoid conflict)
+  // Daily Tip Text Style
   dailyTipTitleText: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Bold',
   },
 });
 

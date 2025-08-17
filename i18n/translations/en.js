@@ -1,6 +1,7 @@
 export default {
   // Common UI elements
   "common": {
+    "copyright": "© 2023 Lifeline. All rights reserved.",
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
