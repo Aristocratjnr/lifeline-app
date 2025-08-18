@@ -13,11 +13,16 @@ import {
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
+import { Colors } from '@/constants/Colors';
 
 export default function CallLogsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [refreshing, setRefreshing] = useState(false);
+  const { darkMode } = useDisplayPreferences();
+  const themeColors = darkMode ? Colors.dark : Colors.light;
+  const styles = getStyles(darkMode);
   
   // Mock doctor data with profile images
   const doctors = {
@@ -134,7 +139,7 @@ export default function CallLogsScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <MaterialIcons name="arrow-back" size={24} color="#000" />
+          <MaterialIcons name="arrow-back" size={24} color={themeColors.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('callLogs.title')}</Text>
       </View>
@@ -199,111 +204,127 @@ export default function CallLogsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  backButton: {
-    padding: 5,
-    marginRight: 15,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  logItem: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    paddingVertical: 12,
-  },
-  doctorInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-  },
-  doctorAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
-  },
-  doctorDetails: {
-    flex: 1,
-  },
-  nameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 2,
-  },
-  doctorName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginRight: 6,
-  },
-  specialty: {
-    fontSize: 13,
-    color: '#666',
-    marginBottom: 4,
-  },
-  statusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginLeft: 6,
-  },
-  onlineDot: {
-    backgroundColor: '#4CAF50',
-  },
-  offlineDot: {
-    backgroundColor: '#9E9E9E',
-  },
-  callDetails: {
-    fontSize: 14,
-    color: '#666',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 16,
-    marginTop: 8,  // Added margin to push buttons down
-  },
-  actionButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-  },
-  callButton: {
-    backgroundColor: '#EF4444',
-    marginLeft: 46,
-  },
-  messageButton: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#EF4444',
-    marginLeft: 22,
-  },
-});
+const getStyles = (darkMode: boolean) => {
+  const backgroundColor = darkMode ? Colors.dark.background : Colors.light.background;
+  const textColor = darkMode ? Colors.dark.text : Colors.light.text;
+  const borderColor = darkMode ? '#333' : '#eee';
+  const secondaryText = darkMode ? '#9BA1A6' : '#666';
+  const cardBackground = darkMode ? '#1E1E1E' : '#fff';
+  const shadowColor = darkMode ? '#000' : 'rgba(0,0,0,0.1)';
+  const messageButtonBg = darkMode ? '#2D2D2D' : '#fff';
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: backgroundColor,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+      backgroundColor: darkMode ? '#1E1E1E' : '#fff',
+    },
+    backButton: {
+      padding: 5,
+      marginRight: 15,
+    },
+    headerTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: textColor,
+    },
+    content: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: backgroundColor,
+    },
+    logItem: {
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+      paddingVertical: 12,
+      backgroundColor: cardBackground,
+      marginBottom: 8,
+      borderRadius: 8,
+      padding: 12,
+    },
+    doctorInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 8,
+    },
+    doctorAvatar: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      marginRight: 12,
+      borderWidth: 1,
+      borderColor: borderColor,
+    },
+    doctorDetails: {
+      flex: 1,
+    },
+    nameContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 2,
+    },
+    doctorName: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: textColor,
+      marginRight: 6,
+    },
+    specialty: {
+      fontSize: 13,
+      color: secondaryText,
+      marginBottom: 4,
+    },
+    statusDot: {
+      width: 10,
+      height: 10,
+      borderRadius: 5,
+      marginLeft: 6,
+    },
+    onlineDot: {
+      backgroundColor: '#4CAF50',
+    },
+    offlineDot: {
+      backgroundColor: '#9E9E9E',
+    },
+    callDetails: {
+      fontSize: 14,
+      color: secondaryText,
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: 16,
+      marginTop: 8,
+    },
+    actionButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 12,
+      elevation: 2,
+      shadowColor: shadowColor,
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: darkMode ? 0.5 : 0.2,
+      shadowRadius: 1.5,
+    },
+    callButton: {
+      backgroundColor: '#EF4444',
+      marginLeft: 46,
+    },
+    messageButton: {
+      backgroundColor: messageButtonBg,
+      borderWidth: 1,
+      borderColor: '#EF4444',
+      marginLeft: 22,
+    },
+  });
+};

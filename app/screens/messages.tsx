@@ -3,6 +3,8 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '@/constants/Colors';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
 
 interface Message {
   id: string;
@@ -25,6 +27,9 @@ export default function MessagesScreen() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const flatListRef = useRef<FlatList>(null);
+  const { darkMode } = useDisplayPreferences();
+  const themeColors = darkMode ? Colors.dark : Colors.light;
+  const styles = getStyles(darkMode ? 'dark' : 'light');
   
   // Doctor data from navigation parameters or fallback
   const { doctorId, doctorName } = useLocalSearchParams<{
@@ -149,8 +154,15 @@ export default function MessagesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <MaterialIcons name="arrow-back" size={24} color="#000" />
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => router.back()}
+        >
+          <MaterialIcons 
+            name="arrow-back" 
+            size={24} 
+            color={themeColors.text} 
+          />
         </TouchableOpacity>
         <View style={styles.headerInfo}>
           <Text style={styles.doctorName}>{doctor.name}</Text>
@@ -179,10 +191,10 @@ export default function MessagesScreen() {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
+            placeholder="Type a message..."
+            placeholderTextColor={darkMode ? '#9BA1A6' : '#666'}
             value={message}
             onChangeText={setMessage}
-            placeholder="Type a message..."
-            placeholderTextColor="#999"
             multiline
           />
           <TouchableOpacity 
@@ -191,9 +203,9 @@ export default function MessagesScreen() {
             disabled={message.trim() === ''}
           >
             <MaterialIcons 
-              name={message.trim() === '' ? 'mic' : 'send'} 
+              name="send" 
               size={24} 
-              color={message.trim() === '' ? '#666' : '#EF4444'} 
+              color={message.trim() === '' ? (darkMode ? '#555' : '#999') : '#EF4444'} 
             />
           </TouchableOpacity>
         </View>
@@ -202,121 +214,127 @@ export default function MessagesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  backButton: {
-    padding: 5,
-    marginRight: 10,
-  },
-  headerInfo: {
-    marginLeft: 10,
-  },
-  doctorName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-  },
-  doctorStatus: {
-    fontSize: 14,
-    color: '#666',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginLeft: 6,
-  },
-  content: {
-    flex: 1,
-  },
-  messagesList: {
-    padding: 15,
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    alignItems: 'flex-end',
-  },
-  userMessageContainer: {
-    justifyContent: 'flex-end',
-  },
-  doctorMessageContainer: {
-    justifyContent: 'flex-start',
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    marginRight: 10,
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    padding: 12,
-    borderRadius: 18,
-  },
-  doctorBubble: {
-    backgroundColor: '#fff',
-    borderBottomLeftRadius: 4,
-  },
-  userBubble: {
-    backgroundColor: '#EF4444',
-    borderBottomRightRadius: 4,
-  },
-  messageText: {
-    fontSize: 16,
-    lineHeight: 20,
-  },
-  userBubbleText: {
-    color: '#fff',
-  },
-  doctorBubbleText: {
-    color: '#000',
-  },
-  messageTime: {
-    fontSize: 12,
-    marginTop: 4,
-    textAlign: 'right',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    alignItems: 'flex-end',
-  },
-  input: {
-    flex: 1,
-    minHeight: 40,
-    maxHeight: 120,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginRight: 10,
-    fontSize: 16,
-    color: '#000',
-  },
-  sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+const getStyles = (colorScheme: 'light' | 'dark') => {
+  const isDark = colorScheme === 'dark';
+  const themeColors = Colors[colorScheme];
+  
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 15,
+      backgroundColor: isDark ? '#1E1E1E' : '#fff',
+      borderBottomWidth: 1,
+      borderBottomColor: isDark ? '#333' : '#eee',
+    },
+    backButton: {
+      padding: 5,
+      marginRight: 10,
+    },
+    headerInfo: {
+      marginLeft: 10,
+    },
+    doctorName: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: themeColors.text,
+    },
+    doctorStatus: {
+      fontSize: 14,
+      color: isDark ? '#9BA1A6' : '#666',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    statusDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      marginLeft: 6,
+    },
+    content: {
+      flex: 1,
+    },
+    messagesList: {
+      padding: 15,
+    },
+    messageContainer: {
+      flexDirection: 'row',
+      marginBottom: 15,
+      alignItems: 'flex-end',
+    },
+    userMessageContainer: {
+      justifyContent: 'flex-end',
+    },
+    doctorMessageContainer: {
+      justifyContent: 'flex-start',
+    },
+    avatar: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      marginRight: 10,
+    },
+    messageBubble: {
+      maxWidth: '80%',
+      padding: 12,
+      borderRadius: 18,
+    },
+    doctorBubble: {
+      backgroundColor: isDark ? '#2D2D2D' : '#fff',
+      borderBottomLeftRadius: 4,
+    },
+    userBubble: {
+      backgroundColor: '#EF4444',
+      borderBottomRightRadius: 4,
+    },
+    messageText: {
+      fontSize: 16,
+      lineHeight: 20,
+    },
+    userBubbleText: {
+      color: '#fff',
+    },
+    doctorBubbleText: {
+      color: themeColors.text,
+    },
+    messageTime: {
+      fontSize: 12,
+      marginTop: 4,
+      textAlign: 'right',
+      color: isDark ? '#9BA1A6' : '#666',
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      padding: 10,
+      backgroundColor: isDark ? '#1E1E1E' : '#fff',
+      borderTopWidth: 1,
+      borderTopColor: isDark ? '#333' : '#eee',
+      alignItems: 'flex-end',
+    },
+    input: {
+      flex: 1,
+      minHeight: 40,
+      maxHeight: 120,
+      backgroundColor: isDark ? '#2D2D2D' : '#f0f0f0',
+      borderRadius: 20,
+      paddingHorizontal: 15,
+      paddingTop: 10,
+      paddingBottom: 10,
+      marginRight: 10,
+      fontSize: 16,
+      color: themeColors.text,
+    },
+    sendButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: isDark ? '#2D2D2D' : '#f0f0f0',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
+};
