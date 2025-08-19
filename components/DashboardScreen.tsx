@@ -626,6 +626,30 @@ const DashboardScreen = () => {
             </View>
           </View>
           
+          {/* First Aid Guides Section */}
+          <View style={[styles.sectionContainer, { marginTop: 16 }]}>
+            <TouchableOpacity 
+              style={[styles.firstAidCard, themeStyles.profileCard]}
+              onPress={() => router.push('/screens/firstAidGuide')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.firstAidContent}>
+                <View style={styles.firstAidIconContainer}>
+                  <FontAwesome5 name="first-aid" size={28} color="#FF5252" />
+                </View>
+                <View style={styles.firstAidTextContainer}>
+                  <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 4 }]}>
+                    First Aid Guides
+                  </Text>
+                  <Text style={[styles.firstAidDescription, themeStyles.detailLabel]}>
+                    Access step-by-step guides for common medical emergencies
+                  </Text>
+                </View>
+                <AntDesign name="right" size={20} color={darkMode ? '#888' : '#ccc'} />
+              </View>
+            </TouchableOpacity>
+          </View>
+          
           {/* Enhanced Health Stats */}
           <View style={styles.healthStatsContainer}>
             <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 16 }]}>
@@ -1194,8 +1218,41 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   healthStatsContainer: {
+    marginTop: 24,
     paddingHorizontal: 16,
-    marginBottom: 16,
+  },
+  sectionContainer: {
+    paddingHorizontal: 16,
+  },
+  firstAidCard: {
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  firstAidContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  firstAidIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 82, 82, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  firstAidTextContainer: {
+    flex: 1,
+  },
+  firstAidDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 2,
   },
   statsRow: {
     flexDirection: 'row',
