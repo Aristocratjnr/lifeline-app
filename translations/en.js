@@ -9,7 +9,8 @@ export default {
     "confirm": "Confirm",
     "back": "Back",
     "next": "Next",
-    "search": "Search"
+    "search": "Search",
+    "close": "Close"
   },
 
   // Navigation and tabs
@@ -89,7 +90,19 @@ export default {
       "subtitle": "App terms and conditions"
     },
     "about": {
-      "title": "About",
+      "title": "About Us",
+      "aboutUs": "About Us",
+      "header": "ABOUT",
+      "aboutLifeline": "About LIFELINE",
+      "lifelineDescription": "Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you're prepared to act quickly and effectively.",
+      "appVersion": "App Version",
+      "versionNumber": "1.0.0",
+      "acknowledgement": "Acknowledgement of Credit:",
+      "acknowledgementDescription": "This application was made possible through the collaborative efforts and support of the following individuals and entities. We extend our sincere gratitude to:",
+      "daniellaCredit": "Daniella Asiedu - Lead UI/UX & Developer",
+      "davidCredit": "David Ayim Obuobi - Assistance Developer Credits",
+      "specialMention": "Special Mention:",
+      "stephenCredit": "Stephen Adingo, for guidance and mentorship throughout the project.",
       "subtitle": "App info and version"
     },
     "help": {
@@ -224,6 +237,25 @@ export default {
         "description": "This Privacy Policy was last updated on August 12, 2025. Please check back periodically for updates."
       }
     }
+  },
+
+  // Donate
+  "donate": {
+    "title": "Support Lifeline",
+    "subtitle": "Your donation helps us keep providing life-saving information and support to everyone, everywhere. Thank you for making a difference!",
+    "donateNow": "Donate Now",
+    "paymentDetails": "Payment Details",
+    "telecelCash": "Telecel-Cash:",
+    "daniellaAccount": "Daniella Asiedu",
+    "mtnMomo": "MTN-MOMO:",
+    "davidAccount": "David Obuobi",
+    "bankGcb": "Bank(GCB):",
+    "usdtWallet": "USDT Wallet TRC20:",
+    "close": "Close",
+    "thankYouAlert": "Thank you so much! 🥲",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
   },
 
   // AI Assistant

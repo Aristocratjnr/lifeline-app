@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing, Modal, Pressable, Linking, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Audio } from 'expo-av';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
+import { Colors } from '@/constants/Colors';
 
 interface Message {
   id: string;
@@ -25,6 +27,10 @@ interface Doctor {
 export default function MessagesScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
+  const themeColors = darkMode ? Colors.dark : Colors.light;
+  const styles = getStyles(darkMode, themeColors);
+  
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isRecording, setIsRecording] = useState(false);
@@ -521,83 +527,95 @@ export default function MessagesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    paddingBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 8,
-  },
-  doctorInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  doctorAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
-  },
-  doctorDetails: {
-    flex: 1,
-  },
-  doctorName: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  verifiedIcon: {
-    marginLeft: 4,
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  doctorStatus: {
-    fontSize: 13,
-    color: '#666',
-    marginLeft: 6,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  headerIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerButton: {
-    padding: 8,
-    marginLeft: 8,
-  },
-  content: {
-    flex: 1,
+const getStyles = (darkMode: boolean, themeColors: any) => {
+  const backgroundColor = themeColors.background;
+  const textColor = themeColors.text;
+  const borderColor = darkMode ? '#333' : '#f0f0f0';
+  const cardBackground = darkMode ? '#1E1E1E' : '#fff';
+  const secondaryText = themeColors.tabIconDefault;
+  const inputBackground = darkMode ? '#2D2D2D' : '#f5f5f5';
+  const messageBackground = darkMode ? '#2D2D2D' : '#f0f0f0';
+  const userMessageBackground = darkMode ? '#EF4444' : '#EF4444';
+  const userMessageText = '#fff';
+  const timeText = darkMode ? '#aaa' : '#666';
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: backgroundColor,
+    },
+    header: {
+      backgroundColor: cardBackground,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+      paddingBottom: 12,
+      shadowColor: darkMode ? '#000' : '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: darkMode ? 0.3 : 0.05,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+    headerContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingTop: 12,
+    },
+    backButton: {
+      padding: 8,
+      marginRight: 8,
+    },
+    doctorInfo: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    doctorAvatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginRight: 12,
+      borderWidth: 1,
+      borderColor: borderColor,
+    },
+    doctorDetails: {
+      flex: 1,
+    },
+    doctorName: {
+      fontSize: 17,
+      fontWeight: '600',
+      color: textColor,
+      marginBottom: 2,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    verifiedIcon: {
+      marginLeft: 4,
+    },
+    statusContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    doctorStatus: {
+      fontSize: 13,
+      color: secondaryText,
+      marginLeft: 6,
+    },
+    statusDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+    },
+    headerIcons: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    headerButton: {
+      padding: 8,
+      marginLeft: 8,
+    },
+    content: {
+      flex: 1,
   },
   messagesList: {
     padding: 15,
@@ -663,165 +681,141 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-    backgroundColor: '#fff',
+    backgroundColor: cardBackground,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderTopColor: borderColor,
     alignItems: 'center',
   },
   messageInput: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: inputBackground,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginRight: 10,
     maxHeight: 120,
+    color: textColor,
   },
   input: {
     flex: 1,
-    minHeight: 42,
-    maxHeight: 120,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 21,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginRight: 10,
-    fontSize: 16,
-    color: '#1a1a1a',
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
-  },
-  sendButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  recordButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  stopButton: {
-    backgroundColor: '#EF4444',
-  },
-  recordingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffebee',
-    borderRadius: 21,
-    paddingHorizontal: 12,
-    height: 42,
-  },
-  recordingTime: {
-    color: '#EF4444',
-    fontWeight: '600',
-    marginLeft: 8,
-    minWidth: 40,
+    color: textColor,
   },
   audioMessage: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    marginTop: 4,
   },
   audioWaveform: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 12,
+    flex: 1,
     height: 30,
+    marginHorizontal: 8,
   },
   audioBar: {
-    width: 3,
-    marginHorizontal: 1.5,
-    borderRadius: 2,
+    height: 2,
+    backgroundColor: secondaryText,
+    marginVertical: 2,
   },
   userAudioBar: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: '#fff',
   },
   doctorAudioBar: {
-    backgroundColor: '#EF4444',
+    backgroundColor: secondaryText,
   },
   audioDuration: {
     fontSize: 12,
-    marginLeft: 4,
+    color: secondaryText,
   },
   userAudioDuration: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255,255,255,0.7)',
   },
   doctorAudioDuration: {
-    color: '#666',
+    color: secondaryText,
   },
-  // Modal styles
+  recordingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: darkMode ? '#3A1E1E' : '#FFEBEE',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
+  },
+  recordButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EF4444',
+  },
+  stopButton: {
+    backgroundColor: '#EF4444',
+  },
+  recordingTime: {
+    marginLeft: 8,
+    color: '#EF4444',
+    fontWeight: '600',
+  },
+  sendButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   modalContent: {
-    backgroundColor: 'white',
+    width: '100%',
+    backgroundColor: cardBackground,
     borderRadius: 12,
     padding: 20,
-    width: '100%',
-    maxWidth: 320,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     marginBottom: 12,
-    color: '#333',
-    textAlign: 'center',
+    color: textColor,
   },
   modalText: {
     fontSize: 16,
-    color: '#555',
-    marginBottom: 24,
     textAlign: 'center',
-    lineHeight: 24,
+    marginBottom: 20,
+    color: secondaryText,
   },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
+    width: '100%',
   },
   modalButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 4,
+    alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: darkMode ? '#333' : '#f0f0f0',
+    marginRight: 10,
   },
   confirmButton: {
     backgroundColor: '#EF4444',
   },
   cancelButtonText: {
-    color: '#333',
+    color: darkMode ? '#fff' : '#333',
     fontWeight: '600',
-    fontSize: 16,
   },
   confirmButtonText: {
     color: 'white',
     fontWeight: '600',
-    fontSize: 16,
   },
 });
+};

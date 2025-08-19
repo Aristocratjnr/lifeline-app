@@ -1,13 +1,17 @@
 "use client"
 
-import { AntDesign, Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons"
+import AppointmentModal from "@/components/AppointmentModal"
+import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
+import { useProfile } from "@/context/ProfileContext"
+import { fetchWeatherData, WeatherData } from "@/services/weatherService"
+import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ActivityIndicator, Alert, Animated, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from "react-native"
+import { Alert, Animated, Linking, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -15,6 +19,24 @@ const DashboardScreen = () => {
   const { width: windowWidth } = useWindowDimensions();
   const circleSize = Math.min(80, windowWidth / 4);
   const { t } = useTranslation()
+  const { darkMode } = useDisplayPreferences()
+  const { profile } = useProfile()
+  const router = useRouter()
+
+  // Handle emergency calls
+  const handleEmergencyCall = useCallback((phoneNumber: string) => {
+    const url = `tel:${phoneNumber}`;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        return Linking.openURL(url);
+      } else {
+        Alert.alert('Error', 'Unable to make a call. Please try again later.');
+      }
+    }).catch(err => {
+      console.error('Error making call:', err);
+      Alert.alert('Error', 'Unable to make a call. Please try again later.');
+    });
+  }, []);
 
   // Load fonts (first hook)
   const [fontsLoaded] = useFonts({
@@ -63,88 +85,153 @@ const DashboardScreen = () => {
 
   const healthStats = useMemo(
     () => ({
-      steps: 7421,
+      steps: 1700,
       lastCheckup: "25/06/25",
-      waterIntake: 6, // out of 8 glasses
+      waterIntake: 4, 
+      heartRate: 72,
+      bloodPressure: "120/80",
+      weight: "65 kg",
+      temperature: "36.5°C",
     }),
     [],
   )
+
+  // Weather data (real-time)
+  const [weatherData, setWeatherData] = useState<WeatherData>({
+    location: "Loading...",
+    temperature: 0,
+    condition: "Loading",
+    humidity: 0,
+    windSpeed: 0,
+    icon: "partly-sunny",
+    description: "Loading weather data..."
+  });
+  const [weatherLoading, setWeatherLoading] = useState(true);
+
+  // Emergency Contacts
+  const emergencyContacts = useMemo(() => [
+    {
+      id: 1,
+      name: "Emergency Services",
+      number: "911",
+      type: "emergency",
+      icon: "emergency"
+    },
+    {
+      id: 2,
+      name: "Family Doctor",
+      number: "+233 24 123 4567",
+      type: "doctor",
+      icon: "medical-services"
+    },
+    {
+      id: 3,
+      name: "Mom",
+      number: "+233 24 987 6543",
+      type: "family",
+      icon: "phone"
+    }
+  ], [])
+
+  // State for medication modal and data
+  const [selectedMedication, setSelectedMedication] = useState<number | null>(null);
+  const [medications, setMedications] = useState([
+    {
+      id: 1,
+      name: "Vitamin D",
+      dosage: "1 tablet",
+      time: "8:00 AM",
+      taken: false,
+      color: "#FF9800"
+    },
+    {
+      id: 2,
+      name: "Blood Pressure Med",
+      dosage: "2 tablets",
+      time: "2:00 PM",
+      taken: false,
+      color: "#4CAF50"
+    },
+    {
+      id: 3,
+      name: "Omega-3",
+      dosage: "1 capsule",
+      time: "8:00 PM",
+      taken: false,
+      color: "#2196F3"
+    }
+  ]);
+
+  // Appointments
+  const upcomingAppointments = useMemo(() => [
+    {
+      id: 1,
+      doctor: "Dr. Smith",
+      specialty: "Cardiologist",
+      date: "Aug 20, 2025",
+      time: "10:30 AM",
+      type: "Check-up",
+      location: "Korle Bu Teaching Hospital, Accra"
+    },
+    {
+      id: 2,
+      doctor: "Dr. Johnson",
+      specialty: "Dentist",
+      date: "Aug 25, 2025",
+      time: "3:00 PM",
+      type: "Cleaning",
+      location: "Dental Care Clinic, East Legon"
+    }
+  ], [])
+
+  // Appointment modal state
+  const [selectedAppointment, setSelectedAppointment] = useState<{
+    id: string;
+    doctor: string;
+    specialty: string;
+    date: string;
+    time: string;
+    location: string;
+  } | null>(null);
+  const [appointmentModalVisible, setAppointmentModalVisible] = useState(false);
+
+
+  // Handle medication toggle
+  const toggleMedication = useCallback((medicationId: number) => {
+    setSelectedMedication(medicationId);
+  }, []);
+
+  // Handle medication confirmation
+  const handleMedicationConfirmation = useCallback((confirm: boolean) => {
+    if (selectedMedication === null) return;
+    
+    if (confirm) {
+      setMedications(prevMedications =>
+        prevMedications.map(med =>
+          med.id === selectedMedication ? { ...med, taken: !med.taken } : med
+        )
+      );
+    }
+    
+    setSelectedMedication(null);
+  }, [selectedMedication]);
+
+  // Handle emergency contact call
+  const callEmergencyContact = useCallback((phoneNumber: string, name: string) => {
+    Alert.alert(
+      "Call Emergency Contact",
+      `Do you want to call ${name}?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Call", onPress: () => Linking.openURL(`tel:${phoneNumber}`) }
+      ]
+    )
+  }, [])
 
   const animatedSteps = useRef(new Animated.Value(0)).current
   const animatedWater = useRef(new Animated.Value(0)).current
   const [displayedSteps, setDisplayedSteps] = useState(0)
   const [displayedWater, setDisplayedWater] = useState(0)
-
-  // Bot state variables
-  const [showBotModal, setShowBotModal] = useState(false)
-  const [isConnectingDoctor, setIsConnectingDoctor] = useState(false)
-  const botPulseAnim = useRef(new Animated.Value(1)).current
-
-  const router = useRouter()
-
-  // Bot functions
-  const handleBotPress = () => {
-    setShowBotModal(true)
-  }
-
-  const handleCallDoctor = () => {
-    console.log('Call Doctor button pressed - initiating doctor connection')
-    setIsConnectingDoctor(true)
-    
-    // Log the connection attempt
-    const connectionStartTime = new Date().toISOString()
-    console.log(`[${connectionStartTime}] Attempting to connect to doctor...`)
-    
-    // Simulate connecting to doctor
-    setTimeout(() => {
-      const connectionCompleteTime = new Date().toISOString()
-      console.log(`[${connectionCompleteTime}] Successfully connected to doctor`)
-      console.log('Doctor Details:', {
-        name: 'Dr. Sarah Johnson',
-        specialty: 'Emergency Medicine',
-        connectionTime: connectionStartTime,
-        connectionDuration: '2s',
-        status: 'Connected'
-      })
-      
-      setIsConnectingDoctor(false)
-      setShowBotModal(false)
-      
-      // Log the alert being shown to user
-      console.log(`[${new Date().toISOString()}] Showing connection success alert to user`)
-      
-      Alert.alert(
-        'Connected to Doctor',
-        'Connected to Dr. Sarah Johnson\nSpecialty: Emergency Medicine\nEstimated wait time: 2 minutes',
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('User acknowledged doctor connection')
-          }
-        ]
-      )
-    }, 2000)
-  }
-
-  // Bot pulse animation
-  useEffect(() => {
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(botPulseAnim, {
-          toValue: 1.1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(botPulseAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    )
-    pulseAnimation.start()
-    return () => pulseAnimation.stop()
-  }, [botPulseAnim])
 
   useEffect(() => {
     Animated.timing(animatedSteps, {
@@ -169,6 +256,24 @@ const DashboardScreen = () => {
       animatedWater.removeListener(waterListener)
     }
   }, [animatedSteps, animatedWater])
+
+  // Fetch weather data
+  useEffect(() => {
+    const loadWeatherData = async () => {
+      setWeatherLoading(true);
+      try {
+        const data = await fetchWeatherData();
+        setWeatherData(data);
+      } catch (error) {
+        console.error('Failed to load weather data:', error);
+        // Keep the default loading state data
+      } finally {
+        setWeatherLoading(false);
+      }
+    };
+
+    loadWeatherData();
+  }, []);
 
   const recentActivity = useMemo(
     () => [
@@ -239,896 +344,1426 @@ const DashboardScreen = () => {
     </TouchableOpacity>
   ))
 
-  ActivityRow.displayName = "ActivityRow"
-
-  // Early return for fontsLoaded
-  if (!fontsLoaded) {
-    return <View style={styles.safeArea} />
-  }
-
+  // Format last visit date - using current date since lastVisit isn't stored in profile
+  const formatLastVisit = () => {
+    return new Date().toLocaleDateString();
+  };
+  
+  // User data with fallback values
   const user = {
-    name: "Daniella Asiedu",
-    age: "50",
-    gender: "Female",
-    location: "Ghana",
-    medicalCondition: "Common Cold",
-    contact: "020343077",
-    language: "English",
+    name: profile?.username || t('profile.guest'),
+    age: profile?.age || '',
+    gender: profile?.gender || t('profile.notSpecified'),
+    location: profile?.location || t('profile.locationNotSet'),
+    medicalCondition: t('conditions.healthy'),
+    language: t('languages.english'),
+    lastVisit: formatLastVisit(),
     avatar: require("@/assets/images/Daniella.jpeg"),
   };
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Floating Bot Assistant */}
-      <Animated.View 
-        style={[
-          styles.floatingBot,
-          {
-            transform: [{ scale: botPulseAnim }]
-          }
-        ]}
-      >
-        <TouchableOpacity 
-          style={styles.botButton}
-          onPress={handleBotPress}
-          activeOpacity={0.8}
-        >
-          <MaterialIcons name="support-agent" size={28} color="#fff" />
-        </TouchableOpacity>
-      </Animated.View>
+  // State for daily tips with animation
+  const [currentTipIndex, setCurrentTipIndex] = useState(0);
+  const [isRefreshingTip, setIsRefreshingTip] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  
+  // Get theme-based styles
+  const themeStyles = getThemeStyles(darkMode);
+  
+  // Navigate to profile settings
+  const handleEditProfile = () => {
+    router.push('/(screens)/profile-settings');
+  };
+  
+  // Handle refreshing daily tip with smooth animation
+  const refreshDailyTip = useCallback(() => {
+    if (isRefreshingTip) return;
+    
+    setIsRefreshingTip(true);
+    
+    // Fade out current tip
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => {
+      // Update to next tip
+      const nextIndex = (currentTipIndex + 1) % dailyTips.length;
+      setCurrentTipIndex(nextIndex);
       
-      <ScrollView contentContainerStyle={styles.container}>
-        <LinearGradient
-          colors={["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
-          style={styles.firstAidGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <View style={styles.headerContainer}>
-            <View style={styles.headerLeft}>
-              <Text style={styles.statsTitle}>{t("dashboard.healthStats")}</Text>
-              <View style={styles.headerIcons}>
-               
-                <TouchableOpacity onPress={() => router.replace("/main")} style={styles.iconButton}>
-                  <MaterialIcons name="logout" size={24} color="#D9534F" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={styles.statsRow}>
-            {/* Steps Stat */}
-            <View style={styles.statsItem}>
-              <AnimatedCircularProgress
-                size={circleSize}
-                width={10}
-                fill={Math.min((displayedSteps / 10000) * 100, 100)}
-                tintColor="#FC7A7A"
-                backgroundColor="#F3F4F6"
-                rotation={0}
-                lineCap="round"
-                style={{ marginBottom: 6 }}
-              >
-                {() => <FontAwesome5 name="walking" size={32} color="#FC7A7A" />}
-              </AnimatedCircularProgress>
-              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedSteps}</Text>
-              <Text style={styles.statsLabel}>{t("dashboard.steps")}</Text>
-            </View>
+      // Fade in new tip
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }).start(() => {
+        setIsRefreshingTip(false);
+      });
+    });
+  }, [currentTipIndex, dailyTips.length, fadeAnim, isRefreshingTip]);
+  
+  // Get the selected medication data
+  const selectedMedicationData = selectedMedication 
+    ? medications.find(med => med.id === selectedMedication) 
+    : null;
 
-            {/* Water Stat */}
-            <View style={styles.statsItem}>
-              <AnimatedCircularProgress
-                size={circleSize}
-                width={10}
-                fill={Math.min((displayedWater / 8) * 100, 100)}
-                tintColor="#60A5FA"
-                backgroundColor="#F3F4F6"
-                rotation={0}
-                lineCap="round"
-                style={{ marginBottom: 6 }}
-              >
-                {() => <FontAwesome5 name="tint" size={32} color="#60A5FA" />}
-              </AnimatedCircularProgress>
-              <Text style={[styles.statsValue, { fontSize: 22, marginTop: 8 }]}>{displayedWater}/8</Text>
-              <Text style={styles.statsLabel}>{t("dashboard.water")}</Text>
-            </View>
-          </View>
-        </LinearGradient>
+  // Refresh weather data
+  const refreshWeatherData = useCallback(async () => {
+    setWeatherLoading(true);
+    try {
+      const data = await fetchWeatherData();
+      setWeatherData(data);
+    } catch (error) {
+      console.error('Failed to refresh weather data:', error);
+      Alert.alert('Weather Update', 'Unable to refresh weather data. Please try again later.');
+    } finally {
+      setWeatherLoading(false);
+    }
+  }, []);
 
-        {/* First Aid Guide Card */}
-        <TouchableOpacity
-          style={styles.firstAidCard}
-          onPress={() => router.push("/screens/firstAidGuide")}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={["#FF6B6B", "#FF8E8E", "#FFB5B5"]}
-            style={styles.firstAidGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+  // Handle appointment modal
+  const handleAppointmentPress = useCallback((appointment: typeof upcomingAppointments[0]) => {
+    setSelectedAppointment({
+      id: appointment.id.toString(),
+      doctor: appointment.doctor,
+      specialty: appointment.specialty,
+      date: appointment.date,
+      time: appointment.time,
+      location: appointment.location,
+    });
+    setAppointmentModalVisible(true);
+  }, []);
+
+  const handleCloseAppointmentModal = useCallback(() => {
+    setAppointmentModalVisible(false);
+    setSelectedAppointment(null);
+  }, []);
+
+  // Handle logout
+  const handleLogout = useCallback(() => {
+    // In a real app, you would clear auth state here
+    router.replace('/');
+  }, [router]);
+
+  return (
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: themeStyles.container.backgroundColor }]}>
+      <View style={styles.headerContainer}>
+        <View style={styles.header}>
+          <View style={styles.headerLeft} />
+          <TouchableOpacity 
+            style={[styles.logoutButton, darkMode && styles.logoutButtonDark]}
+            onPress={handleLogout}
           >
-            <View style={styles.firstAidContent}>
-              <View style={styles.firstAidIconContainer}>
-                <View style={styles.firstAidIconGlow}>
-                  <MaterialIcons name="medical-services" size={32} color="#FFFFFF" />
-                </View>
-              </View>
-              <View style={styles.firstAidTextContainer}>
-                <Text style={styles.firstAidTitle}>First Aid Guides</Text>
-                <Text style={styles.firstAidSubtitle}>Emergency help at your fingertips</Text>
-                <View style={styles.firstAidBadge}>
-                  <Text style={styles.firstAidBadgeText}>15+ Guides</Text>
-                </View>
-              </View>
-              <View style={styles.firstAidArrow}>
-                <AntDesign name="right" size={20} color="#FFFFFF" />
-              </View>
-            </View>
-
-            {/* Decorative elements */}
-            <View style={styles.firstAidDecorative1} />
-            <View style={styles.firstAidDecorative2} />
-            <View style={styles.firstAidDecorative3} />
-          </LinearGradient>
-        </TouchableOpacity>
-
-        {/* Profile Card */}
-        <View style={styles.profileCard}>
-          <View style={styles.profileAvatarGlow}>
-            <Image source={user.avatar} style={styles.profileAvatar} contentFit="cover" transition={300} />
-          </View>
-          <Text style={styles.profileName}>{user.name}</Text>
-          <View style={styles.profileInfoRow}>
-            <Feather name="calendar" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>{t("dashboard.age")}:</Text>
-            <Text style={styles.profileInfoValue}>{user.age}</Text>
-            <Feather name="user" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
-            <Text style={styles.profileInfoLabel}>{t("dashboard.gender")}:</Text>
-            <Text style={styles.profileInfoValue}>{user.gender}</Text>
-          </View>
-          <View style={styles.profileInfoRow}>
-            <Feather name="map-pin" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>{t("dashboard.location")}:</Text>
-            <Text style={styles.profileInfoValue}>{user.location}</Text>
-          </View>
-          <View style={styles.profileInfoRow}>
-            <MaterialIcons name="healing" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoLabel}>{t("dashboard.condition")}:</Text>
-            <Text style={styles.profileInfoValue}>{user.medicalCondition}</Text>
-          </View>
-          <View style={styles.profileInfoRowNoWrap}>
-            <Feather name="phone" size={20} color="#222" style={styles.profileIcon} />
-            <Text style={styles.profileInfoValue}>{user.contact}</Text>
-            <FontAwesome5 name="language" size={20} color="#222" style={[styles.profileIcon, { marginLeft: 18 }]} />
-            <Text style={styles.profileInfoLabel}>{t("dashboard.language")}:</Text>
-            <Text style={styles.profileInfoValue}>{user.language}</Text>
-          </View>
-          <TouchableOpacity style={styles.editProfileButton} onPress={() => router.push("/screens/profile-settings")}>
-            <Text style={styles.editProfileButtonText}>{t("dashboard.editProfile")}</Text>
+            <Ionicons 
+              name="log-out-outline" 
+              size={20} 
+              color={darkMode ? '#FF6B6B' : '#FF4444'} 
+            />
+            <Text style={[styles.logoutText, { color: darkMode ? '#FF6B6B' : '#FF4444' }]}>
+              {t('common.logout')}
+            </Text>
           </TouchableOpacity>
         </View>
-
-        {/* Lifeline History */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{t("dashboard.lifelineHistory")}</Text>
-            <TouchableOpacity style={styles.viewAllButton}>
-              <AntDesign name="eyeo" size={16} color="#D9534F" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timelineContainer}>
-            <FlatList
-              data={timeline}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => <TimelineItem item={item} />}
-              scrollEnabled={false}
-            />
-          </View>
-        </View>
-
-        {/* Daily Tip */}
-        <View style={styles.dailyTipCard}>
-          <View style={styles.sectionHeader}>
-            <AntDesign name="info" size={16} color="#ccc" />
-            <Text style={styles.sectionTitle}>{t("dashboard.dailyTip")}</Text>
-          </View>
-          <View style={styles.tipContent}>
-            {/* Dynamic icon for the tip */}
-            {dailyTip.iconSet && dailyTip.iconName && (
-              <dailyTip.iconSet name={dailyTip.iconName} size={24} color="#D9534F" style={{ marginBottom: 4 }} />
-            )}
-            <Text style={styles.tipText}>{dailyTip.title}</Text>
-            <Text style={styles.tipSubText}>{dailyTip.content}</Text>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <TouchableOpacity style={styles.newTipButton} onPress={handleNewTip}>
-              <Feather name="refresh-cw" size={16} color="#D9534F" style={{ marginRight: 6 }} />
-            </TouchableOpacity>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Feather name="zap" size={14} color="#aaa" style={{ marginRight: 4 }} />
-              <Text style={styles.tipFooter}>{t("dashboard.newTipEveryDay")}</Text>
+      </View>
+      <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
+        {/* Medication Confirmation Modal */}
+        <Modal
+          visible={selectedMedication !== null}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setSelectedMedication(null)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, themeStyles.modalContent]}>
+              <Text style={[styles.modalTitle, themeStyles.modalTitle]}>
+                {selectedMedicationData?.taken ? 'Mark as Not Taken?' : 'Medication Reminder'}
+              </Text>
+              <Text style={[styles.modalText, themeStyles.modalText]}>
+                {selectedMedicationData?.taken 
+                  ? `Mark ${selectedMedicationData.name} as not taken?`
+                  : `Did you take your ${selectedMedicationData?.name}?`}
+              </Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity 
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={() => handleMedicationConfirmation(false)}
+                >
+                  <Text style={[styles.cancelButtonText, themeStyles.cancelButtonText]}>
+                    {selectedMedicationData?.taken ? 'Cancel' : 'Not Yet'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={() => handleMedicationConfirmation(true)}
+                >
+                  <Text style={styles.confirmButtonText}>
+                    {selectedMedicationData?.taken ? 'Mark Not Taken' : 'Taken'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </Modal>
 
-        {/* Recent Activity */}
-        <View style={styles.activityCard}>
-          <Text style={styles.activityTitle}>{t("dashboard.recentActivity")}</Text>
-          <FlatList
-            data={recentActivity}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <ActivityRow item={item} />}
-            scrollEnabled={false}
-          />
-        </View>
-      </ScrollView>
+        {/* Appointment Modal */}
+        <AppointmentModal
+          visible={appointmentModalVisible}
+          onClose={handleCloseAppointmentModal}
+          appointment={selectedAppointment || undefined}
+        />
 
-      {/* Medical Assistant Bot Modal */}
-      <Modal
-        visible={showBotModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowBotModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.botModalCard}>
+        <LinearGradient
+          colors={darkMode ? ["#1E1E1E", "#1A1A1A", "#121212"] : ["#FFFFFF", "#FAFAFA", "#F0F0F0"]}
+          style={styles.gradient}>
+          
+          {/* Profile Card */}
+          <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+            <View style={styles.profileHeader}>
+              <View style={styles.profileImageContainer}>
+                <Image 
+                  source={user.avatar} 
+                  style={styles.profileImage} 
+                  contentFit="cover"
+                />
+                <View style={[styles.editProfileBadge, { backgroundColor: themeStyles.primary }]}>
+                  <Feather name="edit-2" size={12} color="white" />
+                </View>
+              </View>
+              <View style={styles.profileInfo}>
+                <Text style={[styles.profileName, themeStyles.profileName]}>{user.name}</Text>
+                <Text style={[styles.profileStatus, themeStyles.profileStatus]}>
+                  {t('status.active')} • {user.lastVisit}
+                </Text>
+              </View>
+              <TouchableOpacity 
+                style={[styles.editButton, themeStyles.editButton]}
+                onPress={handleEditProfile}
+              >
+                <Feather name="edit-2" size={16} color={darkMode ? '#E0E0E0' : '#555555'} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.profileDetails}>
+              <View style={styles.detailRow}>
+                <View style={styles.detailItem}>
+                  <Text style={[styles.detailLabel, themeStyles.detailLabel]}>{t('profile.age')}</Text>
+                  <Text style={[styles.detailValue, themeStyles.detailValue]}>{user.age}</Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={[styles.detailLabel, themeStyles.detailLabel]}>{t('profile.gender')}</Text>
+                  <Text style={[styles.detailValue, themeStyles.detailValue]}>{user.gender}</Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={[styles.detailLabel, themeStyles.detailLabel]}>{t('profile.language')}</Text>
+                  <Text style={[styles.detailValue, themeStyles.detailValue]}>{user.language}</Text>
+                </View>
+              </View>
+              <View style={[styles.conditionBadge, themeStyles.conditionBadge]}>
+                <MaterialIcons name="medical-services" size={16} color="#D9534F" />
+                <Text style={[styles.conditionText, themeStyles.conditionText]}>
+                  {user.medicalCondition}
+                </Text>
+              </View>
+            </View>
+          </View>
+          
+          {/* Weather Widget */}
+          <View style={[styles.weatherWidget, themeStyles.profileCard, { marginBottom: 20 }]}>
+            <View style={styles.weatherHeader}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 0 }]}>
+                Weather
+              </Text>
+              <View style={styles.weatherHeaderActions}>
+                <TouchableOpacity 
+                  onPress={refreshWeatherData}
+                  disabled={weatherLoading}
+                  style={styles.weatherRefreshButton}
+                  activeOpacity={0.7}
+                >
+                  <Feather 
+                    name="refresh-cw" 
+                    size={18} 
+                    color={darkMode ? '#4CAF50' : '#2E7D32'}
+                    style={weatherLoading ? styles.spinningIcon : undefined}
+                  />
+                </TouchableOpacity>
+                {weatherLoading ? (
+                  <Ionicons name="refresh" size={24} color="#FFA726" />
+                ) : (
+                  <Ionicons name={weatherData.icon as any} size={24} color="#FFA726" />
+                )}
+              </View>
+            </View>
+            <View style={styles.weatherContent}>
+              <View style={styles.weatherMain}>
+                <Text style={[styles.weatherTemp, themeStyles.profileName]}>
+                  {weatherLoading ? '--' : `${weatherData.temperature}°C`}
+                </Text>
+                <Text style={[styles.weatherCondition, themeStyles.profileStatus]}>
+                  {weatherData.condition}
+                </Text>
+                <Text style={[styles.weatherLocation, themeStyles.detailLabel]}>
+                  {weatherData.location}
+                </Text>
+                {weatherData.description && weatherData.description !== weatherData.condition && (
+                  <Text style={[styles.weatherDescription, themeStyles.detailLabel]}>
+                    {weatherData.description}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.weatherDetails}>
+                <View style={styles.weatherDetailItem}>
+                  <Feather name="droplet" size={16} color="#2196F3" />
+                  <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                    {weatherLoading ? '--' : `${weatherData.humidity}%`}
+                  </Text>
+                </View>
+                <View style={styles.weatherDetailItem}>
+                  <Feather name="wind" size={16} color="#4CAF50" />
+                  <Text style={[styles.weatherDetailText, themeStyles.detailValue]}>
+                    {weatherLoading ? '--' : `${weatherData.windSpeed} km/h`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          
+          {/* First Aid Guides Section */}
+          <View style={[styles.sectionContainer, { marginTop: 16 }]}>
             <TouchableOpacity 
-              style={styles.modalCloseButton} 
-              onPress={() => setShowBotModal(false)}
+              style={[styles.firstAidCard, themeStyles.profileCard]}
+              onPress={() => router.push('/screens/firstAidGuide')}
+              activeOpacity={0.8}
             >
-              <AntDesign name="close" size={24} color="#666" />
+              <View style={styles.firstAidContent}>
+                <View style={styles.firstAidIconContainer}>
+                  <FontAwesome5 name="first-aid" size={28} color="#FF5252" />
+                </View>
+                <View style={styles.firstAidTextContainer}>
+                  <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 4 }]}>
+                    First Aid Guides
+                  </Text>
+                  <Text style={[styles.firstAidDescription, themeStyles.detailLabel]}>
+                    Access step-by-step guides for common medical emergencies
+                  </Text>
+                </View>
+                <AntDesign name="right" size={20} color={darkMode ? '#888' : '#ccc'} />
+              </View>
             </TouchableOpacity>
-            <View style={styles.botIconContainer}>
-              <View style={styles.botIcon}>
-                <MaterialIcons name="support-agent" size={48} color="#E53935" />
-              </View>
-              <View style={styles.botIconRing} />
-            </View>
-            <Text style={styles.botModalTitle}>{t('bot.title')}</Text>
-            <Text style={styles.botModalText}>{t('bot.description')}</Text>
+          </View>
+          
+          {/* Enhanced Health Stats */}
+          <View style={styles.healthStatsContainer}>
+            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 16 }]}>
+              Health Metrics Summary
+            </Text>
             
-            {isConnectingDoctor ? (
-              <View style={styles.connectingContainer}>
-                <ActivityIndicator size="large" color="#E53935" />
-                <Text style={styles.connectingText}>{t('bot.connecting')}</Text>
-              </View>
-            ) : (
-              <View style={styles.modalButtonsContainer}>
-                <TouchableOpacity 
-                  style={styles.callDoctorButton} 
-                  onPress={handleCallDoctor} 
-                  activeOpacity={0.8}
+            {/* Primary Stats Row */}
+            <View style={styles.statsRow}>
+              {/* Steps */}
+              <View style={styles.circularProgressContainer}>
+                <AnimatedCircularProgress
+                  size={circleSize}
+                  width={6}
+                  fill={(healthStats.steps / 10000) * 100}
+                  tintColor="#4CAF50"
+                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                  rotation={0}
+                  lineCap="round"
                 >
-                  <MaterialIcons name="phone" size={20} color="#fff" style={{ marginRight: 8 }} />
-                  <Text style={styles.callDoctorButtonText}>{t('bot.callDoctor')}</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={styles.callLogsButton} 
-                  onPress={() => {
-                    setShowBotModal(false);
-                    router.push('/screens/call-logs');
-                  }} 
-                  activeOpacity={0.8}
-                >
-                  <MaterialIcons name="history" size={20} color="#E53935" style={{ marginRight: 8 }} />
-                  <Text style={styles.callLogsButtonText}>{t('callLogs.title')}</Text>
-                </TouchableOpacity>
+                  {() => (
+                    <View style={styles.circularProgressContent}>
+                      <FontAwesome5 name="walking" size={24} color="#4CAF50" />
+                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedSteps.toLocaleString()}</Text>
+                    </View>
+                  )}
+                </AnimatedCircularProgress>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
               </View>
-            )}
-            
-            <View style={styles.modalFooter}>
-              <MaterialIcons name="info-outline" size={16} color="#666" style={{ marginRight: 6 }} />
-              <Text style={styles.modalFooterText}>{t('bot.available247')}</Text>
+              
+              {/* Water Intake */}
+              <View style={styles.circularProgressContainer}>
+                <AnimatedCircularProgress
+                  size={circleSize}
+                  width={6}
+                  fill={(healthStats.waterIntake / 8) * 100}
+                  tintColor="#2196F3"
+                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                  rotation={0}
+                  lineCap="round"
+                >
+                  {() => (
+                    <View style={styles.circularProgressContent}>
+                      <FontAwesome5 name="tint" size={24} color="#2196F3" />
+                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
+                    </View>
+                  )}
+                </AnimatedCircularProgress>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.water')}</Text>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      
-      {/* Floating Action Button for Bot */}
-      <TouchableOpacity 
-        style={styles.floatingBot}
-        onPress={() => setShowBotModal(true)}
-        activeOpacity={0.8}
-      >
-        <Animated.View style={[styles.botButton, { transform: [{ scale: botPulseAnim }] }]}>
-          <MaterialIcons name="support-agent" size={24} color="#fff" />
-        </Animated.View>
-      </TouchableOpacity>
+          
+          {/* Medication Reminders & Appointments */}
+          <View style={[styles.medicationSection, themeStyles.profileCard]}>
+            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 16 }]}>
+              Medications & Appointments
+            </Text>
+            
+            {/* Medication Reminders */}
+            <View style={styles.medicationList}>
+              <Text style={[styles.subsectionTitle, themeStyles.detailLabel]}>Today&apos;s Medications</Text>
+              {medications.map((med) => (
+                <TouchableOpacity
+                  key={med.id}
+                  style={[styles.medicationItem, themeStyles.timelineItem]}
+                  onPress={() => toggleMedication(med.id)}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.medicationIndicator, { backgroundColor: med.color }]} />
+                  <View style={styles.medicationInfo}>
+                    <Text style={[styles.medicationName, themeStyles.timelineTitle]}>
+                      {med.name}
+                    </Text>
+                    <Text style={[styles.medicationDetails, themeStyles.timelineDate]}>
+                      {med.dosage} • {med.time}
+                    </Text>
+                  </View>
+                  <View style={[styles.medicationStatus, { backgroundColor: med.taken ? '#4CAF50' : '#FFC107' }]}>
+                    <Feather 
+                      name={med.taken ? "check" : "clock"} 
+                      size={16} 
+                      color="white" 
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+            
+            {/* Upcoming Appointments */}
+            <View style={styles.appointmentsList}>
+              <Text style={[styles.subsectionTitle, themeStyles.detailLabel]}>Upcoming Appointments</Text>
+              {upcomingAppointments.map((appointment) => (
+                <TouchableOpacity
+                  key={appointment.id}
+                  style={[styles.appointmentItem, themeStyles.timelineItem]}
+                  onPress={() => handleAppointmentPress(appointment)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.appointmentDate}>
+                    <Text style={[styles.appointmentDay, themeStyles.timelineTitle]}>
+                      {appointment.date.split(' ')[1]}
+                    </Text>
+                    <Text style={[styles.appointmentMonth, themeStyles.timelineDate]}>
+                      {appointment.date.split(' ')[0]}
+                    </Text>
+                  </View>
+                  <View style={styles.appointmentInfo}>
+                    <Text style={[styles.appointmentDoctor, themeStyles.timelineTitle]}>
+                      {appointment.doctor}
+                    </Text>
+                    <Text style={[styles.appointmentSpecialty, themeStyles.timelineDate]}>
+                      {appointment.specialty} • {appointment.type}
+                    </Text>
+                    <Text style={[styles.appointmentTime, themeStyles.detailValue]}>
+                      {appointment.time}
+                    </Text>
+                  </View>
+                  <Feather name="calendar" size={16} color="#2196F3" />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          
+          {/* Daily Tip */}
+          <View style={[styles.dailyTipContainer, themeStyles.dailyTipContainer]}>
+            <View style={styles.dailyTipHeader}>
+              <Text style={[styles.dailyTipTitle, themeStyles.dailyTipTitle]}>{t('dashboard.dailyTip')}</Text>
+              <TouchableOpacity 
+                onPress={refreshDailyTip} 
+                disabled={isRefreshingTip}
+                style={styles.refreshButton}
+                activeOpacity={0.7}
+              >
+                <Animated.View 
+                  style={{
+                    transform: [{
+                      rotate: isRefreshingTip ? '360deg' : '0deg'
+                    }]
+                  }}
+                >
+                  <Feather 
+                    name="refresh-cw" 
+                    size={18} 
+                    color={darkMode ? '#4CAF50' : '#2E7D32'}
+                  />
+                </Animated.View>
+              </TouchableOpacity>
+            </View>
+            <Animated.View style={[styles.dailyTipContent, { opacity: fadeAnim }]}>
+              <View style={styles.dailyTipIconContainer}>
+                {React.createElement(
+                  dailyTips[currentTipIndex]?.iconSet || MaterialIcons,
+                  {
+                    name: dailyTips[currentTipIndex]?.iconName || 'lightbulb-outline',
+                    size: 24,
+                    color: darkMode ? '#4CAF50' : '#2E7D32',
+                  }
+                )}
+              </View>
+              <View style={styles.dailyTipTextContainer}>
+                <Text style={[styles.dailyTipTitleText, themeStyles.dailyTipTitle]}>
+                  {dailyTips[currentTipIndex]?.title || dailyTip.title}
+                </Text>
+                <Text style={[styles.dailyTipDescription, themeStyles.dailyTipDescription]}>
+                  {dailyTips[currentTipIndex]?.content || dailyTip.content}
+                </Text>
+              </View>
+            </Animated.View>
+          </View>
+          
+          {/* Timeline Items */}
+          <View style={[styles.timelineContainer, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
+            <View style={styles.timelineSection}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 12 }]}>
+                {t('dashboard.lifelineHistory')}
+              </Text>
+              {timeline.map((item) => (
+              <View key={item.id} style={[styles.timelineItem, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
+                <View style={styles.timelineIcon}>
+                  <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
+                </View>
+                <View style={styles.timelineContent}>
+                  <Text style={[styles.timelineTitle, themeStyles.timelineTitle]}>{item.title}</Text>
+                  <Text style={[styles.timelineDate, themeStyles.timelineDate]}>{item.date}</Text>
+                </View>
+                <AntDesign name="right" size={16} color={darkMode ? '#888' : '#ccc'} />
+              </View>
+            ))}
+            </View>
+          </View>
+          
+          {/* Recent Activity */}
+          <View style={[styles.recentActivityContainer, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
+            <View style={styles.recentActivitySection}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 12 }]}>
+                {t('dashboard.recentActivity')}
+              </Text>
+              {recentActivity.map((item) => (
+              <TouchableOpacity 
+                key={item.id} 
+                style={[styles.activityRow, themeStyles.activityRow]}
+                onPress={() => router.push(item.path)}
+                activeOpacity={0.7}
+              >
+                <FontAwesome5 name={item.icon as any} size={18} color="#FC7A7A" style={{ marginRight: 14 }} />
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.activityLabel, themeStyles.activityLabel]}>{item.label}</Text>
+                  <Text style={[styles.activityTime, themeStyles.activityTime]}>{item.time}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+            </View>
+          </View>
+          
+          {/* Footer */}
+          <View style={[{
+            padding: 20,
+            paddingBottom: 40, 
+            alignItems: 'center',
+            marginTop: 90,
+            borderTopWidth: 1,
+          }, themeStyles.footer]}>
+            <View style={styles.footerLinks}>
+              <TouchableOpacity onPress={() => router.push('/screens/about')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.about')}</Text>
+              </TouchableOpacity>
+              <Text style={[styles.footerDivider, themeStyles.footerDivider]}>•</Text>
+              <TouchableOpacity onPress={() => router.push('/screens/privacy-policy')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.privacyPolicy')}</Text>
+              </TouchableOpacity>
+              <Text style={[styles.footerDivider, themeStyles.footerDivider]}>•</Text>
+              <TouchableOpacity onPress={() => router.push('/screens/terms-use')}>
+                <Text style={[styles.footerLink, themeStyles.footerLink]}>{t('common.termsOfUse')}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.footerText, themeStyles.footerText]}>
+              {t('common.copyright')} {new Date().getFullYear()} {t('app.name')}. {t('common.allRightsReserved')}
+            </Text>
+            <Text style={[styles.footerVersion, themeStyles.footerVersion]}>
+              {t('common.version')} 1.0.0
+            </Text>
+            <Text style={[styles.footerBuiltBy, themeStyles.footerBuiltBy]}>
+              Built by{' '}
+              <Text 
+                style={styles.githubLink}
+                onPress={() => Linking.openURL('https://github.com/yourusername')}
+              >
+                Daniella Asiedu
+              </Text>
+            </Text>
+          </View>
+        </LinearGradient>
+      </ScrollView>
       
     </SafeAreaView>
-  )
-}
+  );
+};
+
+const getThemeStyles = (isDark: boolean) => ({
+  container: {
+    backgroundColor: isDark ? '#121212' : '#F5F5F5',
+  },
+  primary: isDark ? '#4CAF50' : '#2E7D32', // Primary brand color
+  profileCard: {
+    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+  },
+  profileName: {
+    color: isDark ? '#FFFFFF' : '#222222',
+  },
+  profileStatus: {
+    color: isDark ? '#A0A0A0' : '#888888',
+  },
+  editButton: {
+    borderColor: isDark ? '#444' : '#E0E0E0',
+  },
+  detailLabel: {
+    color: isDark ? '#A0A0A0' : '#888888',
+  },
+  detailValue: {
+    color: isDark ? '#E0E0E0' : '#333333',
+  },
+  conditionBadge: {
+    backgroundColor: isDark ? 'rgba(217, 83, 79, 0.1)' : 'rgba(217, 83, 79, 0.05)',
+  },
+  conditionText: {
+    color: isDark ? '#FF8A80' : '#D9534F',
+  },
+  cardBackground: {
+    backgroundColor: isDark ? '#2A2A2A' : '#FFFFFF',
+  },
+  statValue: {
+    color: isDark ? '#E0E0E0' : '#222222',
+  },
+  statLabel: {
+    color: isDark ? '#A0A0A0' : '#888888',
+  },
+  dailyTipContainer: {
+    backgroundColor: isDark ? 'rgba(30, 30, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+  },
+  dailyTipTitle: {
+    color: isDark ? '#4CAF50' : '#2E7D32',
+  },
+  dailyTipDescription: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  modalText: {
+    color: isDark ? '#E0E0E0' : '#555555',
+  },
+  timelineItem: {
+    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+  },
+  timelineTitle: {
+    color: isDark ? '#E0E0E0' : '#222222',
+  },
+  timelineDate: {
+    color: isDark ? '#A0A0A0' : '#888888',
+  },
+  activityRow: {
+    borderBottomColor: isDark ? '#333333' : '#F3F4F6',
+  },
+  activityLabel: {
+    color: isDark ? '#E0E0E0' : '#222222',
+  },
+  activityTime: {
+    color: isDark ? '#A0A0A0' : '#888888',
+  },
+  modalContent: {
+    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold' as const,
+    marginBottom: 16,
+    textAlign: 'center' as const,
+    color: isDark ? '#FFFFFF' : '#000000',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  modalButton: {
+    backgroundColor: isDark ? '#2D2D2D' : '#F5F5F5',
+  },
+  cancelButton: {
+    backgroundColor: isDark ? '#2D2D2D' : '#F5F5F5',
+  },
+  confirmButton: {
+    backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
+  },
+  cancelButtonText: {
+    color: isDark ? '#E0E0E0' : '#333333',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  footerLink: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerDivider: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerText: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerVersion: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footerBuiltBy: {
+    color: isDark ? '#A0A0A0' : '#666666',
+  },
+  footer: {
+    backgroundColor: 'transparent',
+    borderTopColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+  },
+});
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  headerLeft: {
+    width: 24, // For balance since we only have right-aligned content
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 68, 68, 0.1)',
+  },
+  logoutButtonDark: {
+    backgroundColor: 'rgba(255, 107, 107, 0.15)',
+  },
+  logoutText: {
+    marginLeft: 6,
+    fontSize: 14,
+    fontWeight: '500',
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
   },
-  floatingBot: {
-    position: 'absolute',
-    bottom: 24,
-    left: 24,
-    zIndex: 1000,
+  container: {
+    flexGrow: 1,
+    paddingBottom: 100,
+    marginBottom: 16,
+    borderRadius: 8,
+    marginHorizontal: 8,
   },
-  botButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#E53935',
-    justifyContent: 'center',
-    alignItems: 'center',
+  timelineContainer: {
+    marginTop: 24,
+    marginBottom: 16,
+    marginHorizontal: 16,
+    borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
   },
-  connectingContainer: {
-    alignItems: 'center',
+  timelineSection: {
+    padding: 16,
+  },
+  timelineIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(217, 83, 79, 0.1)',
     justifyContent: 'center',
-    padding: 20,
+    alignItems: 'center',
+    marginRight: 12,
   },
-  connectingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#E53935',
+  timelineContent: {
+    flex: 1,
+  },
+  timelineTitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  timelineDate: {
+    fontSize: 12,
     fontFamily: 'JetBrainsMono-Regular',
   },
-  callDoctorButton: {
+  activityRow: {
     flexDirection: 'row',
-    backgroundColor: '#E53935',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 25,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    marginHorizontal: 24, // Increased from 16 to 24 for right shift
+    paddingTop: 8,
+  },
+  recentActivityContainer: {
+    marginTop: 24,
+    marginBottom: 16,
+    marginHorizontal: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
     elevation: 3,
+    overflow: 'hidden',
   },
-  callDoctorButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontFamily: 'JetBrainsMono-Bold',
-    marginLeft: 8,
+  recentActivitySection: {
+    padding: 16,
   },
-  callLogsButton: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#E53935',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+  activityLabel: {
+    fontSize: 15,
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
+    flex: 1,
   },
-  callLogsButtonText: {
-    color: '#E53935',
-    fontSize: 16,
-    fontFamily: 'JetBrainsMono-Bold',
-    marginLeft: 8,
+  activityTime: {
+    fontSize: 13,
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
   },
+
+  // Modal styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  botModalCard: {
-    backgroundColor: 'white',
-    borderRadius: 20,
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     padding: 24,
     width: '85%',
     alignItems: 'center',
   },
-  modalCloseButton: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-    padding: 4,
-  },
-  botIconContainer: {
-    marginBottom: 20,
-    position: 'relative',
-  },
-  botIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(229, 57, 53, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
-  },
-  botIconRing: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: 'rgba(229, 57, 53, 0.2)',
-    top: -10,
-    left: -10,
-    zIndex: 1,
-  },
-  botModalTitle: {
+  modalTitle: {
     fontSize: 20,
-    fontFamily: 'JetBrainsMono-Bold',
-    color: '#333',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  botModalText: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 20,
-  },
-  modalButtonsContainer: {
-    width: '100%',
+    fontWeight: 'bold' as const,
     marginBottom: 16,
+    textAlign: 'center' as const,
+    color: '#000000',
+    fontFamily: 'JetBrainsMono-Bold',
   },
-  modalFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  modalFooterText: {
-    fontSize: 12,
-    color: '#666',
+  modalText: {
+    fontSize: 16,
+    marginBottom: 24,
+    textAlign: 'center' as const,
+    lineHeight: 24,
     fontFamily: 'JetBrainsMono-Regular',
   },
-  headerContainer: {
-    marginBottom: 24,
+  modalButtons: {
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
     width: '100%',
   },
-  headerLeft: {
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    marginHorizontal: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#F5F5F5',
+  },
+  confirmButton: {
+    backgroundColor: '#4CAF50',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600' as const,
+  },
+  cancelButtonText: {
+    color: '#333333',
+    fontWeight: '600' as const,
+  },
+  // Footer styles - using themeStyles.footer for theming
+  footerLinks: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 8,
   },
-  headerIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+  footerLink: {
+    fontSize: 12,
+    marginHorizontal: 8,
+    paddingVertical: 4,
+    fontFamily: 'JetBrainsMono-Regular',
   },
-  iconButton: {
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: 'rgba(217, 83, 79, 0.1)',
+  footerDivider: {
+    fontSize: 12,
+    opacity: 0.5,
+    marginHorizontal: 4,
+    fontFamily: 'JetBrainsMono-Regular',
   },
-  signOutButton: {
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: 'rgba(217, 83, 79, 0.1)',
+  footerText: {
+    fontSize: 11,
+    opacity: 0.7,
+    textAlign: 'center',
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Regular',
   },
-  container: {
-    padding: 24,
-    paddingBottom: 50,
-    alignItems: "center",
-    backgroundColor: "#F5F5F5",
+  footerVersion: {
+    fontSize: 10,
+    opacity: 0.5,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginBottom: 4,
   },
-  statsCard: {
-    width: "100%",
-    borderRadius: 22,
-    padding: 24,
-    marginBottom: 24,
-    shadowColor: "#000",
+  footerBuiltBy: {
+    fontSize: 11,
+    opacity: 0.7,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginTop: 8,
+  },
+  githubLink: {
+    color: '#E53935',
+    textDecorationLine: 'underline',
+  },
+  healthStatsContainer: {
+    marginTop: 24,
+    paddingHorizontal: 16,
+  },
+  sectionContainer: {
+    paddingHorizontal: 16,
+  },
+  firstAidCard: {
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 10,
+    shadowRadius: 4,
     elevation: 3,
   },
-  statsTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#1F2937",
-    marginBottom: 16,
-    letterSpacing: 0.5,
-    fontFamily: "JetBrainsMono-Bold",
-  },
-  statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 8,
-  },
-  statsItem: {
-    alignItems: "center",
-    flex: 1,
-    paddingHorizontal: 8,
-    minHeight: 80,
-  },
-  statsValue: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#222",
-    marginTop: 4,
-    marginBottom: 4,
-    fontFamily: "JetBrainsMono-Bold",
-    textAlign: "center",
-  },
-  statsLabel: {
-    fontSize: 14,
-    color: "#6B7280",
-    marginTop: 4,
-    letterSpacing: 0.2,
-    fontFamily: "JetBrainsMono-Regular",
-    textAlign: "center",
-  },
-  // First Aid Guide Card Styles
-  firstAidCard: {
-    width: "100%",
-    marginBottom: 24,
-    borderRadius: 20,
-    overflow: "hidden",
-    shadowColor: "#FF6B6B",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 10,
-  },
-  firstAidGradient: {
-    width: "100%",
-    padding: 20,
-    marginBottom: 20,
-    position: "relative",
-    overflow: "hidden",
-  },
   firstAidContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    zIndex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   firstAidIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 82, 82, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 16,
-  },
-  firstAidIconGlow: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#FFFFFF",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
   },
   firstAidTextContainer: {
     flex: 1,
   },
-  firstAidTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    fontFamily: "JetBrainsMono-Bold",
-    marginBottom: 4,
+  firstAidDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 2,
   },
-  firstAidSubtitle: {
-    fontSize: 14,
-    color: "rgba(255,255,255,0.9)",
-    fontFamily: "JetBrainsMono-Regular",
-    marginBottom: 8,
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+    gap: 8,
   },
-  firstAidBadge: {
-    backgroundColor: "rgba(255,255,255,0.25)",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+  circularProgressContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  circularProgressContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
     borderRadius: 12,
-    alignSelf: "flex-start",
-  },
-  firstAidBadgeText: {
-    fontSize: 12,
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontFamily: "JetBrainsMono-Bold",
-  },
-  firstAidArrow: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  // Decorative elements
-  firstAidDecorative1: {
-    position: "absolute",
-    top: -20,
-    right: -20,
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    zIndex: 1,
-  },
-  firstAidDecorative2: {
-    position: "absolute",
-    bottom: -30,
-    left: -30,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "rgba(255,255,255,0.05)",
-    zIndex: 1,
-  },
-  firstAidDecorative3: {
-    position: "absolute",
-    top: 10,
-    left: -10,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.08)",
-    zIndex: 1,
-  },
-  profileCard: {
-    width: "100%",
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 32,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.18,
-    shadowRadius: 18,
-    elevation: 8,
-  },
-  profileAvatarGlow: {
-    width: 112, // slightly larger than avatar
-    height: 112,
-    borderRadius: 56,
-    backgroundColor: "rgba(252,122,122,0.25)", // soft pink glow
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#FC7A7A",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.7,
-    shadowRadius: 18,
-    elevation: 12, // for Android
-    marginBottom: 16,
-  },
-  profileAvatar: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    borderWidth: 2,
-    borderColor: "#FC7A7A",
-    backgroundColor: "#F3F4F6",
-  },
-  profileName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#111",
-    fontFamily: "JetBrainsMono-Bold",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  profileInfoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 6,
-    width: "100%",
-    flexWrap: "wrap",
-  },
-  profileInfoRowNoWrap: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 6,
-    width: "100%",
-    flexWrap: "nowrap",
-  },
-  profileIcon: {
-    marginRight: 6,
-  },
-  profileInfoLabel: {
-    fontSize: 15,
-    color: "#111",
-    fontFamily: "JetBrainsMono-Regular",
-    marginRight: 4,
-    textAlign: "center",
-  },
-  profileInfoValue: {
-    fontSize: 15,
-    color: "#111",
-    fontFamily: "JetBrainsMono-Regular",
-    marginRight: 8,
-    flexShrink: 1,
-    textAlign: "center",
-  },
-  editProfileButton: {
-    marginTop: 14,
-    backgroundColor: "#FFE5E5",
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 32,
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "#D9534F",
-  },
-  editProfileButtonText: {
-    color: "#D9534F",
-    fontWeight: "bold",
-    fontSize: 15,
-    fontFamily: "JetBrainsMono-Bold",
-    letterSpacing: 0.5,
-  },
-  section: {
-    width: "100%",
-    marginBottom: 32,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-    paddingHorizontal: 4,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#1F2937",
-    fontFamily: "JetBrainsMono-Bold",
-  },
-  viewAllButton: {
-    backgroundColor: "#FFE5E5",
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    borderRadius: 18,
-  },
-  viewAllButtonText: {
-    color: "#D9534F",
-    fontWeight: "bold",
-    fontSize: 15,
-    fontFamily: "JetBrainsMono-Bold",
-  },
-  timelineContainer: {
-    backgroundColor: "rgba(255,255,255,0.75)",
-    borderRadius: 14,
-    padding: 18,
-    marginTop: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 14,
-    elevation: 6,
+    padding: 12,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   timelineItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    borderRadius: 12,
+    padding: 12,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  timelineIcon: {
+  statIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  statTextContainer: {
+    flex: 1,
+  },
+  statValue: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  statLabel: {
+    fontSize: 14,
+    fontFamily: 'JetBrainsMono-Regular',
+    opacity: 0.8,
+  },
+  dailyTipContainer: {
+    marginHorizontal: 16,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  dailyTipContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: 16,
+  },
+  dailyTipTextContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  dailyTipTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  dailyTipDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  dailyTipIconContainer: {
+    marginRight: 12,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#F5F5F5",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  timelineContent: {
-    flex: 1,
-    paddingRight: 8,
+  dailyTipHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  timelineTitle: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#1F2937",
-    fontFamily: "JetBrainsMono-Bold",
-    marginBottom: 2,
+  refreshButton: {
+    padding: 6,
+    borderRadius: 20,
   },
-  timelineDate: {
+  dailyTipText: {
     fontSize: 14,
-    color: "#666",
-    fontFamily: "JetBrainsMono-Regular",
-  },
-  dailyTipCard: {
-    width: "100%",
-    backgroundColor: "rgba(255,255,255,0.75)",
-    borderRadius: 18,
-    padding: 24,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 14,
-    elevation: 6,
-  },
-  tipContent: {
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: "#FAFAFA",
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  tipText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 12,
-    color: "#D9534F",
-    fontFamily: "JetBrainsMono-Bold",
-    lineHeight: 22,
-  },
-  tipSubText: {
-    fontSize: 14,
-    color: "#666",
-    textAlign: "center",
-    fontFamily: "JetBrainsMono-Regular",
+    fontFamily: 'JetBrainsMono-Regular',
     lineHeight: 20,
   },
-  newTipButton: {
-    backgroundColor: "#FFE5E5",
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    borderRadius: 18,
-    alignSelf: "flex-start",
+  profileCard: {
+    margin: 16,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  newTipButtonText: {
-    color: "#D9534F",
-    fontWeight: "bold",
-    fontSize: 15,
-    fontFamily: "JetBrainsMono-Bold",
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
-  tipFooter: {
-    fontSize: 14,
-    color: "#aaa",
-    textAlign: "center",
-    fontFamily: "JetBrainsMono-Regular",
+  profileImageContainer: {
+    position: 'relative',
+    marginRight: 12,
   },
-  activityCard: {
-    width: "100%",
-    backgroundColor: "rgba(255,255,255,0.75)",
-    borderRadius: 18,
-    padding: 20,
-    marginTop: 20,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 14,
-    elevation: 6,
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
-  activityTitle: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#1F2937",
-    marginBottom: 12,
-    fontFamily: "JetBrainsMono-Bold",
+  editProfileBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
   },
-  activityRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 14,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
-  },
-  activityLabel: {
-    fontSize: 15,
-    color: "#222",
-    fontWeight: "500",
-    fontFamily: "JetBrainsMono-Regular",
+  profileInfo: {
     flex: 1,
   },
-  activityTime: {
-    fontSize: 13,
-    color: "#888",
-    marginTop: 2,
-    fontFamily: "JetBrainsMono-Regular",
+  profileName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
   },
-})
+  profileStatus: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  editButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileDetails: {
+    marginTop: 8,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  detailItem: {
+    flex: 1,
+  },
+  detailLabel: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginBottom: 2,
+    opacity: 0.8,
+  },
+  detailValue: {
+    fontSize: 14,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  conditionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    alignSelf: 'flex-start',
+  },
+  conditionText: {
+    fontSize: 13,
+    fontFamily: 'JetBrainsMono-Bold',
+    marginLeft: 6,
+  },
+  gradient: {
+    flex: 1,
+    paddingVertical: 16,
+  },
+  callButton: {
+    backgroundColor: '#E53935',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    marginBottom: 15,
+    width: '100%',
+    alignItems: 'center',
+  },
+  callButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Weather Widget Styles
+  weatherWidget: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  weatherHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  weatherHeaderActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  weatherRefreshButton: {
+    padding: 6,
+    borderRadius: 20,
+  },
+  spinningIcon: {
+    transform: [{ rotate: '45deg' }],
+  },
+  weatherContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  weatherMain: {
+    flex: 1,
+  },
+  weatherTemp: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  weatherCondition: {
+    fontSize: 14,
+    marginTop: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  weatherLocation: {
+    fontSize: 12,
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  weatherDescription: {
+    fontSize: 11,
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Regular',
+    fontStyle: 'italic',
+  },
+  weatherDetails: {
+    alignItems: 'flex-end',
+  },
+  weatherDetailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  weatherDetailText: {
+    fontSize: 12,
+    marginLeft: 6,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  
+  // Enhanced Health Metrics Styles
+  additionalMetrics: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  metricCard: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  metricHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  metricLabel: {
+    fontSize: 10,
+    marginLeft: 6,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  metricValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Emergency Contacts Styles
+  emergencySection: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  emergencySectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  emergencyContactsList: {
+    gap: 8,
+  },
+  emergencyContactItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  emergencyContactIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(229, 57, 53, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  emergencyContactInfo: {
+    flex: 1,
+  },
+  emergencyContactName: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  emergencyContactNumber: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  
+  // Medication & Appointments Styles
+  medicationSection: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600' as const,
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  subsectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  medicationList: {
+    marginBottom: 24,
+  },
+  medicationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  medicationIndicator: {
+    width: 4,
+    height: 40,
+    borderRadius: 2,
+    marginRight: 12,
+  },
+  medicationInfo: {
+    flex: 1,
+  },
+  medicationName: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  medicationDetails: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  medicationStatus: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  appointmentsList: {
+    gap: 8,
+  },
+  appointmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  appointmentDate: {
+    width: 60,
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  appointmentDay: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  appointmentMonth: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  appointmentInfo: {
+    flex: 1,
+  },
+  appointmentDoctor: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 2,
+  },
+  appointmentSpecialty: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+    marginBottom: 2,
+  },
+  appointmentTime: {
+    fontSize: 12,
+    fontWeight: '600' as const,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Daily Tip Text Style
+  dailyTipTitleText: {
+    fontSize: 15,
+    fontWeight: '600' as const,
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+});
 
-export default DashboardScreen
+export default DashboardScreen;

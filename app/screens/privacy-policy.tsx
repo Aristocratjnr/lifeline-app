@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 import {
   Modal,
   SafeAreaView,
@@ -13,7 +14,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  ImageBackground
 } from 'react-native';
 
 // Load JetBrains Mono font
@@ -28,12 +30,13 @@ type LinkItemProps = {
   title: string;
   hasArrow?: boolean;
   onPress?: () => void;
+  darkMode?: boolean;
 };
 
-const LinkItem = ({ title, hasArrow = true, onPress }: LinkItemProps) => (
-  <TouchableOpacity style={styles.linkItem} onPress={onPress}>
-    <Text style={styles.linkText}>{title}</Text>
-    {hasArrow && <Ionicons name="chevron-forward" size={20} color="black" />}
+const LinkItem = ({ title, hasArrow = true, onPress, darkMode = false }: LinkItemProps) => (
+  <TouchableOpacity style={[styles.linkItem, darkMode && styles.darkLinkItem]} onPress={onPress}>
+    <Text style={[styles.linkText, darkMode && styles.darkLinkText]}>{title}</Text>
+    {hasArrow && <Ionicons name="chevron-forward" size={20} color={darkMode ? '#E0E0E0' : 'black'} />}
   </TouchableOpacity>
 );
 
@@ -41,6 +44,7 @@ export default function PrivacyPolicy() {
   const navigation = useNavigation();
   const router = useRouter();
   const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   useEffect(() => {
@@ -70,30 +74,30 @@ export default function PrivacyPolicy() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, darkMode && styles.darkHeader]}>
         <TouchableOpacity 
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color="black" />
+          <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('privacyPolicy.header')}</Text>
+        <Text style={[styles.headerTitle, darkMode && styles.darkText]}>{t('privacyPolicy.header')}</Text>
       </View>
 
-      <ScrollView style={styles.scrollContent}>
+      <ScrollView style={[styles.scrollContent, darkMode && styles.darkLinksContainer]}>
         {/* Privacy Content */}
-        <View style={styles.privacyContainer}>
-          <Text style={styles.privacyText}>
+        <View style={[styles.privacyContainer, darkMode && styles.darkPrivacyContainer]}>
+          <Text style={[styles.privacyText, darkMode && styles.darkPrivacyText]}>
             {t('privacyPolicy.intro.privacyImportant')}
           </Text>
           
-          <Text style={[styles.privacyText, styles.spacingTop]}>
+          <Text style={[styles.privacyText, styles.spacingTop, darkMode && styles.darkPrivacyText]}>
             {t('privacyPolicy.intro.howWeCollect')}
           </Text>
           
-          <Text style={[styles.privacyText, styles.spacingTop]}>
+          <Text style={[styles.privacyText, styles.spacingTop, darkMode && styles.darkPrivacyText]}>
             {t('privacyPolicy.intro.policyExplains')}
           </Text>
           
@@ -102,19 +106,40 @@ export default function PrivacyPolicy() {
             style={styles.seeMoreButton}
             onPress={() => setShowPrivacyModal(true)}
           >
-            <Text style={styles.seeMoreText}>{t('privacyPolicy.seeMore')}</Text>
+            <Text style={[styles.seeMoreText, darkMode && styles.darkListText]}>{t('privacyPolicy.seeMore')}</Text>
             <Ionicons name="chevron-forward" size={18} color="white" />
           </TouchableOpacity>
         </View>
 
         {/* Links */}
         <View style={styles.linksContainer}>
-          <LinkItem title={t('privacyPolicy.links.termsUse')} onPress={() => router.push('/screens/terms-use')} />
-          <LinkItem title={t('privacyPolicy.links.faqs')} onPress={() => router.push('/screens/faqs')} />
-          <LinkItem title={t('privacyPolicy.links.shareApp')} onPress={handleShareApp} />
-          <ExternalLink href="https://lifeline-mu.vercel.app/">
-            <LinkItem title={t('privacyPolicy.links.visitWebsite')} />
-          </ExternalLink>
+          <View>
+            <LinkItem 
+              title={t('privacyPolicy.links.termsUse')} 
+              onPress={() => router.push('/screens/terms-use')} 
+              darkMode={darkMode}
+            />
+          </View>
+          <View>
+            <LinkItem 
+              title={t('privacyPolicy.links.faqs')} 
+              onPress={() => router.push('/screens/faqs')} 
+              darkMode={darkMode}
+            />
+          </View>
+          <View>
+            <LinkItem 
+              title={t('privacyPolicy.links.shareApp')} 
+              onPress={handleShareApp} 
+              darkMode={darkMode}
+            />
+          </View>
+          <View style={[styles.linkItem, darkMode && styles.darkLinkItem]}>
+            <ExternalLink href="https://lifeline-mu.vercel.app/">
+              <Text style={[styles.linkText, darkMode && styles.darkLinkText]}>{t('privacyPolicy.links.visitWebsite')}</Text>
+              <Ionicons name="chevron-forward" size={20} color={darkMode ? '#E0E0E0' : 'black'} />
+            </ExternalLink>
+          </View>
         </View>
       </ScrollView>
 
@@ -124,95 +149,102 @@ export default function PrivacyPolicy() {
         animationType="slide"
         presentationStyle="pageSheet"
       >
-        <SafeAreaView style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={() => setShowPrivacyModal(false)}
-            >
-              <Ionicons name="close" size={24} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.modalTitle}>{t('privacyPolicy.header')}</Text>
-            <View style={styles.placeholder} />
-          </View>
-          <ScrollView style={styles.modalContent}>
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.informationWeCollect.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.informationWeCollect.description1')}
-              </Text>
+        <ImageBackground 
+          source={require('../../assets/images/blur.png')} 
+          style={[styles.backgroundImage, darkMode && { opacity: 0.9 }]}
+          resizeMode="cover"
+        >
+          <View style={[styles.overlay, darkMode && styles.darkOverlay]} />
+          <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
+            <View style={styles.modalHeader}>
+              <TouchableOpacity 
+                style={styles.closeButton}
+                onPress={() => setShowPrivacyModal(false)}
+              >
+                <Ionicons name="close" size={24} color={darkMode ? 'white' : 'black'} />
+              </TouchableOpacity>
+              <Text style={[styles.modalTitle, darkMode && styles.darkModalTitle]}>{t('privacyPolicy.header')}</Text>
+              <View style={styles.placeholder} />
             </View>
+            <ScrollView style={[styles.modalContent, darkMode && styles.darkModalContent]}>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.informationWeCollect.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.informationWeCollect.description1')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.informationWeCollect.description2')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.informationWeCollect.description2')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.howWeUseInformation.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.howWeUseInformation.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.howWeUseInformation.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.howWeUseInformation.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.informationSharing.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.informationSharing.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.informationSharing.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.informationSharing.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.dataSecurity.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.dataSecurity.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.dataSecurity.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.dataSecurity.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.yourRights.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.yourRights.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.yourRights.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.yourRights.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.childrenPrivacy.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.childrenPrivacy.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.childrenPrivacy.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.childrenPrivacy.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.changesToPolicy.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.changesToPolicy.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.changesToPolicy.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.changesToPolicy.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.contactUs.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.contactUs.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.contactUs.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.contactUs.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.internationalDataTransfers.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.internationalDataTransfers.description')}
-              </Text>
-            </View>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.internationalDataTransfers.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.internationalDataTransfers.description')}
+                </Text>
+              </View>
 
-            <View style={styles.privacySection}>
-              <Text style={styles.sectionTitle}>{t('privacyPolicy.sections.lastUpdated.title')}</Text>
-              <Text style={styles.sectionText}>
-                {t('privacyPolicy.sections.lastUpdated.description')}
-              </Text>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
+              <View style={[styles.privacySection, darkMode && styles.darkPrivacySection]}>
+                <Text style={[styles.sectionTitle, darkMode && styles.darkSectionTitle]}>{t('privacyPolicy.sections.lastUpdated.title')}</Text>
+                <Text style={[styles.sectionText, darkMode && styles.darkSectionText]}>
+                  {t('privacyPolicy.sections.lastUpdated.description')}
+                </Text>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </ImageBackground>
       </Modal>
     </SafeAreaView>
   );
@@ -222,6 +254,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  darkContainer: {
+    backgroundColor: '#121212',
   },
   header: {
     flexDirection: 'row',
@@ -238,6 +273,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.07,
     shadowRadius: 4,
     elevation: 1,
+  },
+  darkHeader: {
+    backgroundColor: '#1E1E1E',
+    borderBottomColor: '#333',
   },
   backButton: {
     padding: 5,
@@ -266,11 +305,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  darkPrivacyContainer: {
+    backgroundColor: '#1E1E1E',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+  },
   privacyText: {
     fontSize: 16,
     lineHeight: 24,
     color: '#333',
     fontFamily: 'JetBrainsMono',
+  },
+  darkPrivacyText: {
+    color: '#E0E0E0',
   },
   spacingTop: {
     marginTop: 15,
@@ -302,6 +349,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     marginTop: 10,
   },
+  darkLinksContainer: {
+    backgroundColor: '#121212',
+  },
   linkItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -310,10 +360,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
+  darkLinkItem: {
+    borderBottomColor: '#333',
+  },
   linkText: {
     fontSize: 16,
     color: '#333',
     fontFamily: 'JetBrainsMono',
+  },
+  darkLinkText: {
+    color: '#E0E0E0',
   },
   modalContainer: {
     flex: 1,
@@ -337,6 +393,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  darkModalHeader: {
+    backgroundColor: '#1E1E1E',
+    borderBottomColor: '#333',
+  },
   closeButton: {
     padding: 5,
   },
@@ -347,6 +407,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'JetBrainsMono-Bold',
     color: '#333',
+  },
+  darkModalTitle: {
+    color: '#FFFFFF',
   },
   placeholder: {
     width: 34,
@@ -366,11 +429,17 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
+  darkModalContent: {
+    backgroundColor: '#1E1E1E',
+  },
   privacySection: {
     marginVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
     paddingBottom: 12,
+  },
+  darkPrivacySection: {
+    borderBottomColor: '#333',
   },
   sectionTitle: {
     fontSize: 18,
@@ -379,10 +448,35 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: 'JetBrainsMono-Bold',
   },
+  darkSectionTitle: {
+    color: '#FFFFFF',
+  },
   sectionText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#666',
+    color: '#555',
+    marginBottom: 10,
     fontFamily: 'JetBrainsMono',
   },
-}); 
+  darkSectionText: {
+    color: '#d0d0d0',
+  },
+  darkText: {
+    color: '#E0E0E0',
+  },
+  darkListText: {
+    color: '#E0E0E0',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  darkOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
+  },
+});

@@ -1,6 +1,7 @@
 export default {
   // Common UI elements
   "common": {
+    "copyright": "©",
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
@@ -12,7 +13,29 @@ export default {
     "search": "Search",
     "off": "Off",
     "on": "On",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "close": "Close",
+    "delete": "Delete",
+    "deactivate": "Deactivate",
+    "female": "Female",
+    "male": "Male",
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "allRightsReserved": "All rights reserved",
+    "version": "Version",
+    "logout": "Logout"
+  },
+  
+  // Medical conditions
+  "conditions": {
+    "commonCold": "Common Cold",
+    "healthy": "Healthy"
+  },
+  
+  // Status indicators
+  "status": {
+    "active": "Active"
   },
 
   // Navigation and tabs
@@ -56,7 +79,7 @@ export default {
     "selectCountry": "Select Country"
   },
 
-  // Languages screen
+  // Languages
   "languages": {
     "title": "LANGUAGE",
     "searchPlaceholder": "Search for language",
@@ -69,12 +92,25 @@ export default {
     "languageChanged": "Language Changed",
     "languageChangedTo": "Language has been changed to",
     "error": "Error",
-    "languageChangeFailed": "Failed to change language. Please try again."
+    "languageChangeFailed": "Failed to change language. Please try again.",
+    "english": "English"
   },
 
   // Settings
   "settings": {
     "title": "Settings",
+    "deleteAccount": {
+      "title": "Delete Account",
+      "manageTitle": "Manage Your Account",
+      "manageDescription": "Control your account settings, including deactivation and deletion options.",
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDescription": "Temporarily disable your account. You can reactivate it by logging in again.",
+      "deactivateButton": "DEACTIVATE ACCOUNT",
+      "deleteTitle": "Delete Account Permanently",
+      "deleteDescription": "We are really sorry to see you go. Are you sure you want to delete your account?",
+      "deleteWarning": "This is irreversible and will remove your account and all data from Lifeline.",
+      "deleteButton": "DELETE ACCOUNT"
+    },
     "account": "Account",
     "language": "Language",
     "notifications": "Notifications",
@@ -161,6 +197,9 @@ export default {
 
   // Dashboard
   "dashboard": {
+    "emergencyAssistance": "Emergency Assistance",
+    "emergencyAssistanceText": "Need immediate medical help? Connect with a doctor now.",
+    "callDoctor": "Call Doctor",
     "healthStats": "Health Stats",
     "steps": "Steps",
     "water": "Water",
@@ -176,7 +215,7 @@ export default {
     "fracture": "Fracture",
     "cough": "Cough",
     "burns": "Burns",
-    "lastVisited": "Last Visited: 02, May, 2025",
+    "lastVisited": "Last Visited",
     "age": "Age",
     "gender": "Gender",
     "location": "Location",
@@ -184,6 +223,22 @@ export default {
     "language": "Language",
     "editProfile": "Edit Profile",
     "newTipEveryDay": "New tip every day"
+  },
+  
+  // Profile translations
+  "profile": {
+    "title": "Profile",
+    "guest": "Guest User",
+    "notSpecified": "Not Specified",
+    "locationNotSet": "Location Not Set",
+    "age": "Age",
+    "gender": "Gender",
+    "language": "Language",
+    "lastVisit": "Last Visit",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   },
 
   // Tips section (new)
@@ -245,7 +300,10 @@ export default {
     "bankGcb": "Bank(GCB):",
     "usdtWallet": "USDT Wallet TRC20:",
     "close": "Close",
-    "thankYouAlert": "Thank you so much! 🥲"
+    "thankYouAlert": "Thank you so much! 🥲",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
   },
 
   // Help screen
@@ -263,6 +321,8 @@ export default {
 
   // About screen
   "about": {
+    "title": "About Us",
+    "aboutUs": "About Us",
     "header": "ABOUT",
     "aboutLifeline": "About LIFELINE",
     "lifelineDescription": "Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you're prepared to act quickly and effectively.",
@@ -446,6 +506,16 @@ export default {
     "connecting": "Connecting to doctor...",
     "available247": "Available 24/7"
   },
+  "alerts": {
+    "deactivateAccount": {
+      "title": "Deactivate Account",
+      "message": "Are you sure you want to deactivate your account? You can reactivate it later by logging in."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "message": "This action is irreversible. All your data will be permanently deleted."
+    }
+  },
   "callLogs": {
     "title": "Call Logs",
     "outgoing": "Outgoing",
@@ -490,6 +560,36 @@ export default {
   },
 
   // Privacy Policy
+  "app": {
+    "name": "Lifeline"
+  },
+  
+  "footer": {
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "rightsReserved": "All rights reserved"
+  },
+  
+  "appointments": {
+    "upcoming": "Upcoming Appointments",
+    "past": "Past Appointments",
+    "noUpcoming": "No upcoming appointments",
+    "noPast": "No past appointments",
+    "bookNow": "Book Now",
+    "viewAll": "View All",
+    "viewDetails": "View Details",
+    "appointmentDetails": "Appointment Details",
+    "appointmentInfo": "Appointment Information",
+    "doctor": "Doctor",
+    "specialty": "Specialty",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "notes": "Notes",
+    "reschedule": "Reschedule"
+  },
+
   "privacyPolicy": {
     "header": "Privacy Policy",
     "intro": {

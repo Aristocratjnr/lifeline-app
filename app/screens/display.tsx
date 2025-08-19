@@ -28,8 +28,16 @@ const loadFonts = async () => {
 export default function Display() {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { textSize, setTextSize, fontBold, setFontBold, brightness, setBrightness, eyeProtection, setEyeProtection } = useDisplayPreferences();
-  const [theme, setTheme] = React.useState('Light');
+  const { 
+    textSize, setTextSize, 
+    fontBold, setFontBold, 
+    brightness, setBrightness, 
+    eyeProtection, setEyeProtection,
+    darkMode, setDarkMode 
+  } = useDisplayPreferences();
+  
+  // Set initial theme based on darkMode state
+  const [theme, setTheme] = React.useState(darkMode ? 'Dark' : 'Light');
   const [showThemeModal, setShowThemeModal] = React.useState(false);
 
   useEffect(() => {
@@ -48,13 +56,14 @@ export default function Display() {
 
   const handleThemeSelect = (selectedTheme: string) => {
     setTheme(selectedTheme);
+    setDarkMode(selectedTheme === 'Dark');
     setShowThemeModal(false);
   };
 
   return (
     <ImageBackground 
-      source={require('../../assets/images/blur.png')} 
-      style={styles.backgroundImage}
+      source={darkMode ? require('../../assets/images/blur.png') : require('../../assets/images/blur.png')} 
+      style={[styles.backgroundImage, darkMode && { opacity: 0.8 }]}
       resizeMode="cover"
     >
       {/* Only show the animated yellow overlay for eye protection */}
@@ -65,25 +74,25 @@ export default function Display() {
           { opacity: fadeAnim },
         ]}
       />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? '#fff' : 'black'} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('settings.display.title')}</Text>
+          <Text style={[styles.headerTitle, darkMode && styles.darkHeaderTitle]}>{t('settings.display.title')}</Text>
         </View>
 
         {/* Display Settings */}
         <View style={styles.contentContainer}>
           {/* Brightness */}
-          <View style={styles.settingCard}>
-            <Text style={styles.settingLabel}>{t('settings.display.brightness')}</Text>
+          <View style={[styles.settingCard, darkMode && styles.darkSettingCard]}>
+            <Text style={[styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.brightness')}</Text>
             <View style={styles.sliderContainer}>
-              <Feather name="sun" size={16} color="black" />
+              <Feather name="sun" size={16} color={darkMode ? '#fff' : 'black'} />
               <Slider
                 style={styles.slider}
                 minimumValue={0}
@@ -92,17 +101,17 @@ export default function Display() {
                 onValueChange={setBrightness}
                 minimumTrackTintColor="#DDDDDD"
                 maximumTrackTintColor="#DDDDDD"
-                thumbTintColor="black"
+                thumbTintColor={darkMode ? '#fff' : 'black'}
               />
-              <Feather name="sun" size={22} color="black" />
+              <Feather name="sun" size={22} color={darkMode ? '#fff' : 'black'} />
             </View>
           </View>
 
           {/* Text Size */}
-          <View style={styles.settingCard}>
-            <Text style={styles.settingLabel}>{t('settings.display.textSize')}</Text>
+          <View style={[styles.settingCard, darkMode && styles.darkSettingCard]}>
+            <Text style={[styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.textSize')}</Text>
             <View style={styles.sliderContainer}>
-              <Text style={styles.smallA}>{t('settings.display.small')}</Text>
+              <Text style={[styles.smallA, darkMode && styles.darkSmallA]}>{t('settings.display.small')}</Text>
               <Slider
                 style={styles.slider}
                 minimumValue={0}
@@ -111,57 +120,57 @@ export default function Display() {
                 onValueChange={setTextSize}
                 minimumTrackTintColor="#DDDDDD"
                 maximumTrackTintColor="#DDDDDD"
-                thumbTintColor="black"
+                thumbTintColor={darkMode ? '#fff' : 'black'}
               />
-              <Text style={styles.largeA}>{t('settings.display.large')}</Text>
+              <Text style={[styles.largeA, darkMode && styles.darkLargeA]}>{t('settings.display.large')}</Text>
             </View>
           </View>
 
           {/* Text Bold */}
-          <View style={styles.settingCard}>
+          <View style={[styles.settingCard, darkMode && styles.darkSettingCard]}>
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
-                <Text style={[styles.textBold, styles.settingLabel]}>{t('settings.display.bold')}</Text>
-                <Text style={styles.settingLabel}>{t('settings.display.textBold')}</Text>
+                <Text style={[styles.textBold, styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.bold')}</Text>
+                <Text style={[styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.textBold')}</Text>
               </View>
               <Switch
                 value={fontBold}
                 onValueChange={setFontBold}
                 trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
-                thumbColor={fontBold ? 'black' : '#f4f3f4'}
+                thumbColor={fontBold ? (darkMode ? '#fff' : 'black') : '#f4f3f4'}
               />
             </View>
           </View>
 
           {/* Theme */}
           <TouchableOpacity 
-            style={styles.settingCard}
+            style={[styles.settingCard, darkMode && styles.darkSettingCard]}
             onPress={() => setShowThemeModal(true)}
           >
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
-                <MaterialIcons name="color-lens" size={20} color="black" />
-                <Text style={styles.settingLabel}>{t('settings.display.theme')}</Text>
+                <MaterialIcons name="color-lens" size={20} color={darkMode ? '#fff' : 'black'} />
+                <Text style={[styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.theme')}</Text>
               </View>
               <View style={styles.themeValueContainer}>
-                <Text style={styles.themeValue}>{theme === 'Light' ? t('settings.display.light') : t('settings.display.dark')}</Text>
-                <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+                <Text style={[styles.themeValue, darkMode && styles.darkThemeValue]}>{theme === 'Light' ? t('settings.display.light') : t('settings.display.dark')}</Text>
+                <MaterialIcons name="keyboard-arrow-down" size={24} color={darkMode ? '#fff' : 'black'} />
               </View>
             </View>
           </TouchableOpacity>
 
           {/* Eye Protection */}
-          <View style={styles.settingCard}>
+          <View style={[styles.settingCard, darkMode && styles.darkSettingCard]}>
             <View style={styles.settingRow}>
               <View style={styles.settingLabelContainer}>
-                <Ionicons name="eye-outline" size={20} color="black" />
-                <Text style={styles.settingLabel}>{t('settings.display.eyeProtection')}</Text>
+                <Ionicons name="eye-outline" size={20} color={darkMode ? '#fff' : 'black'} />
+                <Text style={[styles.settingLabel, darkMode && styles.darkSettingLabel]}>{t('settings.display.eyeProtection')}</Text>
               </View>
               <Switch
                 value={eyeProtection}
                 onValueChange={setEyeProtection}
                 trackColor={{ false: '#e0e0e0', true: '#e0e0e0' }}
-                thumbColor={eyeProtection ? 'black' : '#f4f3f4'}
+                thumbColor={eyeProtection ? (darkMode ? '#fff' : 'black') : '#f4f3f4'}
               />
             </View>
           </View>
@@ -179,38 +188,38 @@ export default function Display() {
             activeOpacity={1}
             onPress={() => setShowThemeModal(false)}
           >
-            <View style={styles.modalContent}>
+            <View style={[styles.modalContent, darkMode && styles.darkModalContent]}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{t('settings.display.selectTheme')}</Text>
+                <Text style={[styles.modalTitle, darkMode && styles.darkModalTitle]}>{t('settings.display.selectTheme')}</Text>
                 <TouchableOpacity onPress={() => setShowThemeModal(false)}>
-                  <Ionicons name="close" size={24} color="black" />
+                  <Ionicons name="close" size={24} color={darkMode ? '#fff' : 'black'} />
                 </TouchableOpacity>
               </View>
               
               <TouchableOpacity 
-                style={[styles.themeOption, theme === 'Light' && styles.selectedThemeOption]}
+                style={[styles.themeOption, theme === 'Light' && styles.selectedThemeOption, darkMode && styles.darkSettingCard]}
                 onPress={() => handleThemeSelect('Light')}
               >
                 <View style={styles.themeOptionContent}>
-                  <View style={[styles.themeIcon, { backgroundColor: '#f0f0f0' }]}>
-                    <Ionicons name="sunny" size={20} color="#FFD700" />
+                  <View style={[styles.themeIcon, { backgroundColor: darkMode ? '#333' : '#f0f0f0' }]}>
+                    <Ionicons name="sunny" size={20} color={darkMode ? '#FFD700' : '#FFD700'} />
                   </View>
-                  <Text style={styles.themeOptionText}>{t('settings.display.lightMode')}</Text>
+                  <Text style={[styles.themeOptionText, darkMode && styles.darkThemeOptionText]}>{t('settings.display.lightMode')}</Text>
                 </View>
-                {theme === 'Light' && <Ionicons name="checkmark" size={20} color="black" />}
+                {theme === 'Light' && <Ionicons name="checkmark" size={20} color={darkMode ? '#fff' : 'black'} />}
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.themeOption, theme === 'Dark' && styles.selectedThemeOption]}
+                style={[styles.themeOption, theme === 'Dark' && styles.selectedThemeOption, darkMode && styles.darkSettingCard]}
                 onPress={() => handleThemeSelect('Dark')}
               >
                 <View style={styles.themeOptionContent}>
-                  <View style={[styles.themeIcon, { backgroundColor: '#333' }]}>
-                    <Ionicons name="moon" size={20} color="#fff" />
+                  <View style={[styles.themeIcon, { backgroundColor: darkMode ? '#444' : '#333' }]}>
+                    <Ionicons name="moon" size={20} color={darkMode ? '#FFD700' : '#fff'} />
                   </View>
-                  <Text style={styles.themeOptionText}>{t('settings.display.darkMode')}</Text>
+                  <Text style={[styles.themeOptionText, darkMode && styles.darkThemeOptionText]}>{t('settings.display.darkMode')}</Text>
                 </View>
-                {theme === 'Dark' && <Ionicons name="checkmark" size={20} color="black" />}
+                {theme === 'Dark' && <Ionicons name="checkmark" size={20} color={darkMode ? '#FFD700' : 'black'} />}
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
@@ -235,6 +244,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.89)',
   },
+  darkContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -251,6 +263,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'JetBrainsMono-Bold',
     marginRight: 30,
+  },
+  darkHeaderTitle: {
+    color: '#fff',
   },
   divider: {
     height: 1,
@@ -271,10 +286,17 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
+  darkSettingCard: {
+    backgroundColor: '#1e1e1e',
+    shadowColor: '#000',
+  },
   settingLabel: {
     fontFamily: 'JetBrainsMono',
     fontSize: 14,
     color: '#333',
+  },
+  darkSettingLabel: {
+    color: '#fff',
   },
   settingRow: {
     flexDirection: 'row',
@@ -301,9 +323,15 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono',
     fontSize: 14,
   },
+  darkSmallA: {
+    color: '#fff',
+  },
   largeA: {
     fontFamily: 'JetBrainsMono',
     fontSize: 20,
+  },
+  darkLargeA: {
+    color: '#fff',
   },
   textBold: {
     fontWeight: 'bold',
@@ -319,6 +347,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
+  darkThemeValue: {
+    color: '#aaa',
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -332,6 +363,9 @@ const styles = StyleSheet.create({
     width: '80%',
     maxWidth: 300,
   },
+  darkModalContent: {
+    backgroundColor: '#1e1e1e',
+  },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -342,6 +376,9 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 18,
     color: '#333',
+  },
+  darkModalTitle: {
+    color: '#fff',
   },
   themeOption: {
     flexDirection: 'row',
@@ -371,5 +408,8 @@ const styles = StyleSheet.create({
     fontFamily: 'JetBrainsMono',
     fontSize: 16,
     color: '#333',
+  },
+  darkThemeOptionText: {
+    color: '#fff',
   },
 });
