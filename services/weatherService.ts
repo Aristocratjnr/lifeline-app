@@ -1,5 +1,9 @@
 import * as Location from 'expo-location';
 
+// Environment variables following the same pattern as firstAidNews.tsx
+const OPENWEATHER_API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY;
+const WEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
 export interface WeatherData {
   location: string;
   temperature: number;
@@ -25,9 +29,6 @@ export interface WeatherApiResponse {
     speed: number;
   };
 }
-
-// Free OpenWeatherMap API - no key required for basic usage
-const WEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 // Map OpenWeatherMap icons to Ionicons
 const getIoniconName = (weatherIcon: string): string => {
@@ -201,24 +202,33 @@ export const fetchWeatherDataOpenWeather = async (apiKey?: string): Promise<Weat
   }
 };
 
-// Main weather service function - tries multiple sources
-export const fetchWeatherData = async (openWeatherApiKey?: string): Promise<WeatherData> => {
+// Main weather service function - tries multiple sources with priority to OpenWeatherMap
+export const fetchWeatherData = async (): Promise<WeatherData> => {
   try {
-    // First try wttr.in (free, no API key required)
+    // First try OpenWeatherMap with API key if available (more reliable and accurate)
+    if (OPENWEATHER_API_KEY) {
+      console.log('Using OpenWeatherMap API for real-time weather data');
+      return await fetchWeatherDataOpenWeather(OPENWEATHER_API_KEY);
+    }
+    
+    // Fallback to wttr.in (free, no API key required)
+    console.log('Using wttr.in API for weather data');
     return await fetchWeatherDataWttr();
   } catch (error) {
     console.error('Primary weather service failed, trying backup:', error);
     
     try {
-      // Fallback to OpenWeatherMap if API key is provided
-      if (openWeatherApiKey) {
-        return await fetchWeatherDataOpenWeather(openWeatherApiKey);
+      // If OpenWeatherMap failed, try wttr.in
+      if (OPENWEATHER_API_KEY) {
+        console.log('OpenWeatherMap failed, falling back to wttr.in');
+        return await fetchWeatherDataWttr();
       }
     } catch (fallbackError) {
       console.error('Backup weather service also failed:', fallbackError);
     }
     
     // Final fallback - return default data
+    console.warn('All weather services failed, using fallback data');
     return {
       location: 'Accra, Ghana',
       temperature: 28,

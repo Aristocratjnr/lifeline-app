@@ -784,24 +784,26 @@ const DashboardScreen = () => {
           </View>
           
           {/* Timeline Items */}
-          <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginTop: 24, marginBottom: 12 }]}>
-            {t('dashboard.lifelineHistory')}
-          </Text>
-          {timeline.map((item) => (
-            <View key={item.id} style={[styles.timelineItem, themeStyles.timelineItem]}>
-              <View style={styles.timelineIcon}>
-                <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
+          <View style={styles.timelineSection}>
+            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginTop: 24, marginBottom: 12 }]}>
+              {t('dashboard.lifelineHistory')}
+            </Text>
+            {timeline.map((item) => (
+              <View key={item.id} style={[styles.timelineItem, themeStyles.timelineItem]}>
+                <View style={styles.timelineIcon}>
+                  <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
+                </View>
+                <View style={styles.timelineContent}>
+                  <Text style={[styles.timelineTitle, themeStyles.timelineTitle]}>{item.title}</Text>
+                  <Text style={[styles.timelineDate, themeStyles.timelineDate]}>{item.date}</Text>
+                </View>
+                <AntDesign name="right" size={16} color={darkMode ? '#888' : '#ccc'} />
               </View>
-              <View style={styles.timelineContent}>
-                <Text style={[styles.timelineTitle, themeStyles.timelineTitle]}>{item.title}</Text>
-                <Text style={[styles.timelineDate, themeStyles.timelineDate]}>{item.date}</Text>
-              </View>
-              <AntDesign name="right" size={16} color={darkMode ? '#888' : '#ccc'} />
-            </View>
-          ))}
+            ))}
+          </View>
           
           {/* Recent Activity */}
-          <View style={{ marginTop: 24, marginBottom: 16 }}>
+          <View style={styles.recentActivitySection}>
             <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color }]}>
               {t('dashboard.recentActivity')}
             </Text>
@@ -1024,7 +1026,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     borderRadius: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 24, // Increased from 16 to 24 for right shift
+  },
+  timelineSection: {
+    marginTop: 24,
+    marginBottom: 16,
+    paddingHorizontal: 8, // Additional padding for section container
   },
   timelineIcon: {
     width: 40,
@@ -1054,8 +1061,13 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 24, // Increased from 16 to 24 for right shift
     paddingTop: 8,
+  },
+  recentActivitySection: {
+    marginTop: 24,
+    marginBottom: 16,
+    paddingHorizontal: 8, // Additional padding for section container
   },
   activityLabel: {
     fontSize: 15,
