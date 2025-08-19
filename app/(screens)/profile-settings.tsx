@@ -1,19 +1,16 @@
 import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
 import { useProfile } from '@/context/ProfileContext';
-import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Image,
-  ImageBackground,
   ImageStyle,
   Modal,
   Platform,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -154,8 +151,8 @@ const ProfileSettings = () => {
   const { darkMode, textSize, fontBold } = useDisplayPreferences();
   const { profile, updateProfile, loading } = useProfile();
   
-  // Get styles based on dark mode
-  const styles = getStyles(darkMode);
+  // Get styles based on theme
+  const styles = React.useMemo(() => getStyles(darkMode), [darkMode]);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -220,189 +217,179 @@ const ProfileSettings = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('@/assets/images/background.jpg')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={darkMode ? '#FFFFFF' : '#000000'} />
-          </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: darkMode ? '#FFFFFF' : '#000000' }]}>
-            {t('profile.editProfile')}
-          </Text>
-          <View style={styles.emptySpace} />
-        </View>
+    <View style={[styles.background, darkMode ? styles.backgroundDark : styles.backgroundLight]}>
+      <SafeAreaView style={styles.overlay}>
+        <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity 
+              style={styles.backButton} 
+              onPress={() => navigation.goBack()}
+            >
+              <Ionicons name="arrow-back" size={24} color={darkMode ? '#FFFFFF' : '#000000'} />
+            </TouchableOpacity>
+            <Text style={[styles.headerTitle, getTextStyle()]}>{t('settings.profile.title')}</Text>
+            <View style={styles.emptySpace} />
+          </View>
 
-        {/* Hero Image */}
-        <View style={styles.heroContainer}>
-          <Image 
-            source={require('../../assets/images/medical-team.png')} 
-            style={styles.heroImage} 
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* Profile Form */}
-        <View style={styles.formContainer}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Username */}
-            <InputRow 
-              icon={<Ionicons name="person-outline" size={20} color="#333" />} 
-              value={formData.username}
-              isEditing={isEditing === 'username'}
-              onEditPress={() => handleEditField('username')}
-              onChangeText={(text) => handleInputChange('username', text)}
-              t={t}
-            />
+          <View style={styles.formContainer}>
+            <View style={styles.formHeader}>
+              <Text style={[styles.formTitle, getTextStyle()]}>{t('settings.profile.personalInfo')}</Text>
+            </View>
             
-            {/* Location */}
-            <InputRow 
-              icon={<MaterialIcons name="location-on" size={20} color="#333" />} 
-              value={formData.location}
-              hasDropdown
-              isEditing={isEditing === 'location'}
-              onEditPress={() => handleEditField('location')}
-              onChangeText={(text) => handleInputChange('location', text)}
-              t={t}
-            />
-            
-            {/* Email */}
-            <InputRow 
-              icon={<MaterialCommunityIcons name="email-outline" size={20} color="#333" />} 
-              value={formData.email}
-              isEditing={isEditing === 'email'}
-              onEditPress={() => handleEditField('email')}
-              onChangeText={(text) => handleInputChange('email', text)}
-              t={t}
-            />
-            
-            {/* Phone */}
-            <InputRow 
-              icon={<Feather name="phone" size={20} color="#333" />} 
-              value={formData.phone}
-              isEditing={isEditing === 'phone'}
-              onEditPress={() => handleEditField('phone')}
-              onChangeText={(text) => handleInputChange('phone', text)}
-              t={t}
-            />
-            
-            {/* Password */}
-            <InputRow 
-              icon={<FontAwesome name="lock" size={20} color="#333" />} 
-              value={formData.password}
-              isPassword
-              isEditing={isEditing === 'password'}
-              onEditPress={() => handleEditField('password')}
-              onChangeText={(text) => handleInputChange('password', text)}
-              t={t}
-            />
-            
-            {/* Gender */}
-            <InputRow 
-              icon={<Ionicons name="transgender" size={20} color="#333" />} 
-              value={formData.gender}
-              hasDropdown
-              onPress={() => setShowGenderModal(true)}
-              t={t}
-            />
-            
-            {/* Age */}
-            <InputRow 
-              icon={<MaterialIcons name="cake" size={20} color="#333" />} 
-              value={formData.age}
-              isEditing={isEditing === 'age'}
-              onEditPress={() => handleEditField('age')}
-              onChangeText={(text) => handleInputChange('age', text)}
-              t={t}
-            />
-          </ScrollView>
-        </View>
-
-        {/* Save Button */}
-        <View style={styles.saveButtonContainer}>
-          <TouchableOpacity 
-            style={[styles.saveButton, loading && { opacity: 0.7 }]}
-            onPress={handleSaveChanges}
-            disabled={loading}
-          >
-            <Text style={styles.saveButtonText}>
-              {loading ? t('common.loading') : t('profile.saveChanges')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Gender Selection Modal */}
-        <Modal
-          visible={showGenderModal}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setShowGenderModal(false)}
-        >
-          <TouchableOpacity 
-            style={styles.modalOverlay}
-            activeOpacity={1}
-            onPress={() => setShowGenderModal(false)}
-          >
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={getTextStyle(styles.modalTitle)}>{t('settings.profile.selectGender')}</Text>
-                <TouchableOpacity onPress={() => setShowGenderModal(false)}>
-                  <Ionicons name="close" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
+            <View style={styles.formContent}>
+              {/* Username */}
+              <InputRow 
+                icon={<Ionicons name="person-outline" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.username}
+                isEditing={isEditing === 'username'}
+                onEditPress={() => handleEditField('username')}
+                onChangeText={(text) => handleInputChange('username', text)}
+                t={t}
+              />
               
-              <TouchableOpacity 
-                style={[styles.genderOption, formData.gender === 'Male' && styles.selectedGenderOption]}
-                onPress={() => handleGenderSelect('Male')}
-              >
-                <View style={styles.genderOptionContent}>
-                  <Ionicons name="male" size={24} color="#007AFF" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.male')}</Text>
-                </View>
-                {formData.gender === 'Male' && <Ionicons name="checkmark" size={20} color="black" />}
-              </TouchableOpacity>
+              {/* Email */}
+              <InputRow 
+                icon={<Ionicons name="mail-outline" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.email}
+                isEditing={isEditing === 'email'}
+                onEditPress={() => handleEditField('email')}
+                onChangeText={(text) => handleInputChange('email', text)}
+                t={t}
+              />
+              
+              {/* Phone */}
+              <InputRow 
+                icon={<Ionicons name="call-outline" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.phone}
+                isEditing={isEditing === 'phone'}
+                onEditPress={() => handleEditField('phone')}
+                onChangeText={(text) => handleInputChange('phone', text)}
+                t={t}
+              />
+              
+              {/* Location */}
+              <InputRow 
+                icon={<Ionicons name="location-outline" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.location}
+                isEditing={isEditing === 'location'}
+                onEditPress={() => handleEditField('location')}
+                onChangeText={(text) => handleInputChange('location', text)}
+                t={t}
+              />
+              
+              {/* Gender */}
+              <InputRow 
+                icon={<Ionicons name="transgender" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.gender}
+                hasDropdown
+                onPress={() => setShowGenderModal(true)}
+                t={t}
+              />
+              
+              {/* Age */}
+              <InputRow 
+                icon={<MaterialIcons name="cake" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.age}
+                isEditing={isEditing === 'age'}
+                onEditPress={() => handleEditField('age')}
+                onChangeText={(text) => handleInputChange('age', text)}
+                t={t}
+              />
+              
+              {/* Password */}
+              <InputRow 
+                icon={<Ionicons name="lock-closed-outline" size={20} color={darkMode ? '#9CA3AF' : '#6B7280'} />} 
+                value={formData.password}
+                isPassword
+                isEditing={isEditing === 'password'}
+                onEditPress={() => handleEditField('password')}
+                onChangeText={(text) => handleInputChange('password', text)}
+                t={t}
+              />
+            </View>
+          </View>
 
-              <TouchableOpacity 
-                style={[styles.genderOption, formData.gender === 'Female' && styles.selectedGenderOption]}
-                onPress={() => handleGenderSelect('Female')}
-              >
-                <View style={styles.genderOptionContent}>
-                  <Ionicons name="female" size={24} color="#FF2D92" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.female')}</Text>
-                </View>
-                {formData.gender === 'Female' && <Ionicons name="checkmark" size={20} color="black" />}
-              </TouchableOpacity>
+          {/* Save Button */}
+          <View style={styles.saveButtonContainer}>
+            <TouchableOpacity 
+              style={[styles.saveButton, loading && { opacity: 0.7 }]}
+              onPress={handleSaveChanges}
+              disabled={loading}
+            >
+              <Text style={styles.saveButtonText}>
+                {loading ? t('common.loading') : t('profile.saveChanges')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
 
-              <TouchableOpacity 
-                style={[styles.genderOption, formData.gender === 'Other' && styles.selectedGenderOption]}
-                onPress={() => handleGenderSelect('Other')}
-              >
-                <View style={styles.genderOptionContent}>
-                  <Ionicons name="transgender" size={24} color="#666" />
-                  <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.other')}</Text>
-                </View>
-                {formData.gender === 'Other' && <Ionicons name="checkmark" size={20} color="black" />}
+      {/* Gender Selection Modal */}
+      <Modal
+        visible={showGenderModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowGenderModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowGenderModal(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={getTextStyle(styles.modalTitle)}>{t('settings.profile.selectGender')}</Text>
+              <TouchableOpacity onPress={() => setShowGenderModal(false)}>
+                <Ionicons name="close" size={24} color="black" />
               </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </Modal>
-      </SafeAreaView>
-    </ImageBackground>
+            
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Male' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Male')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="male" size={24} color="#007AFF" />
+                <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.male')}</Text>
+              </View>
+              {formData.gender === 'Male' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Female' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Female')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="female" size={24} color="#FF2D92" />
+                <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.female')}</Text>
+              </View>
+              {formData.gender === 'Female' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.genderOption, formData.gender === 'Other' && styles.selectedGenderOption]}
+              onPress={() => handleGenderSelect('Other')}
+            >
+              <View style={styles.genderOptionContent}>
+                <Ionicons name="transgender" size={24} color="#666" />
+                <Text style={getTextStyle(styles.genderOptionText)}>{t('settings.profileSettings.other')}</Text>
+              </View>
+              {formData.gender === 'Other' && <Ionicons name="checkmark" size={20} color="black" />}
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </View>
   );
 }
 
 // Define style types for better type safety
 type CustomStyles = {
   // Base styles
-  backgroundImage: ViewStyle;
+  background: ViewStyle;
+  backgroundLight: ViewStyle;
+  backgroundDark: ViewStyle;
   overlay: ViewStyle;
   container: ViewStyle;
   
@@ -414,11 +401,14 @@ type CustomStyles = {
   
   // Form styles
   formContainer: ViewStyle;
+  formHeader: ViewStyle;
+  formTitle: TextStyle;
+  formContent: ViewStyle;
   inputRow: ViewStyle;
   inputRowDark: ViewStyle;
   inputIconContainer: ViewStyle;
-  inputTextInput: TextStyle & { cursor?: 'text' | 'pointer', userSelect?: 'text' | 'auto' | 'none' };
-  inputTextDark: TextStyle;
+  inputTextInput: TextStyle & { cursor?: 'text' | 'pointer', userSelect?: 'text' | 'auto' | 'none' | undefined };
+  inputTextDark: ViewStyle;
   inputText: TextStyle;
   editButton: ViewStyle;
   
@@ -442,21 +432,25 @@ type CustomStyles = {
   heroImage: ImageStyle;
 };
 
-const getStyles = (darkMode: boolean) => {
-  const background = darkMode ? '#121212' : '#FFFFFF';
+const getStyles = (darkMode: boolean): CustomStyles => {
   const text = darkMode ? '#E0E0E0' : '#333333';
   const secondaryText = darkMode ? '#B0B0B0' : '#666666';
+  const backgroundColor = darkMode ? '#121212' : '#FFFFFF';
   const cardBackground = darkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = darkMode ? '#333333' : '#E0E0E0';
   const primary = darkMode ? '#BB86FC' : '#6200EE';
   
-  // Create styles with proper typing
-  const styles = {
-    backgroundImage: {
+  const styles: CustomStyles = {
+    background: {
       flex: 1,
       width: '100%',
-      height: '100%',
-    } as ViewStyle,
+    },
+    backgroundLight: {
+      backgroundColor: '#FFFFFF',
+    },
+    backgroundDark: {
+      backgroundColor: '#121212',
+    },
     overlay: {
       ...StyleSheet.absoluteFillObject,
       backgroundColor: darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.6)',
@@ -535,18 +529,19 @@ const getStyles = (darkMode: boolean) => {
     } as ViewStyle,
     inputTextInput: {
       flex: 1,
-      fontSize: 15,
-      color: darkMode ? '#F5F5F5' : '#1A1A1A',
-      padding: 16,
-      paddingLeft: 12,
-      backgroundColor: 'transparent',
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      color: text,
       ...(Platform.OS === 'web' ? {
         cursor: 'text' as const,
         userSelect: 'text' as const,
+        outlineStyle: 'none',
       } : {}),
-    } as TextStyle,
+    } as TextStyle & { cursor?: 'text' | 'pointer', userSelect?: 'text' | 'auto' | 'none' | undefined },
     inputTextDark: {
       borderColor: '#444',
+      borderWidth: 1,
     } as ViewStyle,
     inputText: {
       flex: 1,

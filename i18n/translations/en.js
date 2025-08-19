@@ -99,6 +99,9 @@ export default {
   // Settings
   "settings": {
     "title": "Settings",
+    "profile": {
+      "personalInfo": "Personal Information"
+    },
     "deleteAccount": {
       "title": "Delete Account",
       "manageTitle": "Manage Your Account",

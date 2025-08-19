@@ -33,7 +33,8 @@
     "profile": {
       "title": "Profile",
       "subtitle": "Manage your profile",
-      "selectGender": ""
+      "selectGender": "",
+      "personalInfo": "Personal Information"
     },
     "notifications": {
       "title": "Notifications",
