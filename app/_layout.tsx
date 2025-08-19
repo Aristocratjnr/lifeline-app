@@ -7,6 +7,7 @@ import { ActivityIndicator, Text, View, useColorScheme as useNativeColorScheme }
 import 'react-native-reanimated';
 
 import { DisplayPreferencesProvider, useDisplayPreferences } from '../context/DisplayPreferencesContext';
+import { ProfileProvider } from '../context/ProfileContext';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { initI18n } from '../i18n';
 import { LanguageProvider } from '../i18n/LanguageContext';
@@ -106,7 +107,9 @@ export default function RootLayout() {
   return (
     <LanguageProvider>
       <DisplayPreferencesProvider>
-        <RootLayoutContent />
+        <ProfileProvider>
+          <RootLayoutContent />
+        </ProfileProvider>
       </DisplayPreferencesProvider>
     </LanguageProvider>
   );

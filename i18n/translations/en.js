@@ -29,7 +29,8 @@ export default {
   
   // Medical conditions
   "conditions": {
-    "commonCold": "Common Cold"
+    "commonCold": "Common Cold",
+    "healthy": "Healthy"
   },
   
   // Status indicators
@@ -226,11 +227,18 @@ export default {
   
   // Profile translations
   "profile": {
+    "title": "Profile",
+    "guest": "Guest User",
+    "notSpecified": "Not Specified",
+    "locationNotSet": "Location Not Set",
     "age": "Age",
     "gender": "Gender",
     "language": "Language",
-    "location": "Location",
-    "condition": "Condition"
+    "lastVisit": "Last Visit",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   },
 
   // Tips section (new)

@@ -2,6 +2,7 @@
 
 import AppointmentModal from "@/components/AppointmentModal"
 import { useDisplayPreferences } from "@/context/DisplayPreferencesContext"
+import { useProfile } from "@/context/ProfileContext"
 import { fetchWeatherData, WeatherData } from "@/services/weatherService"
 import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons"
 import { useFonts } from "expo-font"
@@ -19,6 +20,7 @@ const DashboardScreen = () => {
   const circleSize = Math.min(80, windowWidth / 4);
   const { t } = useTranslation()
   const { darkMode } = useDisplayPreferences()
+  const { profile } = useProfile()
   const router = useRouter()
 
   // Handle emergency calls
@@ -341,15 +343,21 @@ const DashboardScreen = () => {
       </View>
     </TouchableOpacity>
   ))
-  // User data
+
+  // Format last visit date - using current date since lastVisit isn't stored in profile
+  const formatLastVisit = () => {
+    return new Date().toLocaleDateString();
+  };
+  
+  // User data with fallback values
   const user = {
-    name: "Daniella Asiedu",
-    age: 50,
-    gender: t('common.female'),
-    location: "Accra, Ghana",
-    medicalCondition: t('conditions.commonCold'),
+    name: profile?.username || t('profile.guest'),
+    age: profile?.age || '',
+    gender: profile?.gender || t('profile.notSpecified'),
+    location: profile?.location || t('profile.locationNotSet'),
+    medicalCondition: t('conditions.healthy'),
     language: t('languages.english'),
-    lastVisit: "02/05/2025",
+    lastVisit: formatLastVisit(),
     avatar: require("@/assets/images/Daniella.jpeg"),
   };
 
@@ -363,7 +371,7 @@ const DashboardScreen = () => {
   
   // Navigate to profile settings
   const handleEditProfile = () => {
-    router.push('/settings');
+    router.push('/screens/profile-settings');
   };
   
   // Handle refreshing daily tip with smooth animation
@@ -510,11 +518,16 @@ const DashboardScreen = () => {
           {/* Profile Card */}
           <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
             <View style={styles.profileHeader}>
-              <Image 
-                source={user.avatar} 
-                style={styles.profileImage} 
-                contentFit="cover"
-              />
+              <View style={styles.profileImageContainer}>
+                <Image 
+                  source={user.avatar} 
+                  style={styles.profileImage} 
+                  contentFit="cover"
+                />
+                <View style={[styles.editProfileBadge, { backgroundColor: themeStyles.primary }]}>
+                  <Feather name="edit-2" size={12} color="white" />
+                </View>
+              </View>
               <View style={styles.profileInfo}>
                 <Text style={[styles.profileName, themeStyles.profileName]}>{user.name}</Text>
                 <Text style={[styles.profileStatus, themeStyles.profileStatus]}>
@@ -871,6 +884,7 @@ const getThemeStyles = (isDark: boolean) => ({
   container: {
     backgroundColor: isDark ? '#121212' : '#F5F5F5',
   },
+  primary: isDark ? '#4CAF50' : '#2E7D32', // Primary brand color
   profileCard: {
     backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
   },
@@ -1297,11 +1311,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  profileImage: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+  profileImageContainer: {
+    position: 'relative',
     marginRight: 12,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  editProfileBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   profileInfo: {
     flex: 1,

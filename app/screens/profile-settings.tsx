@@ -1,5 +1,4 @@
 import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +15,9 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
+import { useProfile } from '../../context/ProfileContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -97,19 +98,18 @@ export default function ProfileSettings() {
   const { t } = useTranslation();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
-  const [textSize, setTextSize] = useState(0.5); // default medium
-  const [fontBold, setFontBold] = useState(false);
-  useDisplayPreferences();
+  const { darkMode, textSize, fontBold } = useDisplayPreferences();
+  const { profile, updateProfile, loading } = useProfile();
   
   // Form state
   const [formData, setFormData] = useState({
-    username: '',
-    location: '',
-    email: '',
-    phone: '',
-    password: '',
-    gender: t('settings.profile.selectGender'),
-    age: ''
+    username: profile.username || '',
+    location: profile.location || '',
+    email: profile.email || '',
+    phone: profile.phone || '',
+    password: profile.password || '',
+    gender: profile.gender || t('settings.profile.selectGender'),
+    age: profile.age || ''
   });
 
   const getTextStyle = (baseStyle = {}) => {
@@ -120,31 +120,20 @@ export default function ProfileSettings() {
 
   useEffect(() => {
     loadFonts();
-    // Load saved profile data from AsyncStorage
-    const loadProfileData = async () => {
-      try {
-        const savedData = await AsyncStorage.getItem('profileSettings');
-        if (savedData) {
-          setFormData(JSON.parse(savedData));
-        }
-      } catch (error) {
-        console.error('Failed to load profile data:', error);
-      }
-    };
-    loadProfileData();
-    // Load display preferences
-    const loadDisplayPrefs = async () => {
-      try {
-        const prefs = await AsyncStorage.getItem('displayPrefs');
-        if (prefs) {
-          const parsed = JSON.parse(prefs);
-          if (parsed.textSize !== undefined) setTextSize(parsed.textSize);
-          if (parsed.fontBold !== undefined) setFontBold(parsed.fontBold);
-        }
-      } catch {}
-    };
-    loadDisplayPrefs();
   }, []);
+  
+  // Update form data when profile changes
+  useEffect(() => {
+    setFormData({
+      username: profile.username || '',
+      location: profile.location || '',
+      email: profile.email || '',
+      phone: profile.phone || '',
+      password: profile.password || '',
+      gender: profile.gender || t('settings.profile.selectGender'),
+      age: profile.age || ''
+    });
+  }, [profile, t]);
 
   const handleEditField = (field: string) => {
     setIsEditing(field);
@@ -167,8 +156,7 @@ export default function ProfileSettings() {
 
   const handleSaveChanges = async () => {
     try {
-      await AsyncStorage.setItem('profileSettings', JSON.stringify(formData));
-      console.log('Profile data saved locally:', formData);
+      await updateProfile(formData);
       navigation.goBack();
     } catch (error) {
       console.error('Failed to save profile data:', error);
