@@ -371,7 +371,7 @@ const DashboardScreen = () => {
   
   // Navigate to profile settings
   const handleEditProfile = () => {
-    router.push('/screens/profile-settings');
+    router.push('/(screens)/profile-settings');
   };
   
   // Handle refreshing daily tip with smooth animation

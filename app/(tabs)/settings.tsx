@@ -2,6 +2,12 @@ import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from '@expo
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import * as Font from 'expo-font';
+import { router } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 type RootStackParamList = {
   'screens/help': undefined;
@@ -41,13 +47,6 @@ type RootStackParamList = {
   'screens/offline-content': undefined;
   // Add other screen names as needed
 };
-import * as Font from 'expo-font';
-import { router } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
-import { useColorScheme } from 'react-native';
 
 type IconProps = {
   color?: string;
@@ -166,9 +165,13 @@ export default function Settings() {
     }, [])
   );
 
-  const navigateToScreen = (screen: keyof RootStackParamList) => {
-    const route = screen.startsWith('screens/') ? screen : `screens/${screen}`;
-    router.push(route as any);
+  const navigateToScreen = (screen: string) => {
+    if (screen === 'screens/profile-settings') {
+      router.push('/(screens)/profile-settings');
+    } else {
+      // @ts-ignore - We know the screen is valid
+      navigation.navigate(screen);
+    }
   };
 
   return (
@@ -216,7 +219,7 @@ export default function Settings() {
               icon={<Ionicons name="person-outline" size={24} color={iconColor} />}
               title={t('settings.profile.title')}
               subtitle={username || t('settings.profile.subtitle')}
-              onPress={() => navigateToScreen('screens/profile-settings')}
+              onPress={() => router.push('/(screens)/profile-settings')}
               textSize={textSize}
               fontBold={fontBold}
             />

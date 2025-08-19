@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface ProfileData {
+export interface ProfileData {
   username: string;
   location: string;
   email: string;

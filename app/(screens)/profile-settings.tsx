@@ -1,23 +1,27 @@
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
+import { useProfile } from '@/context/ProfileContext';
 import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Image,
   ImageBackground,
+  ImageStyle,
   Modal,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   TouchableOpacity,
-  View
+  View,
+  ViewStyle
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
-import { useProfile } from '../../context/ProfileContext';
 
 // Load JetBrains Mono font
 const loadFonts = async () => {
@@ -28,7 +32,7 @@ const loadFonts = async () => {
 };
 
 type InputRowProps = {
-  icon: React.ReactNode;
+  icon: React.ReactElement<{ name: string; size: number; color?: string }>;
   value: string;
   isPassword?: boolean;
   hasDropdown?: boolean;
@@ -48,58 +52,110 @@ const InputRow = ({
   onChangeText,
   isEditing = false,
   onEditPress,
-  t
+  t 
 }: InputRowProps) => {
+  const { darkMode } = useDisplayPreferences();
+  const styles = getStyles(darkMode);
+  
+  // Clone the icon to apply dark mode styles
+  const themedIcon = React.cloneElement(icon, {
+    color: darkMode ? '#E0E0E0' : '#333',
+    size: 20
+  });
+
   const [textSize] = useState(0.5);
   const [fontBold] = useState(false);
 
-  const getTextStyle = (baseStyle = {}) => {
-    let fontSize = 14 + textSize * 8; // 14-22px
-    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
-    return { ...baseStyle, fontSize, fontFamily };
-  };
+  const getTextStyle = (baseStyle: TextStyle = {}): TextStyle => ({
+    fontSize: 14 + textSize * 8, // 14-22px
+    fontFamily: fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono',
+    ...baseStyle,
+  } as TextStyle);
+
+  // Create style objects with proper typing
+  const rowStyle = {
+    ...styles.inputRow,
+    ...(darkMode ? styles.inputRowDark : {})
+  } as ViewStyle;
+
+  const textInputStyle = {
+    ...styles.inputTextInput,
+    ...(darkMode ? {
+      ...styles.inputTextDark,
+      // Ensure userSelect is properly typed for web
+      ...(Platform.OS === 'web' ? { userSelect: 'text' as const } : {})
+    } : {}),
+    ...getTextStyle({ color: darkMode ? '#E0E0E0' : '#333' })
+  } as TextStyle;
+
+  const textStyle = {
+    ...styles.inputText,
+    ...(darkMode ? {
+      ...styles.inputTextDark,
+      // Ensure userSelect is properly typed for web
+      ...(Platform.OS === 'web' ? { userSelect: 'text' as const } : {})
+    } : {}),
+    ...getTextStyle({ color: darkMode ? '#E0E0E0' : '#333' })
+  } as TextStyle;
 
   return (
-    <View style={styles.inputRow}>
+    <TouchableOpacity 
+      style={rowStyle}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
       <View style={styles.inputIconContainer}>
-        {icon}
+        {themedIcon}
       </View>
+      
       {isEditing ? (
         <TextInput
-          style={[styles.inputTextInput, getTextStyle()]}
+          style={textInputStyle}
           value={value}
           onChangeText={onChangeText}
+          autoFocus
           secureTextEntry={isPassword}
-          placeholder={isPassword ? t('settings.profileSettings.passwordPlaceholder') : t('settings.profileSettings.valuePlaceholder')}
-          placeholderTextColor="#999"
+          placeholderTextColor={darkMode ? '#888' : '#999'}
+          placeholder={t('profile.notSpecified')}
         />
       ) : (
-        <Text style={getTextStyle(styles.inputText)}>
-          {isPassword ? t('settings.profileSettings.maskedPassword') : value}
+        <Text style={textStyle}>
+          {value || t('profile.notSpecified')}
         </Text>
       )}
+      
       {hasDropdown && !isEditing && (
-        <MaterialIcons name="keyboard-arrow-down" size={20} color="#333" />
+        <Ionicons 
+          name="chevron-down" 
+          size={20} 
+          color={darkMode ? '#888' : '#666'} 
+        />
       )}
-      {isPassword && !isEditing && (
-        <Ionicons name="eye-outline" size={20} color="#333" />
-      )}
-      {!hasDropdown && !isPassword && (
+      
+      {!isEditing && onEditPress && (
         <TouchableOpacity onPress={onEditPress} style={styles.editButton}>
-          <Ionicons name={isEditing ? "checkmark" : "create-outline"} size={18} color="#666" />
+          <Feather 
+            name="edit-2" 
+            size={16} 
+            color={darkMode ? '#888' : '#666'} 
+          />
         </TouchableOpacity>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export default function ProfileSettings() {
+const ProfileSettings = () => {
+  const router = useRouter();
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const { darkMode, textSize, fontBold } = useDisplayPreferences();
   const { profile, updateProfile, loading } = useProfile();
+  
+  // Get styles based on dark mode
+  const styles = getStyles(darkMode);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -112,11 +168,11 @@ export default function ProfileSettings() {
     age: profile.age || ''
   });
 
-  const getTextStyle = (baseStyle = {}) => {
-    let fontSize = 14 + textSize * 8; // 14-22px
-    let fontFamily = fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono';
-    return { ...baseStyle, fontSize, fontFamily };
-  };
+  const getTextStyle = (baseStyle: TextStyle = {}): TextStyle => ({
+    fontSize: 14 + textSize * 8, // 14-22px
+    fontFamily: fontBold ? 'JetBrainsMono-Bold' : 'JetBrainsMono',
+    ...baseStyle,
+  } as TextStyle);
 
   useEffect(() => {
     loadFonts();
@@ -165,22 +221,23 @@ export default function ProfileSettings() {
 
   return (
     <ImageBackground
-      source={require('../../assets/images/medical-team.png')}
+      source={require('@/assets/images/background.jpg')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      {/* Overlay for better text contrast */}
       <View style={styles.overlay} />
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? '#FFFFFF' : '#000000'} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, getTextStyle({fontSize: 20})]}>{t('profile.title')}</Text>
+          <Text style={[styles.headerTitle, { color: darkMode ? '#FFFFFF' : '#000000' }]}>
+            {t('profile.editProfile')}
+          </Text>
           <View style={styles.emptySpace} />
         </View>
 
@@ -271,8 +328,14 @@ export default function ProfileSettings() {
 
         {/* Save Button */}
         <View style={styles.saveButtonContainer}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-            <Text style={getTextStyle(styles.saveButtonText)}>{t('settings.profileSettings.saveChanges')}</Text>
+          <TouchableOpacity 
+            style={[styles.saveButton, loading && { opacity: 0.7 }]}
+            onPress={handleSaveChanges}
+            disabled={loading}
+          >
+            <Text style={styles.saveButtonText}>
+              {loading ? t('common.loading') : t('profile.saveChanges')}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -336,170 +399,223 @@ export default function ProfileSettings() {
   );
 }
 
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    position: 'relative',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    zIndex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)',
-    zIndex: 2,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    position: 'relative',
-  },
-  backButton: {
-    padding: 5,
-    width: 30,
-  },
-  headerTitle: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '600',
-    fontFamily: 'JetBrainsMono-Bold',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    alignSelf: 'center',
-  },
-  emptySpace: {
-    width: 30,
-  },
-  heroContainer: {
-    height: 180,
-    marginHorizontal: 20,
-    marginBottom: 15,
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
-  },
-  formContainer: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    marginHorizontal: 20,
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 80,
-    flex: 1,
-    position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  inputIconContainer: {
-    width: 25,
-    alignItems: 'center',
-    marginRight: 5,
-  },
-  inputText: {
-    flex: 1,
-    fontSize: 14,
-    marginLeft: 5,
-    fontFamily: 'JetBrainsMono',
-    color: '#333',
-  },
-  saveButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 15,
-    right: 15,
-  },
-  saveButton: {
-    backgroundColor: '#ff0000',
-    borderRadius: 25,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  saveButtonText: {
-    color: 'white',
-    fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 14,
-    letterSpacing: 0.5,
-  },
-  inputTextInput: {
-    flex: 1,
-    fontSize: 14,
-    marginLeft: 5,
-    fontFamily: 'JetBrainsMono',
-    color: '#333',
-    paddingVertical: 0,
-  },
-  editButton: {
-    padding: 5,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 20,
-    width: '80%',
-    maxWidth: 300,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  modalTitle: {
-    fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 18,
-    color: '#333',
-  },
-  genderOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  selectedGenderOption: {
-    backgroundColor: '#f0f0f0',
-  },
-  genderOptionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
-  },
-  genderOptionText: {
-    fontFamily: 'JetBrainsMono',
-    fontSize: 16,
-    color: '#333',
-  },
-});
+// Define style types for better type safety
+type CustomStyles = {
+  // Base styles
+  backgroundImage: ViewStyle;
+  overlay: ViewStyle;
+  container: ViewStyle;
+  
+  // Header styles
+  header: ViewStyle;
+  backButton: ViewStyle;
+  headerTitle: TextStyle;
+  emptySpace: ViewStyle;
+  
+  // Form styles
+  formContainer: ViewStyle;
+  inputRow: ViewStyle;
+  inputRowDark: ViewStyle;
+  inputIconContainer: ViewStyle;
+  inputTextInput: TextStyle & { cursor?: 'text' | 'pointer', userSelect?: 'text' | 'auto' | 'none' };
+  inputTextDark: TextStyle;
+  inputText: TextStyle;
+  editButton: ViewStyle;
+  
+  // Save button
+  saveButtonContainer: ViewStyle;
+  saveButton: ViewStyle;
+  saveButtonText: TextStyle;
+  
+  // Modal styles
+  modalOverlay: ViewStyle;
+  modalContent: ViewStyle;
+  modalHeader: ViewStyle;
+  modalTitle: TextStyle;
+  genderOption: ViewStyle;
+  selectedGenderOption: ViewStyle;
+  genderOptionContent: ViewStyle;
+  genderOptionText: TextStyle;
+  
+  // Hero image
+  heroContainer: ViewStyle;
+  heroImage: ImageStyle;
+};
+
+const getStyles = (darkMode: boolean) => {
+  const background = darkMode ? '#121212' : '#FFFFFF';
+  const text = darkMode ? '#E0E0E0' : '#333333';
+  const secondaryText = darkMode ? '#B0B0B0' : '#666666';
+  const cardBackground = darkMode ? '#1E1E1E' : '#FFFFFF';
+  const borderColor = darkMode ? '#333333' : '#E0E0E0';
+  const primary = darkMode ? '#BB86FC' : '#6200EE';
+  
+  // Create styles with proper typing
+  const styles = {
+    backgroundImage: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+    } as ViewStyle,
+    overlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.6)',
+      zIndex: 1,
+    } as ViewStyle,
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.89)',
+      zIndex: 2,
+    } as ViewStyle,
+    
+    // Header styles
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 16,
+      backgroundColor: 'transparent',
+    } as ViewStyle,
+    backButton: {
+      padding: 8,
+    } as ViewStyle,
+    headerTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: darkMode ? '#FFFFFF' : '#000000',
+      marginLeft: 16,
+    } as TextStyle,
+    emptySpace: {
+      flex: 1,
+    } as ViewStyle,
+    
+    // Form styles
+    formContainer: {
+      flex: 1,
+      padding: 16,
+    } as ViewStyle,
+    inputRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: darkMode ? '#1E1E1E' : '#F5F5F5',
+      borderRadius: 8,
+      padding: 0,
+      marginBottom: 16,
+      overflow: 'hidden',
+    } as ViewStyle,
+    inputRowDark: {
+      backgroundColor: '#333',
+    } as ViewStyle,
+    inputIconContainer: {
+      marginRight: 12,
+    } as ViewStyle,
+    inputTextInput: {
+      flex: 1,
+      fontSize: 16,
+      color: darkMode ? '#E0E0E0' : '#333',
+      padding: 12,
+      borderRadius: 8,
+      backgroundColor: 'transparent',
+      ...(Platform.OS === 'web' ? {
+        cursor: 'text' as const,
+        userSelect: 'text' as const,
+      } : {}),
+    } as TextStyle,
+    inputTextDark: {
+      borderColor: '#444',
+    } as ViewStyle,
+    inputText: {
+      flex: 1,
+      fontSize: 16,
+      color: darkMode ? '#E0E0E0' : '#333',
+      padding: 12,
+    } as TextStyle,
+    
+    // Button styles
+    editButton: {
+      marginLeft: 12,
+      padding: 8,
+    } as ViewStyle,
+    saveButtonContainer: {
+      marginTop: 24,
+      alignItems: 'center',
+    } as ViewStyle,
+    saveButton: {
+      backgroundColor: '#d32f2f',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      minWidth: 200,
+      alignSelf: 'center',
+    } as ViewStyle,
+    saveButtonText: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      fontWeight: 'bold',
+    } as TextStyle,
+    
+    // Modal styles
+    modalOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    } as ViewStyle,
+    modalContent: {
+      backgroundColor: darkMode ? '#1E1E1E' : '#FFFFFF',
+      borderRadius: 12,
+      padding: 16,
+      width: '80%',
+      maxWidth: 400,
+    } as ViewStyle,
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 16,
+    } as ViewStyle,
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: darkMode ? '#FFFFFF' : '#000000',
+    } as TextStyle,
+    genderOption: {
+      padding: 12,
+      borderRadius: 8,
+      marginBottom: 8,
+    } as ViewStyle,
+    selectedGenderOption: {
+      backgroundColor: darkMode ? '#333' : '#F0F0F0',
+    } as ViewStyle,
+    genderOptionContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    } as ViewStyle,
+    genderOptionText: {
+      fontFamily: 'JetBrainsMono',
+      fontSize: 16,
+      color: text,
+    } as TextStyle,
+    
+    // Hero image
+    heroContainer: {
+      alignItems: 'center',
+      padding: 24,
+    } as ViewStyle,
+    heroImage: {
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+    } as ImageStyle,
+  };
+  
+  return styles;
+};
+
+export default ProfileSettings;
