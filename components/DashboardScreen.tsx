@@ -821,12 +821,13 @@ const DashboardScreen = () => {
           </View>
           
           {/* Timeline Items */}
-          <View style={styles.timelineSection}>
-            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginTop: 24, marginBottom: 12 }]}>
-              {t('dashboard.lifelineHistory')}
-            </Text>
-            {timeline.map((item) => (
-              <View key={item.id} style={[styles.timelineItem, themeStyles.timelineItem]}>
+          <View style={[styles.timelineContainer, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
+            <View style={styles.timelineSection}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 12 }]}>
+                {t('dashboard.lifelineHistory')}
+              </Text>
+              {timeline.map((item) => (
+              <View key={item.id} style={[styles.timelineItem, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
                 <View style={styles.timelineIcon}>
                   <FontAwesome5 name={item.icon as any} size={20} color="#D9534F" />
                 </View>
@@ -837,14 +838,16 @@ const DashboardScreen = () => {
                 <AntDesign name="right" size={16} color={darkMode ? '#888' : '#ccc'} />
               </View>
             ))}
+            </View>
           </View>
           
           {/* Recent Activity */}
-          <View style={styles.recentActivitySection}>
-            <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color }]}>
-              {t('dashboard.recentActivity')}
-            </Text>
-            {recentActivity.map((item) => (
+          <View style={[styles.recentActivityContainer, { backgroundColor: themeStyles.cardBackground.backgroundColor }]}>
+            <View style={styles.recentActivitySection}>
+              <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 12 }]}>
+                {t('dashboard.recentActivity')}
+              </Text>
+              {recentActivity.map((item) => (
               <TouchableOpacity 
                 key={item.id} 
                 style={[styles.activityRow, themeStyles.activityRow]}
@@ -858,6 +861,7 @@ const DashboardScreen = () => {
                 </View>
               </TouchableOpacity>
             ))}
+            </View>
           </View>
           
           {/* Footer */}
@@ -933,8 +937,8 @@ const getThemeStyles = (isDark: boolean) => ({
   conditionText: {
     color: isDark ? '#FF8A80' : '#D9534F',
   },
-  statCard: {
-    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+  cardBackground: {
+    backgroundColor: isDark ? '#2A2A2A' : '#FFFFFF',
   },
   statValue: {
     color: isDark ? '#E0E0E0' : '#222222',
@@ -1057,19 +1061,24 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     paddingBottom: 100,
-  },
-  timelineItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 16,
-    padding: 12,
     borderRadius: 8,
-    marginHorizontal: 24, // Increased from 16 to 24 for right shift
+    marginHorizontal: 8,
   },
-  timelineSection: {
+  timelineContainer: {
     marginTop: 24,
     marginBottom: 16,
-    paddingHorizontal: 8, // Additional padding for section container
+    marginHorizontal: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  timelineSection: {
+    padding: 16,
   },
   timelineIcon: {
     width: 40,
@@ -1102,10 +1111,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 24, // Increased from 16 to 24 for right shift
     paddingTop: 8,
   },
-  recentActivitySection: {
+  recentActivityContainer: {
     marginTop: 24,
     marginBottom: 16,
-    paddingHorizontal: 8, // Additional padding for section container
+    marginHorizontal: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  recentActivitySection: {
+    padding: 16,
   },
   activityLabel: {
     fontSize: 15,
@@ -1270,12 +1289,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   statCard: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    marginBottom: 12,
     borderRadius: 12,
-    marginHorizontal: 4,
+    padding: 12,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  timelineItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    borderRadius: 12,
+    padding: 12,
+    marginHorizontal: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
