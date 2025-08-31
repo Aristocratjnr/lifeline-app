@@ -2,8 +2,23 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyText: string;
+  buttonBackground: string;
+  purpleAccent: string;
+  termCard: string;
+  noteBox: string;
+  iconBackground: string;
+}
 
 type TermItem = {
   term: string;
@@ -26,6 +41,23 @@ const terms: TermItem[] = [
 
 export default function GlossaryScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#555555',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    buttonBackground: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+    purpleAccent: isDarkMode ? '#B39DDB' : '#5E35B1',
+    termCard: isDarkMode ? '#2A2A2A' : '#FFFFFF',
+    noteBox: isDarkMode ? 'rgba(179, 157, 219, 0.1)' : '#F3E5F5',
+    iconBackground: isDarkMode ? 'rgba(179, 157, 219, 0.2)' : '#F3E5F5',
+  };
 
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -38,67 +70,75 @@ export default function GlossaryScreen() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
         source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['top', 'right', 'left']}>
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.6)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.89)' : 'rgba(255, 255, 255, 0.74)' }]} edges={['top', 'right', 'left']}>
           <ScrollView 
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.header}>
               <TouchableOpacity 
-                style={styles.backButton}
+                style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
                 onPress={() => router.back()}
               >
-                <MaterialIcons name="arrow-back" size={24} color="#333" />
+                <MaterialIcons name="arrow-back" size={24} color={colors.text} />
               </TouchableOpacity>
               
-              <Text style={styles.headerTitle}>GLOSSARY</Text>
+              <Text style={[styles.headerTitle, { color: colors.purpleAccent }]}>GLOSSARY</Text>
               
-              <View style={styles.headerRight}>
+              <View style={[styles.headerRight, { backgroundColor: colors.buttonBackground }]}>
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/screens/guest')}
                 >
-                  <MaterialIcons name="person" size={24} color="#E53935" />
+                  <MaterialIcons name="person" size={24} color={colors.emergencyText} />
                 </TouchableOpacity>
-                <View style={styles.verticalLine} />
+                <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/settings')}
                 >
-                  <MaterialIcons name="more-vert" size={24} color="#666" />
+                  <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
 
-            <View style={styles.contentContainer}>
-              <Text style={styles.sectionTitle}>First Aid Terms & Definitions</Text>
-              <Text style={styles.introText}>
+            <View style={[styles.contentContainer, { backgroundColor: colors.card }]}>
+              <Text style={[styles.sectionTitle, { color: colors.purpleAccent }]}>First Aid Terms & Definitions</Text>
+              <Text style={[styles.introText, { color: colors.textSecondary }]}>
                 Common medical terms and abbreviations used in first aid and emergency situations:
               </Text>
               
               <View style={styles.termsContainer}>
                 {terms.map((item, index) => (
-                  <View key={index} style={styles.termCard}>
+                  <View key={index} style={[styles.termCard, { 
+                    backgroundColor: colors.termCard,
+                    borderColor: isDarkMode ? colors.border : '#EDE7F6' 
+                  }]}>
                     <View style={styles.termHeader}>
-                      <MaterialIcons name={item.icon} size={24} color="#5E35B1" style={styles.termIcon} />
-                      <Text style={styles.term}>{item.term}</Text>
+                      <MaterialIcons 
+                        name={item.icon} 
+                        size={24} 
+                        color={colors.purpleAccent} 
+                        style={[styles.termIcon, { backgroundColor: colors.iconBackground }]} 
+                      />
+                      <Text style={[styles.term, { color: colors.purpleAccent }]}>{item.term}</Text>
                     </View>
-                    <Text style={styles.definition}>{item.definition}</Text>
+                    <Text style={[styles.definition, { color: colors.textSecondary }]}>{item.definition}</Text>
                   </View>
                 ))}
               </View>
               
-              <View style={styles.noteBox}>
-                <MaterialIcons name="info" size={24} color="#5E35B1" style={styles.noteIcon} />
-                <Text style={styles.noteText}>
+              <View style={[styles.noteBox, { backgroundColor: colors.noteBox }]}>
+                <MaterialIcons name="info" size={24} color={colors.purpleAccent} style={styles.noteIcon} />
+                <Text style={[styles.noteText, { color: colors.purpleAccent }]}>
                   This glossary provides general information and is not a substitute for professional medical advice.
                 </Text>
               </View>
@@ -118,17 +158,14 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.74)',
     zIndex: 2,
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
   },
   scrollContent: {
     padding: 20,
@@ -147,14 +184,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#5E35B1',
     fontFamily: 'JetBrainsMono-Bold',
     textAlign: 'center',
     flex: 1,
@@ -163,7 +198,6 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 20,
     paddingHorizontal: 4,
   },
@@ -180,10 +214,8 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 1,
     height: 24,
-    backgroundColor: '#E0E0E0',
   },
   contentContainer: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000',
@@ -195,7 +227,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 26,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#5E35B1',
     marginBottom: 12,
     textAlign: 'center',
     letterSpacing: 0.5,
@@ -203,7 +234,6 @@ const styles = StyleSheet.create({
   introText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#555',
     marginBottom: 24,
     textAlign: 'center',
     paddingHorizontal: 8,
@@ -212,12 +242,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   termCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#EDE7F6',
     shadowColor: '#5E35B1',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -231,7 +259,6 @@ const styles = StyleSheet.create({
   },
   termIcon: {
     marginRight: 12,
-    backgroundColor: '#F3E5F5',
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -242,16 +269,13 @@ const styles = StyleSheet.create({
   term: {
     fontSize: 18,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#5E35B1',
   },
   definition: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#444',
     paddingLeft: 36, // Align with icon
   },
   noteBox: {
-    backgroundColor: '#F3E5F5',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -263,7 +287,6 @@ const styles = StyleSheet.create({
   },
   noteText: {
     flex: 1,
-    color: '#5E35B1',
     fontStyle: 'italic',
     lineHeight: 20,
   },

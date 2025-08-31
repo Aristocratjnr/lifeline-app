@@ -1,8 +1,21 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { Dimensions, ImageBackground, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  progressBackground: string;
+  progressFill: string;
+  explanationBackground: string;
+  homeButtonText: string;
+}
 
 interface Question {
   id: number;
@@ -14,6 +27,22 @@ interface Question {
 
 export default function QuizScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? 'rgba(18, 18, 18, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    progressBackground: isDarkMode ? '#333333' : '#F0F0F0',
+    progressFill: isDarkMode ? '#FF8A8A' : '#FF6B6B',
+    explanationBackground: isDarkMode ? '#2A2A2A' : '#F8F9FA',
+    homeButtonText: isDarkMode ? '#FFFFFF' : '#333333',
+  };
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
@@ -202,16 +231,16 @@ export default function QuizScreen() {
 
   const renderOptions = () => {
     return questions[currentQuestion].options.map((option, index) => {
-      let optionStyle = styles.option;
-      let optionTextStyle = styles.optionText;
+      let optionStyle = [styles.option, { backgroundColor: colors.card, borderColor: colors.border }];
+      let optionTextStyle = [styles.optionText, { color: colors.text }];
       
       if (answered) {
         if (index === selectedOption) {
           optionStyle = index === questions[currentQuestion].correctAnswer 
-            ? styles.correctOption 
-            : styles.wrongOption;
+            ? [styles.correctOption, { backgroundColor: isDarkMode ? 'rgba(76, 175, 80, 0.2)' : '#E8F5E9', borderColor: '#4CAF50' }]
+            : [styles.wrongOption, { backgroundColor: isDarkMode ? 'rgba(244, 67, 54, 0.2)' : '#FFEBEE', borderColor: '#F44336' }];
         } else if (index === questions[currentQuestion].correctAnswer) {
-          optionStyle = styles.correctOption;
+          optionStyle = [styles.correctOption, { backgroundColor: isDarkMode ? 'rgba(76, 175, 80, 0.2)' : '#E8F5E9', borderColor: '#4CAF50' }];
         }
       }
 
@@ -241,35 +270,38 @@ export default function QuizScreen() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
         
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>First Aid Quiz</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>First Aid Quiz</Text>
           <View style={styles.headerRight} />
         </View>
 
         {!showScore ? (
           <View style={styles.quizContainer}>
             <View style={styles.progressContainer}>
-              <Text style={styles.progressText}>
+              <Text style={[styles.progressText, { color: colors.textSecondary }]}>
                 Question {currentQuestion + 1} of {questions.length}
               </Text>
-              <View style={styles.progressBar}>
+              <View style={[styles.progressBar, { backgroundColor: colors.progressBackground }]}>
                 <View 
                   style={[
                     styles.progressFill, 
-                    { width: `${((currentQuestion + 1) / questions.length) * 100}%` }
+                    { 
+                      width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                      backgroundColor: colors.progressFill
+                    }
                   ]} 
                 />
               </View>
             </View>
 
-            <View style={styles.questionContainer}>
-              <Text style={styles.questionText}>
+            <View style={[styles.questionContainer, { backgroundColor: colors.card }]}>
+              <Text style={[styles.questionText, { color: colors.text }]}>
                 {questions[currentQuestion].question}
               </Text>
             </View>
@@ -279,17 +311,17 @@ export default function QuizScreen() {
             </View>
 
             {answered && (
-              <View style={styles.explanationContainer}>
-                <Text style={styles.explanationTitle}>
+              <View style={[styles.explanationContainer, { backgroundColor: colors.explanationBackground }]}>
+                <Text style={[styles.explanationTitle, { color: colors.text }]}>
                   {selectedOption === questions[currentQuestion].correctAnswer 
                     ? 'Correct! 🎉' 
                     : 'Incorrect'}
                 </Text>
-                <Text style={styles.explanationText}>
+                <Text style={[styles.explanationText, { color: colors.textSecondary }]}>
                   {questions[currentQuestion].explanation}
                 </Text>
                 <TouchableOpacity 
-                  style={styles.nextButton}
+                  style={[styles.nextButton, { backgroundColor: colors.progressFill }]}
                   onPress={handleNext}
                   activeOpacity={0.8}
                 >
@@ -339,8 +371,8 @@ export default function QuizScreen() {
               onPress={() => router.push('/')}
               activeOpacity={0.8}
             >
-              <Ionicons name="home" size={20} color="#333" />
-              <Text style={styles.homeButtonText}>Back to Home</Text>
+              <Ionicons name="home" size={20} color={colors.homeButtonText} />
+              <Text style={[styles.homeButtonText, { color: colors.homeButtonText }]}>Back to Home</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -359,7 +391,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   header: {
     flexDirection: 'row',
@@ -374,7 +405,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
   },
   headerRight: {
@@ -389,23 +419,19 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 8,
     fontFamily: 'JetBrainsMono-Regular',
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#F0F0F0',
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FF6B6B',
     borderRadius: 4,
   },
   questionContainer: {
-    backgroundColor: '#FFF',
     borderRadius: 16,
     padding: 20,
     marginBottom: 24,
@@ -417,7 +443,6 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontSize: 20,
-    color: '#333',
     lineHeight: 28,
     fontFamily: 'JetBrainsMono-Bold',
   },
@@ -425,12 +450,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   option: {
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -438,36 +461,30 @@ const styles = StyleSheet.create({
   optionText: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
     fontFamily: 'JetBrainsMono-Regular',
   },
   optionIcon: {
     marginLeft: 8,
   },
   correctOption: {
-    backgroundColor: '#E8F5E9',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#4CAF50',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   wrongOption: {
-    backgroundColor: '#FFEBEE',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#F44336',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   explanationContainer: {
-    backgroundColor: '#F8F9FA',
     borderRadius: 12,
     padding: 16,
     marginTop: 8,
@@ -475,19 +492,16 @@ const styles = StyleSheet.create({
   explanationTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 8,
     fontFamily: 'JetBrainsMono-Bold',
   },
   explanationText: {
     fontSize: 15,
-    color: '#555',
     lineHeight: 22,
     marginBottom: 16,
     fontFamily: 'JetBrainsMono-Regular',
   },
   nextButton: {
-    backgroundColor: '#FF6B6B',
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 24,
@@ -579,7 +593,6 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   homeButtonText: {
-    color: '#333',
     fontSize: 16,
     marginLeft: 8,
     fontFamily: 'JetBrainsMono-Regular',

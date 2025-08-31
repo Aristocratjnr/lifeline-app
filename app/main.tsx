@@ -5,8 +5,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useDisplayPreferences } from '../context/DisplayPreferencesContext';
 
 // Define the color scheme interface
 interface ColorScheme {
@@ -47,8 +48,8 @@ interface FirstAidTip {
 export default function MainScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === 'dark';
+  const { darkMode } = useDisplayPreferences();
+  const isDarkMode = darkMode;
   const [showTipsModal, setShowTipsModal] = useState(false);
   const [selectedTip, setSelectedTip] = useState<FirstAidTip | null>(null);
   
@@ -377,10 +378,10 @@ export default function MainScreen() {
               setSelectedTip(null);
             }}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>
+            <View style={[styles.modalOverlay, { backgroundColor: colors.modalBackground }]}>
+              <View style={[styles.modalContent, { backgroundColor: colors.modalContent }]}>
+                <View style={[styles.modalHeader, { borderBottomColor: isDarkMode ? '#333333' : '#F0F0F0' }]}>
+                  <Text style={[styles.modalTitle, { color: colors.text }]}>
                     {selectedTip ? selectedTip.title : 'First Aid Tips'}
                   </Text>
                   <TouchableOpacity 
@@ -396,7 +397,7 @@ export default function MainScreen() {
                     <Ionicons 
                       name={selectedTip ? "arrow-back" : "close"} 
                       size={24} 
-                      color="#666" 
+                      color={colors.textSecondary}
                     />
                   </TouchableOpacity>
                 </View>
@@ -404,13 +405,13 @@ export default function MainScreen() {
                 {!selectedTip ? (
                   // Show all categories
                   <ScrollView style={styles.tipsList}>
-                    <Text style={styles.instructionText}>
+                    <Text style={[styles.instructionText, { color: colors.textSecondary }]}>
                       {t('home.tapCategoryInstruction')}
                     </Text>
                     {firstAidTips.map((tip) => (
                       <TouchableOpacity 
                         key={tip.id} 
-                        style={styles.tipItem}
+                        style={[styles.tipItem, { backgroundColor: colors.card }]}
                         onPress={() => setSelectedTip(tip)}
                         activeOpacity={0.7}
                       >
@@ -418,42 +419,47 @@ export default function MainScreen() {
                           <Ionicons name={tip.icon} size={28} color={tip.color} />
                         </View>
                         <View style={styles.tipTextContainer}>
-                          <Text style={styles.tipTitle}>{tip.title}</Text>
-                          <Text style={styles.tipDescription}>{tip.description}</Text>
+                          <Text style={[styles.tipTitle, { color: colors.text }]}>{tip.title}</Text>
+                          <Text style={[styles.tipDescription, { color: colors.textSecondary }]}>{tip.description}</Text>
                         </View>
-                        <Ionicons name="chevron-forward" size={20} color="#999" />
+                        <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
                       </TouchableOpacity>
                     ))}
                   </ScrollView>
                 ) : (
                   // Show detailed tips for selected category
                   <ScrollView style={styles.detailedTipsList}>
-                    <View style={styles.selectedTipHeader}>
+                    <View style={[styles.selectedTipHeader, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA' }]}>
                       <View style={[styles.selectedTipIcon, { backgroundColor: `${selectedTip.color}20` }]}>
                         <Ionicons name={selectedTip.icon} size={32} color={selectedTip.color} />
                       </View>
-                      <Text style={styles.selectedTipDescription}>
+                      <Text style={[styles.selectedTipDescription, { color: colors.text }]}>
                         {selectedTip.description}
                       </Text>
                     </View>
                     
-                    <Text style={styles.detailedTipsTitle}>{t('home.preventionTipsTitle')}</Text>
+                    <Text style={[styles.detailedTipsTitle, { color: colors.text }]}>{t('home.preventionTipsTitle')}</Text>
                     
                     {selectedTip.preventionTips.map((tip, index) => (
-                      <View key={index} style={styles.detailedTipItem}>
+                      <View key={index} style={[styles.detailedTipItem, { backgroundColor: colors.card }]}>
                         <View style={styles.tipIconContainer}>
                           <Ionicons name={tip.icon} size={20} color={selectedTip.color} />
                         </View>
                         <View style={styles.tipContentContainer}>
-                          <Text style={styles.preventionTipTitle}>{tip.title}</Text>
-                          <Text style={styles.detailedTipText}>{tip.content}</Text>
+                          <Text style={[styles.preventionTipTitle, { color: colors.text }]}>{tip.title}</Text>
+                          <Text style={[styles.detailedTipText, { color: colors.text }]}>{tip.content}</Text>
                         </View>
                       </View>
                     ))}
                     
-                    <View style={styles.emergencyNote}>
+                    <View style={[styles.emergencyNote, { 
+                      backgroundColor: isDarkMode ? 'rgba(255, 107, 107, 0.1)' : '#FFF3E0',
+                      borderColor: isDarkMode ? 'rgba(255, 107, 107, 0.3)' : '#FFE0B2'
+                    }]}>
                       <Ionicons name="warning" size={20} color="#FF6B6B" />
-                      <Text style={styles.emergencyNoteText}>
+                      <Text style={[styles.emergencyNoteText, { 
+                        color: isDarkMode ? '#FF9E9E' : '#E65100'
+                      }]}>
                         {t('home.emergencyNote')}
                       </Text>
                     </View>
@@ -745,11 +751,9 @@ const styles = StyleSheet.create({
   // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
@@ -762,12 +766,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
   },
   closeButton: {
@@ -775,7 +777,6 @@ const styles = StyleSheet.create({
   },
   instructionText: {
     fontSize: 14,
-    color: '#666',
     textAlign: 'center',
     marginBottom: 16,
     fontStyle: 'italic',
@@ -787,7 +788,6 @@ const styles = StyleSheet.create({
   tipItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -811,13 +811,11 @@ const styles = StyleSheet.create({
   tipTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
   },
   tipDescription: {
     fontSize: 13,
-    color: '#666',
     lineHeight: 18,
   },
   
@@ -829,7 +827,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     padding: 16,
-    backgroundColor: '#F8F9FA',
     borderRadius: 12,
   },
   selectedTipIcon: {
@@ -842,7 +839,6 @@ const styles = StyleSheet.create({
   },
   selectedTipDescription: {
     fontSize: 16,
-    color: '#333',
     textAlign: 'center',
     fontWeight: '500',
     fontFamily: 'JetBrainsMono-Regular',
@@ -850,7 +846,6 @@ const styles = StyleSheet.create({
   detailedTipsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 16,
     fontFamily: 'JetBrainsMono-Bold',
   },
@@ -859,7 +854,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 16,
     padding: 12,
-    backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -874,31 +868,26 @@ const styles = StyleSheet.create({
   preventionTipTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
   },
   detailedTipText: {
     flex: 1,
     fontSize: 14,
-    color: '#333',
     lineHeight: 20,
     fontFamily: 'JetBrainsMono-Regular',
   },
   emergencyNote: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF3E0',
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
     borderWidth: 1,
-    borderColor: '#FFE0B2',
   },
   emergencyNoteText: {
     flex: 1,
     fontSize: 13,
-    color: '#E65100',
     marginLeft: 8,
     fontWeight: '500',
     fontFamily: 'JetBrainsMono-Regular',

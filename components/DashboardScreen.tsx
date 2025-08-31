@@ -216,17 +216,6 @@ const DashboardScreen = () => {
     setSelectedMedication(null);
   }, [selectedMedication]);
 
-  // Handle emergency contact call
-  const callEmergencyContact = useCallback((phoneNumber: string, name: string) => {
-    Alert.alert(
-      "Call Emergency Contact",
-      `Do you want to call ${name}?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Call", onPress: () => Linking.openURL(`tel:${phoneNumber}`) }
-      ]
-    )
-  }, [])
 
   const animatedSteps = useRef(new Animated.Value(0)).current
   const animatedWater = useRef(new Animated.Value(0)).current
@@ -342,7 +331,9 @@ const DashboardScreen = () => {
         <Text style={styles.activityTime}>{item.time}</Text>
       </View>
     </TouchableOpacity>
-  ))
+  ));
+
+  ActivityRow.displayName = "ActivityRow";
 
   // Format last visit date - using current date since lastVisit isn't stored in profile
   const formatLastVisit = () => {
@@ -440,8 +431,8 @@ const DashboardScreen = () => {
 
   // Handle logout
   const handleLogout = useCallback(() => {
-    // In a real app, you would clear auth state here
-    router.replace('/');
+   
+    router.replace('/main');
   }, [router]);
 
   return (
@@ -472,7 +463,7 @@ const DashboardScreen = () => {
           animationType="fade"
           onRequestClose={() => setSelectedMedication(null)}
         >
-          <View style={styles.modalOverlay}>
+          <View style={[styles.modalOverlay, { backgroundColor: darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)' }]}>
             <View style={[styles.modalContent, themeStyles.modalContent]}>
               <Text style={[styles.modalTitle, themeStyles.modalTitle]}>
                 {selectedMedicationData?.taken ? 'Mark as Not Taken?' : 'Medication Reminder'}
@@ -484,7 +475,7 @@ const DashboardScreen = () => {
               </Text>
               <View style={styles.modalButtons}>
                 <TouchableOpacity 
-                  style={[styles.modalButton, styles.cancelButton]}
+                  style={[styles.modalButton, styles.cancelButton, themeStyles.cancelButton]}
                   onPress={() => handleMedicationConfirmation(false)}
                 >
                   <Text style={[styles.cancelButtonText, themeStyles.cancelButtonText]}>
@@ -492,10 +483,10 @@ const DashboardScreen = () => {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                  style={[styles.modalButton, styles.confirmButton]}
+                  style={[styles.modalButton, styles.confirmButton, themeStyles.confirmButton]}
                   onPress={() => handleMedicationConfirmation(true)}
                 >
-                  <Text style={styles.confirmButtonText}>
+                  <Text style={[styles.confirmButtonText, themeStyles.confirmButtonText]}>
                     {selectedMedicationData?.taken ? 'Mark Not Taken' : 'Taken'}
                   </Text>
                 </TouchableOpacity>
@@ -992,16 +983,21 @@ const getThemeStyles = (isDark: boolean) => ({
   },
   cancelButton: {
     backgroundColor: isDark ? '#2D2D2D' : '#F5F5F5',
+    borderWidth: 1,
+    borderColor: isDark ? '#444444' : '#E0E0E0',
   },
   confirmButton: {
     backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
   },
   cancelButtonText: {
     color: isDark ? '#E0E0E0' : '#333333',
+    fontWeight: '600' as const,
+    fontFamily: 'JetBrainsMono-Regular',
   },
   confirmButtonText: {
     color: 'white',
-    fontWeight: '600',
+    fontWeight: '600' as const,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   footerLink: {
     color: isDark ? '#A0A0A0' : '#666666',
@@ -1141,23 +1137,25 @@ const styles = StyleSheet.create({
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     width: '85%',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold' as const,
     marginBottom: 16,
     textAlign: 'center' as const,
-    color: '#000000',
     fontFamily: 'JetBrainsMono-Bold',
   },
   modalText: {
@@ -1174,25 +1172,25 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: 14,
+    borderRadius: 10,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     marginHorizontal: 8,
   },
   cancelButton: {
-    backgroundColor: '#F5F5F5',
+    // Styling handled by theme
   },
   confirmButton: {
-    backgroundColor: '#4CAF50',
+    // Styling handled by theme
   },
   confirmButtonText: {
-    color: 'white',
-    fontWeight: '600' as const,
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Bold',
   },
   cancelButtonText: {
-    color: '#333333',
-    fontWeight: '600' as const,
+    fontSize: 16,
+    fontFamily: 'JetBrainsMono-Regular',
   },
   // Footer styles - using themeStyles.footer for theming
   footerLinks: {

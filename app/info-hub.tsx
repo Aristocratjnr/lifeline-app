@@ -3,8 +3,22 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyText: string;
+  modalBackground: string;
+  modalContent: string;
+  buttonBackground: string;
+  cardGradient: [string, string];
+}
 
 // Interface for info hub items
 interface InfoHubItem {
@@ -19,7 +33,23 @@ interface InfoHubItem {
 
 export default function InfoHubScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
   const [showGlossaryModal, setShowGlossaryModal] = useState(false);
+
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    modalBackground: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+    modalContent: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    buttonBackground: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+    cardGradient: isDarkMode ? ['#1E1E1E', '#2A2A2A'] : ['#FFFFFF', '#F8F9FA'],
+  };
 
   // Info hub items data
   const infoHubItems: InfoHubItem[] = [
@@ -69,15 +99,15 @@ export default function InfoHubScreen() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
         source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['top', 'right', 'left']}>
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.6)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.89)' : 'rgba(255, 255, 255, 0.74)' }]} edges={['top', 'right', 'left']}>
           <ScrollView 
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
@@ -85,27 +115,27 @@ export default function InfoHubScreen() {
             {/* Header */}
             <View style={styles.header}>
               <TouchableOpacity 
-                style={styles.backButton}
+                style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
                 onPress={() => router.back()}
               >
-                <MaterialIcons name="arrow-back" size={24} color="#333" />
+                <MaterialIcons name="arrow-back" size={24} color={colors.text} />
               </TouchableOpacity>
               
-              <Text style={styles.headerTitle}>INFO HUB</Text>
+              <Text style={[styles.headerTitle, { color: colors.text }]}>INFO HUB</Text>
               
-              <View style={styles.headerRight}>
+              <View style={[styles.headerRight, { backgroundColor: colors.buttonBackground }]}>
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/screens/guest')}
                 >
-                  <MaterialIcons name="person" size={24} color="#E53935" />
+                  <MaterialIcons name="person" size={24} color={colors.emergencyText} />
                 </TouchableOpacity>
-                <View style={styles.verticalLine} />
+                <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/settings')}
                 >
-                  <MaterialIcons name="more-vert" size={24} color="#666" />
+                  <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -135,7 +165,7 @@ export default function InfoHubScreen() {
                   activeOpacity={0.8}
                 >
                   <LinearGradient
-                    colors={['#FFFFFF', '#F8F9FA']}
+                    colors={colors.cardGradient}
                     style={styles.cardGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -150,12 +180,12 @@ export default function InfoHubScreen() {
                       </View>
                       
                       <View style={styles.textContainer}>
-                        <Text style={styles.cardTitle}>{item.title}</Text>
-                        <Text style={styles.cardDescription}>{item.description}</Text>
+                        <Text style={[styles.cardTitle, { color: colors.text }]}>{item.title}</Text>
+                        <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>{item.description}</Text>
                       </View>
                       
                       <View style={styles.arrowContainer}>
-                        <MaterialIcons name="chevron-right" size={24} color="#666" />
+                        <MaterialIcons name="chevron-right" size={24} color={colors.textSecondary} />
                       </View>
                     </View>
                   </LinearGradient>
@@ -170,43 +200,43 @@ export default function InfoHubScreen() {
               visible={showGlossaryModal}
               onRequestClose={() => setShowGlossaryModal(false)}
             >
-              <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
+              <View style={[styles.modalOverlay, { backgroundColor: colors.modalBackground }]}>
+                <View style={[styles.modalContent, { backgroundColor: colors.modalContent }]}>
                   <TouchableOpacity 
                     style={styles.closeButton}
                     onPress={() => setShowGlossaryModal(false)}
                   >
-                    <MaterialIcons name="close" size={24} color="#666" />
+                    <MaterialIcons name="close" size={24} color={colors.textSecondary} />
                   </TouchableOpacity>
                   
                   <View style={styles.modalHeader}>
                     <MaterialIcons name="book" size={48} color="#5E35B1" />
-                    <Text style={styles.modalTitle}>Glossary Coming Soon!</Text>
-                    <Text style={styles.modalSubtitle}>
+                    <Text style={[styles.modalTitle, { color: colors.text }]}>Glossary Coming Soon!</Text>
+                    <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]}>
                       We&apos;re working on creating a comprehensive glossary of medical and first aid terms to help you better understand emergency care.
                     </Text>
                   </View>
 
                   <View style={styles.modalBody}>
-                    <View style={styles.featureItem}>
+                    <View style={[styles.featureItem, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA' }]}>
                       <View style={[styles.featureIcon, { backgroundColor: 'rgba(94, 53, 177, 0.1)' }]}>
                         <MaterialIcons name="search" size={24} color="#5E35B1" />
                       </View>
-                      <Text style={styles.featureText}>Searchable medical terms</Text>
+                      <Text style={[styles.featureText, { color: colors.text }]}>Searchable medical terms</Text>
                     </View>
                     
-                    <View style={styles.featureItem}>
+                    <View style={[styles.featureItem, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA' }]}>
                       <View style={[styles.featureIcon, { backgroundColor: 'rgba(94, 53, 177, 0.1)' }]}>
                         <MaterialIcons name="translate" size={24} color="#5E35B1" />
                       </View>
-                      <Text style={styles.featureText}>Multiple language support</Text>
+                      <Text style={[styles.featureText, { color: colors.text }]}>Multiple language support</Text>
                     </View>
                     
-                    <View style={styles.featureItem}>
+                    <View style={[styles.featureItem, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA' }]}>
                       <View style={[styles.featureIcon, { backgroundColor: 'rgba(94, 53, 177, 0.1)' }]}>
                         <MaterialIcons name="bookmark" size={24} color="#5E35B1" />
                       </View>
-                      <Text style={styles.featureText}>Bookmark important terms</Text>
+                      <Text style={[styles.featureText, { color: colors.text }]}>Bookmark important terms</Text>
                     </View>
                   </View>
 
@@ -265,14 +295,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
     textAlign: 'center',
     flex: 1,
@@ -283,7 +311,6 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 20,
     paddingHorizontal: 4,
   },
@@ -297,7 +324,6 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 1,
     height: 24,
-    backgroundColor: '#E0E0E0',
   },
 
   // Items Container
@@ -342,13 +368,11 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
     marginBottom: 4,
   },
   cardDescription: {
     fontSize: 13,
-    color: '#666',
     fontFamily: 'JetBrainsMono-Regular',
     lineHeight: 18,
   },
@@ -362,13 +386,11 @@ const styles = StyleSheet.create({
   // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   modalContent: {
-    backgroundColor: 'white',
     borderRadius: 20,
     padding: 20,
     width: '90%',
@@ -394,7 +416,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 12,
     marginBottom: 8,
     textAlign: 'center',
@@ -402,7 +423,6 @@ const styles = StyleSheet.create({
   },
   modalSubtitle: {
     fontSize: 14,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 20,
     fontFamily: 'JetBrainsMono-Regular',
@@ -415,7 +435,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
     padding: 12,
-    backgroundColor: '#F8F9FA',
     borderRadius: 12,
   },
   featureIcon: {
@@ -429,7 +448,6 @@ const styles = StyleSheet.create({
   featureText: {
     flex: 1,
     fontSize: 14,
-    color: '#333',
     fontFamily: 'JetBrainsMono-Regular',
   },
   notifyButton: {
