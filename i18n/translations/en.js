@@ -100,7 +100,11 @@ export default {
   "settings": {
     "title": "Settings",
     "profile": {
-      "personalInfo": "Personal Information"
+      "personalInfo": "Personal Information",
+      "title": "Profile",
+      "subtitle": "Manage your personal information",
+      "maskedPassword": "****************",
+      "selectGender": "Select Gender"
     },
     "deleteAccount": {
       "title": "Delete Account",
@@ -121,12 +125,6 @@ export default {
     "about": "About",
     "logout": "Logout",
     "privacy": "Privacy",
-    "profile": {
-      "title": "Profile",
-      "subtitle": "Manage your personal information",
-      "maskedPassword": "****************",
-      "selectGender": "Select Gender"
-    },
     "profileSettings": {
       "title": "PROFILE",
       "saveChanges": "SAVE CHANGES",
@@ -136,20 +134,6 @@ export default {
       "maskedPassword": "****************",
       "passwordPlaceholder": "Enter password",
       "valuePlaceholder": "Enter value"
-    },
-    "notifications": {
-      "title": "Notifications",
-      "subtitle": "Manage your notification preferences",
-      "general": "General Notifications",
-      "dailyTips": "Daily Tips",
-      "appUpdate": "App Update",
-      "upToDate": "(Up-to-date)",
-      "email": "Email Notifications",
-      "sound": "Sound"
-    },
-    "language": {
-      "title": "Language",
-      "subtitle": "Select your preferred language"
     },
     "display": {
       "title": "Display",
@@ -171,10 +155,6 @@ export default {
     "terms": {
       "title": "Terms & Conditions",
       "subtitle": "Review our terms of service"
-    },
-    "about": {
-      "title": "About",
-      "subtitle": "Learn more about our application"
     },
     "offline": {
       "title": "Offline Mode",
