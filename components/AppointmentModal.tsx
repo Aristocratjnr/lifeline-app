@@ -1,8 +1,8 @@
-import React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDisplayPreferences } from '../context/DisplayPreferencesContext';
 
 interface AppointmentModalProps {
@@ -93,8 +93,10 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ visible, onClose, a
               style={[styles.button, styles.confirmButton]}
               onPress={() => {
                 onClose();
-                // @ts-ignore - TypeScript doesn't recognize the dynamic route
-                router.push(`/(tabs)/appointment-details/${appointment.id}`);
+                router.push({
+                  pathname: '/appointment-details/[id]',
+                  params: { id: appointment.id }
+                });
               }}
             >
               <Text style={[styles.buttonText, styles.confirmButtonText]}>{t('appointments.viewDetails')}</Text>

@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDisplayPreferences } from '../../../context/DisplayPreferencesContext';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 const AppointmentDetails = () => {
   const { t } = useTranslation();
