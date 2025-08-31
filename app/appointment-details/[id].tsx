@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
 const AppointmentDetails = () => {
@@ -10,8 +10,20 @@ const AppointmentDetails = () => {
   const router = useRouter();
   const { darkMode } = useDisplayPreferences();
   const { id } = useLocalSearchParams();
+  const { width, height } = useWindowDimensions();
+  
+  // Responsive breakpoints
+  const isTablet = width >= 768;
+  const isLargeScreen = width >= 1024;
+  const isSmallScreen = width < 400;
+  
+  // Dynamic sizing
+  const containerPadding = isTablet ? 24 : 16;
+  const cardPadding = isTablet ? 24 : 16;
+  const iconSize = isTablet ? 48 : 40;
+  const headerFontSize = isTablet ? 24 : 20;
 
-  // In a real app, you would fetch the appointment details using the ID
+  
   const appointment = {
     id,
     doctor: 'Dr. Sarah Johnson',
@@ -24,57 +36,101 @@ const AppointmentDetails = () => {
 
   return (
     <View style={[styles.container, darkMode && styles.darkContainer]}>
-      <View style={[styles.header, darkMode && styles.darkHeader]}>
+      <View style={[
+        styles.header, 
+        darkMode && styles.darkHeader,
+        { paddingHorizontal: containerPadding }
+      ]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <MaterialIcons name="arrow-back" size={24} color={darkMode ? '#fff' : '#000'} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, darkMode && styles.darkText]}>
+        <Text style={[
+          styles.headerTitle, 
+          darkMode && styles.darkText,
+          { fontSize: headerFontSize }
+        ]}>
           {t('appointments.appointmentDetails')}
         </Text>
       </View>
 
-      <ScrollView style={styles.content}>
-        <View style={[styles.card, darkMode && styles.darkCard]}>
+      <ScrollView 
+        style={[styles.content, { paddingHorizontal: containerPadding }]}
+        contentContainerStyle={isTablet ? styles.tabletContentContainer : undefined}
+      >
+        <View style={[
+          styles.card, 
+          darkMode && styles.darkCard,
+          { 
+            padding: cardPadding,
+            maxWidth: isTablet ? 600 : '100%',
+            alignSelf: isTablet ? 'center' : 'stretch'
+          }
+        ]}>
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, darkMode && styles.darkText]}>
               {t('appointments.appointmentInfo')}
             </Text>
             
-            <View style={styles.detailRow}>
-              <MaterialIcons name="person" size={20} color="#4CAF50" style={styles.icon} />
-              <View>
+            <View style={[styles.detailRow, isTablet && styles.tabletDetailRow]}>
+              <MaterialIcons 
+                name="person" 
+                size={isTablet ? 24 : 20} 
+                color="#4CAF50" 
+                style={[styles.icon, { width: iconSize, height: iconSize, borderRadius: iconSize / 2 }]} 
+              />
+              <View style={styles.detailContent}>
                 <Text style={[styles.detailLabel, darkMode && styles.darkText]}>{t('appointments.doctor')}</Text>
                 <Text style={[styles.detailValue, darkMode && styles.darkText]}>{appointment.doctor}</Text>
               </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <MaterialIcons name="medical-services" size={20} color="#2196F3" style={styles.icon} />
-              <View>
+            <View style={[styles.detailRow, isTablet && styles.tabletDetailRow]}>
+              <MaterialIcons 
+                name="medical-services" 
+                size={isTablet ? 24 : 20} 
+                color="#2196F3" 
+                style={[styles.icon, { width: iconSize, height: iconSize, borderRadius: iconSize / 2 }]} 
+              />
+              <View style={styles.detailContent}>
                 <Text style={[styles.detailLabel, darkMode && styles.darkText]}>{t('appointments.specialty')}</Text>
                 <Text style={[styles.detailValue, darkMode && styles.darkText]}>{appointment.specialty}</Text>
               </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <MaterialIcons name="event" size={20} color="#FF9800" style={styles.icon} />
-              <View>
+            <View style={[styles.detailRow, isTablet && styles.tabletDetailRow]}>
+              <MaterialIcons 
+                name="event" 
+                size={isTablet ? 24 : 20} 
+                color="#FF9800" 
+                style={[styles.icon, { width: iconSize, height: iconSize, borderRadius: iconSize / 2 }]} 
+              />
+              <View style={styles.detailContent}>
                 <Text style={[styles.detailLabel, darkMode && styles.darkText]}>{t('appointments.date')}</Text>
                 <Text style={[styles.detailValue, darkMode && styles.darkText]}>{appointment.date}</Text>
               </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <MaterialIcons name="access-time" size={20} color="#9C27B0" style={styles.icon} />
-              <View>
+            <View style={[styles.detailRow, isTablet && styles.tabletDetailRow]}>
+              <MaterialIcons 
+                name="access-time" 
+                size={isTablet ? 24 : 20} 
+                color="#9C27B0" 
+                style={[styles.icon, { width: iconSize, height: iconSize, borderRadius: iconSize / 2 }]} 
+              />
+              <View style={styles.detailContent}>
                 <Text style={[styles.detailLabel, darkMode && styles.darkText]}>{t('appointments.time')}</Text>
                 <Text style={[styles.detailValue, darkMode && styles.darkText]}>{appointment.time}</Text>
               </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <MaterialIcons name="location-on" size={20} color="#F44336" style={styles.icon} />
-              <View>
+            <View style={[styles.detailRow, isTablet && styles.tabletDetailRow]}>
+              <MaterialIcons 
+                name="location-on" 
+                size={isTablet ? 24 : 20} 
+                color="#F44336" 
+                style={[styles.icon, { width: iconSize, height: iconSize, borderRadius: iconSize / 2 }]} 
+              />
+              <View style={styles.detailContent}>
                 <Text style={[styles.detailLabel, darkMode && styles.darkText]}>{t('appointments.location')}</Text>
                 <Text style={[styles.detailValue, darkMode && styles.darkText]}>{appointment.location}</Text>
               </View>
@@ -92,11 +148,32 @@ const AppointmentDetails = () => {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, darkMode && styles.darkFooter]}>
-        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => router.back()}>
+      <View style={[
+        styles.footer, 
+        darkMode && styles.darkFooter,
+        { 
+          paddingHorizontal: containerPadding,
+          flexDirection: isTablet ? 'row' : 'row',
+          justifyContent: isTablet ? 'center' : 'space-between'
+        }
+      ]}>
+        <TouchableOpacity 
+          style={[
+            styles.button, 
+            styles.cancelButton,
+            isTablet && { maxWidth: 200, marginHorizontal: 8 }
+          ]} 
+          onPress={() => router.back()}
+        >
           <Text style={styles.buttonText}>{t('common.back')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.rescheduleButton]}>
+        <TouchableOpacity 
+          style={[
+            styles.button, 
+            styles.rescheduleButton,
+            isTablet && { maxWidth: 200, marginHorizontal: 8 }
+          ]}
+        >
           <Text style={[styles.buttonText, styles.rescheduleButtonText]}>{t('appointments.reschedule')}</Text>
         </TouchableOpacity>
       </View>
@@ -138,6 +215,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  tabletContentContainer: {
+    alignItems: 'center',
+    paddingVertical: 24,
+  },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
@@ -166,6 +247,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  tabletDetailRow: {
+    paddingVertical: 12,
+  },
+  detailContent: {
+    flex: 1,
   },
   icon: {
     width: 40,
