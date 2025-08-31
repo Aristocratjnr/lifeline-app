@@ -240,6 +240,12 @@ export default function AIAssistantScreen() {
         <TouchableOpacity onPress={() => router.back()} style={{ position: 'absolute', left: 16, top: 16, zIndex: 20 }}>
           <FontAwesome name="arrow-left" size={24} color={isDark ? '#fff' : '#111'} />
         </TouchableOpacity>
+        <TouchableOpacity 
+          onPress={() => router.push('/ai-video-generator')} 
+          style={{ position: 'absolute', right: 16, top: 16, zIndex: 20 }}
+        >
+          <MaterialIcons name="video-library" size={24} color={isDark ? '#fff' : '#111'} />
+        </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: isDark ? '#fff' : '#111' }]}>
           First Aid Assistant
         </Text>
