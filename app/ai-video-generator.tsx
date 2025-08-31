@@ -571,7 +571,7 @@ export default function AIVideoGeneratorScreen() {
             style={[
               styles.generateButton,
               { 
-                backgroundColor: !request.trim() || isGenerating ? '#ccc' : '#4CAF50',
+                backgroundColor: !request.trim() || isGenerating ? '#ccc' : '#E53935',
                 opacity: !request.trim() || isGenerating ? 0.6 : 1
               }
             ]}

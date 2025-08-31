@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { Dimensions, ImageBackground, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, ImageBackground, SafeAreaView, Share, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, Vibration, View } from 'react-native';
 
 // Define the color scheme interface
 interface ColorScheme {
@@ -29,26 +29,6 @@ export default function QuizScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
-
-  // Colors based on theme
-  const colors: ColorScheme = {
-    background: isDarkMode ? 'rgba(18, 18, 18, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
-    text: isDarkMode ? '#FFFFFF' : '#333333',
-    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
-    border: isDarkMode ? '#333333' : '#E0E0E0',
-    progressBackground: isDarkMode ? '#333333' : '#F0F0F0',
-    progressFill: isDarkMode ? '#FF8A8A' : '#FF6B6B',
-    explanationBackground: isDarkMode ? '#2A2A2A' : '#F8F9FA',
-    homeButtonText: isDarkMode ? '#FFFFFF' : '#333333',
-  };
-
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showScore, setShowScore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [answered, setAnswered] = useState(false);
 
   // First Aid Quiz Questions
   const questions: Question[] = [
@@ -198,26 +178,149 @@ export default function QuizScreen() {
     }
   ];
 
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? 'rgba(18, 18, 18, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    progressBackground: isDarkMode ? '#333333' : '#F0F0F0',
+    progressFill: isDarkMode ? '#FF8A8A' : '#FF6B6B',
+    explanationBackground: isDarkMode ? '#2A2A2A' : '#F8F9FA',
+    homeButtonText: isDarkMode ? '#FFFFFF' : '#333333',
+  };
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [showCountdown, setShowCountdown] = useState(false);
+
+  // Animation values
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useRef(new Animated.Value(0)).current;
+  const countdownAnim = useRef(new Animated.Value(0)).current;
+  const optionAnimations = useRef(
+    Array.from({ length: 4 }, () => new Animated.Value(0))
+  ).current;
+
+  // Animate progress bar
+  useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: (currentQuestion + 1) / questions.length,
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+  }, [currentQuestion, progressAnim, questions.length]);
+
+  // Animate options entrance
+  useEffect(() => {
+    optionAnimations.forEach((anim, index) => {
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        delay: index * 100,
+        useNativeDriver: true,
+      }).start();
+    });
+
+    return () => {
+      optionAnimations.forEach(anim => anim.setValue(0));
+    };
+  }, [currentQuestion, optionAnimations]);
+
   const handleAnswer = (selectedOption: number) => {
     if (answered) return;
     
     setSelectedOption(selectedOption);
     setAnswered(true);
+    setIsLoading(true);
     
-    if (selectedOption === questions[currentQuestion].correctAnswer) {
-      setScore(score + 1);
-    }
+    // Haptic feedback
+    Vibration.vibrate(100);
+    
+    // Scale animation for selected option
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    
+    // Delay to show result
+    setTimeout(() => {
+      if (selectedOption === questions[currentQuestion].correctAnswer) {
+        setScore(score + 1);
+      }
+      setIsLoading(false);
+      setShowCountdown(true);
+      setCountdown(3);
+      
+      // Start countdown animation
+      countdownAnim.setValue(0);
+      Animated.timing(countdownAnim, {
+        toValue: 1,
+        duration: 3000,
+        useNativeDriver: false,
+      }).start();
+      
+      // Countdown timer
+      let timeLeft = 3;
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        setCountdown(timeLeft);
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          setShowCountdown(false);
+          handleNext();
+        }
+      }, 1000);
+    }, 500);
   };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedOption(null);
-      setAnswered(false);
-      setShowExplanation(false);
-    } else {
-      setShowScore(true);
-    }
+    // Fade out animation
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedOption(null);
+        setAnswered(false);
+        
+        // Reset option animations
+        optionAnimations.forEach(anim => anim.setValue(0));
+        
+        // Fade back in
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        setShowScore(true);
+        // Fade back in for score screen
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      }
+    });
   };
 
   const restartQuiz = () => {
@@ -226,7 +329,41 @@ export default function QuizScreen() {
     setShowScore(false);
     setSelectedOption(null);
     setAnswered(false);
-    setShowExplanation(false);
+    setShowCountdown(false);
+    setCountdown(0);
+    
+    // Reset all animations
+    fadeAnim.setValue(1);
+    scaleAnim.setValue(1);
+    progressAnim.setValue(0);
+    countdownAnim.setValue(0);
+    optionAnimations.forEach(anim => anim.setValue(0));
+  };
+
+  const shareScore = async () => {
+    try {
+      const percentage = Math.round((score / questions.length) * 100);
+      const performanceLevel = percentage >= 80 ? 'Excellent' : percentage >= 60 ? 'Good' : 'Keep Learning';
+      
+      const shareMessage = `🏥 First Aid Quiz Results! 📋\n\n` +
+        `I scored ${percentage}% (${score}/${questions.length}) on the Lifeline First Aid Quiz! ${performanceLevel === 'Excellent' ? '🎉' : performanceLevel === 'Good' ? '👍' : '📚'}\n\n` +
+        `Performance: ${performanceLevel}\n` +
+        `${percentage >= 80 ? 'I\'m well-prepared for emergencies!' : percentage >= 60 ? 'I\'m on the right track!' : 'Time to brush up on my first aid skills!'}\n\n` +
+        `💡 First aid knowledge can save lives! Take the quiz and test your emergency preparedness.\n\n` +
+        `#FirstAid #LifelineMobile #EmergencyPreparedness #HealthEducation`;
+
+      const result = await Share.share({
+        message: shareMessage,
+        title: 'My First Aid Quiz Score',
+      });
+
+      if (result.action === Share.sharedAction) {
+        // Content was shared
+        console.log('Score shared successfully');
+      }
+    } catch (error) {
+      console.error('Error sharing score:', error);
+    }
   };
 
   const renderOptions = () => {
@@ -244,22 +381,83 @@ export default function QuizScreen() {
         }
       }
 
+      const animatedStyle = {
+        opacity: optionAnimations[index],
+        transform: [
+          {
+            translateY: optionAnimations[index].interpolate({
+              inputRange: [0, 1],
+              outputRange: [20, 0],
+            }),
+          },
+          {
+            scale: index === selectedOption && answered ? scaleAnim : 1,
+          },
+        ],
+      };
+
       return (
-        <TouchableOpacity
-          key={index}
-          style={[optionStyle, { opacity: answered && index !== selectedOption && index !== questions[currentQuestion].correctAnswer ? 0.6 : 1 }]}
-          onPress={() => handleAnswer(index)}
-          disabled={answered}
-          activeOpacity={0.7}
-        >
-          <Text style={optionTextStyle}>{option}</Text>
-          {answered && index === questions[currentQuestion].correctAnswer && (
-            <Ionicons name="checkmark-circle" size={24} color="#4CAF50" style={styles.optionIcon} />
-          )}
-          {answered && index === selectedOption && index !== questions[currentQuestion].correctAnswer && (
-            <Ionicons name="close-circle" size={24} color="#F44336" style={styles.optionIcon} />
-          )}
-        </TouchableOpacity>
+        <Animated.View key={index} style={animatedStyle}>
+          <TouchableOpacity
+            style={[
+              optionStyle, 
+              { 
+                opacity: answered && index !== selectedOption && index !== questions[currentQuestion].correctAnswer ? 0.6 : 1,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 3,
+              }
+            ]}
+            onPress={() => handleAnswer(index)}
+            disabled={answered}
+            activeOpacity={0.8}
+          >
+            <View style={styles.optionContent}>
+              <View style={[styles.optionNumber, { 
+                backgroundColor: answered && index === questions[currentQuestion].correctAnswer 
+                  ? '#4CAF50' 
+                  : answered && index === selectedOption && index !== questions[currentQuestion].correctAnswer
+                    ? '#F44336'
+                    : isDarkMode ? '#444' : '#f0f0f0'
+              }]}>
+                <Text style={[styles.optionNumberText, {
+                  color: answered && (index === questions[currentQuestion].correctAnswer || 
+                         (index === selectedOption && index !== questions[currentQuestion].correctAnswer))
+                    ? '#fff' : colors.text
+                }]}>
+                  {String.fromCharCode(65 + index)}
+                </Text>
+              </View>
+              <Text style={[optionTextStyle, { flex: 1, marginLeft: 12 }]}>{option}</Text>
+              {answered && index === questions[currentQuestion].correctAnswer && (
+                <Animated.View style={{
+                  transform: [{
+                    scale: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.5, 1],
+                    })
+                  }]
+                }}>
+                  <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                </Animated.View>
+              )}
+              {answered && index === selectedOption && index !== questions[currentQuestion].correctAnswer && (
+                <Animated.View style={{
+                  transform: [{
+                    scale: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.5, 1],
+                    })
+                  }]
+                }}>
+                  <Ionicons name="close-circle" size={24} color="#F44336" />
+                </Animated.View>
+              )}
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
       );
     });
   };
@@ -282,106 +480,234 @@ export default function QuizScreen() {
         </View>
 
         {!showScore ? (
-          <View style={styles.quizContainer}>
+          <Animated.View style={[styles.quizContainer, { opacity: fadeAnim }]}>
             <View style={styles.progressContainer}>
               <Text style={[styles.progressText, { color: colors.textSecondary }]}>
                 Question {currentQuestion + 1} of {questions.length}
               </Text>
               <View style={[styles.progressBar, { backgroundColor: colors.progressBackground }]}>
-                <View 
+                <Animated.View 
                   style={[
                     styles.progressFill, 
                     { 
-                      width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                      width: progressAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0%', '100%'],
+                      }),
                       backgroundColor: colors.progressFill
                     }
                   ]} 
                 />
               </View>
+              <Text style={[styles.scoreIndicator, { color: colors.textSecondary }]}>
+                Score: {score}/{questions.length}
+              </Text>
             </View>
 
-            <View style={[styles.questionContainer, { backgroundColor: colors.card }]}>
+            <Animated.View style={[
+              styles.questionContainer, 
+              { 
+                backgroundColor: colors.card,
+                transform: [{
+                  scale: fadeAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.95, 1],
+                  })
+                }]
+              }
+            ]}>
+              <View style={styles.questionHeader}>
+                <View style={[styles.questionBadge, { backgroundColor: colors.progressFill }]}>
+                  <Text style={styles.questionBadgeText}>Q{currentQuestion + 1}</Text>
+                </View>
+                <View style={styles.difficultyIndicator}>
+                  <Ionicons 
+                    name="star" 
+                    size={16} 
+                    color={colors.progressFill} 
+                  />
+                  <Text style={[styles.difficultyText, { color: colors.textSecondary }]}>
+                    {currentQuestion < 4 ? 'Easy' : currentQuestion < 8 ? 'Medium' : 'Hard'}
+                  </Text>
+                </View>
+              </View>
               <Text style={[styles.questionText, { color: colors.text }]}>
                 {questions[currentQuestion].question}
               </Text>
-            </View>
+            </Animated.View>
 
             <View style={styles.optionsContainer}>
               {renderOptions()}
             </View>
 
-            {answered && (
-              <View style={[styles.explanationContainer, { backgroundColor: colors.explanationBackground }]}>
-                <Text style={[styles.explanationTitle, { color: colors.text }]}>
-                  {selectedOption === questions[currentQuestion].correctAnswer 
-                    ? 'Correct! 🎉' 
-                    : 'Incorrect'}
-                </Text>
+            {answered && !isLoading && (
+              <Animated.View style={[
+                styles.explanationContainer, 
+                { 
+                  backgroundColor: colors.explanationBackground,
+                  opacity: fadeAnim,
+                  transform: [{
+                    translateY: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [20, 0],
+                    })
+                  }]
+                }
+              ]}>
+                <View style={styles.explanationHeader}>
+                  <Ionicons 
+                    name={selectedOption === questions[currentQuestion].correctAnswer ? "checkmark-circle" : "close-circle"} 
+                    size={24} 
+                    color={selectedOption === questions[currentQuestion].correctAnswer ? "#4CAF50" : "#F44336"} 
+                  />
+                  <Text style={[styles.explanationTitle, { color: colors.text }]}>
+                    {selectedOption === questions[currentQuestion].correctAnswer 
+                      ? 'Correct! 🎉' 
+                      : 'Incorrect 📚'}
+                  </Text>
+                </View>
                 <Text style={[styles.explanationText, { color: colors.textSecondary }]}>
                   {questions[currentQuestion].explanation}
                 </Text>
-                <TouchableOpacity 
-                  style={[styles.nextButton, { backgroundColor: colors.progressFill }]}
-                  onPress={handleNext}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.nextButtonText}>
-                    {currentQuestion < questions.length - 1 ? 'Next Question' : 'See Results'}
-                  </Text>
-                  <Ionicons name="arrow-forward" size={20} color="#fff" />
-                </TouchableOpacity>
+                
+                {showCountdown && (
+                  <View style={styles.countdownContainer}>
+                    <View style={styles.countdownContent}>
+                      <Text style={[styles.countdownText, { color: colors.text }]}>
+                        {currentQuestion < questions.length - 1 ? 'Next question in' : 'Showing results in'}
+                      </Text>
+                      <View style={styles.countdownCircle}>
+                        <Animated.View style={[
+                          styles.countdownProgress,
+                          {
+                            transform: [{
+                              rotate: countdownAnim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ['0deg', '360deg'],
+                              })
+                            }]
+                          }
+                        ]} />
+                        <Text style={[styles.countdownNumber, { color: colors.progressFill }]}>
+                          {countdown}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                )}
+              </Animated.View>
+            )}
+
+            {isLoading && (
+              <View style={styles.loadingContainer}>
+                <Animated.View style={{
+                  transform: [{
+                    rotate: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0deg', '360deg'],
+                    })
+                  }]
+                }}>
+                  <Ionicons name="hourglass-outline" size={32} color={colors.progressFill} />
+                </Animated.View>
+                <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+                  Checking answer...
+                </Text>
               </View>
             )}
-          </View>
+          </Animated.View>
         ) : (
-          <View style={styles.scoreContainer}>
+          <Animated.View style={[styles.scoreContainer, { opacity: fadeAnim }]}>
             <LinearGradient
-              colors={score / questions.length >= 0.8 ? ['#4CAF50', '#66BB6A'] : ['#FF6B6B', '#FF8E8E']}
+              colors={score / questions.length >= 0.8 
+                ? ['#4CAF50', '#66BB6A', '#81C784'] 
+                : score / questions.length >= 0.6
+                  ? ['#FF9800', '#FFB74D', '#FFCC02']
+                  : ['#FF6B6B', '#FF8E8E', '#FFAB91']
+              }
               style={styles.scoreCard}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <View style={styles.scoreCircle}>
+              <Animated.View style={[
+                styles.scoreCircle,
+                {
+                  transform: [{
+                    scale: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.5, 1],
+                    })
+                  }]
+                }
+              ]}>
                 <Text style={styles.scoreText}>
                   {Math.round((score / questions.length) * 100)}%
                 </Text>
                 <Text style={styles.scoreSubtext}>Your Score</Text>
+                <View style={styles.scoreDetails}>
+                  <Text style={styles.scoreDetailText}>
+                    {score} out of {questions.length}
+                  </Text>
+                </View>
+              </Animated.View>
+              
+              <View style={styles.performanceIndicator}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Ionicons
+                    key={index}
+                    name="star"
+                    size={24}
+                    color={index < Math.ceil((score / questions.length) * 5) ? '#FFD700' : 'rgba(255, 255, 255, 0.3)'}
+                    style={{ marginHorizontal: 2 }}
+                  />
+                ))}
               </View>
               
               <Text style={styles.resultText}>
                 {score === questions.length 
                   ? 'Perfect! You\'re a first aid expert! 🎉' 
-                  : score >= questions.length / 2 
-                    ? 'Good job! Keep learning!' 
-                    : 'Keep practicing! You\'ll get better!'}
+                  : score >= questions.length * 0.8
+                    ? 'Excellent! You\'re well prepared! ⭐'
+                    : score >= questions.length * 0.6 
+                      ? 'Good job! Keep practicing! 👍' 
+                      : 'Keep learning! You\'re on the right track! 📚'}
               </Text>
               
-              <TouchableOpacity 
-                style={styles.restartButton}
-                onPress={restartQuiz}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="refresh" size={20} color="#FF6B6B" />
-                <Text style={styles.restartButtonText}>Try Again</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                  style={styles.restartButton}
+                  onPress={restartQuiz}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="refresh" size={20} color="#FF6B6B" />
+                  <Text style={styles.restartButtonText}>Try Again</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={[styles.shareButton, { backgroundColor: 'rgba(255, 255, 255, 0.2)' }]}
+                  onPress={shareScore}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="share-social" size={20} color="#fff" />
+                  <Text style={styles.shareButtonText}>Share Score</Text>
+                </TouchableOpacity>
+              </View>
             </LinearGradient>
             
             <TouchableOpacity 
               style={styles.homeButton}
-              onPress={() => router.push('/')}
+              onPress={() => router.push('/main')}
               activeOpacity={0.8}
             >
               <Ionicons name="home" size={20} color={colors.homeButtonText} />
               <Text style={[styles.homeButtonText, { color: colors.homeButtonText }]}>Back to Home</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
         )}
       </SafeAreaView>
     </ImageBackground>
   );
 }
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   backgroundImage: {
@@ -401,6 +727,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
+    borderRadius: 20,
   },
   headerTitle: {
     fontSize: 20,
@@ -426,89 +753,175 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     overflow: 'hidden',
+    marginBottom: 8,
   },
   progressFill: {
     height: '100%',
     borderRadius: 4,
   },
+  scoreIndicator: {
+    fontSize: 12,
+    textAlign: 'right',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
   questionContainer: {
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 20,
+    padding: 24,
     marginBottom: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  questionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  questionBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  questionBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  difficultyIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  difficultyText: {
+    fontSize: 12,
+    marginLeft: 4,
+    fontFamily: 'JetBrainsMono-Regular',
   },
   questionText: {
-    fontSize: 20,
-    lineHeight: 28,
+    fontSize: 18,
+    lineHeight: 26,
     fontFamily: 'JetBrainsMono-Bold',
   },
   optionsContainer: {
     marginBottom: 24,
   },
   option: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    borderWidth: 1,
+    borderWidth: 2,
+  },
+  optionContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
+  optionNumber: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  optionNumberText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
   optionText: {
-    flex: 1,
     fontSize: 16,
     fontFamily: 'JetBrainsMono-Regular',
   },
-  optionIcon: {
-    marginLeft: 8,
-  },
   correctOption: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    borderWidth: 2,
   },
   wrongOption: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    borderWidth: 2,
   },
   explanationContainer: {
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
     marginTop: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  explanationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   explanationTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginLeft: 8,
     fontFamily: 'JetBrainsMono-Bold',
   },
   explanationText: {
     fontSize: 15,
     lineHeight: 22,
-    marginBottom: 16,
+    marginBottom: 20,
     fontFamily: 'JetBrainsMono-Regular',
   },
+  countdownContainer: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  countdownContent: {
+    alignItems: 'center',
+  },
+  countdownText: {
+    fontSize: 14,
+    marginBottom: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+    textAlign: 'center',
+  },
+  countdownCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  countdownProgress: {
+    position: 'absolute',
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    borderWidth: 3,
+    borderColor: 'transparent',
+    borderTopColor: '#FF6B6B',
+  },
+  countdownNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
   nextButton: {
-    borderRadius: 12,
+    borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 24,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'flex-end',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   nextButtonText: {
     color: '#FFF',
@@ -516,6 +929,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 8,
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    fontSize: 14,
+    marginTop: 8,
+    fontFamily: 'JetBrainsMono-Regular',
   },
   scoreContainer: {
     flex: 1,
@@ -525,28 +947,28 @@ const styles = StyleSheet.create({
   },
   scoreCard: {
     width: '100%',
-    borderRadius: 24,
-    padding: 32,
+    borderRadius: 32,
+    padding: 40,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    elevation: 16,
   },
   scoreCircle: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
-    borderWidth: 6,
+    borderWidth: 8,
     borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   scoreText: {
-    fontSize: 48,
+    fontSize: 52,
     fontWeight: 'bold',
     color: '#FFF',
     fontFamily: 'JetBrainsMono-Bold',
@@ -558,26 +980,44 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontFamily: 'JetBrainsMono-Regular',
   },
+  scoreDetails: {
+    marginTop: 8,
+  },
+  scoreDetailText: {
+    fontSize: 14,
+    color: '#FFF',
+    opacity: 0.8,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  performanceIndicator: {
+    flexDirection: 'row',
+    marginBottom: 24,
+    alignItems: 'center',
+  },
   resultText: {
     fontSize: 20,
     color: '#FFF',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 32,
     lineHeight: 28,
     fontFamily: 'JetBrainsMono-Bold',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
   restartButton: {
     backgroundColor: '#FFF',
-    borderRadius: 12,
+    borderRadius: 16,
     paddingVertical: 16,
-    paddingHorizontal: 32,
+    paddingHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
   },
   restartButtonText: {
     color: '#FF6B6B',
@@ -586,11 +1026,28 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontFamily: 'JetBrainsMono-Bold',
   },
-  homeButton: {
-    marginTop: 24,
+  shareButton: {
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  shareButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  homeButton: {
+    marginTop: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
   },
   homeButtonText: {
     fontSize: 16,
