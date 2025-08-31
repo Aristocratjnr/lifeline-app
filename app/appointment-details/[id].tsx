@@ -10,12 +10,10 @@ const AppointmentDetails = () => {
   const router = useRouter();
   const { darkMode } = useDisplayPreferences();
   const { id } = useLocalSearchParams();
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   
   // Responsive breakpoints
   const isTablet = width >= 768;
-  const isLargeScreen = width >= 1024;
-  const isSmallScreen = width < 400;
   
   // Dynamic sizing
   const containerPadding = isTablet ? 24 : 16;
