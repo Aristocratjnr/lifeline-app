@@ -5,7 +5,6 @@ import { useFonts } from "expo-font"
 import { useRouter } from "expo-router"
 import type React from "react"
 import {
-    Dimensions,
     Image,
     ImageBackground,
     SafeAreaView,
@@ -15,8 +14,6 @@ import {
     TouchableOpacity,
     View,
 } from "react-native"
-
-const { width } = Dimensions.get("window")
 
 const BugsFirstAid: React.FC = () => {
   const router = useRouter()
