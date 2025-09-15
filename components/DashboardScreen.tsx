@@ -54,10 +54,10 @@ const DashboardScreen = () => {
         iconName: "content-cut",
       },
       {
-        title: t("tips.stayHydrated"),
-        content: t("tips.stayHydratedContent"),
+        title: t("tips.stayComfortable"),
+        content: t("tips.stayComfortableContent"),
         iconSet: FontAwesome5,
-        iconName: "tint",
+        iconName: "tshirt",
       },
       {
         title: t("tips.washHands"),
@@ -87,7 +87,7 @@ const DashboardScreen = () => {
     () => ({
       steps: 1700,
       lastCheckup: "25/06/25",
-      waterIntake: 4, 
+      clothingLayers: 4, 
       heartRate: 72,
       bloodPressure: "120/80",
       weight: "65 kg",
@@ -230,11 +230,11 @@ const DashboardScreen = () => {
     }).start()
 
     Animated.timing(animatedWater, {
-      toValue: healthStats.waterIntake,
+      toValue: healthStats.clothingLayers,
       duration: 800,
       useNativeDriver: false,
     }).start()
-  }, [healthStats.steps, healthStats.waterIntake, animatedSteps, animatedWater])
+  }, [healthStats.steps, healthStats.clothingLayers, animatedSteps, animatedWater])
 
   useEffect(() => {
     const stepsListener = animatedSteps.addListener(({ value }) => setDisplayedSteps(Math.round(value)))
@@ -670,25 +670,25 @@ const DashboardScreen = () => {
                 <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
               </View>
               
-              {/* Water Intake */}
+              {/* Clothing Layers */}
               <View style={styles.circularProgressContainer}>
                 <AnimatedCircularProgress
                   size={circleSize}
                   width={6}
-                  fill={(healthStats.waterIntake / 8) * 100}
-                  tintColor="#2196F3"
+                  fill={(healthStats.clothingLayers / 5) * 100}
+                  tintColor="#FFA726"
                   backgroundColor={darkMode ? '#333' : '#E0E0E0'}
                   rotation={0}
                   lineCap="round"
                 >
                   {() => (
                     <View style={styles.circularProgressContent}>
-                      <FontAwesome5 name="tint" size={24} color="#2196F3" />
-                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/8</Text>
+                      <FontAwesome5 name="tshirt" size={24} color="#FFA726" />
+                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/5</Text>
                     </View>
                   )}
                 </AnimatedCircularProgress>
-                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.water')}</Text>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.clothing')}</Text>
               </View>
             </View>
           </View>
