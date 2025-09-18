@@ -4,6 +4,8 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
+
 import {
   Image,
   ImageBackground,
@@ -28,6 +30,7 @@ export default function Help() {
   const navigation = useNavigation();
   const router = useRouter();
   const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
 
   useEffect(() => {
     loadFonts();
@@ -54,20 +57,20 @@ export default function Help() {
   return (
     <ImageBackground
       source={require('../../assets/images/blur.png')}
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, darkMode && { opacity: 0.9 }]}
       resizeMode="cover"
     >
-      <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.overlay, darkMode && styles.darkOverlay]} />
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('help.header')}</Text>
+          <Text style={[styles.headerTitle, darkMode && styles.darkText]}>{t('help.header')}</Text>
         </View>
 
         <ScrollView 
@@ -75,51 +78,64 @@ export default function Help() {
           showsVerticalScrollIndicator={false}
         >
           {/* Doctor Image */}
-          <View style={styles.imageContainer}>
+          <View style={[styles.imageContainer, darkMode && styles.darkImageContainer]}>
             <Image 
               source={require('../../assets/images/nurse.png')} 
               style={styles.helpImage} 
               resizeMode="contain"
+              tintColor={darkMode ? '#e0e0e0' : undefined}
             />
           </View>
 
           {/* Help Title */}
-          <Text style={styles.helpTitle}>{t('help.title')}</Text>
+          <Text style={[styles.helpTitle, darkMode && styles.darkText]}>{t('help.title')}</Text>
 
           {/* Help Description */}
-          <Text style={styles.helpText}>
+          <Text style={[styles.helpText, darkMode && styles.darkText]}>
             {t('help.description')}
           </Text>
 
           {/* Action Buttons */}
           <View style={styles.actionButtonsRow}>
-            <TouchableOpacity style={styles.actionButton} onPress={handleDonatePress}>
+            <TouchableOpacity 
+              style={[styles.actionButton, darkMode && styles.darkActionButton]} 
+              onPress={handleDonatePress}
+            >
               <MaterialIcons name="favorite" size={18} color="#E74C3C" style={styles.buttonIcon} />
-              <Text style={styles.actionButtonText}>{t('help.donate')}</Text>
+              <Text style={[styles.actionButtonText, darkMode && styles.darkText]}>{t('help.donate')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} onPress={handleLiveChatPress}>
+            <TouchableOpacity 
+              style={[styles.actionButton, darkMode && styles.darkActionButton]} 
+              onPress={handleLiveChatPress}
+            >
               <MaterialIcons name="chat" size={18} color="#2980B9" style={styles.buttonIcon} />
-              <Text style={styles.actionButtonText}>{t('help.startLiveChat')}</Text>
+              <Text style={[styles.actionButtonText, darkMode && styles.darkText]}>{t('help.startLiveChat')}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Contact Text */}
-          <Text style={styles.contactText}>{t('help.contactUs')}</Text>
+          <Text style={[styles.contactText, darkMode && styles.darkText]}>{t('help.contactUs')}</Text>
 
           {/* Email Button */}
-          <TouchableOpacity style={styles.contactButton} onPress={handleEmailPress}>
+          <TouchableOpacity 
+            style={[styles.contactButton, darkMode && styles.darkContactButton]} 
+            onPress={handleEmailPress}
+          >
             <MaterialIcons name="email" size={18} color="#8E44AD" style={styles.buttonIcon} />
-            <Text style={styles.contactButtonText}>{t('help.email')}</Text>
+            <Text style={[styles.contactButtonText, darkMode && styles.darkText]}>{t('help.email')}</Text>
           </TouchableOpacity>
 
           {/* Phone Button */}
-          <TouchableOpacity style={styles.contactButton} onPress={handlePhonePress}>
+          <TouchableOpacity 
+            style={[styles.contactButton, darkMode && styles.darkContactButton]} 
+            onPress={handlePhonePress}
+          >
             <MaterialIcons name="call" size={18} color="#16A085" style={styles.buttonIcon} />
-            <Text style={styles.contactButtonText}>{t('help.phone')}</Text>
+            <Text style={[styles.contactButtonText, darkMode && styles.darkText]}>{t('help.phone')}</Text>
           </TouchableOpacity>
 
           {/* Solution Text */}
-          <Text style={styles.solutionText}>{t('help.solution')}</Text>
+          <Text style={[styles.solutionText, darkMode && styles.darkText]}>{t('help.solution')}</Text>
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -137,10 +153,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
+  darkOverlay: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+  },
   container: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.89)',
     zIndex: 2,
+  },
+  darkContainer: {
+    backgroundColor: 'rgba(30, 30, 30, 0.9)',
+  },
+  darkText: {
+    color: '#f0f0f0',
   },
   header: {
     flexDirection: 'row',
@@ -174,6 +199,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#d3f7f5',
     borderRadius: 90,
+  },
+  darkImageContainer: {
+    backgroundColor: '#2a4a58',
   },
   helpImage: {
     width: '80%',
@@ -211,6 +239,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  darkActionButton: {
+    backgroundColor: '#424242',
+    borderColor: '#555',
+  },
   actionButtonText: {
     fontFamily: 'JetBrainsMono',
     fontSize: 14,
@@ -235,6 +267,10 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  darkContactButton: {
+    backgroundColor: '#424242',
+    borderColor: '#555',
   },
   contactButtonText: {
     fontFamily: 'JetBrainsMono',

@@ -1,17 +1,18 @@
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Animated,
-    FlatList,
-    Linking,
-    RefreshControl,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Animated,
+  FlatList,
+  Linking,
+  RefreshControl,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,6 +20,24 @@ const NEWS_API_KEY = process.env.EXPO_PUBLIC_MEDIASTACK_KEY;
 const NEWS_API_LIMIT = 100;
 const NEWS_API_URL = `https://api.mediastack.com/v1/news?access_key=${NEWS_API_KEY}&categories=health&languages=en&limit=${NEWS_API_LIMIT}`;
 const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000;
+
+interface ColorScheme {
+  background: string;
+  cardBackground: string;
+  textPrimary: string;
+  textSecondary: string;
+  accent: string;
+  statusBar: 'light-content' | 'dark-content';
+  gradient1: string;
+  gradient2: string;
+  cardGradient1: string;
+  cardGradient2: string;
+  placeholderBg: string;
+  categoryBg: string;
+  categoryText: string;
+  dividerColor: string;
+  refreshBg: string;
+}
 
 type NewsArticle = {
   author?: string;
@@ -34,6 +53,26 @@ type NewsArticle = {
 };
 
 export default function FirstAidNewsScreen() {
+  const { darkMode } = useDisplayPreferences();
+  
+  const colors: ColorScheme = {
+    background: darkMode ? '#121212' : '#FFF5F5',
+    cardBackground: darkMode ? '#1E1E1E' : '#FFFFFF',
+    textPrimary: darkMode ? '#FFFFFF' : '#1F2937',
+    textSecondary: darkMode ? '#B0B0B0' : '#6B7280',
+    accent: '#FC7A7A',
+    statusBar: darkMode ? 'light-content' : 'dark-content',
+    gradient1: darkMode ? '#1A1A1A' : '#FFFFFF',
+    gradient2: darkMode ? '#2A2A2A' : '#FFFFFF',
+    cardGradient1: darkMode ? '#1E1E1E' : '#FFFFFF',
+    cardGradient2: darkMode ? '#2A2A2A' : '#FEFEFE',
+    placeholderBg: darkMode ? '#2A2A2A' : '#FEF2F2',
+    categoryBg: darkMode ? '#1A4D3A' : '#ECFDF5',
+    categoryText: darkMode ? '#4ADE80' : '#10B981',
+    dividerColor: darkMode ? '#404040' : '#E5E7EB',
+    refreshBg: darkMode ? 'rgba(45, 45, 45, 0.8)' : '#FFFFFF',
+  };
+
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -98,14 +137,14 @@ export default function FirstAidNewsScreen() {
     return (
       <View style={styles.imageContainer}>
         {loading && !error && (
-          <View style={styles.imageLoader}>
-            <ActivityIndicator size="small" color="#FC7A7A" />
+          <View style={[styles.imageLoader, { backgroundColor: colors.placeholderBg }]}>
+            <ActivityIndicator size="small" color={colors.accent} />
           </View>
         )}
         {!error ? (
           <Animated.Image
             source={{ uri }}
-            style={[styles.newsImage, { opacity }]}
+            style={[styles.newsImage, { opacity, backgroundColor: colors.placeholderBg }]}
             resizeMode="cover"
             onLoad={() => {
               setLoading(false);
@@ -121,9 +160,9 @@ export default function FirstAidNewsScreen() {
             }}
           />
         ) : (
-          <View style={styles.placeholderImage}>
-            <MaterialIcons name="broken-image" size={40} color="#FC7A7A" />
-            <Text style={styles.placeholderText}>Image unavailable</Text>
+          <View style={[styles.placeholderImage, { backgroundColor: colors.placeholderBg }]}>
+            <MaterialIcons name="broken-image" size={40} color={colors.accent} />
+            <Text style={[styles.placeholderText, { color: colors.accent }]}>Image unavailable</Text>
           </View>
         )}
       </View>
@@ -172,49 +211,49 @@ export default function FirstAidNewsScreen() {
           onPress={() => item.url && Linking.openURL(item.url)}
         >
           <LinearGradient
-            colors={['#fff', '#FEFEFE']}
+            colors={[colors.cardGradient1, colors.cardGradient2]}
             style={styles.cardGradient}
           >
             {item.image ? (
               <FadeInImage uri={item.image} />
             ) : (
               <View style={styles.imageContainer}>
-                <View style={styles.placeholderImage}>
-                  <MaterialIcons name="article" size={48} color="#FC7A7A" />
-                  <Text style={styles.placeholderText}>Health News</Text>
+                <View style={[styles.placeholderImage, { backgroundColor: colors.placeholderBg }]}>
+                  <MaterialIcons name="article" size={48} color={colors.accent} />
+                  <Text style={[styles.placeholderText, { color: colors.accent }]}>Health News</Text>
                 </View>
               </View>
             )}
             
             <View style={styles.cardContent}>
-              <View style={styles.categoryBadge}>
-                <MaterialIcons name="local-hospital" size={14} color="#10B981" />
-                <Text style={styles.categoryText}>Health</Text>
+              <View style={[styles.categoryBadge, { backgroundColor: colors.categoryBg }]}>
+                <MaterialIcons name="local-hospital" size={14} color={colors.categoryText} />
+                <Text style={[styles.categoryText, { color: colors.categoryText }]}>Health</Text>
               </View>
               
-              <Text style={styles.cardTitle} numberOfLines={2}>
+              <Text style={[styles.cardTitle, { color: colors.textPrimary }]} numberOfLines={2}>
                 {item.title}
               </Text>
               
               {item.description && (
-                <Text style={styles.cardDesc} numberOfLines={3}>
+                <Text style={[styles.cardDesc, { color: colors.textSecondary }]} numberOfLines={3}>
                   {item.description}
                 </Text>
               )}
               
               <View style={styles.cardFooter}>
                 <View style={styles.sourceContainer}>
-                  <View style={styles.sourceIcon}>
-                    <MaterialIcons name="public" size={14} color="#6B7280" />
+                  <View style={[styles.sourceIcon, { backgroundColor: colors.dividerColor }]}>
+                    <MaterialIcons name="public" size={14} color={colors.textSecondary} />
                   </View>
-                  <Text style={styles.cardSource} numberOfLines={1}>
+                  <Text style={[styles.cardSource, { color: colors.textSecondary }]} numberOfLines={1}>
                     {item.source || 'Unknown Source'}
                   </Text>
                 </View>
                 
                 <View style={styles.timeContainer}>
-                  <MaterialIcons name="access-time" size={14} color="#6B7280" />
-                  <Text style={styles.cardDate}>
+                  <MaterialIcons name="access-time" size={14} color={colors.textSecondary} />
+                  <Text style={[styles.cardDate, { color: colors.textSecondary }]}>
                     {item.published_at ? formatTimeAgo(item.published_at) : ''}
                   </Text>
                 </View>
@@ -232,17 +271,20 @@ export default function FirstAidNewsScreen() {
 
   const LoadingComponent = () => (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#FC7A7A" />
-      <Text style={styles.loadingText}>Loading health news...</Text>
+      <ActivityIndicator size="large" color={colors.accent} />
+      <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading health news...</Text>
     </View>
   );
 
   const ErrorComponent = () => (
     <View style={styles.errorContainer}>
-      <MaterialIcons name="error-outline" size={48} color="#FC7A7A" />
-      <Text style={styles.errorTitle}>Oops! Something went wrong</Text>
-      <Text style={styles.errorText}>{error}</Text>
-      <TouchableOpacity style={styles.retryButton} onPress={() => fetchNews(1)}>
+      <MaterialIcons name="error-outline" size={48} color={colors.accent} />
+      <Text style={[styles.errorTitle, { color: colors.textPrimary }]}>Oops! Something went wrong</Text>
+      <Text style={[styles.errorText, { color: colors.textSecondary }]}>{error}</Text>
+      <TouchableOpacity 
+        style={[styles.retryButton, { backgroundColor: colors.accent }]} 
+        onPress={() => fetchNews(1)}
+      >
         <MaterialIcons name="refresh" size={20} color="#fff" />
         <Text style={styles.retryButtonText}>Try Again</Text>
       </TouchableOpacity>
@@ -260,11 +302,11 @@ export default function FirstAidNewsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF5F5" />
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} />
       
       <LinearGradient
-        colors={['#FFFFFF', '#FFFFFF']}
+        colors={[colors.gradient1, colors.gradient2]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -273,7 +315,7 @@ export default function FirstAidNewsScreen() {
           <View style={styles.headerTop}>
             <View style={styles.iconContainer}>
               <LinearGradient
-                colors={['#FFFFF', '#FFFFF']}
+                colors={[colors.cardGradient1, colors.cardGradient2]}
                 style={styles.iconGradient}
               >
                 <Animated.Image
@@ -285,19 +327,19 @@ export default function FirstAidNewsScreen() {
             </View>
             
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>Health News & Alerts</Text>
-              <Text style={styles.subtitle}>
+              <Text style={[styles.title, { color: colors.textPrimary }]}>Health News & Alerts</Text>
+              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 Stay informed with the latest health emergencies and first aid updates
               </Text>
             </View>
           </View>
           
-          <View style={styles.statsContainer}>
+          <View style={[styles.statsContainer, { backgroundColor: colors.refreshBg }]}>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{news.length}</Text>
-              <Text style={styles.statLabel}>Articles</Text>
+              <Text style={[styles.statNumber, { color: colors.accent }]}>{news.length}</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Articles</Text>
             </View>
-            <View style={styles.statDivider} />
+            <View style={[styles.statDivider, { backgroundColor: colors.dividerColor }]} />
             <TouchableOpacity 
               style={styles.refreshContainer} 
               onPress={onRefresh} 
@@ -306,13 +348,13 @@ export default function FirstAidNewsScreen() {
               <MaterialIcons 
                 name="refresh" 
                 size={20} 
-                color="#FC7A7A" 
+                color={colors.accent} 
                 style={[
                   styles.refreshIcon,
                   (isRefreshing || isLoading) && styles.refreshingIcon
                 ]} 
               />
-              <Text style={styles.refreshText}>
+              <Text style={[styles.refreshText, { color: colors.accent }]}>
                 {isRefreshing ? 'Updating...' : 'Refresh'}
               </Text>
             </TouchableOpacity>
@@ -333,15 +375,15 @@ export default function FirstAidNewsScreen() {
               <RefreshControl 
                 refreshing={isRefreshing} 
                 onRefresh={onRefresh} 
-                tintColor="#FC7A7A"
-                colors={['#FC7A7A']}
+                tintColor={colors.accent}
+                colors={[colors.accent]}
               />
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <MaterialIcons name="inbox" size={64} color="#D1D5DB" />
-                <Text style={styles.emptyTitle}>No news available</Text>
-                <Text style={styles.emptyText}>Check back later for updates</Text>
+                <MaterialIcons name="inbox" size={64} color={colors.textSecondary} />
+                <Text style={[styles.emptyTitle, { color: colors.textSecondary }]}>No news available</Text>
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>Check back later for updates</Text>
               </View>
             }
             onEndReached={loadMore}
@@ -349,8 +391,8 @@ export default function FirstAidNewsScreen() {
             ListFooterComponent={
               loadingMore ? (
                 <View style={styles.loadMoreContainer}>
-                  <ActivityIndicator size="small" color="#FC7A7A" />
-                  <Text style={styles.loadMoreText}>Loading more...</Text>
+                  <ActivityIndicator size="small" color={colors.accent} />
+                  <Text style={[styles.loadMoreText, { color: colors.textSecondary }]}>Loading more...</Text>
                 </View>
               ) : null
             }
@@ -365,7 +407,6 @@ export default function FirstAidNewsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
   },
   gradient: {
     flex: 1,
@@ -400,20 +441,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '800',
-    color: '#1F2937',
+    fontWeight: '500',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
     fontWeight: '500',
     lineHeight: 20,
   },
   statsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 16,
@@ -429,18 +467,15 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FC7A7A',
   },
   statLabel: {
     fontSize: 12,
-    color: '#6B7280',
     fontWeight: '500',
     marginTop: 2,
   },
   statDivider: {
     width: 1,
     height: 32,
-    backgroundColor: '#E5E7EB',
     marginHorizontal: 20,
   },
   refreshContainer: {
@@ -458,7 +493,6 @@ const styles = StyleSheet.create({
   refreshText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FC7A7A',
   },
   listContent: {
     paddingHorizontal: 20,
@@ -485,7 +519,6 @@ const styles = StyleSheet.create({
   newsImage: {
     width: '100%',
     height: 200,
-    backgroundColor: '#F9FAFB',
   },
   imageLoader: {
     position: 'absolute',
@@ -495,19 +528,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
     zIndex: 1,
   },
   placeholderImage: {
     width: '100%',
     height: 200,
-    backgroundColor: '#FEF2F2',
     justifyContent: 'center',
     alignItems: 'center',
   },
   placeholderText: {
     fontSize: 12,
-    color: '#FC7A7A',
     fontWeight: '500',
     marginTop: 8,
   },
@@ -517,7 +547,6 @@ const styles = StyleSheet.create({
   categoryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ECFDF5',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -527,19 +556,16 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#10B981',
     marginLeft: 4,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
     marginBottom: 8,
     lineHeight: 24,
   },
   cardDesc: {
     fontSize: 14,
-    color: '#6B7280',
     lineHeight: 20,
     marginBottom: 16,
   },
@@ -557,14 +583,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#F3F4F6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
   cardSource: {
     fontSize: 12,
-    color: '#6B7280',
     fontWeight: '500',
     flex: 1,
   },
@@ -574,7 +598,6 @@ const styles = StyleSheet.create({
   },
   cardDate: {
     fontSize: 12,
-    color: '#9CA3AF',
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -586,7 +609,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
     marginTop: 16,
     fontWeight: '500',
   },
@@ -600,14 +622,12 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
     marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 24,
@@ -615,7 +635,6 @@ const styles = StyleSheet.create({
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FC7A7A',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 24,
@@ -639,13 +658,11 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#6B7280',
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
     textAlign: 'center',
   },
   loadMoreContainer: {
@@ -656,7 +673,6 @@ const styles = StyleSheet.create({
   },
   loadMoreText: {
     fontSize: 14,
-    color: '#6B7280',
     marginLeft: 8,
     fontWeight: '500',
   },

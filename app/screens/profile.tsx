@@ -57,7 +57,7 @@ export default function ProfileScreen() {
   };
 
   const handleConfirm = () => {
-    router.push('/explore');
+    router.push('/ExploreScreen');
   };
 
   return (

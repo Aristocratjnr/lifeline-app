@@ -5,11 +5,15 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Linking, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
 
 export default function SOSScreen() {
   const pulseAnimation = useRef(new Animated.Value(1)).current;
   const router = useRouter();
   const [showMedicalId, setShowMedicalId] = useState(false);
+  const { darkMode } = useDisplayPreferences();
+  
+  const themeStyles = getThemeStyles(darkMode);
 
   // Simulated user data for Medical ID
   const user = {
@@ -63,13 +67,13 @@ export default function SOSScreen() {
   };
 
   return (
-    <LinearGradient colors={['#FEF2F2', '#FFFBEB']} style={styles.safeArea}>
+    <LinearGradient colors={themeStyles.backgroundGradient as [string, string]} style={[styles.safeArea, themeStyles.safeArea]}>
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.header}>
+        <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
+          <View style={[styles.header, themeStyles.header]}>
             <FontAwesome5 name="heartbeat" size={40} color="#EF4444" />
-            <Text style={styles.headerTitle}>Emergency SOS</Text>
-            <Text style={styles.headerSubtitle}>Stay calm. Help is on the way.</Text>
+            <Text style={[styles.headerTitle, themeStyles.headerTitle]}>Emergency SOS</Text>
+            <Text style={[styles.headerSubtitle, themeStyles.headerSubtitle]}>Stay calm. Help is on the way.</Text>
           </View>
 
           <Animated.View style={[styles.sosButtonContainer, animatedSosButtonStyle]}>
@@ -83,13 +87,19 @@ export default function SOSScreen() {
           </Animated.View>
 
           <View style={styles.actionButtonsContainer}>
-            <TouchableOpacity style={styles.actionButton} onPress={handleSendLocation}>
-              <FontAwesome5 name="map-marker-alt" size={24} color="#1F2937" />
-              <Text style={styles.actionButtonText}>Send Location</Text>
+            <TouchableOpacity 
+              style={[styles.actionButton, themeStyles.actionButton]} 
+              onPress={handleSendLocation}
+            >
+              <FontAwesome5 name="map-marker-alt" size={24} color={darkMode ? '#E5E7EB' : '#1F2937'} />
+              <Text style={[styles.actionButtonText, themeStyles.actionButtonText]}>Send Location</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} onPress={() => setShowMedicalId(true)}>
-              <FontAwesome5 name="user-shield" size={24} color="#1F2937" />
-              <Text style={styles.actionButtonText}>Medical ID</Text>
+            <TouchableOpacity 
+              style={[styles.actionButton, themeStyles.actionButton]} 
+              onPress={() => setShowMedicalId(true)}
+            >
+              <FontAwesome5 name="user-shield" size={24} color={darkMode ? '#E5E7EB' : '#1F2937'} />
+              <Text style={[styles.actionButtonText, themeStyles.actionButtonText]}>Medical ID</Text>
             </TouchableOpacity>
           </View>
 
@@ -101,15 +111,36 @@ export default function SOSScreen() {
             onRequestClose={() => setShowMedicalId(false)}
           >
             <View style={styles.modalOverlay}>
-              <View style={styles.medicalIdCard}>
-                <Text style={styles.medicalIdTitle}>Medical ID</Text>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Name:</Text><Text style={styles.medicalIdValue}>{user.name}</Text></View>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Age:</Text><Text style={styles.medicalIdValue}>{user.age}</Text></View>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Gender:</Text><Text style={styles.medicalIdValue}>{user.gender}</Text></View>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Condition:</Text><Text style={styles.medicalIdValue}>{user.medicalCondition}</Text></View>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Contact:</Text><Text style={styles.medicalIdValue}>{user.contact}</Text></View>
-                <View style={styles.medicalIdRow}><Text style={styles.medicalIdLabel}>Blood Type:</Text><Text style={styles.medicalIdValue}>{user.bloodType}</Text></View>
-                <TouchableOpacity style={styles.closeModalButton} onPress={() => setShowMedicalId(false)}>
+              <View style={[styles.medicalIdCard, themeStyles.medicalIdCard]}>
+                <Text style={[styles.medicalIdTitle, themeStyles.medicalIdTitle]}>Medical ID</Text>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Name:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.name}</Text>
+                </View>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Age:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.age}</Text>
+                </View>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Gender:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.gender}</Text>
+                </View>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Condition:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.medicalCondition}</Text>
+                </View>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Contact:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.contact}</Text>
+                </View>
+                <View style={styles.medicalIdRow}>
+                  <Text style={[styles.medicalIdLabel, themeStyles.medicalIdLabel]}>Blood Type:</Text>
+                  <Text style={[styles.medicalIdValue, themeStyles.medicalIdValue]}>{user.bloodType}</Text>
+                </View>
+                <TouchableOpacity 
+                  style={[styles.closeModalButton, themeStyles.closeModalButton]} 
+                  onPress={() => setShowMedicalId(false)}
+                >
                   <Text style={styles.closeModalButtonText}>Close</Text>
                 </TouchableOpacity>
               </View>
@@ -124,6 +155,112 @@ export default function SOSScreen() {
 export const config = {
   headerShown: false,
 };
+
+interface ThemeStyles {
+  safeArea: {
+    backgroundColor: string;
+  };
+  container: {
+    backgroundColor: string;
+  };
+  header: {
+    backgroundColor: string;
+  };
+  headerTitle: {
+    color: string;
+  };
+  headerSubtitle: {
+    color: string;
+  };
+  sosButtonContainer: {
+    backgroundColor: string;
+    shadowColor: string;
+  };
+  sosButtonText: {
+    color: string;
+  };
+  actionButton: {
+    backgroundColor: string;
+    shadowColor: string;
+    shadowOffset: { width: number; height: number };
+    shadowOpacity: number;
+    shadowRadius: number;
+    elevation: number;
+  };
+  actionButtonText: {
+    color: string;
+  };
+  medicalIdCard: {
+    backgroundColor: string;
+  };
+  medicalIdTitle: {
+    color: string;
+  };
+  medicalIdLabel: {
+    color: string;
+  };
+  medicalIdValue: {
+    color: string;
+  };
+  closeModalButton: {
+    backgroundColor: string;
+  };
+  backgroundGradient: readonly [string, string];
+}
+
+const getThemeStyles = (isDark: boolean): ThemeStyles => ({
+  safeArea: {
+    backgroundColor: isDark ? '#121212' : '#FEF2F2',
+  },
+  container: {
+    backgroundColor: 'transparent',
+  },
+  header: {
+    backgroundColor: 'transparent'
+  },
+  headerTitle: {
+    color: isDark ? '#F3F4F6' : '#1F2937',
+  },
+  headerSubtitle: {
+    color: isDark ? '#9CA3AF' : '#6B7280',
+  },
+  sosButtonContainer: {
+    backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+    shadowColor: isDark ? '#000' : '#000',
+  },
+  sosButtonText: {
+    color: isDark ? '#F3F4F6' : '#1F2937',
+  },
+  actionButton: {
+    backgroundColor: isDark ? '#374151' : '#FFFFFF',
+    shadowColor: isDark ? '#000' : '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.3 : 0.05,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  actionButtonText: {
+    color: isDark ? '#F3F4F6' : '#1F2937',
+  },
+  medicalIdCard: {
+    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+  },
+  medicalIdTitle: {
+    color: isDark ? '#F87171' : '#EF4444',
+  },
+  medicalIdLabel: {
+    color: isDark ? '#9CA3AF' : '#374151',
+  },
+  medicalIdValue: {
+    color: isDark ? '#F3F4F6' : '#1F2937',
+  },
+  closeModalButton: {
+    backgroundColor: isDark ? '#EF4444' : '#EF4444',
+  },
+  backgroundGradient: isDark 
+    ? ['#121212', '#1E1E1E'] as const 
+    : ['#FEF2F2', '#FFFBEB'] as const,
+});
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -192,16 +329,10 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     alignItems: 'center',
-    backgroundColor: 'white',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 15,
     width: '45%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 3,
   },
   actionButtonText: {
     fontSize: 16,
@@ -243,7 +374,6 @@ const styles = StyleSheet.create({
   },
   medicalIdCard: {
     width: 320,
-    backgroundColor: '#fff',
     borderRadius: 18,
     padding: 28,
     alignItems: 'flex-start',
@@ -266,11 +396,9 @@ const styles = StyleSheet.create({
   },
   medicalIdLabel: {
     fontWeight: 'bold',
-    color: '#374151',
     width: 110,
   },
   medicalIdValue: {
-    color: '#1F2937',
     fontWeight: '500',
   },
   closeModalButton: {

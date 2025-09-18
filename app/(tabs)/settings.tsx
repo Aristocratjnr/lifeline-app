@@ -1,19 +1,76 @@
 import { AntDesign, Feather, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Font from 'expo-font';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 
-// Load JetBrains Mono font
-const loadFonts = async () => {
-  await Font.loadAsync({
-    'JetBrainsMono': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),
-    'JetBrainsMono-Bold': require('../../assets/fonts/JetBrainsMono-Bold.ttf'),
-  });
+type RootStackParamList = {
+  'screens/help': undefined;
+  'screens/about': undefined;
+  'screens/delete-account': undefined;
+  'screens/display': undefined;
+  'screens/language': undefined;
+  'screens/notifications': undefined;
+  'screens/terms': undefined;
+  'screens/privacy': undefined;
+  'screens/faq': undefined;
+  'screens/contact': undefined;
+  'screens/profile': undefined;
+  'screens/login': undefined;
+  'screens/register': undefined;
+  'screens/forgot-password': undefined;
+  'screens/reset-password': undefined;
+  'screens/verification': undefined;
+  'screens/home': undefined;
+  'screens/dashboard': undefined;
+  'screens/settings': undefined;
+  'screens/profile-settings': undefined;
+  'screens/security': undefined;
+  'screens/notifications-settings': undefined;
+  'screens/display-settings': undefined;
+  'screens/language-settings': undefined;
+  'screens/help-support': undefined;
+  'screens/about-app': undefined;
+  'screens/terms-conditions': undefined;
+  'screens/privacy-policy': undefined;
+  'screens/faqs': undefined;
+  'screens/contact-us': undefined;
+  'screens/feedback': undefined;
+  'screens/rate-app': undefined;
+  'screens/share-app': undefined;
+  'screens/logout': undefined;
+  'screens/offline-content': undefined;
+  // Add other screen names as needed
+};
+
+type IconProps = {
+  color?: string;
+  size?: number;
+  [key: string]: any;
+};
+
+// Font loading hook
+const useLoadFonts = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'JetBrainsMono': require('../../assets/fonts/JetBrainsMono-Regular.ttf'),
+        'JetBrainsMono-Bold': require('../../assets/fonts/JetBrainsMono-Bold.ttf'),
+      });
+      setFontsLoaded(true);
+    };
+    
+    loadFonts();
+  }, []);
+  
+  return fontsLoaded;
 };
 
 // Helper for dynamic text style - moved inside the component
@@ -23,8 +80,18 @@ const getTextStyle = (textSize: number, fontBold: boolean, baseStyle = {}) => {
   return { ...baseStyle, fontSize, fontFamily };
 };
 
+type Theme = {
+  background: string;
+  card: string;
+  text: string;
+  subtitle: string;
+  icon: string;
+  overlay: string;
+  containerBg: string;
+};
+
 type SettingItemProps = {
-  icon: React.ReactNode;
+  icon: React.ReactElement<IconProps>;
   title: string;
   subtitle: string;
   onPress?: () => void;
@@ -32,27 +99,52 @@ type SettingItemProps = {
   fontBold: boolean;
 };
 
-const SettingItem = ({ icon, title, subtitle, onPress, textSize, fontBold }: SettingItemProps) => (
-  <TouchableOpacity style={styles.settingItem} onPress={onPress}>
-    <View style={styles.iconContainer}>
-      {icon}
-    </View>
-    <View style={styles.textContainer}>
-      <Text style={getTextStyle(textSize, fontBold, styles.title)}>{title}</Text>
-      <Text style={getTextStyle(textSize, fontBold, styles.subtitle)}>{subtitle}</Text>
-    </View>
-  </TouchableOpacity>
-);
+const SettingItem = React.memo(({ icon, title, subtitle, onPress, textSize, fontBold }: SettingItemProps) => {
+  const { darkMode } = useDisplayPreferences();
+  const iconColor = darkMode ? '#ffffff' : '#000000';
+  const cardColor = darkMode ? '#2d2d2d' : '#ffffff';
+  const textColor = darkMode ? '#ffffff' : '#000000';
+  const subTextColor = darkMode ? '#a0a0a0' : '#666666';
+  
+  const iconWithTheme = React.cloneElement(icon, { 
+    color: iconColor,
+    size: 24
+  });
+  
+  return (
+    <TouchableOpacity 
+      style={[styles.settingItem, { backgroundColor: cardColor }]} 
+      onPress={onPress}
+    >
+      <View style={styles.iconContainer}>
+        {iconWithTheme}
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={[getTextStyle(textSize, fontBold, styles.title), { color: textColor }]}>
+          {title}
+        </Text>
+        <Text style={[getTextStyle(textSize, fontBold, styles.subtitle), { color: subTextColor }]}>
+          {subtitle}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 export default function Settings() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [username, setUsername] = useState('');
-  const { textSize, fontBold, brightness, eyeProtection } = useDisplayPreferences();
+  const { textSize, fontBold, brightness, eyeProtection, darkMode } = useDisplayPreferences();
+  const systemColorScheme = useColorScheme();
+  const isDark = darkMode; // darkMode is a boolean in the context
   
-  useEffect(() => {
-    loadFonts();
-  }, []);
+  // Theme colors
+  const overlayColor = isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.6)';
+  const containerBg = isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.89)';
+  const iconColor = isDark ? '#ffffff' : '#000000';
+  
+  const fontsLoaded = useLoadFonts();
 
   useFocusEffect(
     useCallback(() => {
@@ -74,7 +166,12 @@ export default function Settings() {
   );
 
   const navigateToScreen = (screen: string) => {
-    router.push(`/screens/${screen}` as any);
+    if (screen === 'screens/profile-settings') {
+      router.push('/(screens)/profile-settings');
+    } else {
+      // @ts-ignore - We know the screen is valid
+      navigation.navigate(screen);
+    }
   };
 
   return (
@@ -84,9 +181,9 @@ export default function Settings() {
       resizeMode="cover"
     >
       {/* Faded overlay */}
-      <View style={styles.overlay} />
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+      <View style={[styles.overlay, { backgroundColor: overlayColor }]} />
+      <SafeAreaView style={[styles.container, { backgroundColor: containerBg }]}>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
         
         {/* Header */}
         <View style={styles.header}>
@@ -94,76 +191,91 @@ export default function Settings() {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={isDark ? '#ffffff' : '#000000'} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, getTextStyle(textSize, fontBold, {fontSize: 18})]}
-            >{t('settings.title')}</Text>
+          <Text style={[
+              styles.headerTitle, 
+              getTextStyle(textSize, fontBold, {fontSize: 18}),
+              { color: isDark ? '#ffffff' : '#000000' }
+            ]}>
+            {t('settings.title')}
+          </Text>
         </View>
 
         {/* Settings Grid */}
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.grid}>
+            {!username && (
+              <SettingItem
+                icon={<Ionicons name="person-outline" size={24} color={iconColor} />}
+                title={t('settings.guest.title')}
+                subtitle={t('settings.guest.subtitle')}
+                onPress={() => router.push('/screens/guest-settings')}
+                textSize={textSize}
+                fontBold={fontBold}
+              />
+            )}
             <SettingItem
-              icon={<Ionicons name="person-outline" size={24} color="black" />}
+              icon={<Ionicons name="person-outline" size={24} color={iconColor} />}
               title={t('settings.profile.title')}
               subtitle={username || t('settings.profile.subtitle')}
-              onPress={() => navigateToScreen('profile-settings')}
+              onPress={() => router.push('/(screens)/profile-settings')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<Ionicons name="notifications-outline" size={24} color="black" />}
+              icon={<Ionicons name="notifications-outline" size={24} color={iconColor} />}
               title={t('settings.notifications.title')}
               subtitle={t('settings.notifications.subtitle')}
-              onPress={() => navigateToScreen('notifications')}
+              onPress={() => navigateToScreen('screens/notifications')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<Ionicons name="language" size={24} color="black" />}
+              icon={<Ionicons name="language" size={24} color={iconColor} />}
               title={t('settings.language.title')}
               subtitle={t('settings.language.subtitle')}
-              onPress={() => navigateToScreen('languages')}
+              onPress={() => navigateToScreen('screens/language')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<MaterialIcons name="display-settings" size={24} color="black" />}
+              icon={<MaterialIcons name="display-settings" size={24} color={iconColor} />}
               title={t('settings.display.title')}
               subtitle={t('settings.display.subtitle')}
-              onPress={() => navigateToScreen('display')}
+              onPress={() => navigateToScreen('screens/display')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<FontAwesome5 name="file-contract" size={22} color="black" />}
+              icon={<FontAwesome5 name="file-contract" size={22} color={iconColor} />}
               title={t('settings.terms.title')}
               subtitle={t('settings.terms.subtitle')}
-              onPress={() => navigateToScreen('terms-use')}
+              onPress={() => navigateToScreen('screens/terms')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<AntDesign name="infocirlceo" size={22} color="black" />}
+              icon={<AntDesign name="infocirlceo" size={22} color={iconColor} />}
               title={t('settings.about.title')}
               subtitle={t('settings.about.subtitle')}
-              onPress={() => navigateToScreen('about')}
+              onPress={() => navigateToScreen('screens/about')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<MaterialIcons name="offline-pin" size={24} color="black" />}
+              icon={<MaterialIcons name="offline-pin" size={24} color={iconColor} />}
               title={t('settings.offline.title')}
               subtitle={t('settings.offline.subtitle')}
-              onPress={() => navigateToScreen('offline-content')}
+              onPress={() => navigateToScreen('screens/offline-content')}
               textSize={textSize}
               fontBold={fontBold}
             />
             <SettingItem
-              icon={<Feather name="help-circle" size={24} color="black" />}
+              icon={<Feather name="help-circle" size={24} color={iconColor} />}
               title={t('settings.help.title')}
               subtitle={t('settings.help.subtitle')}
-              onPress={() => navigateToScreen('help')}
+              onPress={() => navigateToScreen('screens/help')}
               textSize={textSize}
               fontBold={fontBold}
             />
@@ -171,25 +283,25 @@ export default function Settings() {
           
           {/* Show brightness value */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
-            <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              {t('display.brightness')}: {Math.round(brightness * 100)}%
-            </Text>
+            <Text style={[getTextStyle(textSize, fontBold), { color: isDark ? '#ffffff' : '#333333' }]}>
+            {t('settings.display.brightness')}: {Math.round(brightness * 100)}%
+          </Text>
           </View>
           
           {/* Show eye protection status */}
           <View style={{alignItems: 'center', marginVertical: 10}}>
-            <Text style={getTextStyle(textSize, fontBold, {color: '#333'})}>
-              {t('display.eyeProtection')}: {eyeProtection ? t('common.on') : t('common.off')}
-            </Text>
+            <Text style={[getTextStyle(textSize, fontBold), { color: isDark ? '#ffffff' : '#333333' }]}>
+            {t('settings.display.eyeProtection')}: {eyeProtection ? t('common.on') : t('common.off')}
+          </Text>
           </View>
           
           {/* Delete button centered */}
           <View style={styles.deleteContainer}>
             <SettingItem
-              icon={<AntDesign name="delete" size={24} color="black" />}
+              icon={<AntDesign name="delete" size={24} color={isDark ? '#ffffff' : '#000000'} />}
               title={t('settings.delete.title')}
               subtitle={t('settings.delete.subtitle')}
-              onPress={() => navigateToScreen('delete-account')}
+              onPress={() => navigateToScreen('screens/delete-account')}
               textSize={textSize}
               fontBold={fontBold}
             />
@@ -208,12 +320,10 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)', // Adjust alpha for more/less fade
     zIndex: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.89)', 
     zIndex: 2,
   },
   header: {
@@ -247,7 +357,6 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   settingItem: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 15,
     width: '48%',

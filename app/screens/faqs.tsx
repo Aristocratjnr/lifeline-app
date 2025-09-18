@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDisplayPreferences } from '../../context/DisplayPreferencesContext';
 import {
   ImageBackground,
   SafeAreaView,
@@ -27,21 +28,22 @@ type FAQItemProps = {
   answer: string;
   isExpanded: boolean;
   onToggle: () => void;
+  darkMode?: boolean;
 };
 
-const FAQItem = ({ question, answer, isExpanded, onToggle }: FAQItemProps) => (
-  <View style={styles.faqItem}>
+const FAQItem = ({ question, answer, isExpanded, onToggle, darkMode = false }: FAQItemProps) => (
+  <View style={[styles.faqItem, darkMode && styles.darkFaqItem]}>
     <TouchableOpacity style={styles.faqQuestion} onPress={onToggle}>
-      <Text style={styles.faqQuestionText}>{question}</Text>
+      <Text style={[styles.faqQuestion, darkMode && styles.darkText]}>{question}</Text>
       <Ionicons 
         name={isExpanded ? "chevron-up" : "chevron-down"} 
         size={20} 
-        color="#666" 
+        color={darkMode ? 'white' : '#666'} 
       />
     </TouchableOpacity>
     {isExpanded && (
-      <View style={styles.faqAnswer}>
-        <Text style={styles.faqAnswerText}>{answer}</Text>
+      <View style={[styles.faqAnswerContainer, darkMode && styles.darkFaqAnswerContainer]}>
+        <Text style={[styles.faqAnswer, darkMode && styles.darkFaqAnswer]}>{answer}</Text>
       </View>
     )}
   </View>
@@ -51,6 +53,7 @@ export default function FAQs() {
   const navigation = useNavigation();
   const router = useRouter();
   const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
   const [expandedFAQs, setExpandedFAQs] = useState<number[]>([]);
 
   useEffect(() => {
@@ -111,19 +114,20 @@ export default function FAQs() {
   return (
     <ImageBackground 
       source={require('../../assets/images/blur.png')} 
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, darkMode && { opacity: 0.9 }]}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.overlay, darkMode && styles.darkOverlay]} />
+      <SafeAreaView style={[styles.container, darkMode && styles.darkContainer]}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color="black" />
+            <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('faqs.headerTitle')}</Text>
+          <Text style={[styles.headerTitle, darkMode && styles.darkText]}>{t('faqs.headerTitle')}</Text>
         </View>
         
         <ScrollView style={styles.scrollContent}>
@@ -136,7 +140,7 @@ export default function FAQs() {
           </View>
 
           {/* FAQ Items */}
-          <View style={styles.faqsContainer}>
+          <View style={[styles.faqsContainer, darkMode && styles.darkFaqsContainer]}>
             {faqs.map((faq, index) => (
               <FAQItem
                 key={index}
@@ -144,6 +148,7 @@ export default function FAQs() {
                 answer={faq.answer}
                 isExpanded={expandedFAQs.includes(index)}
                 onToggle={() => toggleFAQ(index)}
+                darkMode={darkMode}
               />
             ))}
           </View>
@@ -165,9 +170,24 @@ export default function FAQs() {
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    zIndex: 1,
+  },
+  darkOverlay: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff4f5',
+    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+    zIndex: 2,
+  },
+  darkContainer: {
+    backgroundColor: 'rgba(30, 30, 30, 0.9)',
+  },
+  darkText: {
+    color: '#f0f0f0',
   },
   header: {
     flexDirection: 'row',
@@ -216,44 +236,57 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   faqsContainer: {
-    paddingHorizontal: 20,
     marginTop: 20,
+    paddingHorizontal: 15,
+  },
+  darkFaqsContainer: {
+    backgroundColor: 'transparent',
   },
   faqItem: {
     backgroundColor: 'white',
-    borderRadius: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    borderRadius: 10,
+    marginBottom: 15,
+    overflow: 'hidden',
     elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  faqQuestion: {
+  darkFaqItem: {
+    backgroundColor: '#2d2d2d',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+  },
+  faqHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 15,
   },
-  faqQuestionText: {
+  faqQuestion: {
     flex: 1,
     fontFamily: 'JetBrainsMono-Bold',
-    fontSize: 14,
+    fontSize: 15,
     color: '#333',
     marginRight: 10,
   },
-  faqAnswer: {
-    paddingHorizontal: 15,
-    paddingBottom: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+  faqAnswerContainer: {
+    padding: 15,
+    paddingTop: 0,
+    backgroundColor: '#f9f9f9',
   },
-  faqAnswerText: {
+  darkFaqAnswerContainer: {
+    backgroundColor: '#3d3d3d',
+  },
+  faqAnswer: {
     fontFamily: 'JetBrainsMono',
     fontSize: 14,
     lineHeight: 20,
-    color: '#666',
-    marginTop: 10,
+    color: '#555',
+  },
+  darkFaqAnswer: {
+    color: '#d0d0d0',
   },
   contactContainer: {
     paddingHorizontal: 20,

@@ -1,6 +1,8 @@
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
+import { Colors } from '@/constants/Colors';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -82,6 +84,9 @@ export default function DoctorProfileScreen() {
   const router = useRouter();
   const { doctorId } = useLocalSearchParams();
   const doctor = doctors[doctorId as keyof typeof doctors] || doctors['1'];
+  const { darkMode } = useDisplayPreferences();
+  const themeColors = darkMode ? Colors.dark : Colors.light;
+  const styles = getStyles(darkMode, themeColors);
 
   const handleGoBack = () => {
     if (router.canGoBack()) {
@@ -109,12 +114,15 @@ export default function DoctorProfileScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <MaterialIcons name="arrow-back-ios" size={22} color="#333" />
+          <MaterialIcons name="arrow-back-ios" size={22} color={themeColors.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Doctor Profile</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.headerIcon}>
-            <MaterialIcons name="more-vert" size={24} color="#333" />
+          <TouchableOpacity 
+            style={styles.headerIcon}
+            onPress={() => router.push('/(tabs)/settings')}
+          >
+            <MaterialIcons name="more-vert" size={24} color={themeColors.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -133,13 +141,13 @@ export default function DoctorProfileScreen() {
           <Text style={styles.specialty}>{doctor.specialty}</Text>
           
           <View style={styles.hospitalContainer}>
-            <MaterialIcons name="local-hospital" size={18} color="#666" />
-            <Text style={styles.hospital}>{doctor.hospital}</Text>
+            <MaterialIcons name="local-hospital" size={18} color={themeColors.tabIconDefault} />
+            <Text style={[styles.hospital, { color: themeColors.tabIconDefault }]}>{doctor.hospital}</Text>
           </View>
           
           <View style={styles.ratingContainer}>
             <FontAwesome5 name="star" size={16} color="#FFD700" />
-            <Text style={styles.ratingText}>
+            <Text style={[styles.ratingText, { color: themeColors.tabIconDefault }]}>
               {doctor.rating} ({doctor.reviews} reviews)
             </Text>
           </View>
@@ -193,169 +201,179 @@ export default function DoctorProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a1a',
-  },
-  headerIcons: {
-    flexDirection: 'row',
-  },
-  headerIcon: {
-    padding: 8,
-  },
-  content: {
-    flex: 1,
-  },
-  profileHeader: {
-    alignItems: 'center',
-    padding: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  avatarContainer: {
-    position: 'relative',
-    marginBottom: 16,
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: '#EF4444',
-  },
-  onlineBadge: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#4CAF50',
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1a1a1a',
-    marginBottom: 4,
-  },
-  specialty: {
-    fontSize: 16,
-    color: '#EF4444',
-    marginBottom: 8,
-  },
-  hospitalContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  hospital: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 4,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  ratingText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 4,
-  },
-  actionButtons: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 8,
-    flex: 1,
-  },
-  callButton: {
-    backgroundColor: '#EF4444',
-    marginRight: 12,
-  },
-  messageButton: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderWidth: 1,
-    borderColor: '#EF4444',
-  },
-  callButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  messageButtonText: {
-    color: '#EF4444',
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  section: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 12,
-  },
-  aboutText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 22,
-  },
-  educationText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 22,
-    textAlignVertical: 'top',
-  },
-  experienceText: {
-    fontSize: 14,
-    color: '#666',
-  },
-  languagesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 8,
-  },
-  languageTag: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  languageText: {
-    fontSize: 14,
-    color: '#666',
-  },
-});
+const getStyles = (darkMode: boolean, themeColors: any) => {
+  const backgroundColor = themeColors.background;
+  const textColor = themeColors.text;
+  const borderColor = darkMode ? '#333' : '#f0f0f0';
+  const cardBackground = darkMode ? '#1E1E1E' : '#fff';
+  const secondaryText = themeColors.tabIconDefault;
+  const languageTagBg = darkMode ? '#2D2D2D' : '#f5f5f5';
+  const messageButtonBg = darkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: backgroundColor,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+    },
+    backButton: {
+      padding: 8,
+    },
+    headerTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: textColor,
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    headerIcon: {
+      padding: 8,
+    },
+    content: {
+      flex: 1,
+    },
+    profileHeader: {
+      alignItems: 'center',
+      padding: 24,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+    },
+    avatarContainer: {
+      position: 'relative',
+      marginBottom: 16,
+    },
+    avatar: {
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+      borderWidth: 3,
+      borderColor: '#EF4444',
+    },
+    onlineBadge: {
+      position: 'absolute',
+      bottom: 10,
+      right: 10,
+      width: 16,
+      height: 16,
+      borderRadius: 8,
+      backgroundColor: '#4CAF50',
+      borderWidth: 2,
+      borderColor: '#fff',
+    },
+    name: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: textColor,
+      marginBottom: 4,
+    },
+    specialty: {
+      fontSize: 16,
+      color: '#EF4444',
+      marginBottom: 8,
+    },
+    hospitalContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    hospital: {
+      fontSize: 14,
+      color: secondaryText,
+      marginLeft: 4,
+    },
+    ratingContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    ratingText: {
+      fontSize: 14,
+      color: secondaryText,
+      marginLeft: 4,
+    },
+    actionButtons: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
+      marginTop: 8,
+    },
+    actionButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      borderRadius: 8,
+      flex: 1,
+    },
+    callButton: {
+      backgroundColor: '#EF4444',
+      marginRight: 12,
+    },
+    messageButton: {
+      backgroundColor: messageButtonBg,
+      borderWidth: 1,
+      borderColor: '#EF4444',
+    },
+    callButtonText: {
+      color: '#fff',
+      fontWeight: '600',
+      marginLeft: 8,
+    },
+    messageButtonText: {
+      color: '#EF4444',
+      fontWeight: '600',
+      marginLeft: 8,
+    },
+    section: {
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: textColor,
+      marginBottom: 12,
+    },
+    aboutText: {
+      fontSize: 14,
+      color: secondaryText,
+      lineHeight: 22,
+    },
+    educationText: {
+      fontSize: 14,
+      color: secondaryText,
+      lineHeight: 22,
+      textAlignVertical: 'top',
+    },
+    experienceText: {
+      fontSize: 14,
+      color: secondaryText,
+    },
+    languagesContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: 8,
+    },
+    languageTag: {
+      backgroundColor: languageTagBg,
+      borderRadius: 4,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      marginRight: 8,
+      marginBottom: 8,
+    },
+    languageText: {
+      fontSize: 14,
+      color: secondaryText,
+    }
+  });
+};

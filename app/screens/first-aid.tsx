@@ -2,8 +2,22 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyText: string;
+  buttonBackground: string;
+  primaryButton: string;
+  cardText: string;
+  headerCard: string;
+}
 
 const firstAidPrinciples: {
   id: string;
@@ -58,6 +72,23 @@ const firstAidPrinciples: {
 
 export default function FirstAidScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    buttonBackground: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+    primaryButton: isDarkMode ? '#FF6B6B' : '#E53935',
+    cardText: isDarkMode ? '#B0B0B0' : '#444444',
+    headerCard: isDarkMode ? '#2A2A2A' : '#FFFFFF',
+  };
+
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
     'JetBrainsMono-Bold': require('@/assets/fonts/JetBrainsMono-Bold.ttf'),
@@ -69,15 +100,15 @@ export default function FirstAidScreen() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
         source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['top', 'right', 'left']}>
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.6)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.89)' : 'rgba(255, 255, 255, 0.74)' }]} edges={['top', 'right', 'left']}>
           <ScrollView 
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
@@ -85,51 +116,51 @@ export default function FirstAidScreen() {
             {/* Header */}
             <View style={styles.header}>
               <TouchableOpacity 
-                style={styles.backButton}
+                style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
                 onPress={() => router.back()}
               >
-                <MaterialIcons name="arrow-back" size={24} color="#333" />
+                <MaterialIcons name="arrow-back" size={24} color={colors.text} />
               </TouchableOpacity>
               
-              <Text style={styles.headerTitle}>FIRST AID</Text>
+              <Text style={[styles.headerTitle, { color: colors.text }]}>FIRST AID</Text>
               
-              <View style={styles.headerRight}>
+              <View style={[styles.headerRight, { backgroundColor: colors.buttonBackground }]}>
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/screens/guest')}
                 >
-                  <MaterialIcons name="person" size={24} color="#E53935" />
+                  <MaterialIcons name="person" size={24} color={colors.emergencyText} />
                 </TouchableOpacity>
-                <View style={styles.verticalLine} />
+                <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/settings')}
                 >
-                  <MaterialIcons name="more-vert" size={24} color="#666" />
+                  <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Content */}
             <View style={styles.contentContainer}>
-              <View style={styles.headerCard}>
-                <Text style={styles.sectionTitle}>First Aid Basics</Text>
-                <Text style={styles.paragraph}>
+              <View style={[styles.headerCard, { backgroundColor: colors.headerCard }]}>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>First Aid Basics</Text>
+                <Text style={[styles.paragraph, { color: colors.cardText }]}>
                   First aid is the immediate care given to a person who has been injured or is suddenly taken ill. It includes self-help and home care if medical assistance is not available or delayed.
                 </Text>
               </View>
               
-              <Text style={styles.sectionSubtitle}>Essential First Aid Principles</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.text }]}>Essential First Aid Principles</Text>
               
               <View style={styles.cardsContainer}>
                 {firstAidPrinciples.map((item) => (
-                  <View key={item.id} style={styles.card}>
+                  <View key={item.id} style={[styles.card, { backgroundColor: colors.card }]}>
                     <View style={[styles.iconContainer, { backgroundColor: `${item.color}20` }]}>
                       <Ionicons name={item.icon} size={24} color={item.color} />
                     </View>
                     <View style={styles.cardContent}>
-                      <Text style={styles.cardTitle}>{item.title}</Text>
-                      <Text style={styles.cardText}>{item.description}</Text>
+                      <Text style={[styles.cardTitle, { color: colors.text }]}>{item.title}</Text>
+                      <Text style={[styles.cardText, { color: colors.textSecondary }]}>{item.description}</Text>
                     </View>
                   </View>
                 ))}
@@ -137,7 +168,7 @@ export default function FirstAidScreen() {
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity 
-                  style={styles.primaryButton}
+                  style={[styles.primaryButton, { backgroundColor: colors.primaryButton }]}
                   onPress={() => router.push('/screens/firstAidGuide')}
                 >
                   <MaterialIcons name="medical-services" size={20} color="white" style={styles.buttonIcon} />
@@ -160,17 +191,14 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.6)',
     zIndex: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.74)',
     zIndex: 2,
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
   },
   scrollContent: {
     padding: 16,
@@ -189,14 +217,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
     textAlign: 'center',
     flex: 1,
@@ -204,7 +230,6 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 20,
     paddingHorizontal: 4,
   },
@@ -221,13 +246,11 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 1,
     height: 24,
-    backgroundColor: '#E0E0E0',
   },
   contentContainer: {
     flex: 1,
   },
   headerCard: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
@@ -241,20 +264,17 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 12,
-    color: '#1a1a1a',
     fontFamily: 'JetBrainsMono-Bold',
   },
   sectionSubtitle: {
     fontSize: 18,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#333',
     marginTop: 20,
     marginBottom: 12,
   },
   paragraph: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#444',
     marginBottom: 16,
   },
   listContainer: {
@@ -277,13 +297,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     lineHeight: 22,
-    color: '#444',
   },
   buttonContainer: {
     paddingHorizontal: 4,
   },
   primaryButton: {
-    backgroundColor: '#E53935',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -308,7 +326,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   card: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -334,13 +351,11 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
     marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
   },
   cardText: {
     fontSize: 14,
-    color: '#666',
     lineHeight: 20,
     fontFamily: 'JetBrainsMono-Regular',
   },

@@ -1,9 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing, Modal, Pressable, Linking, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Audio } from 'expo-av';
+import { useDisplayPreferences } from '@/context/DisplayPreferencesContext';
+import { Colors } from '@/constants/Colors';
 
 interface Message {
   id: string;
@@ -25,12 +27,17 @@ interface Doctor {
 export default function MessagesScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
+  const themeColors = darkMode ? Colors.dark : Colors.light;
+  const styles = getStyles(darkMode, themeColors);
+  
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [recordingPermission, setRecordingPermission] = useState(false);
+  const [isCallModalVisible, setIsCallModalVisible] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const recordingAnimation = useRef(new Animated.Value(0)).current;
   
@@ -220,6 +227,52 @@ export default function MessagesScreen() {
     }
   };
 
+  const handleMessage = () => {
+    if (message.trim() === '') return;
+    
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      sender: 'user',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    
+    setMessages([...messages, newMessage]);
+    setMessage('');
+  };
+
+  const handleCallPress = () => {
+    setIsCallModalVisible(true);
+  };
+
+  const handleCallConfirm = async () => {
+    try {
+      // Close modal
+      setIsCallModalVisible(false);
+      
+      // Initiate call using the provided phone number
+      const phoneNumber = '+233203430787';
+      const phoneUrl = `tel:${phoneNumber}`;
+      
+      // Check if the device can open the URL
+      const supported = await Linking.canOpenURL(phoneUrl);
+      
+      if (supported) {
+        await Linking.openURL(phoneUrl);
+      } else {
+        console.error("Device doesn't support phone calls");
+        // Optionally show an alert to the user
+        Alert.alert("Error", "Your device doesn't support phone calls");
+      }
+    } catch (error) {
+      console.error('Error making call:', error);
+    }
+  };
+
+  const handleCallCancel = () => {
+    setIsCallModalVisible(false);
+  };
+
   const handleSend = () => {
     if (message.trim() === '') return;
     
@@ -227,7 +280,7 @@ export default function MessagesScreen() {
       id: Date.now().toString(),
       text: message,
       sender: 'user',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
     
     setMessages(prev => [...prev, newMessage]);
@@ -336,7 +389,13 @@ export default function MessagesScreen() {
           <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
             <MaterialIcons name="arrow-back-ios" size={22} color="#333" />
           </TouchableOpacity>
-          <View style={styles.doctorInfo}>
+          <TouchableOpacity 
+            style={styles.doctorInfo}
+            onPress={() => router.push({
+              pathname: '/(screens)/doctor-profile',
+              params: { doctorId: doctor.id }
+            })}
+          >
             <Image 
               source={{ uri: doctor.avatar }} 
               style={styles.doctorAvatar} 
@@ -365,15 +424,52 @@ export default function MessagesScreen() {
                 </Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleCallPress}
+            >
               <MaterialIcons name="phone" size={24} color="#EF4444" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={() => router.push('/(tabs)/settings')}
+            >
               <MaterialIcons name="more-vert" size={24} color="#333" />
             </TouchableOpacity>
           </View>
+
+          {/* Call Confirmation Modal */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isCallModalVisible}
+            onRequestClose={() => setIsCallModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Call Doctor</Text>
+                <Text style={styles.modalText}>
+                  Are you sure you want to call {doctor.name}?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <Pressable 
+                    style={[styles.modalButton, styles.cancelButton]} 
+                    onPress={handleCallCancel}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </Pressable>
+                  <Pressable 
+                    style={[styles.modalButton, styles.confirmButton]} 
+                    onPress={handleCallConfirm}
+                  >
+                    <Text style={styles.confirmButtonText}>Call</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
 
@@ -431,83 +527,95 @@ export default function MessagesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    paddingBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 8,
-  },
-  doctorInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  doctorAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
-  },
-  doctorDetails: {
-    flex: 1,
-  },
-  doctorName: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  verifiedIcon: {
-    marginLeft: 4,
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  doctorStatus: {
-    fontSize: 13,
-    color: '#666',
-    marginLeft: 6,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  headerIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerButton: {
-    padding: 8,
-    marginLeft: 8,
-  },
-  content: {
-    flex: 1,
+const getStyles = (darkMode: boolean, themeColors: any) => {
+  const backgroundColor = themeColors.background;
+  const textColor = themeColors.text;
+  const borderColor = darkMode ? '#333' : '#f0f0f0';
+  const cardBackground = darkMode ? '#1E1E1E' : '#fff';
+  const secondaryText = themeColors.tabIconDefault;
+  const inputBackground = darkMode ? '#2D2D2D' : '#f5f5f5';
+  const messageBackground = darkMode ? '#2D2D2D' : '#f0f0f0';
+  const userMessageBackground = darkMode ? '#EF4444' : '#EF4444';
+  const userMessageText = '#fff';
+  const timeText = darkMode ? '#aaa' : '#666';
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: backgroundColor,
+    },
+    header: {
+      backgroundColor: cardBackground,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor,
+      paddingBottom: 12,
+      shadowColor: darkMode ? '#000' : '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: darkMode ? 0.3 : 0.05,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+    headerContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingTop: 12,
+    },
+    backButton: {
+      padding: 8,
+      marginRight: 8,
+    },
+    doctorInfo: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    doctorAvatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginRight: 12,
+      borderWidth: 1,
+      borderColor: borderColor,
+    },
+    doctorDetails: {
+      flex: 1,
+    },
+    doctorName: {
+      fontSize: 17,
+      fontWeight: '600',
+      color: textColor,
+      marginBottom: 2,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    verifiedIcon: {
+      marginLeft: 4,
+    },
+    statusContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    doctorStatus: {
+      fontSize: 13,
+      color: secondaryText,
+      marginLeft: 6,
+    },
+    statusDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+    },
+    headerIcons: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    headerButton: {
+      padding: 8,
+      marginLeft: 8,
+    },
+    content: {
+      flex: 1,
   },
   messagesList: {
     padding: 15,
@@ -573,93 +681,141 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-    backgroundColor: '#fff',
+    backgroundColor: cardBackground,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderTopColor: borderColor,
     alignItems: 'center',
+  },
+  messageInput: {
+    flex: 1,
+    backgroundColor: inputBackground,
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginRight: 10,
+    maxHeight: 120,
+    color: textColor,
   },
   input: {
     flex: 1,
-    minHeight: 42,
-    maxHeight: 120,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 21,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginRight: 10,
-    fontSize: 16,
-    color: '#1a1a1a',
-    borderWidth: 1,
-    borderColor: '#f0f0f0',
-  },
-  sendButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  recordButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  stopButton: {
-    backgroundColor: '#EF4444',
-  },
-  recordingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffebee',
-    borderRadius: 21,
-    paddingHorizontal: 12,
-    height: 42,
-  },
-  recordingTime: {
-    color: '#EF4444',
-    fontWeight: '600',
-    marginLeft: 8,
-    minWidth: 40,
+    color: textColor,
   },
   audioMessage: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    marginTop: 4,
   },
   audioWaveform: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 12,
+    flex: 1,
     height: 30,
+    marginHorizontal: 8,
   },
   audioBar: {
-    width: 3,
-    marginHorizontal: 1.5,
-    borderRadius: 2,
+    height: 2,
+    backgroundColor: secondaryText,
+    marginVertical: 2,
   },
   userAudioBar: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: '#fff',
   },
   doctorAudioBar: {
-    backgroundColor: '#EF4444',
+    backgroundColor: secondaryText,
   },
   audioDuration: {
     fontSize: 12,
-    marginLeft: 4,
+    color: secondaryText,
   },
   userAudioDuration: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255,255,255,0.7)',
   },
   doctorAudioDuration: {
-    color: '#666',
+    color: secondaryText,
+  },
+  recordingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: darkMode ? '#3A1E1E' : '#FFEBEE',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
+  },
+  recordButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EF4444',
+  },
+  stopButton: {
+    backgroundColor: '#EF4444',
+  },
+  recordingTime: {
+    marginLeft: 8,
+    color: '#EF4444',
+    fontWeight: '600',
+  },
+  sendButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    width: '100%',
+    backgroundColor: cardBackground,
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+    color: textColor,
+  },
+  modalText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: secondaryText,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: darkMode ? '#333' : '#f0f0f0',
+    marginRight: 10,
+  },
+  confirmButton: {
+    backgroundColor: '#EF4444',
+  },
+  cancelButtonText: {
+    color: darkMode ? '#fff' : '#333',
+    fontWeight: '600',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
 });
+};

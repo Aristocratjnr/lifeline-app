@@ -2,8 +2,24 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, Modal, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyText: string;
+  modalBackground: string;
+  modalContent: string;
+  buttonBackground: string;
+  mythCard: string;
+  tipBox: string;
+  factBubble: string;
+}
 
 interface Myth {
   id: string;
@@ -53,8 +69,26 @@ const myths: Myth[] = [
 
 export default function MythBusterScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
   const [selectedMyth, setSelectedMyth] = useState<Myth | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    modalBackground: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+    modalContent: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    buttonBackground: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+    mythCard: isDarkMode ? '#2A2A2A' : '#FFF9E6',
+    tipBox: isDarkMode ? '#2A2A2A' : '#FFF8E1',
+    factBubble: isDarkMode ? '#1F2A1A' : '#F1F8E9',
+  };
 
   const [fontsLoaded] = useFonts({
     'JetBrainsMono-Regular': require('@/assets/fonts/JetBrainsMono-Regular.ttf'),
@@ -77,49 +111,49 @@ export default function MythBusterScreen() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
         source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['top', 'right', 'left']}>
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.6)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.89)' : 'rgba(255, 255, 255, 0.74)' }]} edges={['top', 'right', 'left']}>
           <ScrollView 
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.header}>
               <TouchableOpacity 
-                style={styles.backButton}
+                style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
                 onPress={() => router.back()}
               >
-                <MaterialIcons name="arrow-back" size={24} color="#333" />
+                <MaterialIcons name="arrow-back" size={24} color={colors.text} />
               </TouchableOpacity>
               
-              <Text style={styles.headerTitle}>MYTH BUSTER</Text>
+              <Text style={[styles.headerTitle, { color: colors.text }]}>MYTH BUSTER</Text>
               
-              <View style={styles.headerRight}>
+              <View style={[styles.headerRight, { backgroundColor: colors.buttonBackground }]}>
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/screens/guest')}
                 >
-                  <MaterialIcons name="person" size={24} color="#E53935" />
+                  <MaterialIcons name="person" size={24} color={colors.emergencyText} />
                 </TouchableOpacity>
-                <View style={styles.verticalLine} />
+                <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
                 <TouchableOpacity 
                   style={[styles.menuButton, styles.headerIconButton]}
                   onPress={() => router.push('/settings')}
                 >
-                  <MaterialIcons name="more-vert" size={24} color="#666" />
+                  <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
 
-            <View style={styles.contentContainer}>
-              <Text style={styles.sectionTitle}>Common First Aid Myths</Text>
-              <Text style={styles.introText}>
+            <View style={[styles.contentContainer, { backgroundColor: colors.card }]}>
+              <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFD54F' : '#FFB300' }]}>Common First Aid Myths</Text>
+              <Text style={[styles.introText, { color: colors.textSecondary }]}>
                 Tap on any myth card to learn the correct first aid practice and why the myth is dangerous.
               </Text>
               
@@ -127,27 +161,27 @@ export default function MythBusterScreen() {
                 {myths.map((item) => (
                   <TouchableOpacity 
                     key={item.id}
-                    style={styles.mythCard}
+                    style={[styles.mythCard, { backgroundColor: colors.mythCard }]}
                     onPress={() => handleMythPress(item)}
                     activeOpacity={0.8}
                   >
                     <View style={styles.mythHeader}>
                       <MaterialIcons name="warning" size={20} color="#E65100" style={styles.icon} />
-                      <Text style={styles.mythText}>Myth:</Text>
-                      <Text style={styles.mythContent} numberOfLines={2} ellipsizeMode="tail">{item.myth}</Text>
+                      <Text style={[styles.mythText, { color: isDarkMode ? '#FFAB40' : '#E65100' }]}>Myth:</Text>
+                      <Text style={[styles.mythContent, { color: colors.text }]} numberOfLines={2} ellipsizeMode="tail">{item.myth}</Text>
                     </View>
                     <View style={styles.factHeader}>
                       <MaterialIcons name="check-circle" size={20} color="#2E7D32" style={styles.icon} />
-                      <Text style={styles.factText}>Fact:</Text>
-                      <Text style={styles.factContent} numberOfLines={1} ellipsizeMode="tail">{item.fact}</Text>
+                      <Text style={[styles.factText, { color: isDarkMode ? '#81C784' : '#2E7D32' }]}>Fact:</Text>
+                      <Text style={[styles.factContent, { color: colors.textSecondary }]} numberOfLines={1} ellipsizeMode="tail">{item.fact}</Text>
                     </View>
                   </TouchableOpacity>
                 ))}
               </View>
               
-              <View style={styles.tipBox}>
+              <View style={[styles.tipBox, { backgroundColor: colors.tipBox }]}>
                 <MaterialIcons name="lightbulb" size={24} color="#FFB300" style={styles.tipIcon} />
-                <Text style={styles.tipText}>
+                <Text style={[styles.tipText, { color: colors.textSecondary }]}>
                   Always verify first aid information with reliable sources like the Red Cross or medical professionals.
                 </Text>
               </View>
@@ -159,18 +193,18 @@ export default function MythBusterScreen() {
                 visible={modalVisible}
                 onRequestClose={closeModal}
               >
-                <View style={styles.modalOverlay}>
+                <View style={[styles.modalOverlay, { backgroundColor: colors.modalBackground }]}>
                   <TouchableOpacity 
                     style={styles.modalBackground} 
                     activeOpacity={1}
                     onPress={closeModal}
                   >
-                    <View style={styles.modalContent}>
+                    <View style={[styles.modalContent, { backgroundColor: colors.modalContent }]}>
                       <TouchableOpacity 
                         style={styles.closeButton}
                         onPress={closeModal}
                       >
-                        <MaterialIcons name="close" size={24} color="#666" />
+                        <MaterialIcons name="close" size={24} color={colors.textSecondary} />
                       </TouchableOpacity>
                       
                       {selectedMyth && (
@@ -178,25 +212,25 @@ export default function MythBusterScreen() {
                           <View style={styles.modalHeader}>
                             <View style={styles.modalMythHeader}>
                               <MaterialIcons name="warning" size={20} color="#E65100" style={styles.modalIcon} />
-                              <Text style={styles.modalMythLabel}>Myth:</Text>
+                              <Text style={[styles.modalMythLabel, { color: isDarkMode ? '#FFAB40' : '#E65100' }]}>Myth:</Text>
                             </View>
-                            <Text style={styles.modalMythText}>{selectedMyth.myth}</Text>
+                            <Text style={[styles.modalMythText, { color: colors.text }]}>{selectedMyth.myth}</Text>
                             
-                            <View style={styles.factBubble}>
+                            <View style={[styles.factBubble, { backgroundColor: colors.factBubble }]}>
                               <View style={styles.factHeader}>
                                 <MaterialIcons name="check-circle" size={20} color="#2E7D32" style={styles.modalIcon} />
-                                <Text style={styles.factBubbleText}>Fact</Text>
+                                <Text style={[styles.factBubbleText, { color: isDarkMode ? '#81C784' : '#E65100' }]}>Fact</Text>
                               </View>
-                              <Text style={styles.factBubbleFact}>{selectedMyth.fact}</Text>
+                              <Text style={[styles.factBubbleFact, { color: colors.text }]}>{selectedMyth.fact}</Text>
                             </View>
                           </View>
                           
                           <View style={styles.modalBody}>
-                            <Text style={styles.modalSectionTitle}>Why it's wrong:</Text>
-                            <Text style={styles.explanationText}>{selectedMyth.explanation}</Text>
+                            <Text style={[styles.modalSectionTitle, { color: colors.text }]}>Why it&apos;s wrong:</Text>
+                            <Text style={[styles.explanationText, { color: colors.textSecondary }]}>{selectedMyth.explanation}</Text>
                             
                             {selectedMyth.source && (
-                              <Text style={styles.sourceText}>
+                              <Text style={[styles.sourceText, { color: colors.textSecondary }]}>
                                 Source: {selectedMyth.source}
                               </Text>
                             )}
@@ -262,14 +296,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
     textAlign: 'center',
     flex: 1,
@@ -277,7 +309,6 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 20,
     paddingHorizontal: 4,
   },
@@ -294,10 +325,8 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 1,
     height: 24,
-    backgroundColor: '#E0E0E0',
   },
   contentContainer: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000',
@@ -310,14 +339,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#FFB300',
     marginBottom: 16,
     textAlign: 'center',
   },
   introText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#444',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -325,7 +352,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   mythCard: {
-    backgroundColor: '#FFF9E6',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -345,13 +371,11 @@ const styles = StyleSheet.create({
   },
   mythText: {
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#E65100',
     marginRight: 8,
   },
   mythContent: {
     flex: 1,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#333',
     fontStyle: 'italic',
   },
   factHeader: {
@@ -360,16 +384,13 @@ const styles = StyleSheet.create({
   },
   factText: {
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#2E7D32',
     marginRight: 8,
   },
   factContent: {
     flex: 1,
-    color: '#444',
     lineHeight: 22,
   },
   tipBox: {
-    backgroundColor: '#FFF8E1',
     borderRadius: 12,
     padding: 16,
     marginTop: 16,
@@ -382,7 +403,6 @@ const styles = StyleSheet.create({
   },
   tipText: {
     flex: 1,
-    color: '#5D4037',
     fontStyle: 'italic',
     lineHeight: 20,
   },
@@ -390,7 +410,6 @@ const styles = StyleSheet.create({
   // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     padding: 20,
   },
@@ -399,7 +418,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 24,
     maxHeight: '80%',
@@ -416,19 +434,16 @@ const styles = StyleSheet.create({
   },
   modalMythLabel: {
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#E65100',
     fontSize: 16,
     marginBottom: 8,
   },
   modalMythText: {
     fontSize: 20,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#333',
     marginBottom: 20,
     lineHeight: 26,
   },
   factBubble: {
-    backgroundColor: '#F1F8E9',
     borderRadius: 12,
     padding: 16,
     elevation: 1,
@@ -443,13 +458,11 @@ const styles = StyleSheet.create({
   },
   factBubbleText: {
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#E65100',
     fontSize: 14,
     marginBottom: 4,
   },
   factBubbleFact: {
     fontSize: 16,
-    color: '#333',
     lineHeight: 22,
   },
   modalBody: {
@@ -458,18 +471,15 @@ const styles = StyleSheet.create({
   modalSectionTitle: {
     fontSize: 18,
     fontFamily: 'JetBrainsMono-Bold',
-    color: '#333',
     marginBottom: 12,
   },
   explanationText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#444',
     marginBottom: 16,
   },
   sourceText: {
     fontSize: 13,
-    color: '#666',
     fontStyle: 'italic',
   },
   gotItButton: {

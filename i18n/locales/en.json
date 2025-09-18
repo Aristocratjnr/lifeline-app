@@ -1,21 +1,58 @@
 {
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account? ",
+    "alreadyHaveAccount": "Already have an account? ",
+    "or": "or"
+  },
   "settings": {
     "title": "Settings",
+    "deleteAccount": {
+      "title": "Delete Account",
+      "manageTitle": "Manage Your Account",
+      "manageDescription": "Control your account settings, including deactivation and deletion options.",
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDescription": "Temporarily disable your account. You can reactivate it by logging in again.",
+      "deactivateButton": "DEACTIVATE ACCOUNT",
+      "deleteTitle": "Delete Account Permanently",
+      "deleteDescription": "We are really sorry to see you go. Are you sure you want to delete your account?",
+      "deleteWarning": "This is irreversible and will remove your account and all data from Lifeline.",
+      "deleteButton": "DELETE ACCOUNT"
+    },
+    "guest": {
+      "title": "Guest Settings",
+      "subtitle": "Access basic settings",
+      "authTitle": "Sign in to access more features",
+      "authSubtitle": "Get personalized emergency contacts, save preferences, and sync across devices"
+    },
     "profile": {
       "title": "Profile",
-      "subtitle": "Manage your profile"
+      "subtitle": "Manage your profile",
+      "selectGender": "",
+      "personalInfo": "Personal Information"
     },
     "notifications": {
       "title": "Notifications",
-      "subtitle": "Configure alerts"
+      "subtitle": "Configure alerts",
+      "general": "",
+      "dailyTips": "",
+      "appUpdate": "",
+      "upToDate": "",
+      "email": "",
+      "sound": ""
     },
     "language": {
       "title": "Language",
-      "subtitle": "Change language"
+      "subtitle": "Change app language"
     },
     "display": {
       "title": "Display",
-      "subtitle": "Text & appearance",
+      "subtitle": "Text size and appearance",
       "brightness": "Brightness",
       "textSize": "Text Size",
       "small": "A",
@@ -32,32 +69,47 @@
     },
     "terms": {
       "title": "Terms of Use",
-      "subtitle": "Legal information"
+      "subtitle": "App terms and conditions"
     },
     "about": {
       "title": "About",
-      "subtitle": "App information"
+      "subtitle": "App info and version"
     },
     "offline": {
       "title": "Offline Content",
-      "subtitle": "Manage downloads"
+      "subtitle": "Manage downloads",
+      "headerTitle": "",
+      "description": ""
     },
     "help": {
       "title": "Help",
-      "subtitle": "Support & FAQ"
+      "subtitle": "Get support and FAQs"
     },
     "delete": {
       "title": "Delete Account",
       "subtitle": "Remove your data"
     },
     "brightness": "Brightness",
-    "eyeProtection": "Eye Protection"
+    "eyeProtection": "Eye Protection",
+    "profileSettings": {
+      "passwordPlaceholder": "",
+      "valuePlaceholder": "",
+      "maskedPassword": "",
+      "saveChanges": "",
+      "male": "",
+      "female": "",
+      "other": ""
+    }
   },
   "common": {
     "on": "On",
     "off": "Off",
     "next": "NEXT",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deactivate": "Deactivate"
   },
   "languages": {
     "title": "LANGUAGE",
@@ -65,7 +117,11 @@
     "noResults": "No languages found",
     "tryAgain": "Try a different search term",
     "comingSoon": "MORE LANGUAGES COMING SOON!!!",
-    "submit": "SUBMIT"
+    "submit": "SUBMIT",
+    "error": "",
+    "languageChangeFailed": "",
+    "noLanguageSelected": "",
+    "pleaseSelectLanguage": ""
   },
   "dashboard": {
     "healthStats": "Health Stats",
@@ -213,9 +269,50 @@
       "poison": "Poison Control"
     }
   },
+  "alerts": {
+    "deactivateAccount": {
+      "title": "Deactivate Account",
+      "message": "Are you sure you want to deactivate your account? You can reactivate it later by logging in."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "message": "This action is irreversible. All your data will be permanently deleted."
+    }
+  },
   "display": {
     "brightness": "Brightness",
     "eyeProtection": "Eye Protection"
+  },
+  "dashboard": {
+    "callDoctor": "Call Doctor",
+    "emergencyAssistance": "Emergency Assistance",
+    "emergencyAssistanceText": "Need immediate medical help? Connect with a doctor now.",
+    "healthStats": "Health Stats",
+    "steps": "Steps",
+    "water": "Water Intake",
+    "dailyTip": "DAILY TIP",
+    "lifelineHistory": "Lifeline History"
+  },
+  "common": {
+    "female": "Female",
+    "male": "Male",
+    "other": "Other"
+  },
+  "conditions": {
+    "commonCold": "Common Cold"
+  },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish",
+    "french": "French"
+  },
+  "status": {
+    "active": "Active"
+  },
+  "profile": {
+    "age": "Age",
+    "gender": "Gender",
+    "language": "Language"
   },
   "callLogs": {
     "title": "Call Logs",
@@ -308,6 +405,183 @@
       "insectBite": "INSECT\nBITE",
       "sunBurn": "SUN\nBURN",
       "fertile": "Febrile"
+    },
+    "splinter": {
+      "title": "",
+      "initialAssessment": "",
+      "initialDescription": "",
+      "removal": "",
+      "removalDescription": "",
+      "cleaning": "",
+      "cleaningDescription": "",
+      "whenToSeekHelp": "",
+      "whenToSeekHelpDescription": ""
+    }
+  },
+  "buttons": {
+    "next": ""
+  },
+  "termsUse": {
+    "share": {
+      "message": "",
+      "title": ""
+    },
+    "header": "",
+    "intro": {
+      "agreement": "",
+      "rightsResponsibilities": "",
+      "reviewTerms": ""
+    },
+    "seeMore": "",
+    "links": {
+      "privacyPolicy": "",
+      "faqs": "",
+      "shareApp": "",
+      "visitWebsite": ""
+    },
+    "sections": {
+      "acceptanceOfTerms": {
+        "title": "",
+        "description": ""
+      },
+      "useOfApplication": {
+        "title": "",
+        "description": ""
+      },
+      "userResponsibilities": {
+        "title": "",
+        "description": ""
+      },
+      "intellectualProperty": {
+        "title": "",
+        "description": ""
+      },
+      "disclaimerOfWarranties": {
+        "title": "",
+        "description": ""
+      },
+      "limitationOfLiability": {
+        "title": "",
+        "description": ""
+      },
+      "updatesAndChanges": {
+        "title": "",
+        "description": ""
+      },
+      "contactInformation": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+  "profile": {
+    "title": "",
+    "description": "",
+    "country": "",
+    "confirmLocation": "",
+    "selectCountry": ""
+  },
+  "help": {
+    "header": "",
+    "title": "",
+    "description": "",
+    "donate": "",
+    "startLiveChat": "",
+    "contactUs": "",
+    "email": "",
+    "phone": "",
+    "solution": ""
+  },
+  "guest": {
+    "title": "",
+    "description": "",
+    "name": "",
+    "namePlaceholder": "",
+    "phoneNumber": "",
+    "preferredLanguages": "",
+    "gender": "",
+    "selectGender": "",
+    "confirm": ""
+  },
+  "faqs": {
+    "questions": {
+      "whatIsLifeline": "",
+      "whatIsLifelineAnswer": "",
+      "substituteForProfessionalHelp": "",
+      "substituteForProfessionalHelpAnswer": "",
+      "symptomCheckerWork": "",
+      "symptomCheckerWorkAnswer": "",
+      "symptomCheckerDiagnose": "",
+      "symptomCheckerDiagnoseAnswer": "",
+      "firstAidGuides": "",
+      "firstAidGuidesAnswer": "",
+      "updateLifeline": "",
+      "updateLifelineAnswer": "",
+      "offlineUse": "",
+      "offlineUseAnswer": "",
+      "dataSecurity": "",
+      "dataSecurityAnswer": "",
+      "contactSupport": "",
+      "contactSupportAnswer": ""
+    },
+    "headerTitle": "",
+    "introTitle": "",
+    "introText": "",
+    "contactTitle": "",
+    "contactText": "",
+    "contactButton": ""
+  },
+  "empower": {
+    "title": "",
+    "description": ""
+  },
+  "donate": {
+    "title": "Support Lifeline",
+    "subtitle": "Your donation helps us continue providing life-saving first aid information and emergency assistance to those in need.",
+    "donateNow": "Donate Now",
+    "paymentDetails": "Payment Details",
+    "telecelCash": "Telecel Cash",
+    "mtnMomo": "MTN Mobile Money",
+    "davidAccount": "David Asiedu",
+    "bankGcb": "GCB Bank Account",
+    "daniellaAccount": "Daniella Asiedu",
+    "usdtWallet": "USDT Wallet (TRC20)",
+    "thankYouAlert": "Thank you for your generous donation! Your support helps save lives.",
+    "close": "Close",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
+  },
+  "completed": {
+    "title": "",
+    "subtitle": "",
+    "goHome": ""
+  },
+  "about": {
+    "header": "",
+    "aboutLifeline": "",
+    "lifelineDescription": "",
+    "appVersion": "",
+    "versionNumber": "",
+    "acknowledgement": "",
+    "acknowledgementDescription": "",
+    "daniellaCredit": "",
+    "davidCredit": "",
+    "specialMention": "",
+    "stephenCredit": ""
+  },
+  "Calling emergency services": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "Finding a doctor near you": {
+    "": {
+      "": {
+        "": ""
+      }
     }
   }
 }

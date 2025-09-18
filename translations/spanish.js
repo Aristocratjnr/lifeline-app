@@ -23,12 +23,15 @@ export default {
 
   // Auth screens
   "auth": {
-    "login": "Log In",
-    "signup": "Sign Up",
-    "forgotPassword": "Forgot Password?",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password"
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "or": "o",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña"
   },
 
   // Doctor screen
@@ -60,12 +63,35 @@ export default {
 
   // Settings
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "notifications": "Notifications",
-    "theme": "Theme",
-    "privacy": "Privacy",
-    "about": "About",
-    "logout": "Log out"
+    "title": "Configuración",
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Cambiar idioma de la aplicación"
+    },
+    "display": {
+      "title": "Pantalla",
+      "subtitle": "Tamaño de texto y apariencia"
+    },
+    "terms": {
+      "title": "Términos de Uso",
+      "subtitle": "Términos y condiciones de la aplicación"
+    },
+    "about": {
+      "title": "Acerca de",
+      "subtitle": "Información y versión de la aplicación"
+    },
+    "help": {
+      "title": "Ayuda",
+      "subtitle": "Obtener soporte y preguntas frecuentes"
+    },
+    "guest": {
+      "title": "Configuración de Invitado",
+      "authTitle": "Inicia sesión para acceder a más funciones",
+      "authSubtitle": "Obtén contactos de emergencia personalizados, guarda preferencias y sincroniza en dispositivos"
+    },
+    "notifications": "Notificaciones",
+    "theme": "Tema",
+    "privacy": "Privacidad",
+    "logout": "Cerrar sesión"
   }
 }

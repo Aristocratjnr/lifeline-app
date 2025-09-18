@@ -35,9 +35,9 @@ const FirstAidGuides: React.FC = () => {
   
   // Define category types for filtering
   const categoryTypes = {
-    emergency: ["10","12", "16"],
-    exposures: ["1", "2", "3", "13", "4",  "7", "8", "14","11", "15"],
-    internal: ["5", "9", "6",]
+    emergency: ["10","12", "16", "19", "21", "23", "25", "27","26"],
+    exposures: ["1", "2", "3", "13", "4",  "7", "8", "14","11", "15", "17", "24"],
+    internal: ["5", "9", "6", "18", "20", "22"]
   };
 
   const firstAidCategories: FirstAidCategory[] = [
@@ -57,6 +57,18 @@ const FirstAidGuides: React.FC = () => {
     { id: "14", title: t('firstAid.categories.insectBite'), imageSource: require("../../assets/images/insect_bite.png") },
     { id: "15", title: t('firstAid.categories.sunBurn'), imageSource: require("../../assets/images/sun_burn.png") },
     { id: "16", title: t('firstAid.categories.fertile'), imageSource: require("../../assets/images/fertile.png") },
+    { id: "17", title: t('firstAid.categories.bugs'), imageSource: require("../../assets/images/bugs.png") },
+    { id: "18", title: t('firstAid.categories.cold'), imageSource: require("../../assets/images/cold.png") },
+    { id: "19", title: t('firstAid.categories.cpr'), imageSource: require("../../assets/images/cpr.png") },
+    { id: "20", title: t('firstAid.categories.chest'), imageSource: require("../../assets/images/chest.png") },
+    { id: "21", title: t('firstAid.categories.faint'), imageSource: require("../../assets/images/faint.png") },
+    { id: "22", title: t('firstAid.categories.head'), imageSource: require("../../assets/images/head.png") },
+    { id: "23", title: t('firstAid.categories.heart'), imageSource: require("../../assets/images/heart.png") },
+    { id: "24", title: t('firstAid.categories.rabbies'), imageSource: require("../../assets/images/rabbies.png") },
+    { id: "25", title: t('firstAid.categories.shock'), imageSource: require("../../assets/images/shock.png") },
+    { id: "26", title: t('firstAid.categories.skin-rash'), imageSource: require("../../assets/images/skin-rash.png") },
+    { id: "27", title: t('firstAid.categories.head-injury'), imageSource: require("../../assets/images/head-injury.png") },
+
   ];
 
   // Load fonts
@@ -103,6 +115,17 @@ const FirstAidGuides: React.FC = () => {
           case "14": router.push('/screens/first-aid-details/insect-bite'); break;
           case "15": router.push('/screens/first-aid-details/sun-burn'); break;
           case "16": router.push('/screens/first-aid-details/fertile'); break;
+          case "17": router.push('./first-aid-details/bugs'); break;
+          case "18": router.push('./first-aid-details/cold'); break;
+          case "19": router.push('./first-aid-details/cpr'); break;
+          case "20": router.push('./first-aid-details/chest'); break;
+          case "21": router.push('./first-aid-details/faint'); break;
+          case "22": router.push('./first-aid-details/head'); break;
+          case "23": router.push('./first-aid-details/heart'); break;
+          case "24": router.push('./first-aid-details/rabbies'); break;
+          case "25": router.push('./first-aid-details/shock'); break;
+          case "26": router.push('./first-aid-details/skin-rash'); break;
+          case "27": router.push('./first-aid-details/head-injury'); break;
           default: router.push('/screens/firstAidGuide');
         }
       }}
@@ -124,7 +147,10 @@ const FirstAidGuides: React.FC = () => {
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('firstAid.title')}</Text>

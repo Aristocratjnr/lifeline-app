@@ -1,6 +1,7 @@
 export default {
   // Common UI elements
   "common": {
+    "copyright": "©",
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
@@ -11,10 +12,39 @@ export default {
     "next": "Next",
     "search": "Search",
     "off": "Off",
-    "on": "On"
+    "on": "On",
+    "getStarted": "Get Started",
+    "close": "Close",
+    "delete": "Delete",
+    "deactivate": "Deactivate",
+    "female": "Female",
+    "male": "Male",
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "allRightsReserved": "All rights reserved",
+    "version": "Version",
+    "logout": "Logout"
+  },
+  
+  // Medical conditions
+  "conditions": {
+    "commonCold": "Common Cold",
+    "healthy": "Healthy"
+  },
+  
+  // Status indicators
+  "status": {
+    "active": "Active"
   },
 
   // Navigation and tabs
+  "tabs": {
+    "home": "Home",
+    "maps": "Maps",
+    "news": "News",
+    "settings": "Settings"
+  },
   "navigation": {
     "home": "Home",
     "profile": "Profile",
@@ -49,7 +79,7 @@ export default {
     "selectCountry": "Select Country"
   },
 
-  // Languages screen
+  // Languages
   "languages": {
     "title": "LANGUAGE",
     "searchPlaceholder": "Search for language",
@@ -62,12 +92,32 @@ export default {
     "languageChanged": "Language Changed",
     "languageChangedTo": "Language has been changed to",
     "error": "Error",
-    "languageChangeFailed": "Failed to change language. Please try again."
+    "languageChangeFailed": "Failed to change language. Please try again.",
+    "english": "English"
   },
 
   // Settings
   "settings": {
     "title": "Settings",
+    "profile": {
+      "personalInfo": "Personal Information",
+      "title": "Profile",
+      "subtitle": "Manage your personal information",
+      "maskedPassword": "****************",
+      "selectGender": "Select Gender"
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "manageTitle": "Manage Your Account",
+      "manageDescription": "Control your account settings, including deactivation and deletion options.",
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDescription": "Temporarily disable your account. You can reactivate it by logging in again.",
+      "deactivateButton": "DEACTIVATE ACCOUNT",
+      "deleteTitle": "Delete Account Permanently",
+      "deleteDescription": "We are really sorry to see you go. Are you sure you want to delete your account?",
+      "deleteWarning": "This is irreversible and will remove your account and all data from Lifeline.",
+      "deleteButton": "DELETE ACCOUNT"
+    },
     "account": "Account",
     "language": "Language",
     "notifications": "Notifications",
@@ -75,12 +125,6 @@ export default {
     "about": "About",
     "logout": "Logout",
     "privacy": "Privacy",
-    "profile": {
-      "title": "Profile",
-      "subtitle": "Manage your personal information",
-      "maskedPassword": "****************",
-      "selectGender": "Select Gender"
-    },
     "profileSettings": {
       "title": "PROFILE",
       "saveChanges": "SAVE CHANGES",
@@ -90,20 +134,6 @@ export default {
       "maskedPassword": "****************",
       "passwordPlaceholder": "Enter password",
       "valuePlaceholder": "Enter value"
-    },
-    "notifications": {
-      "title": "Notifications",
-      "subtitle": "Manage your notification preferences",
-      "general": "General Notifications",
-      "dailyTips": "Daily Tips",
-      "appUpdate": "App Update",
-      "upToDate": "(Up-to-date)",
-      "email": "Email Notifications",
-      "sound": "Sound"
-    },
-    "language": {
-      "title": "Language",
-      "subtitle": "Select your preferred language"
     },
     "display": {
       "title": "Display",
@@ -126,10 +156,6 @@ export default {
       "title": "Terms & Conditions",
       "subtitle": "Review our terms of service"
     },
-    "about": {
-      "title": "About",
-      "subtitle": "Learn more about our application"
-    },
     "offline": {
       "title": "Offline Mode",
       "subtitle": "Manage offline content",
@@ -143,14 +169,26 @@ export default {
     "delete": {
       "title": "Delete Account",
       "subtitle": "Permanently delete your account and data"
+    },
+    "guest": {
+      "title": "Guest Settings",
+      "subtitle": "Sign in to access all features and save your preferences",
+      "authTitle": "Sign in to access more features",
+      "authSubtitle": "Get personalized emergency contacts, save preferences, and sync across devices"
     }
   },
 
   // Dashboard
   "dashboard": {
+    "emergencyAssistance": "Emergency Assistance",
+    "emergencyAssistanceText": "Need immediate medical help? Connect with a doctor now.",
+    "callDoctor": "Call Doctor",
     "healthStats": "Health Stats",
     "steps": "Steps",
-    "water": "Water",
+    "clothingLayers": "Clothing Layers",
+    "layers": "light-shirt",
+    "singleLayer":  "light-shirt",
+    "clothing": "Clothing",
     "dailyTip": "DAILY TIP",
     "lifelineHistory": "Lifeline History",
     "recentActivity": "Recent Activity",
@@ -163,7 +201,7 @@ export default {
     "fracture": "Fracture",
     "cough": "Cough",
     "burns": "Burns",
-    "lastVisited": "Last Visited: 02, May, 2025",
+    "lastVisited": "Last Visited",
     "age": "Age",
     "gender": "Gender",
     "location": "Location",
@@ -171,6 +209,22 @@ export default {
     "language": "Language",
     "editProfile": "Edit Profile",
     "newTipEveryDay": "New tip every day"
+  },
+  
+  // Profile translations
+  "profile": {
+    "title": "Profile",
+    "guest": "Guest User",
+    "notSpecified": "Not Specified",
+    "locationNotSet": "Location Not Set",
+    "age": "Age",
+    "gender": "Gender",
+    "language": "Language",
+    "lastVisit": "Last Visit",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   },
 
   // Tips section (new)
@@ -199,10 +253,24 @@ export default {
   "home": {
     "title": "Welcome to LIFELINE",
     "subtitle": "Your trusted first aid & emergency companion",
+    "tapForTips": "Tap to get your first aid tips",
     "featureText": "Always Ready - Always Safe",
     "signIn": "Sign In",
     "createAccount": "Create Account",
-    "continueAsGuest": "Continue as a Guest"
+    "continueAsGuest": "Continue as a Guest",
+    "welcome": "Hello, Welcome!",
+    "emergencyTitle1": "In an",
+    "emergencyTitle2": "Emergency",
+    "emergencyTitle3": "We're your",
+    "emergencyTitle4": "LIFELINE",
+    "quizTitle": "Test Your Knowledge",
+    "quizSubtitle": "and potentially save a life",
+    "takeQuiz": "Take Quiz Now",
+    "hubTitle": "First Aid Hub",
+    "hubSubtitle": "Essential medical information at your fingertips",
+    "tapCategoryInstruction": "Tap any category to view its contents",
+    "preventionTipsTitle": "Prevention Tips",
+    "emergencyNote": "Call emergency services (191) for life-threatening conditions"
   },
 
   // Donate screen
@@ -218,7 +286,10 @@ export default {
     "bankGcb": "Bank(GCB):",
     "usdtWallet": "USDT Wallet TRC20:",
     "close": "Close",
-    "thankYouAlert": "Thank you so much! 🥲"
+    "thankYouAlert": "Thank you so much! 🥲",
+    "description": "Your contribution makes a difference",
+    "thankYou": "Thank You",
+    "thankYouMessage": "We appreciate your support!"
   },
 
   // Help screen
@@ -236,6 +307,8 @@ export default {
 
   // About screen
   "about": {
+    "title": "About Us",
+    "aboutUs": "About Us",
     "header": "ABOUT",
     "aboutLifeline": "About LIFELINE",
     "lifelineDescription": "Lifeline provides instant access to crucial first-aid information during emergencies, ensuring you're prepared to act quickly and effectively.",
@@ -416,13 +489,35 @@ export default {
     "title": "Medical Assistant",
     "description": "Hi! I'm your medical assistant. I can connect you with a professional doctor for immediate consultation.",
     "callDoctor": "Call Doctor Now",
-    "connecting": "Connecting to doctor..."
+    "connecting": "Connecting to doctor...",
+    "available247": "Available 24/7"
+  },
+  "alerts": {
+    "deactivateAccount": {
+      "title": "Deactivate Account",
+      "message": "Are you sure you want to deactivate your account? You can reactivate it later by logging in."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "message": "This action is irreversible. All your data will be permanently deleted."
+    }
   },
   "callLogs": {
     "title": "Call Logs",
     "outgoing": "Outgoing",
     "incoming": "Incoming",
     "missed": "Missed"
+  },
+  "aiAssistant": {
+    "welcomeMessage": "Hello! I'm your Lifeline AI Assistant. How can I help you with first aid or emergency care today?",
+    "localResponses": {
+      "cpr": "CPR (Cardiopulmonary Resuscitation) is an emergency procedure performed when someone's breathing or heartbeat has stopped. Here are the basic steps:\n\n1. Call emergency services\n2. Place the heel of one hand on the center of the chest\n3. Place the other hand on top and interlock your fingers\n4. Press down hard and fast (100-120 compressions per minute)\n5. After 30 compressions, give 2 rescue breaths if trained\n6. Continue until help arrives or the person starts breathing\n\nNote: This is general advice. For proper CPR training, please take a certified course.",
+      "choking": "If someone is choking, follow these steps:\n\n1. Ask: \"Are you choking?\"\n2. If they can't speak or breathe, stand behind them\n3. Place one foot between their feet for balance\n4. Make a fist with one hand, thumb side in\n5. Place just above their belly button\n6. Grasp your fist with your other hand\n7. Give quick, upward thrusts (Heimlich maneuver)\n8. Continue until object is expelled or person becomes unconscious\n\nCall emergency services if the obstruction isn't cleared quickly.",
+      "burn": "For minor burns:\n\n1. Cool the burn under cool (not cold) running water for 10-15 minutes\n2. Remove tight items before swelling starts\n3. Apply aloe vera or moisturizer\n4. Cover with sterile, non-stick bandage\n5. Take over-the-counter pain relievers if needed\n\nFor severe burns (larger than 3 inches, or on face, hands, feet, etc.):\n1. Call emergency services\n2. Don't remove burned clothing stuck to skin\n3. Don't immerse large burns in cold water\n4. Cover loosely with clean cloth\n5. Elevate burned area if possible",
+      "bleeding": "To control bleeding:\n\n1. Have the injured person lie down\n2. Remove any visible debris but don't probe the wound\n3. Apply direct pressure using a clean cloth or bandage\n4. Maintain pressure until bleeding stops\n5. If blood soaks through, don't remove the cloth - add more layers\n6. Once bleeding stops, secure the dressing with a bandage\n\nSeek emergency care if:\n- Bleeding is severe\n- Blood is spurting\n- Bleeding doesn't stop after 10 minutes of pressure\n- The wound is deep, large, or caused by a serious injury",
+      "whoAreYou": "I'm your Lifeline AI Assistant, here to provide guidance on first aid and emergency care. I can help with:\n\n• First aid instructions\n• Emergency procedures\n• Health and safety tips\n• And more!\n\nRemember, while I can provide general information, I'm not a substitute for professional medical advice in an emergency.",
+      "whatCanYouDo": "I can help you with various first aid and emergency situations including:\n\n• CPR and choking procedures\n• Wound care and bleeding control\n• Burn treatment\n• Fracture and sprain management\n• Allergic reactions\n• Poisoning\n• And many other medical emergencies\n\nJust ask me about any first aid topic, and I'll provide clear, step-by-step guidance."
+    }
   },
   "firstAid": {
     "title": "FIRST AID GUIDES",
@@ -446,7 +541,112 @@ export default {
       "noseBleed": "NOSE BLEED",
       "insectBite": "INSECT BITE",
       "sunBurn": "SUN BURN",
-      "fertile": "FEBRILE SEIZURE"
+      "fertile": "FEBRILE SEIZURE",
+      "rabbies": "RABIES",
+      "shock": "SHOCK",
+      "skin-rash": "SKIN RASH",
+      "head-injury": "HEAD INJURY",
+      "bugs": "INSECT BITES & STINGS",
+      "cold": "COLD EXPOSURE",
+      "cpr": "CPR",
+      "chest": "CHEST PAIN",
+      "faint": "FAINTING",
+      "head": "HEADACHE",
+      "heart": "HEART ATTACK"
+    }
+  },
+
+  // Privacy Policy
+  "app": {
+    "name": "Lifeline"
+  },
+  
+  "footer": {
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "rightsReserved": "All rights reserved"
+  },
+  
+  "appointments": {
+    "upcoming": "Upcoming Appointments",
+    "past": "Past Appointments",
+    "noUpcoming": "No upcoming appointments",
+    "noPast": "No past appointments",
+    "bookNow": "Book Now",
+    "viewAll": "View All",
+    "viewDetails": "View Details",
+    "appointmentDetails": "Appointment Details",
+    "appointmentInfo": "Appointment Information",
+    "doctor": "Doctor",
+    "specialty": "Specialty",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "notes": "Notes",
+    "reschedule": "Reschedule"
+  },
+
+  "privacyPolicy": {
+    "header": "Privacy Policy",
+    "intro": {
+      "privacyImportant": "Your privacy is important to us. This Privacy Policy explains how LIFELINE collects, uses, and protects your personal information when you use our emergency response application.",
+      "howWeCollect": "We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner.",
+      "policyExplains": "This policy explains what information we collect, how we use it, and what rights you have regarding your data."
+    },
+    "seeMore": "See More",
+    "links": {
+      "termsUse": "Terms of Use",
+      "faqs": "FAQs",
+      "shareApp": "Share App",
+      "visitWebsite": "Visit Website"
+    },
+    "share": {
+      "title": "Share LIFELINE App",
+      "message": "Download LIFELINE - Your emergency response companion. Available on App Store and Google Play."
+    },
+    "sections": {
+      "informationWeCollect": {
+        "title": "Information We Collect",
+        "description1": "We collect information you provide directly to us, such as when you create an account, contact us for support, or use our emergency services.",
+        "description2": "This may include your name, email address, phone number, location data, and emergency contact information."
+      },
+      "howWeUseInformation": {
+        "title": "How We Use Your Information",
+        "description": "We use the information we collect to provide, maintain, and improve our services, respond to emergencies, communicate with you, and ensure the safety and security of our users."
+      },
+      "informationSharing": {
+        "title": "Information Sharing",
+        "description": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except in emergency situations or as required by law."
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "description": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+      },
+      "yourRights": {
+        "title": "Your Rights",
+        "description": "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us."
+      },
+      "childrenPrivacy": {
+        "title": "Children's Privacy",
+        "description": "Our service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13."
+      },
+      "changesToPolicy": {
+        "title": "Changes to This Policy",
+        "description": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page."
+      },
+      "contactUs": {
+        "title": "Contact Us",
+        "description": "If you have any questions about this Privacy Policy, please contact us at privacy@lifeline.app or through our support channels."
+      },
+      "internationalDataTransfers": {
+        "title": "International Data Transfers",
+        "description": "Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your data."
+      },
+      "lastUpdated": {
+        "title": "Last Updated",
+        "description": "This Privacy Policy was last updated on August 12, 2025. Please check back periodically for updates."
+      }
     }
   }
 }

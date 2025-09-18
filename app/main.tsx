@@ -4,8 +4,32 @@ import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, Image, ImageBackground, Modal, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useDisplayPreferences } from '../context/DisplayPreferencesContext';
+
+// Define the color scheme interface
+interface ColorScheme {
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  emergencyCard: string;
+  emergencyText: string;
+  tabActive: string;
+  tabInactive: string;
+  modalBackground: string;
+  modalContent: string;
+}
+
+// Define props for TabBar component
+interface TabBarProps {
+  isDarkMode: boolean;
+  colors: ColorScheme;
+  router: any; // You might want to properly type this with your router type
+}
 
 // Interface for first aid tip items
 interface FirstAidTip {
@@ -14,14 +38,37 @@ interface FirstAidTip {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   description: string;
+  preventionTips: {
+    title: string;
+    content: string;
+    icon: keyof typeof Ionicons.glyphMap;
+  }[];
 }
 
 export default function MainScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { darkMode } = useDisplayPreferences();
+  const isDarkMode = darkMode;
   const [showTipsModal, setShowTipsModal] = useState(false);
-  const [showHubModal, setShowHubModal] = useState(false);
+  const [selectedTip, setSelectedTip] = useState<FirstAidTip | null>(null);
+  
+  // Colors based on theme
+  const colors: ColorScheme = {
+    background: isDarkMode ? '#121212' : '#F8F9FA',
+    card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#333333',
+    textSecondary: isDarkMode ? '#B0B0B0' : '#666666',
+    border: isDarkMode ? '#333333' : '#E0E0E0',
+    emergencyCard: isDarkMode ? '#2A1A1A' : '#FFE5E5',
+    emergencyText: isDarkMode ? '#FF9E9E' : '#E53935',
+    tabActive: isDarkMode ? '#FF6B6B' : '#E53935',
+    tabInactive: isDarkMode ? '#666666' : '#666666',
+    modalBackground: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
+    modalContent: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+  };
 
-  // First aid tips data
+  // First aid tips data with detailed tips for each category
   const firstAidTips: FirstAidTip[] = [
     {
       id: '1',
@@ -29,6 +76,23 @@ export default function MainScreen() {
       icon: 'heart-circle-outline',
       color: '#FF6B6B',
       description: '30 chest compressions followed by 2 rescue breaths',
+      preventionTips: [
+        {
+          title: "Learn CPR",
+          content: "Take a certified CPR course to be prepared for emergencies and practice regularly to maintain skills.",
+          icon: "school-outline"
+        },
+        {
+          title: "Keep Emergency Numbers Handy",
+          content: "Program emergency numbers in your phone and keep them easily accessible for quick dialing.",
+          icon: "call-outline"
+        },
+        {
+          title: "Know Risk Factors",
+          content: "Be aware of heart disease risk factors and encourage regular health checkups for family members.",
+          icon: "heart-outline"
+        }
+      ]
     },
     {
       id: '2',
@@ -36,6 +100,23 @@ export default function MainScreen() {
       icon: 'person-remove-outline',
       color: '#4ECDC4',
       description: '5 back blows between shoulder blades, then 5 abdominal thrusts',
+      preventionTips: [
+        {
+          title: "Cut Food Properly",
+          content: "Cut food into small pieces, especially for children and elderly. Avoid hard candies for small children.",
+          icon: "restaurant-outline"
+        },
+        {
+          title: "Eat Slowly",
+          content: "Chew food thoroughly and eat slowly. Avoid talking or laughing while chewing large bites.",
+          icon: "time-outline"
+        },
+        {
+          title: "Supervise Children",
+          content: "Watch young children while eating and keep small objects that could cause choking out of reach.",
+          icon: "eye-outline"
+        }
+      ]
     },
     {
       id: '3',
@@ -43,6 +124,23 @@ export default function MainScreen() {
       icon: 'water-outline',
       color: '#FF9F43',
       description: 'Apply direct pressure with a clean cloth or bandage',
+      preventionTips: [
+        {
+          title: "Keep First Aid Kit Stocked",
+          content: "Maintain a well-stocked first aid kit with sterile gauze, bandages, and antiseptic supplies.",
+          icon: "medical-outline"
+        },
+        {
+          title: "Handle Sharp Objects Safely",
+          content: "Use proper technique when handling knives, glass, or sharp tools. Keep them clean and stored safely.",
+          icon: "warning-outline"
+        },
+        {
+          title: "Wear Protective Gear",
+          content: "Use appropriate safety equipment when doing activities that could cause cuts or injuries.",
+          icon: "shield-outline"
+        }
+      ]
     },
     {
       id: '4',
@@ -50,6 +148,23 @@ export default function MainScreen() {
       icon: 'flame-outline',
       color: '#FF9F43',
       description: 'Cool with running water for 10-15 minutes',
+      preventionTips: [
+        {
+          title: "Kitchen Safety",
+          content: "Keep pot handles turned inward, use oven mitts, and be careful around hot surfaces and liquids.",
+          icon: "flame-outline"
+        },
+        {
+          title: "Check Water Temperature",
+          content: "Test bath water temperature before use, especially for children and elderly. Set water heater below 120°F.",
+          icon: "thermometer-outline"
+        },
+        {
+          title: "Fire Safety",
+          content: "Install smoke detectors, have fire extinguishers accessible, and create family fire escape plans.",
+          icon: "alarm-outline"
+        }
+      ]
     },
     {
       id: '5',
@@ -57,6 +172,23 @@ export default function MainScreen() {
       icon: 'body-outline',
       color: '#5F27CD',
       description: 'Immobilize the injured area and seek medical help',
+      preventionTips: [
+        {
+          title: "Home Safety",
+          content: "Remove tripping hazards, use non-slip mats, ensure good lighting, and install handrails on stairs.",
+          icon: "home-outline"
+        },
+        {
+          title: "Bone Health",
+          content: "Maintain strong bones with calcium-rich diet, vitamin D, and regular weight-bearing exercise.",
+          icon: "fitness-outline"
+        },
+        {
+          title: "Fall Prevention",
+          content: "Wear appropriate footwear, use assistive devices if needed, and be extra careful on wet surfaces.",
+          icon: "walk-outline"
+        }
+      ]
     },
     {
       id: '6',
@@ -64,7 +196,24 @@ export default function MainScreen() {
       icon: 'flask-outline',
       color: '#1DD1A1',
       description: 'Call poison control immediately',
-    },
+      preventionTips: [
+        {
+          title: "Secure Household Chemicals",
+          content: "Store cleaning products, medications, and chemicals in locked cabinets away from children.",
+          icon: "lock-closed-outline"
+        },
+        {
+          title: "Label Everything",
+          content: "Keep all substances in original containers with labels. Never store chemicals in food containers.",
+          icon: "pricetag-outline"
+        },
+        {
+          title: "Install Safety Latches",
+          content: "Use child-proof latches on cabinets containing potentially dangerous substances.",
+          icon: "shield-checkmark-outline"
+        }
+      ]
+    }
   ];
 
   // Load JetBrains Mono font
@@ -78,74 +227,74 @@ export default function MainScreen() {
   }
 
   // Tab bar component
-  const TabBar = () => (
-    <View style={styles.tabBar}>
+  const TabBar = ({ isDarkMode, colors, router }: TabBarProps) => (
+    <View style={[styles.tabBar, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
       <TouchableOpacity 
-        style={[styles.tabItem, styles.activeTab]}
-        onPress={() => router.push('/main')}
+        style={styles.tabItem}
+        onPress={() => router.push('/')}
       >
-        <MaterialIcons name="home" size={24} color="#E53935" />
-        <Text style={[styles.tabText, { color: '#E53935' }]}>Home</Text>
+        <MaterialIcons name="home" size={24} color={colors.tabActive} />
+        <Text style={[styles.tabText, { color: colors.tabActive }]}>{t('tabs.home')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/explore')}
+        onPress={() => router.push('/ExploreScreen')}
       >
-        <MaterialIcons name="place" size={24} color="#666" />
-        <Text style={styles.tabText}>Maps</Text>
+        <MaterialIcons name="place" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.maps')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/firstAidNews')}
+        onPress={() => router.push('/NewsScreen')}
       >
-        <MaterialIcons name="newspaper" size={24} color="#666" />
-        <Text style={styles.tabText}>News</Text>
+        <MaterialIcons name="newspaper" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.news')}</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.tabItem}
-        onPress={() => router.push('/(tabs)/settings')}
+        onPress={() => router.push('/screens/guest-settings')}
       >
-        <MaterialIcons name="settings" size={24} color="#666" />
-        <Text style={styles.tabText}>Settings</Text>
+        <MaterialIcons name="settings" size={24} color={colors.tabInactive} />
+        <Text style={[styles.tabText, { color: colors.textSecondary }]}>{t('tabs.settings')}</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       
       <ImageBackground 
-        source={require('@/assets/images/blur.png')}
-        style={styles.backgroundImage}
+        source={isDarkMode ? require('@/assets/images/blur.png') : require('@/assets/images/blur.png')}
+        style={[styles.backgroundImage, { backgroundColor: colors.background }]}
         resizeMode="cover"
       >
-        <View style={styles.overlay} />
-        <SafeAreaView style={styles.container} edges={['right', 'left']}>
-          <TabBar />
+        <View style={[styles.overlay, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)' }]} />
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['right', 'left']}>
+          <TabBar isDarkMode={isDarkMode} colors={colors} router={router} />
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.welcomeText}>Hello! Welcome</Text>
+            <Text style={[styles.welcomeText, { color: colors.text }]}>{t('home.welcome')}</Text>
             <View style={styles.headerRight}>
               <TouchableOpacity 
                 style={styles.menuButton}
                 onPress={() => router.push('/screens/guest')}
               >
-                <MaterialIcons name="person" size={24} color="#E53935" />
+                <MaterialIcons name="person" size={24} color={colors.emergencyText} />
               </TouchableOpacity>
-              <View style={styles.verticalLine} />
+              <View style={[styles.verticalLine, { backgroundColor: colors.border }]} />
               <TouchableOpacity 
                 style={styles.menuButton}
-                onPress={() => router.push('/(tabs)/settings')}
+                onPress={() => router.push('/screens/guest-settings')}
               >
-                <MaterialIcons name="more-vert" size={24} color="#666" />
+                <MaterialIcons name="more-vert" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -157,18 +306,18 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE', '#FFB5B5']}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A', '#4A3A3A'] : ['#FFE5E5', '#FFCECE', '#FFB5B5']}
               style={styles.emergencyGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.emergencyContent}>
                 <View style={styles.emergencyTextContainer}>
-                  <Text style={styles.emergencyTitle}>
-                    In an{'\n'}
-                    <Text style={{fontWeight: '900'}}>Emergency</Text>,
-                    {'\n'}We&apos;re your{'\n'}
-                    <Text style={styles.emergencyHighlight}>Lifeline</Text>
+                  <Text style={[styles.emergencyTitle, { color: colors.emergencyText }]}>
+                    {t('home.emergencyTitle1')}{'\n'}
+                    <Text style={{fontWeight: '900'}}>{t('home.emergencyTitle2')}</Text>{'\n'}
+                    {t('home.emergencyTitle3')}{'\n'}
+                    <Text style={[styles.emergencyHighlight, { color: colors.emergencyText }]}>{t('home.emergencyTitle4')}</Text>
                   </Text>
                   
                   <TouchableOpacity 
@@ -176,7 +325,7 @@ export default function MainScreen() {
                     onPress={() => router.push('/screens/firstAidGuide')}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.getStartedText}>Get Started!</Text>
+                    <Text style={[styles.getStartedText, { color: '#FFFFFF' }]}>{t('common.getStarted')}</Text>
                   </TouchableOpacity>
                 </View>
                 
@@ -208,7 +357,7 @@ export default function MainScreen() {
             >
               <View style={styles.tipsContent}>
                 <View style={styles.tipsTextContainer}>
-                  <Text style={styles.tipsTitle}>Tap to get{'\n'}First Aid Tips</Text>
+                  <Text style={styles.tipsTitle}>{t('home.tapForTips')}</Text>
                 </View>
                 <Image
                   source={require('@/assets/images/aid.png')}
@@ -224,33 +373,98 @@ export default function MainScreen() {
             animationType="slide"
             transparent={true}
             visible={showTipsModal}
-            onRequestClose={() => setShowTipsModal(false)}
+            onRequestClose={() => {
+              setShowTipsModal(false);
+              setSelectedTip(null);
+            }}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>First Aid Tips</Text>
+            <View style={[styles.modalOverlay, { backgroundColor: colors.modalBackground }]}>
+              <View style={[styles.modalContent, { backgroundColor: colors.modalContent }]}>
+                <View style={[styles.modalHeader, { borderBottomColor: isDarkMode ? '#333333' : '#F0F0F0' }]}>
+                  <Text style={[styles.modalTitle, { color: colors.text }]}>
+                    {selectedTip ? selectedTip.title : 'First Aid Tips'}
+                  </Text>
                   <TouchableOpacity 
-                    onPress={() => setShowTipsModal(false)}
+                    onPress={() => {
+                      if (selectedTip) {
+                        setSelectedTip(null);
+                      } else {
+                        setShowTipsModal(false);
+                      }
+                    }}
                     style={styles.closeButton}
                   >
-                    <Ionicons name="close" size={24} color="#666" />
+                    <Ionicons 
+                      name={selectedTip ? "arrow-back" : "close"} 
+                      size={24} 
+                      color={colors.textSecondary}
+                    />
                   </TouchableOpacity>
                 </View>
                 
-                <ScrollView style={styles.tipsList}>
-                  {firstAidTips.map((tip) => (
-                    <View key={tip.id} style={styles.tipItem}>
-                      <View style={[styles.tipIconContainer, { backgroundColor: `${tip.color}20` }]}>
-                        <Ionicons name={tip.icon} size={28} color={tip.color} />
+                {!selectedTip ? (
+                  // Show all categories
+                  <ScrollView style={styles.tipsList}>
+                    <Text style={[styles.instructionText, { color: colors.textSecondary }]}>
+                      {t('home.tapCategoryInstruction')}
+                    </Text>
+                    {firstAidTips.map((tip) => (
+                      <TouchableOpacity 
+                        key={tip.id} 
+                        style={[styles.tipItem, { backgroundColor: colors.card }]}
+                        onPress={() => setSelectedTip(tip)}
+                        activeOpacity={0.7}
+                      >
+                        <View style={[styles.tipIconContainer, { backgroundColor: `${tip.color}20` }]}>
+                          <Ionicons name={tip.icon} size={28} color={tip.color} />
+                        </View>
+                        <View style={styles.tipTextContainer}>
+                          <Text style={[styles.tipTitle, { color: colors.text }]}>{tip.title}</Text>
+                          <Text style={[styles.tipDescription, { color: colors.textSecondary }]}>{tip.description}</Text>
+                        </View>
+                        <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                ) : (
+                  // Show detailed tips for selected category
+                  <ScrollView style={styles.detailedTipsList}>
+                    <View style={[styles.selectedTipHeader, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#F8F9FA' }]}>
+                      <View style={[styles.selectedTipIcon, { backgroundColor: `${selectedTip.color}20` }]}>
+                        <Ionicons name={selectedTip.icon} size={32} color={selectedTip.color} />
                       </View>
-                      <View style={styles.tipTextContainer}>
-                        <Text style={styles.tipTitle}>{tip.title}</Text>
-                        <Text style={styles.tipDescription}>{tip.description}</Text>
-                      </View>
+                      <Text style={[styles.selectedTipDescription, { color: colors.text }]}>
+                        {selectedTip.description}
+                      </Text>
                     </View>
-                  ))}
-                </ScrollView>
+                    
+                    <Text style={[styles.detailedTipsTitle, { color: colors.text }]}>{t('home.preventionTipsTitle')}</Text>
+                    
+                    {selectedTip.preventionTips.map((tip, index) => (
+                      <View key={index} style={[styles.detailedTipItem, { backgroundColor: colors.card }]}>
+                        <View style={styles.tipIconContainer}>
+                          <Ionicons name={tip.icon} size={20} color={selectedTip.color} />
+                        </View>
+                        <View style={styles.tipContentContainer}>
+                          <Text style={[styles.preventionTipTitle, { color: colors.text }]}>{tip.title}</Text>
+                          <Text style={[styles.detailedTipText, { color: colors.text }]}>{tip.content}</Text>
+                        </View>
+                      </View>
+                    ))}
+                    
+                    <View style={[styles.emergencyNote, { 
+                      backgroundColor: isDarkMode ? 'rgba(255, 107, 107, 0.1)' : '#FFF3E0',
+                      borderColor: isDarkMode ? 'rgba(255, 107, 107, 0.3)' : '#FFE0B2'
+                    }]}>
+                      <Ionicons name="warning" size={20} color="#FF6B6B" />
+                      <Text style={[styles.emergencyNoteText, { 
+                        color: isDarkMode ? '#FF9E9E' : '#E65100'
+                      }]}>
+                        {t('home.emergencyNote')}
+                      </Text>
+                    </View>
+                  </ScrollView>
+                )}
               </View>
             </View>
           </Modal>
@@ -262,8 +476,8 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE']}
-              style={styles.quizGradient}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A'] : ['#FFE5E5', '#FFCECE']}
+              style={[styles.quizGradient, { backgroundColor: colors.card }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
@@ -276,11 +490,11 @@ export default function MainScreen() {
                   />
                 </View>
                 <View style={styles.quizTextContainer}>
-                  <Text style={styles.quizTitle}>Take a quiz to brainstorm</Text>
-                  <Text style={styles.quizSubtitle}>on how well you can save a life</Text>
+                  <Text style={[styles.quizTitle, { color: colors.text }]}>{t('home.quizTitle')}</Text>
+                  <Text style={[styles.quizSubtitle, { color: colors.textSecondary }]}>{t('home.quizSubtitle')}</Text>
                   
                   <View style={styles.quizButtonContainer}>
-                    <Text style={styles.quizButtonText}>Take Quiz Now</Text>
+                    <Text style={styles.quizButtonText}>{t('home.takeQuiz')}</Text>
                   </View>
                 </View>
               </View>
@@ -294,15 +508,15 @@ export default function MainScreen() {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#FFE5E5', '#FFCECE']}
-              style={styles.hubGradient}
+              colors={isDarkMode ? ['#2A1A1A', '#3A2A2A'] : ['#FFE5E5', '#FFCECE']}
+              style={[styles.hubGradient, { backgroundColor: colors.card }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.hubContent}>
                 <View style={styles.hubTextContainer}>
-                  <Text style={styles.hubTitle}>First Aid Hub 🚑</Text>
-                  <Text style={styles.hubSubtitle}>Comprehensive first aid resources</Text>
+                  <Text style={[styles.hubTitle, { color: colors.text }]}>{t('home.hubTitle')} 🚑</Text>
+                  <Text style={[styles.hubSubtitle, { color: colors.textSecondary }]}>{t('home.hubSubtitle')}</Text>
                 </View>
                 <View style={styles.hubIconContainer}>
                   <Image
@@ -537,11 +751,9 @@ const styles = StyleSheet.create({
   // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
@@ -554,16 +766,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     fontFamily: 'JetBrainsMono-Bold',
   },
   closeButton: {
     padding: 4,
+  },
+  instructionText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 16,
+    fontStyle: 'italic',
+    fontFamily: 'JetBrainsMono-Regular',
   },
   tipsList: {
     marginBottom: 20,
@@ -571,7 +788,6 @@ const styles = StyleSheet.create({
   tipItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -595,14 +811,86 @@ const styles = StyleSheet.create({
   tipTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
   },
   tipDescription: {
     fontSize: 13,
-    color: '#666',
     lineHeight: 18,
+  },
+  
+  // Detailed Tips Styles
+  detailedTipsList: {
+    marginBottom: 20,
+  },
+  selectedTipHeader: {
+    alignItems: 'center',
+    marginBottom: 20,
+    padding: 16,
+    borderRadius: 12,
+  },
+  selectedTipIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  selectedTipDescription: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  detailedTipsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  detailedTipItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+    padding: 12,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  tipContentContainer: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  preventionTipTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  detailedTipText: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 20,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  emergencyNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+    borderWidth: 1,
+  },
+  emergencyNoteText: {
+    flex: 1,
+    fontSize: 13,
+    marginLeft: 8,
+    fontWeight: '500',
+    fontFamily: 'JetBrainsMono-Regular',
   },
 
   // Quiz Card Styles
@@ -721,121 +1009,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  hubModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  hubModalContent: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    width: '90%',
-    maxWidth: 500,
-    maxHeight: '90%',
-    alignSelf: 'center',
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    marginHorizontal: 16,
-  },
-  hubCloseButton: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    zIndex: 1,
-    padding: 4,
-  },
-  hubModalHeader: {
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingTop: 10,
-  },
-  hubModalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
-    marginTop: 12,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  hubModalSubtitle: {
-    fontSize: 15,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  hubModalBody: {
-    marginBottom: 20,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    padding: 12,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-  },
-  featureIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  featureText: {
-    flex: 1,
-    fontSize: 15,
-    color: '#263238',
-    fontFamily: 'JetBrainsMono-Regular',
-  },
-  hubModalFooter: {
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#EEE',
-  },
-  notifyText: {
-    fontSize: 16,
-    color: '#37474F',
-    textAlign: 'center',
-    marginBottom: 16,
-    fontFamily: 'JetBrainsMono-Bold',
-  },
-  notifyInputContainer: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#DDD',
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  notifyInput: {
-    flex: 1,
-    padding: 12,
-    fontSize: 14,
-    color: '#333',
-    backgroundColor: '#FFF',
-    minWidth: 0, 
-  },
-  notifyButton: {
-    backgroundColor: '#E53935',
-    paddingHorizontal: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  notifyButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
-    fontFamily: 'JetBrainsMono-Bold',
   },
   hubImage: {
     width: '150%',
