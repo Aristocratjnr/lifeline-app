@@ -93,6 +93,7 @@ const DashboardScreen = () => {
       bloodPressure: "120/80",
       weight: "65 kg",
       temperature: "36.5°C",
+      healthRiskScore: 23, // Percentage risk score
     }),
     [],
   )
@@ -425,6 +426,141 @@ const DashboardScreen = () => {
     router.replace('/main');
   }, [router]);
 
+  // AI Health Risk Prediction System
+  const [healthRisks, setHealthRisks] = useState<{
+    riskLevel: 'low' | 'moderate' | 'high';
+    primaryRisk: string;
+    secondaryRisks: string[];
+    recommendations: string[];
+    riskScore: number;
+  }>({
+    riskLevel: 'low',
+    primaryRisk: '',
+    secondaryRisks: [],
+    recommendations: [],
+    riskScore: 0
+  });
+
+  // Calculate health risks based on multiple factors
+  useEffect(() => {
+    // Don't calculate until we have weather data
+    if (weatherLoading) return;
+
+    const calculateHealthRisks = () => {
+      // Initialize risk factors
+      const risks: {[key: string]: number} = {
+        dehydration: 0,
+        heatStroke: 0,
+        respiratoryIssues: 0,
+        hypothermia: 0,
+        slipFall: 0,
+        muscleCramps: 0,
+        allergies: 0,
+      };
+      
+      const recommendations: string[] = [];
+      
+      // Analyze weather conditions
+      if (weatherData.temperature > 30) {
+        risks.dehydration += 30;
+        risks.heatStroke += 25;
+        recommendations.push("Stay hydrated and avoid direct sun exposure");
+      } else if (weatherData.temperature > 25) {
+        risks.dehydration += 20;
+        recommendations.push("Remember to drink water regularly");
+      } else if (weatherData.temperature < 5) {
+        risks.hypothermia += 30;
+        recommendations.push("Dress in layers and keep extremities covered");
+      }
+      
+      // Check humidity factors
+      if (weatherData.humidity > 80) {
+        risks.respiratoryIssues += 15;
+        risks.allergies += 10;
+        recommendations.push("High humidity may affect breathing; take breaks if needed");
+      }
+      
+      // Analyze weather conditions + clothing
+      if (weatherData.temperature > 25 && healthStats.clothingLayers > 1) {
+        risks.heatStroke += 15;
+        recommendations.push("Consider lighter clothing for today's weather");
+      } else if (weatherData.temperature < 10 && healthStats.clothingLayers < 2) {
+        risks.hypothermia += 20;
+        recommendations.push("Your current clothing may be too light for today's weather");
+      }
+      
+      // Wind considerations
+      if (weatherData.windSpeed > 25) {
+        risks.respiratoryIssues += 10;
+        recommendations.push("Strong winds today - consider a mask if you have respiratory conditions");
+      }
+      
+      // Activity level analysis
+      if (healthStats.steps < 1000) {
+        risks.muscleCramps += 10;
+        recommendations.push("You're less active today - consider a short walk");
+      }
+      
+      // Health metrics analysis
+      const systolic = parseInt(healthStats.bloodPressure.split('/')[0]);
+      if (systolic > 130) {
+        recommendations.push("Monitor your blood pressure throughout the day");
+      }
+      
+      // Rain/wet conditions
+      if (weatherData.condition.toLowerCase().includes('rain') || 
+          weatherData.description.toLowerCase().includes('rain')) {
+        risks.slipFall += 25;
+        recommendations.push("Wet conditions today - take care when walking outside");
+      }
+      
+      // Get top risks
+      const sortedRisks = Object.entries(risks)
+        .sort((a, b) => b[1] - a[1])
+        .filter(risk => risk[1] > 0);
+      
+      const primaryRisk = sortedRisks.length > 0 ? formatRiskName(sortedRisks[0][0]) : "No significant risks";
+      const secondaryRisks = sortedRisks.slice(1, 3).map(risk => formatRiskName(risk[0]));
+      
+      // Calculate overall risk score (0-100)
+      const maxRiskValue = sortedRisks.length > 0 ? sortedRisks[0][1] : 0;
+      const riskScore = Math.min(Math.round(maxRiskValue + (sortedRisks.length * 5)), 100);
+      
+      // Determine risk level
+      let riskLevel: 'low' | 'moderate' | 'high' = 'low';
+      if (riskScore > 50) riskLevel = 'high';
+      else if (riskScore > 25) riskLevel = 'moderate';
+      
+      // De-duplicate and limit recommendations
+      const uniqueRecommendations = [...new Set(recommendations)].slice(0, 3);
+      
+      setHealthRisks({
+        riskLevel,
+        primaryRisk,
+        secondaryRisks,
+        recommendations: uniqueRecommendations,
+        riskScore
+      });
+    };
+    
+    calculateHealthRisks();
+  }, [weatherData, weatherLoading, healthStats]);
+  
+  // Helper function to format risk names
+  const formatRiskName = (riskKey: string): string => {
+    const formattedRisks: {[key: string]: string} = {
+      dehydration: "Dehydration",
+      heatStroke: "Heat Stroke",
+      respiratoryIssues: "Respiratory Issues",
+      hypothermia: "Cold Exposure",
+      slipFall: "Slip & Fall",
+      muscleCramps: "Muscle Cramps",
+      allergies: "Allergy Flare-up"
+    };
+    
+    return formattedRisks[riskKey] || riskKey;
+  };
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: themeStyles.container.backgroundColor }]}>
       <View style={styles.headerContainer}>
@@ -604,6 +740,133 @@ const DashboardScreen = () => {
                   </Text>
                 </View>
               </View>
+            </View>
+          </View>
+          
+          {/* AI Health Risk Predictor */}
+          <View style={[styles.healthRiskContainer, themeStyles.profileCard]}>
+            <View style={styles.healthRiskHeader}>
+              <View style={styles.healthRiskTitleContainer}>
+                <Text style={[styles.sectionTitle, { color: themeStyles.timelineTitle.color, marginBottom: 4 }]}>
+                  Health Risk Predictor
+                </Text>
+                <Text style={[styles.healthRiskSubtitle, themeStyles.detailLabel]}>
+                  Personalized analysis based on your environment and health
+                </Text>
+              </View>
+              
+              {/* Risk Level Indicator */}
+              <View style={[
+                styles.riskLevelBadge, 
+                { backgroundColor: 
+                  healthRisks.riskLevel === 'high' ? 'rgba(244, 67, 54, 0.15)' : 
+                  healthRisks.riskLevel === 'moderate' ? 'rgba(255, 152, 0, 0.15)' : 
+                  'rgba(76, 175, 80, 0.15)' 
+                }
+              ]}>
+                <Text style={[
+                  styles.riskLevelText,
+                  { 
+                    color: 
+                      healthRisks.riskLevel === 'high' ? '#F44336' : 
+                      healthRisks.riskLevel === 'moderate' ? '#FF9800' : 
+                      '#4CAF50'
+                  }
+                ]}>
+                  {healthRisks.riskLevel.toUpperCase()} RISK
+                </Text>
+              </View>
+            </View>
+            
+            {/* Risk Gauge */}
+            <View style={styles.riskGaugeContainer}>
+              <AnimatedCircularProgress
+                size={70}
+                width={7}
+                fill={healthRisks.riskScore}
+                tintColor={
+                  healthRisks.riskLevel === 'high' ? '#F44336' : 
+                  healthRisks.riskLevel === 'moderate' ? '#FF9800' : 
+                  '#4CAF50'
+                }
+                backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                rotation={0}
+                lineCap="round"
+              >
+                {() => (
+                  <View style={styles.riskGaugeContent}>
+                    <MaterialIcons 
+                      name={
+                        healthRisks.riskLevel === 'high' ? 'warning' : 
+                        healthRisks.riskLevel === 'moderate' ? 'info' : 
+                        'check-circle'
+                      } 
+                      size={20} 
+                      color={
+                        healthRisks.riskLevel === 'high' ? '#F44336' : 
+                        healthRisks.riskLevel === 'moderate' ? '#FF9800' : 
+                        '#4CAF50'
+                      } 
+                    />
+                    <Text style={[
+                      styles.riskScoreText, 
+                      { 
+                        color: 
+                          healthRisks.riskLevel === 'high' ? '#F44336' : 
+                          healthRisks.riskLevel === 'moderate' ? '#FF9800' : 
+                          '#4CAF50'
+                      }
+                    ]}>
+                      {healthRisks.riskScore}%
+                    </Text>
+                  </View>
+                )}
+              </AnimatedCircularProgress>
+              
+              <View style={styles.riskDetailsContainer}>
+                {healthRisks.primaryRisk ? (
+                  <>
+                    <Text style={[styles.primaryRiskText, themeStyles.timelineTitle]}>
+                      {healthRisks.primaryRisk}
+                    </Text>
+                    {healthRisks.secondaryRisks.length > 0 && (
+                      <Text style={[styles.secondaryRiskText, themeStyles.timelineDate]}>
+                        Also: {healthRisks.secondaryRisks.join(', ')}
+                      </Text>
+                    )}
+                  </>
+                ) : (
+                  <Text style={[styles.primaryRiskText, themeStyles.timelineTitle]}>
+                    No significant risks detected
+                  </Text>
+                )}
+              </View>
+            </View>
+            
+            {/* Recommendations */}
+            {healthRisks.recommendations.length > 0 && (
+              <View style={[styles.recommendationsContainer, themeStyles.healthRiskRecommendation]}>
+                <Text style={[styles.recommendationsTitle, themeStyles.dailyTipTitle]}>
+                  Today&apos;s Recommendations
+                </Text>
+                {healthRisks.recommendations.map((recommendation, index) => (
+                  <View key={index} style={styles.recommendationRow}>
+                    <View style={styles.recommendationBullet}>
+                      <MaterialIcons name="arrow-right" size={16} color="#4CAF50" />
+                    </View>
+                    <Text style={[styles.recommendationText, themeStyles.detailValue]}>
+                      {recommendation}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+            
+            <View style={styles.aiDisclaimer}>
+              <MaterialIcons name="info-outline" size={12} color={darkMode ? '#999' : '#777'} />
+              <Text style={[styles.aiDisclaimerText, { color: darkMode ? '#999' : '#777' }]}>
+                Powered by AI analysis of weather data and your health metrics
+              </Text>
             </View>
           </View>
           
@@ -1013,6 +1276,9 @@ const getThemeStyles = (isDark: boolean) => ({
     backgroundColor: 'transparent',
     borderTopColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
   },
+  healthRiskRecommendation: {
+    backgroundColor: isDark ? 'rgba(76, 175, 80, 0.08)' : 'rgba(76, 175, 80, 0.05)',
+  }
 });
 
 const styles = StyleSheet.create({
@@ -1757,6 +2023,114 @@ const styles = StyleSheet.create({
     fontWeight: '600' as const,
     marginBottom: 4,
     fontFamily: 'JetBrainsMono-Bold',
+  },
+  
+  // Health Risk Predictor Styles
+  healthRiskContainer: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  healthRiskHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  healthRiskTitleContainer: {
+    flex: 1,
+  },
+  healthRiskSubtitle: {
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  riskLevelBadge: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
+  },
+  riskLevelText: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  riskGaugeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  riskGaugeContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  riskScoreText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 2,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  riskDetailsContainer: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  primaryRiskText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'JetBrainsMono-Bold',
+    marginBottom: 4,
+  },
+  secondaryRiskText: {
+    fontSize: 12,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  recommendationsContainer: {
+    marginTop: 8,
+    padding: 12,
+    backgroundColor: 'rgba(76, 175, 80, 0.05)',
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  recommendationsTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    fontFamily: 'JetBrainsMono-Bold',
+  },
+  recommendationRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    alignItems: 'flex-start',
+  },
+  recommendationBullet: {
+    marginRight: 8,
+    marginTop: 2,
+  },
+  recommendationText: {
+    fontSize: 13,
+    flex: 1,
+    lineHeight: 18,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  aiDisclaimer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
+  },
+  aiDisclaimerText: {
+    fontSize: 10,
+    marginLeft: 4,
+    fontFamily: 'JetBrainsMono-Regular',
+    fontStyle: 'italic',
   },
 });
 
