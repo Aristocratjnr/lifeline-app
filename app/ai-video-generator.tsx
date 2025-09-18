@@ -3,15 +3,15 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; // HeyGen API configuration
 const HEYGEN_API_KEY = process.env.EXPO_PUBLIC_HEYGEN_API_KEY;
@@ -80,7 +80,28 @@ export default function AIVideoGeneratorScreen() {
     'Jack_public_pro_20230619'
   ];
 
+  // Available voice IDs (fallback system)
+  const availableVoices = [
+    'nova',                // Common HeyGen voices
+    'bella',
+    'daniel',
+    'emma',
+    'jenny',
+    '11labs_Bella',        // 11Labs voices - likely to work
+    '11labs_Rachel',
+    '11labs_Domi',
+    '11labs_Antoni',
+    'eleven_monolingual_v1',
+    'eleven_multilingual_v2',
+    'eleven_english_sts_v2',
+    'en_us_001',           // Standard voices
+    'en_us_002',
+    'en_us_006',
+    'en_us_010'
+  ];
+
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
+  const [currentVoiceIndex, setCurrentVoiceIndex] = useState(0);
 
   // First aid topics for suggestions
   const firstAidTopics = [
@@ -127,42 +148,34 @@ export default function AIVideoGeneratorScreen() {
     try {
       setVideoStatus('Testing API connection...');
       
-      // First try to get available avatars from the API
-      try {
-        const avatarResponse = await fetch('https://api.heygen.com/v2/avatars', {
-          method: 'GET',
-          headers: {
-            'X-API-Key': HEYGEN_API_KEY,
-          }
-        });
-
-        if (avatarResponse.ok) {
-          const avatarData = await avatarResponse.json();
-          console.log('Available avatars from API:', avatarData);
-          if (avatarData.data && avatarData.data.length > 0) {
-            // Use the first available avatar
-            const firstAvatar = avatarData.data[0];
-            const workingAvatarId = firstAvatar.avatar_id;
-            
-            // Test this avatar
-            const testRequest = {
-              video_inputs: [
-                {
-                  character: {
-                    type: 'avatar',
-                    avatar_id: workingAvatarId
-                  },
-                  voice: {
-                    type: 'text',
-                    voice_id: '2d5b0e6cf36f460aa7fc47e3eee3f03e',
-                    input_text: 'This is a test message.'
-                  }
+      // Try all combinations of avatars and voices until we find one that works
+      for (let a = 0; a < availableAvatars.length; a++) {
+        const avatarId = availableAvatars[a];
+        console.log(`Testing avatar: ${avatarId}`);
+        
+        for (let v = 0; v < availableVoices.length; v++) {
+          const voiceId = availableVoices[v];
+          console.log(`Testing voice: ${voiceId}`);
+          
+          const testRequest = {
+            video_inputs: [
+              {
+                character: {
+                  type: 'avatar',
+                  avatar_id: avatarId
+                },
+                voice: {
+                  type: 'text',
+                  voice_id: voiceId,
+                  input_text: 'This is a test message.'
                 }
-              ],
-              test: true
-            };
+              }
+            ],
+            test: true
+          };
 
-            const testResponse = await fetch(HEYGEN_API_URL, {
+          try {
+            const response = await fetch(HEYGEN_API_URL, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -171,71 +184,37 @@ export default function AIVideoGeneratorScreen() {
               body: JSON.stringify(testRequest)
             });
 
-            if (testResponse.ok) {
-              setVideoStatus(`API connection successful! Using avatar: ${workingAvatarId}`);
-              setCurrentAvatarIndex(0); // Use first avatar
-              // Update the first position with working avatar
-              availableAvatars[0] = workingAvatarId;
-              console.log('API test successful with dynamic avatar');
+            const data = await response.json();
+            
+            if (response.ok) {
+              setVideoStatus(`API connection successful! Using avatar: ${avatarId} and voice: ${voiceId}`);
+              setCurrentAvatarIndex(a);
+              setCurrentVoiceIndex(v);
+              console.log('API test successful:', data);
               return;
-            }
-          }
-        }
-      } catch (apiError) {
-        console.log('Could not fetch avatars from API, trying predefined list...', apiError);
-      }
-      
-      // Fallback to predefined list
-      for (let i = 0; i < availableAvatars.length; i++) {
-        const avatarId = availableAvatars[i];
-        console.log(`Testing avatar: ${avatarId}`);
-        
-        const testRequest = {
-          video_inputs: [
-            {
-              character: {
-                type: 'avatar',
-                avatar_id: avatarId
-              },
-              voice: {
-                type: 'text',
-                voice_id: '2d5b0e6cf36f460aa7fc47e3eee3f03e',
-                input_text: 'This is a test message.'
+            } else {
+              console.error('API test failed:', data);
+              if (data.error?.code === 'avatar_not_found') {
+                console.log(`Avatar ${avatarId} not found, trying next...`);
+                break; // Skip to next avatar
+              } else if (data.error?.code === 'invalid_parameter' && data.error?.message?.includes('Voice not found')) {
+                console.log(`Voice ${voiceId} not found, trying next voice...`);
+                continue; // Try next voice with same avatar
+              } else {
+                // Other error, try next combination
+                console.log(`Error with avatar ${avatarId} and voice ${voiceId}: ${data.error?.message || 'Unknown error'}`);
+                continue;
               }
             }
-          ],
-          test: true
-        };
-
-        const response = await fetch(HEYGEN_API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': HEYGEN_API_KEY,
-          },
-          body: JSON.stringify(testRequest)
-        });
-
-        const data = await response.json();
-        
-        if (response.ok) {
-          setVideoStatus(`API connection successful! Using avatar: ${avatarId}`);
-          setCurrentAvatarIndex(i); // Save working avatar
-          console.log('API test successful:', data);
-          return;
-        } else if (data.error?.code === 'avatar_not_found') {
-          console.log(`Avatar ${avatarId} not found, trying next...`);
-          continue;
-        } else {
-          // Other error, stop trying
-          setVideoStatus(`API test failed: ${data.error?.message || data.message || 'Unknown error'}`);
-          console.error('API test failed:', data);
-          return;
+          } catch (error) {
+            console.error('API request error:', error);
+            continue; // Try next combination
+          }
         }
       }
       
-      // If we get here, no avatars worked
-      setVideoStatus('No working avatars found. Please check your account or contact support.');
+      // If we get here, no combinations worked
+      setVideoStatus('No working avatar and voice combination found. Please check your account or contact support.');
       
     } catch (error) {
       setVideoStatus('API connection failed');
@@ -272,7 +251,7 @@ export default function AIVideoGeneratorScreen() {
             },
             voice: {
               type: 'text',
-              voice_id: '2d5b0e6cf36f460aa7fc47e3eee3f03e',
+              voice_id: availableVoices[currentVoiceIndex],
               input_text: script
             },
             background: {
