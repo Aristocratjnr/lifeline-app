@@ -35,8 +35,8 @@ const FirstAidGuides: React.FC = () => {
   
   // Define category types for filtering
   const categoryTypes = {
-    emergency: ["10","12", "16", "19", "21", "23", "25", "27"],
-    exposures: ["1", "2", "3", "13", "4",  "7", "8", "14","11", "15", "17", "24", "26"],
+    emergency: ["10","12", "16", "19", "21", "23", "25", "27","26"],
+    exposures: ["1", "2", "3", "13", "4",  "7", "8", "14","11", "15", "17", "24"],
     internal: ["5", "9", "6", "18", "20", "22"]
   };
 
@@ -147,7 +147,10 @@ const FirstAidGuides: React.FC = () => {
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('firstAid.title')}</Text>

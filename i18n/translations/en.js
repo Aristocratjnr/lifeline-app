@@ -541,7 +541,18 @@ export default {
       "noseBleed": "NOSE BLEED",
       "insectBite": "INSECT BITE",
       "sunBurn": "SUN BURN",
-      "fertile": "FEBRILE SEIZURE"
+      "fertile": "FEBRILE SEIZURE",
+      "rabbies": "RABIES",
+      "shock": "SHOCK",
+      "skin-rash": "SKIN RASH",
+      "head-injury": "HEAD INJURY",
+      "bugs": "INSECT BITES & STINGS",
+      "cold": "COLD EXPOSURE",
+      "cpr": "CPR",
+      "chest": "CHEST PAIN",
+      "faint": "FAINTING",
+      "head": "HEADACHE",
+      "heart": "HEART ATTACK"
     }
   },
 

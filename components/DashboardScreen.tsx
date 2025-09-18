@@ -88,6 +88,7 @@ const DashboardScreen = () => {
       steps: 1700,
       lastCheckup: "25/06/25",
       clothingLayers: 1, 
+      clothingType: "Light Shirt",
       heartRate: 72,
       bloodPressure: "120/80",
       weight: "65 kg",
@@ -659,19 +660,30 @@ const DashboardScreen = () => {
                 <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
               </View>
               
-              {/* Clothing Layers refined display */}
-              <View style={{ alignItems: 'center', justifyContent: 'center', padding: 10, minWidth: 90 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
-                  <FontAwesome5 name="tshirt" size={16} color="#FFA726" style={{ marginRight: 6 }} />
-                  <Text style={{ fontSize: 12, color: themeStyles.statLabel.color, fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.1 }}>
-                    {t('dashboard.clothing')}
-                  </Text>
-                </View>
-                <Text style={{ fontSize: 13, color: themeStyles.statValue.color, fontFamily: 'JetBrainsMono-Bold', textAlign: 'center' }}>
-                  {healthStats.clothingLayers === 1
-                    ? t('dashboard.singleLayer')
-                    : `${healthStats.clothingLayers} ${t('dashboard.layers')}`}
-                </Text>
+              {/* Clothing Layers in circular shape */}
+              <View style={styles.circularProgressContainer}>
+                <AnimatedCircularProgress
+                  size={circleSize}
+                  width={6}
+                  fill={33} // Fixed at 33% for light shirt (1/3)
+                  tintColor="#FFA726"
+                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
+                  rotation={0}
+                  lineCap="round"
+                >
+                  {() => (
+                    <View style={styles.circularProgressContent}>
+                      <FontAwesome5 name="tshirt" size={18} color="#FFA726" style={{marginBottom: 2}} />
+                      <Text style={[styles.statValue, themeStyles.statValue, { 
+                        fontSize: 9, 
+                        textAlign: 'center',
+                        marginTop: 2,
+                        maxWidth: circleSize - 10
+                      }]}>Light Shirt</Text>
+                    </View>
+                  )}
+                </AnimatedCircularProgress>
+                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.clothing')}</Text>
               </View>
             </View>
           </View>
