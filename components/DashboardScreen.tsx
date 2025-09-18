@@ -87,7 +87,7 @@ const DashboardScreen = () => {
     () => ({
       steps: 1700,
       lastCheckup: "25/06/25",
-      clothingLayers: 4, 
+      clothingLayers: 1, 
       heartRate: 72,
       bloodPressure: "120/80",
       weight: "65 kg",
@@ -218,9 +218,7 @@ const DashboardScreen = () => {
 
 
   const animatedSteps = useRef(new Animated.Value(0)).current
-  const animatedWater = useRef(new Animated.Value(0)).current
   const [displayedSteps, setDisplayedSteps] = useState(0)
-  const [displayedWater, setDisplayedWater] = useState(0)
 
   useEffect(() => {
     Animated.timing(animatedSteps, {
@@ -228,23 +226,14 @@ const DashboardScreen = () => {
       duration: 800,
       useNativeDriver: false,
     }).start()
-
-    Animated.timing(animatedWater, {
-      toValue: healthStats.clothingLayers,
-      duration: 800,
-      useNativeDriver: false,
-    }).start()
-  }, [healthStats.steps, healthStats.clothingLayers, animatedSteps, animatedWater])
+  }, [healthStats.steps, animatedSteps])
 
   useEffect(() => {
     const stepsListener = animatedSteps.addListener(({ value }) => setDisplayedSteps(Math.round(value)))
-    const waterListener = animatedWater.addListener(({ value }) => setDisplayedWater(Math.round(value)))
-
     return () => {
       animatedSteps.removeListener(stepsListener)
-      animatedWater.removeListener(waterListener)
     }
-  }, [animatedSteps, animatedWater])
+  }, [animatedSteps])
 
   // Fetch weather data
   useEffect(() => {
@@ -670,25 +659,19 @@ const DashboardScreen = () => {
                 <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.steps')}</Text>
               </View>
               
-              {/* Clothing Layers */}
-              <View style={styles.circularProgressContainer}>
-                <AnimatedCircularProgress
-                  size={circleSize}
-                  width={6}
-                  fill={(healthStats.clothingLayers / 5) * 100}
-                  tintColor="#FFA726"
-                  backgroundColor={darkMode ? '#333' : '#E0E0E0'}
-                  rotation={0}
-                  lineCap="round"
-                >
-                  {() => (
-                    <View style={styles.circularProgressContent}>
-                      <FontAwesome5 name="tshirt" size={24} color="#FFA726" />
-                      <Text style={[styles.statValue, themeStyles.statValue]}>{displayedWater}/5</Text>
-                    </View>
-                  )}
-                </AnimatedCircularProgress>
-                <Text style={[styles.statLabel, themeStyles.statLabel, { marginTop: 8, textAlign: 'center' }]}>{t('dashboard.clothing')}</Text>
+              {/* Clothing Layers refined display */}
+              <View style={{ alignItems: 'center', justifyContent: 'center', padding: 10, minWidth: 90 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+                  <FontAwesome5 name="tshirt" size={16} color="#FFA726" style={{ marginRight: 6 }} />
+                  <Text style={{ fontSize: 12, color: themeStyles.statLabel.color, fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.1 }}>
+                    {t('dashboard.clothing')}
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 13, color: themeStyles.statValue.color, fontFamily: 'JetBrainsMono-Bold', textAlign: 'center' }}>
+                  {healthStats.clothingLayers === 1
+                    ? t('dashboard.singleLayer')
+                    : `${healthStats.clothingLayers} ${t('dashboard.layers')}`}
+                </Text>
               </View>
             </View>
           </View>
@@ -1281,6 +1264,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
+
   },
   circularProgressContent: {
     alignItems: 'center',
