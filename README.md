@@ -19,7 +19,10 @@ A comprehensive first aid and emergency medical assistance application.
     <img src="screenshots/image2.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Multilingual</p>
   </div>
-
+   <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image2.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">News</p>
+  </div>
   <div style="text-align: center; flex: 0 0 auto;">
     <img src="screenshots/image1.jpeg" alt="Messages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Messages</p>
