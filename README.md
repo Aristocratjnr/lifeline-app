@@ -19,6 +19,10 @@ A comprehensive first aid and emergency medical assistance application.
     <img src="screenshots/image2.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">Multilingual</p>
   </div>
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image5.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Guest Profile</p>
+  </div>
    <div style="text-align: center; flex: 0 0 auto;">
     <img src="screenshots/image20.jpeg" alt="Languages" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <p style="margin: 8px 0 0; font-size: 0.9em;">News</p>
@@ -29,9 +33,25 @@ A comprehensive first aid and emergency medical assistance application.
   </div>
 
   <div style="text-align: center; flex: 0 0 auto;">
-    <img src="screenshots/image5.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <p style="margin: 8px 0 0; font-size: 0.9em;">Guest Profile</p>
+    <img src="screenshots/image22.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Sign Up</p>
   </div>
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image23.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Sign In</p>
+  </div>
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image24.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">Dashboard</p>
+  </div>
+
+  <div style="text-align: center; flex: 0 0 auto;">
+    <img src="screenshots/image25.jpeg" alt="Profile" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <p style="margin: 8px 0 0; font-size: 0.9em;">User Dashboard</p>
+  </div>
+  
 
   <div style="text-align: center; flex: 0 0 auto;">
     <img src="screenshots/image3.jpeg" alt="Settings" style="width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
